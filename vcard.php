@@ -185,7 +185,7 @@ class VCard
 		$string .= "BEGIN:VEVENT\n";
 		$string .= "DTSTART;TZID=Europe/London:" . $dtstart . "\n";	
 		$string .= "DTEND;TZID=Europe/London:" . $dtend . "\n";
-		$string .= "SUMMARY:" . FL::msg('VCardSummaryHelp') . "\n"; // Click attached contact below to save to your contacts
+		$string .= "SUMMARY:Click attached contact below to save to your contacts\n";
 		$string .= "DTSTAMP:" . $dtstart . "Z\n";
 		$string .= "ATTACH;VALUE=BINARY;ENCODING=BASE64;FMTTYPE=text/directory;\n";
 		$string .= " X-APPLE-FILENAME=" . $this->filename . ".vcf:\n";
