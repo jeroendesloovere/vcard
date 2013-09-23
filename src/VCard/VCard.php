@@ -347,6 +347,4 @@ class VCard
  *
  * @author Jeroen Desloovere <jeroen@siesqo.be>
  */
-class VCardException extends Exception
-{
-}
+class VCardException extends Exception {}

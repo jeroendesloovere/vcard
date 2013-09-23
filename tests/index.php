@@ -7,7 +7,7 @@
  */	
 
 // require
-require_once '../vcard.php';
+require_once '../src/VCard/VCard.php';
 
 // define vcard
 $vcard = new VCard();
