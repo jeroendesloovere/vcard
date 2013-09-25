@@ -68,7 +68,7 @@ class VCard
 	/**
 	 * Add email
 	 *
-	 * @param string $date Format is YYYY-MM-DD
+	 * @param string $address The e-mailaddress
 	 */
 	public function addEmail($address)
 	{
@@ -169,7 +169,7 @@ class VCard
 	}
 
 	/**
-	 * Build VCalender (.ics) - Safari (iOS) can not open .vcf files, so we build a workaround.
+	 * Build VCalender (.ics) - Safari (iOS) can not open .vcf files, so we have build a workaround.
 	 *
 	 * @return string
 	 */
@@ -178,7 +178,7 @@ class VCard
 		// init dates
 		$dtstart = date("Ymd")."T".date("Hi")."00";		
 		$dtend = date("Ymd")."T".date("Hi")."01";
-	
+
 		// init string
 		$string = "BEGIN:VCALENDAR\n";
 		$string .= "VERSION:2.0\n";
@@ -196,7 +196,7 @@ class VCard
 		// chunk the single long line of b64 text in accordance with RFC2045
 		// (and the exact line length determined from the original .ics file exported from Apple calendar
 		$b64mline = chunk_split($b64vcard, 74, "\n");
-		
+
 		// need to indent all the lines by 1 space for the iphone (yes really?!!)
 		$b64final = preg_replace('/(.+)/', ' $1', $b64mline);		
 		$string .= $b64final;
@@ -212,7 +212,7 @@ class VCard
 	/**
 	 * Decode
 	 *
-	 * @param string $value
+	 * @param string $value The value to decode
 	 * @return string decoded
 	 */
 	private function decode($value)
@@ -231,12 +231,12 @@ class VCard
 			// define output
 			$output = $this->buildVCalendar();
 
-			# Send correct headers
+			// send correct headers
 			header('Content-type: text/x-vcalendar; charset=utf-8');
-			// header('Content-type: application/octet-stream; charset=utf-8');
-			// Alternatively: application/octet-stream
-			// Depending on the desired browser behaviour
-			// Be sure to test thoroughly cross-browser
+			//header('Content-type: application/octet-stream; charset=utf-8');
+			// alternatively: application/octet-stream
+			// depending on the desired browser behaviour
+			// be sure to test thoroughly cross-browser
 			header('Content-Disposition: attachment; filename=' . $this->filename . '.ics;');
 		}
 
@@ -246,13 +246,16 @@ class VCard
 			// define output
 			$output = $this->buildVCard();
 
-			// output to file
-			header('Content-type:text/x-vcard; charset=UTF-8');
+			// send correct headers
+			header('Content-type: text/x-vcard; charset=UTF-8');
 			header('Content-Disposition: attachment; filename=' . $this->filename . '.vcf;');
 		}
 
+		// send correct headers
 		header('Content-Length: ' . strlen($output));
 		header('Connection: close');
+
+		// echo the output and it will be a download
 		echo $output;
 	}
 
@@ -276,9 +279,9 @@ class VCard
 	}
 
 	/**
-	 * Is iOS?
+	 * Is iOS - Check if the user is using an iOS-device
 	 *
-	 * @return string ios
+	 * @return bool
 	 */
 	public function isIOS()
 	{
@@ -290,7 +293,7 @@ class VCard
 	}
 
 	/**
-	 * Save
+	 * Save to a file
 	 */
 	public function save()
 	{
@@ -305,8 +308,8 @@ class VCard
 	 * Set filename
 	 *
 	 * @param mixed $value
-	 * @param bool $overwrite
-	 * @param string[optional] $separator
+	 * @param bool $overwrite[optional] Default overwrite is true
+	 * @param string $separator[optional] Default separator is an underscore '_'
 	 */
 	public function setFilename($value, $overwrite = true, $separator = '_')
 	{
@@ -341,6 +344,7 @@ class VCard
 		$this->properties[$key] = $this->decode($value);
 	}
 }
+
 
 /**
  * VCard Exception class
