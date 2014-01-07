@@ -167,7 +167,7 @@ class VCard
         $string .= "REV:" . date("Y-m-d") . "T" . date("H:i:s") . "Z\r\n";
 
         // loop all properties
-        foreach($this->properties as $key => $value) {
+        foreach ($this->properties as $key => $value) {
             // add to string
             $string .= $key . ':' . $value . "\r\n";
         }
