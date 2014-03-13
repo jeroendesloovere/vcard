@@ -24,6 +24,7 @@ class VCard
     /**
      * Add address
      *
+     * @return void
      * @param string[optional] $name
      * @param string[optional] $extended
      * @param string[optional] $street
@@ -53,6 +54,7 @@ class VCard
     /**
      * Add birthday
      *
+     * @return void
      * @param string $date Format is YYYY-MM-DD
      */
     public function addBirthday($date)
@@ -63,6 +65,7 @@ class VCard
     /**
      * Add company
      *
+     * @return void
      * @param string $company
      */
     public function addCompany($company)
@@ -76,6 +79,7 @@ class VCard
     /**
      * Add email
      *
+     * @return void
      * @param string $address The e-mailaddress
      */
     public function addEmail($address)
@@ -86,6 +90,7 @@ class VCard
     /**
      * Add jobtitle
      *
+     * @return void
      * @param string $jobtitle The jobtitle for the person.
      */
     public function addJobtitle($jobtitle)
@@ -96,6 +101,7 @@ class VCard
     /**
      * Add name
      *
+     * @return void
      * @param string[optional] $lastname
      * @param string[optional] $firstname
      * @param string[optional] $additional
@@ -125,6 +131,7 @@ class VCard
     /**
      * Add note
      *
+     * @return void
      * @param string $note
      */
     public function addNote($note)
@@ -135,6 +142,7 @@ class VCard
     /**
      * Add phone number
      *
+     * @return void
      * @param string $number
      * @param string[optional] $type Type may be PREF | WORK | HOME | VOICE | FAX | MSG | CELL | PAGER | BBS | CAR | MODEM | ISDN | VIDEO or any senseful combination, e.g. "PREF;WORK;VOICE"
      */
@@ -146,6 +154,7 @@ class VCard
     /**
      * Add URL
      *
+     * @return void
      * @param string $url
      * @param string[optional] $type Type may be WORK | HOME
      */
@@ -223,8 +232,8 @@ class VCard
     /**
      * Decode
      *
-     * @param string $value The value to decode
      * @return string decoded
+     * @param string $value The value to decode
      */
     private function decode($value)
     {
@@ -233,6 +242,8 @@ class VCard
 
     /**
      * Download
+     *
+     * @return header will push file to your browser
      */
     public function download()
     {
@@ -268,6 +279,8 @@ class VCard
 
     /**
      * Get output as string
+     *
+     * @return string
      */
     public function get()
     {
@@ -301,6 +314,8 @@ class VCard
 
     /**
      * Save to a file
+     *
+     * @return void
      */
     public function save()
     {
@@ -314,6 +329,7 @@ class VCard
     /**
      * Set filename
      *
+     * @return void
      * @param mixed $value
      * @param bool $overwrite[optional] Default overwrite is true
      * @param string $separator[optional] Default separator is an underscore '_'
@@ -342,6 +358,7 @@ class VCard
     /**
      * Set property
      *
+     * @return void
      * @param string $key
      * @param string $value
      */
