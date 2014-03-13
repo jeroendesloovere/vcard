@@ -1,7 +1,7 @@
 <?php
 
 /**
- * VCard generator - can save to file or output as a download
+ * VCard PHP Class to generate .vcard files and save them to a file or output as a download.
  *
  * @author Jeroen Desloovere <jeroen@siesqo.be>
  */
@@ -34,7 +34,7 @@ class VCard
      * @param string[optional] $type $type may be DOM | INTL | POSTAL | PARCEL | HOME | WORK or any combination of these: e.g. "WORK;PARCEL;POSTAL"
      */
     public function addAddress(
-	    $name = '',
+        $name = '',
         $extended = '',
         $street = '',
         $city = '',
