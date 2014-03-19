@@ -1,5 +1,7 @@
 <?php
 
+namespace JeroenDesloovere\VCard;
+
 /**
  * VCard PHP Class to generate .vcard files and save them to a file or output as a download.
  *
