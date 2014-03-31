@@ -27,14 +27,14 @@ class VCard
      * Add address
      *
      * @return void
-     * @param string[optional] $name
-     * @param string[optional] $extended
-     * @param string[optional] $street
-     * @param string[optional] $city
-     * @param string[optional] $region
-     * @param string[optional] $zip
-     * @param string[optional] $country
-     * @param string[optional] $type $type may be DOM | INTL | POSTAL | PARCEL | HOME | WORK or any combination of these: e.g. "WORK;PARCEL;POSTAL"
+     * @param  string[optional] $name
+     * @param  string[optional] $extended
+     * @param  string[optional] $street
+     * @param  string[optional] $city
+     * @param  string[optional] $region
+     * @param  string[optional] $zip
+     * @param  string[optional] $country
+     * @param  string[optional] $type     $type may be DOM | INTL | POSTAL | PARCEL | HOME | WORK or any combination of these: e.g. "WORK;PARCEL;POSTAL"
      */
     public function addAddress(
         $name = '',
@@ -57,7 +57,7 @@ class VCard
      * Add birthday
      *
      * @return void
-     * @param string $date Format is YYYY-MM-DD
+     * @param  string $date Format is YYYY-MM-DD
      */
     public function addBirthday($date)
     {
@@ -68,7 +68,7 @@ class VCard
      * Add company
      *
      * @return void
-     * @param string $company
+     * @param  string $company
      */
     public function addCompany($company)
     {
@@ -82,7 +82,7 @@ class VCard
      * Add email
      *
      * @return void
-     * @param string $address The e-mailaddress
+     * @param  string $address The e-mailaddress
      */
     public function addEmail($address)
     {
@@ -93,10 +93,10 @@ class VCard
      * Add jobtitle
      *
      * @return void
-     * @param string $jobtitle The jobtitle for the person.
+     * @param  string $jobtitle The jobtitle for the person.
      */
     public function addJobtitle($jobtitle)
-    { 
+    {
         $this->setProperty('TITLE', $jobtitle);
     }
 
@@ -104,11 +104,11 @@ class VCard
      * Add name
      *
      * @return void
-     * @param string[optional] $lastname
-     * @param string[optional] $firstname
-     * @param string[optional] $additional
-     * @param string[optional] $prefix
-     * @param string[optional] $suffix
+     * @param  string[optional] $lastname
+     * @param  string[optional] $firstname
+     * @param  string[optional] $additional
+     * @param  string[optional] $prefix
+     * @param  string[optional] $suffix
      */
     public function addName(
         $lastname = '',
@@ -126,7 +126,7 @@ class VCard
         // is property FN set?
         if (!isset($this->properties['FN']) || $this->properties['FN'] == '') {
             // set property
-            $this->setProperty('FN', trim($prefix . ' ' . $firstname . ' ' . $additional . ' ' . $lastname . ' ' . $suffix));    
+            $this->setProperty('FN', trim($prefix . ' ' . $firstname . ' ' . $additional . ' ' . $lastname . ' ' . $suffix));
         }
     }
 
@@ -134,7 +134,7 @@ class VCard
      * Add note
      *
      * @return void
-     * @param string $note
+     * @param  string $note
      */
     public function addNote($note)
     {
@@ -145,8 +145,8 @@ class VCard
      * Add phone number
      *
      * @return void
-     * @param string $number
-     * @param string[optional] $type Type may be PREF | WORK | HOME | VOICE | FAX | MSG | CELL | PAGER | BBS | CAR | MODEM | ISDN | VIDEO or any senseful combination, e.g. "PREF;WORK;VOICE"
+     * @param  string           $number
+     * @param  string[optional] $type   Type may be PREF | WORK | HOME | VOICE | FAX | MSG | CELL | PAGER | BBS | CAR | MODEM | ISDN | VIDEO or any senseful combination, e.g. "PREF;WORK;VOICE"
      */
     public function addPhoneNumber($number, $type = '')
     {
@@ -157,8 +157,8 @@ class VCard
      * Add URL
      *
      * @return void
-     * @param string $url
-     * @param string[optional] $type Type may be WORK | HOME
+     * @param  string           $url
+     * @param  string[optional] $type Type may be WORK | HOME
      */
     public function addURL($url, $type = '')
     {
@@ -198,14 +198,14 @@ class VCard
     protected function buildVCalendar()
     {
         // init dates
-        $dtstart = date("Ymd") . "T" . date("Hi") . "00";        
+        $dtstart = date("Ymd") . "T" . date("Hi") . "00";
         $dtend = date("Ymd") . "T" . date("Hi") . "01";
 
         // init string
         $string = "BEGIN:VCALENDAR\n";
         $string .= "VERSION:2.0\n";
         $string .= "BEGIN:VEVENT\n";
-        $string .= "DTSTART;TZID=Europe/London:" . $dtstart . "\n";    
+        $string .= "DTSTART;TZID=Europe/London:" . $dtstart . "\n";
         $string .= "DTEND;TZID=Europe/London:" . $dtend . "\n";
         $string .= "SUMMARY:Click attached contact below to save to your contacts\n";
         $string .= "DTSTAMP:" . $dtstart . "Z\n";
@@ -220,11 +220,11 @@ class VCard
         $b64mline = chunk_split($b64vcard, 74, "\n");
 
         // need to indent all the lines by 1 space for the iphone (yes really?!!)
-        $b64final = preg_replace('/(.+)/', ' $1', $b64mline);        
+        $b64final = preg_replace('/(.+)/', ' $1', $b64mline);
         $string .= $b64final;
 
         // output the correctly formatted encoded text
-        $string .= "END:VEVENT\n";        
+        $string .= "END:VEVENT\n";
         $string .= "END:VCALENDAR\n";
 
         // return
@@ -235,7 +235,7 @@ class VCard
      * Decode
      *
      * @return string decoded
-     * @param string $value The value to decode
+     * @param  string $value The value to decode
      */
     private function decode($value)
     {
@@ -332,9 +332,9 @@ class VCard
      * Set filename
      *
      * @return void
-     * @param mixed $value
-     * @param bool $overwrite[optional] Default overwrite is true
-     * @param string $separator[optional] Default separator is an underscore '_'
+     * @param  mixed  $value
+     * @param  bool   $overwrite[optional] Default overwrite is true
+     * @param  string $separator[optional] Default separator is an underscore '_'
      */
     public function setFilename($value, $overwrite = true, $separator = '_')
     {
@@ -361,8 +361,8 @@ class VCard
      * Set property
      *
      * @return void
-     * @param string $key
-     * @param string $value
+     * @param  string $key
+     * @param  string $value
      */
     private function setProperty($key, $value)
     {
@@ -370,7 +370,6 @@ class VCard
         $this->properties[$key] = $this->decode($value);
     }
 }
-
 
 /**
  * VCard Exception class

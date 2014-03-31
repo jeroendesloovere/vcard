@@ -4,7 +4,7 @@
  * VCard generator test - can save to file or output as a download
  *
  * @author Jeroen Desloovere <jeroen@siesqo.be>
- */	
+ */
 
 // require
 require_once '../src/JeroenDesloovere/VCard/VCard.php';
