@@ -9,7 +9,8 @@
         {
             "name": "Jeroen Desloovere",
             "email": "jeroen@siesqo.be",
-            "homepage": "http://jeroendesloovere.be"
+            "homepage": "http://jeroendesloovere.be",
+			"role": "Developer"
         }
     ],
     "require": {
