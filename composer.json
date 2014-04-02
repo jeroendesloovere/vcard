@@ -17,6 +17,6 @@
         "php": ">=5.3.3"
     },
     "autoload": {
-        "psr-4": { "JeroenDesloovere\\": "src/JeroenDesloovere" }
+        "psr-4": { "JeroenDesloovere\\VCard\\": "src/" }
     }
 }
