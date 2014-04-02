@@ -6,8 +6,10 @@
  * @author Jeroen Desloovere <jeroen@siesqo.be>
  */
 
-// require
-require_once '../src/JeroenDesloovere/VCard/VCard.php';
+// autoload files using Composer autoload
+require_once __DIR__ . '/../vendor/autoload.php';
+
+use JeroenDesloovere\VCard;
 
 // define vcard
 $vcard = new VCard();
