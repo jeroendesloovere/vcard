@@ -6,10 +6,9 @@
  * @author Jeroen Desloovere <jeroen@siesqo.be>
  */
 
-// autoload files using Composer autoload
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../src/JeroenDesloovere/VCard/VCard.php';
 
-use JeroenDesloovere\VCard;
+use JeroenDesloovere\VCard\VCard;
 
 // define vcard
 $vcard = new VCard();
@@ -25,16 +24,21 @@ $vcard->addName($lastname, $firstname);
 $vcard->addCompany('Siesqo');
 $vcard->addJobtitle('Web Developer');
 $vcard->addEmail('jeroen@siesqo.be');
-$vcard->addPhoneNumber(0000112233, 'PREF;WORK');
-$vcard->addPhoneNumber(000112233, 'WORK');
+$vcard->addPhoneNumber(1234121212, 'PREF;WORK');
+$vcard->addPhoneNumber(123456789, 'WORK');
 $vcard->addAddress(null, null, 'street', 'worktown', null, 'workpostcode', 'Belgium');
 $vcard->addURL('http://www.siesqo.be');
-
-// echo message
-echo "A personal vCard will be downloaded.";
 
 // return vcard as a download
 return $vcard->download();
 
-// or you can save the card
+// echo message
+echo 'A personal vCard is saved in this folder: ' . __DIR__;
+
+// or
+
+// save the card in file in the current folder
 // return $vcard->save();
+
+// echo message
+// echo 'A personal vCard is saved in this folder: ' . __DIR__;
