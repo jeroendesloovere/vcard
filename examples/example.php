@@ -3,10 +3,10 @@
 /**
  * VCard generator test - can save to file or output as a download
  *
- * @author Jeroen Desloovere <jeroen@siesqo.be>
+ * @author Jeroen Desloovere <info@jeroendesloovere.be>
  */
 
-require_once __DIR__ . '/../src/JeroenDesloovere/VCard/VCard.php';
+require_once __DIR__ . '/../src/VCard.php';
 
 use JeroenDesloovere\VCard\VCard;
 
@@ -23,7 +23,7 @@ $vcard->addName($lastname, $firstname);
 // add work data
 $vcard->addCompany('Siesqo');
 $vcard->addJobtitle('Web Developer');
-$vcard->addEmail('jeroen@siesqo.be');
+$vcard->addEmail('info@jeroendesloovere.be');
 $vcard->addPhoneNumber(1234121212, 'PREF;WORK');
 $vcard->addPhoneNumber(123456789, 'WORK');
 $vcard->addAddress(null, null, 'street', 'worktown', null, 'workpostcode', 'Belgium');
