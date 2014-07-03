@@ -1,10 +1,13 @@
 # VCard PHP class
+[![Latest Stable Version](http://img.shields.io/packagist/v/jeroendesloovere/vcard.svg)](https://packagist.org/packages/jeroendesloovere/vcard)
+[![License](http://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/jeroendesloovere/vcard/blob/master/LICENSE)
+[![Build Status](https://travis-ci.org/jeroendesloovere/vcard.svg?branch=master)](https://travis-ci.org/jeroendesloovere/vcard)
 
 This VCard PHP class can generate a vCard with some data. When using an iOS device it will export as a .ics file because iOS devices don't support the default .vcf files.
 
-## Installing
+## Usage
 
-### Using Composer
+### Installation
 
 When using [Composer](https://getcomposer.org) you can always load in the latest version.
 
@@ -15,9 +18,10 @@ When using [Composer](https://getcomposer.org) you can always load in the latest
     }
 }
 ```
-Check [in Packagist](https://packagist.org/packages/jeroendesloovere/vcard).
 
-### Usage example
+> Add the above in your `composer.json` file when using [Composer](https://getcomposer.org).
+
+### Example
 
 ``` php
 use JeroenDesloovere\VCard\VCard;
@@ -45,23 +49,38 @@ $vcard->addURL('http://www.siesqo.be');
 return $vcard->download();
 ```
 
-Check [the VCard class source](./src/VCard.php) or [view examples](./examples/example.php).
-
+> [View all examples](/examples/example.php) or check [the VCard class](/src/VCard.php).
 
 ## Documentation
 
 The class is well documented inline. If you use a decent IDE you'll see that each method is documented with PHPDoc.
 
-
 ## Contributing
 
-It would be great if you could help us improve this class. GitHub does a great job in managing collaboration by providing different tools, the only thing you need is a [GitHub](http://github.com) login.
+Contributions are **welcome** and will be fully **credited**.
 
-* Use **Pull requests** to add or update code
-* **Issues** for bug reporting or code discussions
-* Or regarding documentation and how-to's, check out **Wiki**
+### Pull Requests
+
+> To add or update code
+
+- **Coding Syntax** - Please keep the code syntax consistent with the rest of the package.
+- **Add unit tests!** - Your patch won't be accepted if it doesn't have tests.
+- **Document any change in behavior** - Make sure the README and any other relevant documentation are kept up-to-date.
+- **Consider our release cycle** - We try to follow [semver](http://semver.org/). Randomly breaking public APIs is not an option.
+- **Create topic branches** - Don't ask us to pull from your master branch.
+- **One pull request per feature** - If you want to do more than one thing, send multiple pull requests.
+- **Send coherent history** - Make sure each individual commit in your pull request is meaningful. If you had to make multiple intermediate commits while developing, please squash them before submitting.
+
+### Issues
+
+> For bug reporting or code discussions.
+
 More info on how to work with GitHub on help.github.com.
 
+## Credits
+
+- [Jeroen Desloovere](https://github.com/jeroendesloovere)
+- [All Contributors](https://github.com/jeroendesloovere/vcard/contributors)
 
 ## License
 
