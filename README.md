@@ -2,6 +2,51 @@
 
 This VCard PHP class can generate a vCard with some data. When using an iOS device it will export as a .ics file because iOS devices don't support the default .vcf files.
 
+## Installing
+
+### Using Composer
+
+When using [Composer](https://getcomposer.org) you can always load in the latest version.
+
+``` json
+{
+    "require": {
+        "jeroendesloovere/vcard": "1.1.*"
+    }
+}
+```
+Check [in Packagist](https://packagist.org/packages/jeroendesloovere/vcard).
+
+### Usage example
+
+``` php
+use JeroenDesloovere\VCard\VCard;
+
+// define vcard
+$vcard = new VCard();
+
+// define variables
+$firstname = 'Jeroen';
+$lastname = 'Desloovere';
+
+// add personal data
+$vcard->addName($lastname, $firstname);
+
+// add work data
+$vcard->addCompany('Siesqo');
+$vcard->addJobtitle('Web Developer');
+$vcard->addEmail('info@jeroendesloovere.be');
+$vcard->addPhoneNumber(1234121212, 'PREF;WORK');
+$vcard->addPhoneNumber(123456789, 'WORK');
+$vcard->addAddress(null, null, 'street', 'worktown', null, 'workpostcode', 'Belgium');
+$vcard->addURL('http://www.siesqo.be');
+
+// return vcard as a download
+return $vcard->download();
+```
+
+Check [the VCard class source](./src/VCard.php) or [view examples](./examples/example.php).
+
 
 ## Documentation
 
