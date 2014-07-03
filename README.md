@@ -9,8 +9,6 @@ This VCard PHP class can generate a vCard with some data. When using an iOS devi
 
 ### Installation
 
-When using [Composer](https://getcomposer.org) you can always load in the latest version.
-
 ``` json
 {
     "require": {
