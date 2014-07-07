@@ -367,7 +367,6 @@ class VCard
     }
 }
 
-
 /**
  * VCard Exception class
  *
