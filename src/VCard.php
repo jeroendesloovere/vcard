@@ -256,10 +256,6 @@ class VCard
 
             // send correct headers
             header('Content-type: text/x-vcalendar; charset=utf-8');
-            //header('Content-type: application/octet-stream; charset=utf-8');
-            // alternatively: application/octet-stream
-            // depending on the desired browser behaviour
-            // be sure to test thoroughly cross-browser
             header('Content-Disposition: attachment; filename=' . $this->filename . '.ics;');
         // non-iOS devices
         } else {
