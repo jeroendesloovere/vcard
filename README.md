@@ -28,8 +28,8 @@ use JeroenDesloovere\VCard\VCard;
 $vcard = new VCard();
 
 // define variables
-$firstname = 'Jeroen';
 $lastname = 'Desloovere';
+$firstname = 'Jeroen';
 
 // add personal data
 $vcard->addName($lastname, $firstname);
