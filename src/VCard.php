@@ -63,6 +63,52 @@ class VCard
     {
         $this->setProperty('BDAY', $date);
     }
+    
+    /**
+     * Add logo
+     *
+     * @return void
+     * @param  string $url image url or filename
+     * @param  bool   $encode wheither or not encode(base64) / inline the file
+     */
+    public function addLogo($url, $encode = false)
+    {
+        $this->addMedia('LOGO', $url, $encode);
+    }
+    
+    /**
+     * Add Photo
+     *
+     * @return void
+     * @param  string $url image url or filename
+     * @param  bool   $encode wheither or not encode(base64) / inline the file
+     */
+    public function addPhoto($url, $encode = false)
+    {
+        $this->addMedia('PHOTO', $url, $encode);
+    }
+    
+    /**
+     * Add logo
+     *
+     * @return void
+     * @param  string $url image url or filename
+     * @param  bool   $encode wheither or not encode(base64) / inline the file
+     */
+    private function addMedia($property, $url, $encode = false)
+    {
+        if ($encode)
+        {
+            $value = file_get_contents($url);
+            // todo better MIME detection
+            $mime = mime_content_type($url);
+            $value = "data:" . $mime . ";base64," . base64_encode($value);
+        }
+        else
+            $value = $url;
+        
+        $this->setProperty($property, $value);
+    }
 
     /**
      * Add company
