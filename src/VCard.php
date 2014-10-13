@@ -69,7 +69,7 @@ class VCard
      *
      * @return void
      * @param  string $url image url or filename
-     * @param  bool   $encode wheither or not encode(base64) / inline the file
+     * @param  bool   $encode to integrate / encode or not the file
      */
     public function addLogo($url, $encode = false)
     {
@@ -81,7 +81,7 @@ class VCard
      *
      * @return void
      * @param  string $url image url or filename
-     * @param  bool   $encode wheither or not encode(base64) / inline the file
+     * @param  bool   $encode to integrate / encode or not the file
      */
     public function addPhoto($url, $encode = false)
     {
@@ -89,11 +89,12 @@ class VCard
     }
     
     /**
-     * Add logo
+     * Add a photo or logo (depending on property name)
      *
      * @return void
+     * @param  string $property LOGO|PHOTO
      * @param  string $url image url or filename
-     * @param  bool   $encode wheither or not encode(base64) / inline the file
+     * @param  bool   $encode to integrate / encode or not the file
      */
     private function addMedia($property, $url, $encode = false)
     {
