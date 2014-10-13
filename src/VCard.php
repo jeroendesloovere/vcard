@@ -170,7 +170,7 @@ class VCard
      *
      * @return string
      */
-    protected function buildVCard()
+    public function buildVCard()
     {
         // init string
         $string = "BEGIN:VCARD\r\n";
@@ -195,7 +195,7 @@ class VCard
      *
      * @return string
      */
-    protected function buildVCalendar()
+    public function buildVCalendar()
     {
         // init dates
         $dtstart = date("Ymd") . "T" . date("Hi") . "00";
