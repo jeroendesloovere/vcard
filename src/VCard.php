@@ -98,15 +98,14 @@ class VCard
      */
     private function addMedia($property, $url, $encode = false)
     {
-        if ($encode)
-        {
+        if ($encode) {
             $value = file_get_contents($url);
             // todo better MIME detection
             $mime = mime_content_type($url);
             $value = "data:" . $mime . ";base64," . base64_encode($value);
-        }
-        else
+        } else {
             $value = $url;
+        }
         
         $this->setProperty($property, $value);
     }
