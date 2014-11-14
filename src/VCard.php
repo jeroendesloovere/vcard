@@ -63,52 +63,6 @@ class VCard
     {
         $this->setProperty('BDAY', $date);
     }
-    
-    /**
-     * Add logo
-     *
-     * @return void
-     * @param  string $url image url or filename
-     * @param  bool   $encode to integrate / encode or not the file
-     */
-    public function addLogo($url, $encode = false)
-    {
-        $this->addMedia('LOGO', $url, $encode);
-    }
-    
-    /**
-     * Add Photo
-     *
-     * @return void
-     * @param  string $url image url or filename
-     * @param  bool   $encode to integrate / encode or not the file
-     */
-    public function addPhoto($url, $encode = false)
-    {
-        $this->addMedia('PHOTO', $url, $encode);
-    }
-    
-    /**
-     * Add a photo or logo (depending on property name)
-     *
-     * @return void
-     * @param  string $property LOGO|PHOTO
-     * @param  string $url image url or filename
-     * @param  bool   $encode to integrate / encode or not the file
-     */
-    private function addMedia($property, $url, $encode = false)
-    {
-        if ($encode) {
-            $value = file_get_contents($url);
-            // todo better MIME detection
-            $mime = mime_content_type($url);
-            $value = "data:" . $mime . ";base64," . base64_encode($value);
-        } else {
-            $value = $url;
-        }
-        
-        $this->setProperty($property, $value);
-    }
 
     /**
      * Add company
@@ -144,6 +98,30 @@ class VCard
     public function addJobtitle($jobtitle)
     {
         $this->setProperty('TITLE', $jobtitle);
+    }
+
+    /**
+     * Add a photo or logo (depending on property name)
+     *
+     * @return void
+     * @param  string $property LOGO|PHOTO
+     * @param  string $url image url or filename
+     * @param  bool   $encode to integrate / encode or not the file
+     */
+    private function addMedia($property, $url, $encode = false)
+    {
+        if ($encode) {
+            $value = file_get_contents($url);
+
+            // todo better MIME detection
+            $mime = mime_content_type($url);
+            $value = base64_encode($value);
+            $property .= ";ENCODING=b;TYPE=" . strtoupper(str_replace('image/', '', $mime));
+        } else {
+            $value = $url;
+        }
+        
+        $this->setProperty($property, $value);
     }
 
     /**
@@ -197,6 +175,18 @@ class VCard
     public function addPhoneNumber($number, $type = '')
     {
         $this->setProperty('TEL' . (($type != '') ? ';' . $type : ''), $number);
+    }
+
+    /**
+     * Add Photo
+     *
+     * @return void
+     * @param  string $url image url or filename
+     * @param  bool   $encode to integrate / encode or not the file
+     */
+    public function addPhoto($url, $encode = false)
+    {
+        $this->addMedia('PHOTO', $url, $encode);
     }
 
     /**
