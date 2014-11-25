@@ -12,14 +12,14 @@ class VCard
     /**
      * Filename
      *
-     * @param string
+     * @var string
      */
     private $filename;
 
     /**
      * Properties
      *
-     * @param array
+     * @var array
      */
     private $properties;
 
