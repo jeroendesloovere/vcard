@@ -29,6 +29,12 @@ class VCardTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->vcard = new VCard();
+
+        $this->firstName = 'Jeroen';
+        $this->lastName = 'Desloovere';
+        $this->additional = '&';
+        $this->prefix = 'Mister';
+        $this->suffix = 'Junior';
     }
 
     /**
@@ -44,11 +50,10 @@ class VCardTest extends \PHPUnit_Framework_TestCase
      */
     public function testFirstNameAndLastName()
     {
-        // define variables
-        $firstName = 'Jeroen';
-        $lastName = 'Desloovere';
-
-        $this->vcard->addName($lastName, $firstName);
+        $this->vcard->addName(
+            $this->lastName,
+            $this->firstName
+        );
 
         $this->assertEquals('jeroen_desloovere', $this->vcard->getFilename());
     }
@@ -58,19 +63,12 @@ class VCardTest extends \PHPUnit_Framework_TestCase
      */
     public function testFullBlownName()
     {
-        // define variables
-        $firstName = 'Jeroen';
-        $lastName = 'Desloovere';
-        $additional = '&';
-        $prefix = 'Mister';
-        $suffix = 'Junior';
-
         $this->vcard->addName(
-            $lastName,
-            $firstName,
-            $additional,
-            $prefix,
-            $suffix
+            $this->lastName,
+            $this->firstName,
+            $this->additional,
+            $this->prefix,
+            $this->suffix
         );
 
         $this->assertEquals('mister_jeroen_&_desloovere_junior', $this->vcard->getFilename());
