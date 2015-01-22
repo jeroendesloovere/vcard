@@ -141,29 +141,29 @@ class VCard
         $prefix = '',
         $suffix = ''
     ) {
+        $values = array(
+            $prefix,
+            $firstname,
+            $additional,
+            $lastname,
+            $suffix
+        );
+
+        // loop values and remove empty ones
+        foreach ($values as $key => $value) {
+            if (empty($value)) {
+                unset($values[$key]);
+            }
+        }
+
         // define filename
-        $this->setFilename(array($prefix, $firstname, $additional, $lastname, $suffix));
+        $this->setFilename($values);
 
         // set property
         $this->setProperty('N', $lastname . ';' . $firstname . ';' . $additional . ';' . $prefix . ';' . $suffix);
 
         // is property FN set?
         if (!isset($this->properties['FN']) || $this->properties['FN'] == '') {
-            $values = array(
-                $prefix,
-                $firstname,
-                $additional,
-                $lastname,
-                $suffix
-            );
-
-            // loop values and remove empty ones
-            foreach ($values as $key => $value) {
-                if (empty($value)) {
-                    unset($values[$key]);
-                }
-            }
-
             // set property
             $this->setProperty('FN', trim(implode(' ', $values)));
         }
