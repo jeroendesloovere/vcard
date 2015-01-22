@@ -1,3 +1,8 @@
+1.1.4 (xxxx-xx-xx)
+--
+Improvements:
+* PHPUnit Tests added
+
 1.1.3 (2015-01-22)
 --
 Bugfixes:
