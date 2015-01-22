@@ -141,20 +141,14 @@ class VCard
         $prefix = '',
         $suffix = ''
     ) {
-        $values = array(
+        // define values with non-empty values
+        $values = array_filter(array(
             $prefix,
             $firstname,
             $additional,
             $lastname,
             $suffix
-        );
-
-        // loop values and remove empty ones
-        foreach ($values as $key => $value) {
-            if (empty($value)) {
-                unset($values[$key]);
-            }
-        }
+        ));
 
         // define filename
         $this->setFilename($values);
