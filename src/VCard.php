@@ -149,8 +149,23 @@ class VCard
 
         // is property FN set?
         if (!isset($this->properties['FN']) || $this->properties['FN'] == '') {
+            $values = array(
+                $prefix,
+                $firstname,
+                $additional,
+                $lastname,
+                $suffix
+            );
+
+            // loop values and remove empty ones
+            foreach ($values as $key => $value) {
+                if (empty($value)) {
+                    unset($values[$key]);
+                }
+            }
+
             // set property
-            $this->setProperty('FN', trim($prefix . ' ' . $firstname . ' ' . $additional . ' ' . $lastname . ' ' . $suffix));
+            $this->setProperty('FN', trim(implode(' ', $values)));
         }
     }
 
