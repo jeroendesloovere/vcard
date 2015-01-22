@@ -2,6 +2,15 @@
 
 namespace JeroenDesloovere\VCard;
 
+/*
+ * This file is part of the VCard PHP Class from Jeroen Desloovere.
+ *
+ * For the full copyright and license information, please view the license
+ * file that was distributed with this source code.
+ */
+
+use JeroenDesloovere\VCard\Exception as VCardException;
+
 /**
  * VCard PHP Class to generate .vcard files and save them to a file or output as a download.
  *
@@ -128,42 +137,36 @@ class VCard
      * Add name
      *
      * @return void
-     * @param  string[optional] $lastname
-     * @param  string[optional] $firstname
+     * @param  string[optional] $lastName
+     * @param  string[optional] $firstName
      * @param  string[optional] $additional
      * @param  string[optional] $prefix
      * @param  string[optional] $suffix
      */
     public function addName(
-        $lastname = '',
-        $firstname = '',
+        $lastName = '',
+        $firstName = '',
         $additional = '',
         $prefix = '',
         $suffix = ''
     ) {
+        // define values with non-empty values
+        $values = array_filter(array(
+            $prefix,
+            $firstName,
+            $additional,
+            $lastName,
+            $suffix
+        ));
+
         // define filename
-        $this->setFilename(array($prefix, $firstname, $additional, $lastname, $suffix));
+        $this->setFilename($values);
 
         // set property
-        $this->setProperty('N', $lastname . ';' . $firstname . ';' . $additional . ';' . $prefix . ';' . $suffix);
+        $this->setProperty('N', $lastName . ';' . $firstName . ';' . $additional . ';' . $prefix . ';' . $suffix);
 
         // is property FN set?
         if (!isset($this->properties['FN']) || $this->properties['FN'] == '') {
-            $values = array(
-                $prefix,
-                $firstname,
-                $additional,
-                $lastname,
-                $suffix
-            );
-
-            // loop values and remove empty ones
-            foreach ($values as $key => $value) {
-                if (empty($value)) {
-                    unset($values[$key]);
-                }
-            }
-
             // set property
             $this->setProperty('FN', trim(implode(' ', $values)));
         }
@@ -413,14 +416,6 @@ class VCard
      */
     private function setProperty($key, $value)
     {
-        // set decoded property
         $this->properties[$key] = $this->decode($value);
     }
 }
-
-/**
- * VCard Exception class
- *
- * @author Jeroen Desloovere <info@jeroendesloovere.be>
- */
-class VCardException extends \Exception {}
