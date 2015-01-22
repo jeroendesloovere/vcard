@@ -1,4 +1,4 @@
-1.1.4 (xxxx-xx-xx)
+1.1.4 (2015-01-22)
 --
 Improvements:
 * PHPUnit Tests added
