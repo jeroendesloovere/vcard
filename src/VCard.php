@@ -128,15 +128,15 @@ class VCard
      * Add name
      *
      * @return void
-     * @param  string[optional] $lastname
-     * @param  string[optional] $firstname
+     * @param  string[optional] $lastName
+     * @param  string[optional] $firstName
      * @param  string[optional] $additional
      * @param  string[optional] $prefix
      * @param  string[optional] $suffix
      */
     public function addName(
-        $lastname = '',
-        $firstname = '',
+        $lastName = '',
+        $firstName = '',
         $additional = '',
         $prefix = '',
         $suffix = ''
@@ -144,9 +144,9 @@ class VCard
         // define values with non-empty values
         $values = array_filter(array(
             $prefix,
-            $firstname,
+            $firstName,
             $additional,
-            $lastname,
+            $lastName,
             $suffix
         ));
 
@@ -154,7 +154,7 @@ class VCard
         $this->setFilename($values);
 
         // set property
-        $this->setProperty('N', $lastname . ';' . $firstname . ';' . $additional . ';' . $prefix . ';' . $suffix);
+        $this->setProperty('N', $lastName . ';' . $firstName . ';' . $additional . ';' . $prefix . ';' . $suffix);
 
         // is property FN set?
         if (!isset($this->properties['FN']) || $this->properties['FN'] == '') {
