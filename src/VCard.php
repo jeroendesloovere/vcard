@@ -2,6 +2,15 @@
 
 namespace JeroenDesloovere\VCard;
 
+/*
+ * This file is part of the VCard PHP Class from Jeroen Desloovere.
+ *
+ * For the full copyright and license information, please view the license
+ * file that was distributed with this source code.
+ */
+
+use JeroenDesloovere\VCard\Exception as VCardException;
+
 /**
  * VCard PHP Class to generate .vcard files and save them to a file or output as a download.
  *
@@ -410,10 +419,3 @@ class VCard
         $this->properties[$key] = $this->decode($value);
     }
 }
-
-/**
- * VCard Exception class
- *
- * @author Jeroen Desloovere <info@jeroendesloovere.be>
- */
-class VCardException extends \Exception {}
