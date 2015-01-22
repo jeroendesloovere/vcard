@@ -407,7 +407,6 @@ class VCard
      */
     private function setProperty($key, $value)
     {
-        // set decoded property
         $this->properties[$key] = $this->decode($value);
     }
 }
