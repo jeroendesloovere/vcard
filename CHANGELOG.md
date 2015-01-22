@@ -2,6 +2,11 @@
 --
 Improvements:
 * PHPUnit Tests added
+* Exception is now a separate class.
+* Renamed the variables $firstName and $lastName
+
+Bugfixes:
+* Filename: Fixed double underscores when no "additional" field was given.
 
 1.1.3 (2015-01-22)
 --
