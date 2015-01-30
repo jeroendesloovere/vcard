@@ -122,8 +122,9 @@ class VCard
         if ($encode) {
             $value = file_get_contents($url);
 
-            // todo better MIME detection
-            $mime = mime_content_type($url);
+            $finfo = finfo_open(FILEINFO_MIME);
+            @$mime = finfo_file($finfo, $url);
+            
             $value = base64_encode($value);
             $property .= ";ENCODING=b;TYPE=" . strtoupper(str_replace('image/', '', $mime));
         } else {
