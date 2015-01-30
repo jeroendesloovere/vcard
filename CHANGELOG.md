@@ -1,3 +1,8 @@
+1.1.5 (2015-01-30)
+--
+Bugfixes:
+* Updated the deprecated MIME detection.
+
 1.1.4 (2015-01-22)
 --
 Improvements:
