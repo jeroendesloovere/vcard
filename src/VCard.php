@@ -112,26 +112,35 @@ class VCard
     /**
      * Add a photo or logo (depending on property name)
      *
-     * @return void
+     * @return boolean
      * @param  string $property LOGO|PHOTO
      * @param  string $url image url or filename
-     * @param  bool   $encode to integrate / encode or not the file
+     * @param  bool $encode to integrate / encode or not the file
      */
     private function addMedia($property, $url, $encode = false)
     {
         if ($encode) {
             $value = file_get_contents($url);
-
-            $finfo = finfo_open(FILEINFO_MIME);
-            @$mime = finfo_file($finfo, $url);
-            
+            if (!$value) {
+                return false; //Nothing returned from URL
+            }
+            if (!function_exists('getimagesizefromstring')) { //Introduced in PHP 5.4
+                $imginfo = getimagesize('data://application/octet-stream;base64,' . base64_encode($value));
+            } else {
+                $imginfo = getimagesizefromstring($value);
+            }
+            if (array_key_exists('mime', $imginfo)) {
+                $type = strtoupper(str_replace('image/', '', $imginfo['mime']));
+            } else {
+                return false; //Returned data doesn't have a MIME type
+            }
             $value = base64_encode($value);
-            $property .= ";ENCODING=b;TYPE=" . strtoupper(str_replace('image/', '', $mime));
+            $property .= ";ENCODING=b;TYPE=" . $type;
         } else {
             $value = $url;
         }
-        
         $this->setProperty($property, $value);
+        return true;
     }
 
     /**
@@ -235,7 +244,7 @@ class VCard
         // loop all properties
         foreach ($this->properties as $key => $value) {
             // add to string
-            $string .= $key . ':' . $value . "\r\n";
+            $string .= $this->fold($key . ':' . $value . "\r\n");
         }
 
         // add to string
@@ -298,9 +307,7 @@ class VCard
     }
 
     /**
-     * Download
-     *
-     * @return header will push file to your browser
+     * Download a vcard or vcal file to the browser.
      */
     public function download()
     {
@@ -418,5 +425,20 @@ class VCard
     private function setProperty($key, $value)
     {
         $this->properties[$key] = $this->decode($value);
+    }
+
+    /**
+     * Fold a line according to RFC2425 section 5.8.1.
+     * @link http://tools.ietf.org/html/rfc2425#section-5.8.1
+     * @param string $text
+     * @return mixed
+     */
+    protected function fold($text)
+    {
+        if (strlen($text) <= 75) {
+            return $text;
+        }
+        //Split, wrap and trim trailing separator
+        return substr(chunk_split($text, 73, "\r\n "), 0, -3);
     }
 }
