@@ -89,7 +89,7 @@ class VCard
         $this->setProperty('ORG', $company);
 
         // if filename is empty, add to filename
-        if (empty($this->getFilename())) {
+        if ($this->getFilename() === null) {
             $this->setFilename($company);
         }
     }
