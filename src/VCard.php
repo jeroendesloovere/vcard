@@ -324,23 +324,12 @@ class VCard
      */
     public function download()
     {
-        // iOS devices
-        if ($this->isIOS()) {
-            // define output
-            $output = $this->buildVCalendar();
+        // define output
+        $output = $this->getOutput();
 
-            // send correct headers
-            header('Content-type: text/x-vcalendar; charset=utf-8');
-            header('Content-Disposition: attachment; filename=' . $this->filename . '.ics;');
-        // non-iOS devices
-        } else {
-            // define output
-            $output = $this->buildVCard();
-
-            // send correct headers
-            header('Content-type: text/x-vcard; charset=UTF-8');
-            header('Content-Disposition: attachment; filename=' . $this->filename . '.vcf;');
-        }
+        // send headers for the type of file
+        header('Content-type: ' . $this->getContentType() . '; charset=UTF-8');
+        header('Content-Disposition: attachment; filename=' . $this->getFilename() . ' . ' . $this->getFileExtension());
 
         // send correct headers
         header('Content-Length: ' . strlen($output));
@@ -351,6 +340,17 @@ class VCard
     }
 
     /**
+     * Get content type
+     *
+     * @return string
+     */
+    public function getContentType()
+    {
+        return ($this->isIOS()) ?
+            'text/x-vcalendar' : 'text/x-vcard'
+        ;
+    }
+
      * Get output as string
      *
      * @return string
