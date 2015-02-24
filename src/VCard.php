@@ -392,8 +392,7 @@ class VCard
         // get user agent
         $browser = strtolower($_SERVER['HTTP_USER_AGENT']);
 
-        // return bool
-        return (strpos($browser, 'iphone') || strpos($browser, 'ipod') || strpos($browser, 'ipad')) ? true : false;
+        return (strpos($browser, 'iphone') || strpos($browser, 'ipod') || strpos($browser, 'ipad'));
     }
 
     /**
