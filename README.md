@@ -46,7 +46,7 @@ $vcard->addURL('http://www.siesqo.be');
 $vcard->addPhoto(__DIR__ . '/landscape.jpeg', true);
 
 // return vcard as a string
-//return $vcard->get();
+//return $vcard->getOutput();
 
 // return vcard as a download
 return $vcard->download();
