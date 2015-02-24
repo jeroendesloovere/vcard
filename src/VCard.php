@@ -43,7 +43,9 @@ class VCard
      * @param  string[optional] $region
      * @param  string[optional] $zip
      * @param  string[optional] $country
-     * @param  string[optional] $type     $type may be DOM | INTL | POSTAL | PARCEL | HOME | WORK or any combination of these: e.g. "WORK;PARCEL;POSTAL"
+     * @param  string[optional] $type
+     *    $type may be DOM | INTL | POSTAL | PARCEL | HOME | WORK
+     *    or any combination of these: e.g. "WORK;PARCEL;POSTAL"
      */
     public function addAddress(
         $name = '',
@@ -59,7 +61,10 @@ class VCard
         $value = $name . ';' . $extended . ';' . $street . ';' . $city . ';' . $region . ';' . $zip . ';' . $country;
 
         // set property
-        $this->setProperty('ADR' . (($type != '') ? ';' . $type : ''), $value);
+        $this->setProperty(
+            'ADR' . (($type != '') ? ';' . $type : ''),
+            $value
+        );
     }
 
     /**
@@ -84,7 +89,9 @@ class VCard
         $this->setProperty('ORG', $company);
 
         // if filename is empty, add to filename
-        if (empty($this->filename)) $this->setFilename($company);
+        if (empty($this->getFilename())) {
+            $this->setFilename($company);
+        }
     }
 
     /**
@@ -114,8 +121,8 @@ class VCard
      *
      * @return void
      * @param  string $property LOGO|PHOTO
-     * @param  string $url image url or filename
-     * @param  bool   $encode to integrate / encode or not the file
+     * @param  string $url      image url or filename
+     * @param  bool   $encode   to integrate / encode or not the file
      */
     private function addMedia($property, $url, $encode = false)
     {
@@ -124,13 +131,13 @@ class VCard
 
             $finfo = finfo_open(FILEINFO_MIME);
             @$mime = finfo_file($finfo, $url);
-            
+
             $value = base64_encode($value);
             $property .= ";ENCODING=b;TYPE=" . strtoupper(str_replace('image/', '', $mime));
         } else {
             $value = $url;
         }
-        
+
         $this->setProperty($property, $value);
     }
 
@@ -157,19 +164,23 @@ class VCard
             $firstName,
             $additional,
             $lastName,
-            $suffix
+            $suffix,
         ));
 
         // define filename
         $this->setFilename($values);
 
         // set property
-        $this->setProperty('N', $lastName . ';' . $firstName . ';' . $additional . ';' . $prefix . ';' . $suffix);
+        $property = $lastName . ';' . $firstName . ';' . $additional . ';' . $prefix . ';' . $suffix;
+        $this->setProperty('N', $property);
 
         // is property FN set?
         if (!isset($this->properties['FN']) || $this->properties['FN'] == '') {
             // set property
-            $this->setProperty('FN', trim(implode(' ', $values)));
+            $this->setProperty(
+                'FN',
+                trim(implode(' ', $values))
+            );
         }
     }
 
@@ -189,18 +200,24 @@ class VCard
      *
      * @return void
      * @param  string           $number
-     * @param  string[optional] $type   Type may be PREF | WORK | HOME | VOICE | FAX | MSG | CELL | PAGER | BBS | CAR | MODEM | ISDN | VIDEO or any senseful combination, e.g. "PREF;WORK;VOICE"
+     * @param  string[optional] $type
+     *    Type may be PREF | WORK | HOME | VOICE | FAX | MSG |
+     *    CELL | PAGER | BBS | CAR | MODEM | ISDN | VIDEO
+     *    or any senseful combination, e.g. "PREF;WORK;VOICE"
      */
     public function addPhoneNumber($number, $type = '')
     {
-        $this->setProperty('TEL' . (($type != '') ? ';' . $type : ''), $number);
+        $this->setProperty(
+            'TEL' . (($type != '') ? ';' . $type : ''),
+            $number
+        );
     }
 
     /**
      * Add Photo
      *
      * @return void
-     * @param  string $url image url or filename
+     * @param  string $url    image url or filename
      * @param  bool   $encode to integrate / encode or not the file
      */
     public function addPhoto($url, $encode = false)
@@ -217,7 +234,10 @@ class VCard
      */
     public function addURL($url, $type = '')
     {
-        $this->setProperty('URL' . (($type != '') ? ';' . $type : ''), $url);
+        $this->setProperty(
+            'URL' . (($type != '') ? ';' . $type : ''),
+            $url
+        );
     }
 
     /**
@@ -390,7 +410,9 @@ class VCard
     public function setFilename($value, $overwrite = true, $separator = '_')
     {
         // recast to string if $value is array
-        if (is_array($value)) $value = implode($separator, $value);
+        if (is_array($value)) {
+            $value = implode($separator, $value);
+        }
 
         // trim unneeded values
         $value = trim($value, $separator);
@@ -399,13 +421,16 @@ class VCard
         $value = preg_replace('/\s+/', $separator, $value);
 
         // if value is empty, stop here
-        if (empty($value)) return false;
+        if (empty($value)) {
+            return false;
+        }
 
         // decode value + lowercase the string
         $value = strtolower($this->decode($value));
 
         // overwrite filename or add to filename using a prefix in between
-        $this->filename = ($overwrite) ? $value : $this->filename . $separator . $value;
+        $this->filename = ($overwrite) ?
+            $value : $this->filename.$separator.$value;
     }
 
     /**
