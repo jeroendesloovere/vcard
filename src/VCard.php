@@ -351,14 +351,15 @@ class VCard
         ;
     }
 
+    /**
      * Get output as string
+     * @deprecated in the future
      *
      * @return string
      */
     public function get()
     {
-        // return output for iOS devices or for non-iOS devices
-        return ($this->isIOS()) ? $this->buildVCalendar() : $this->buildVCard();
+        $this->getOutput();
     }
 
     /**
@@ -383,6 +384,21 @@ class VCard
         ;
     }
 
+    /**
+     * Get output as string
+     * iOS devices (and safari in particular) can not read .vcf (= vcard) files.
+     * So I build a workaround to build a .ics (= vcalender) file.
+     *
+     * @return string
+     */
+    public function getOutput()
+    {
+        return ($this->isIOS()) ?
+            $this->buildVCalendar() : $this->buildVCard()
+        ;
+    }
+
+    /**
      * Is iOS - Check if the user is using an iOS-device
      *
      * @return bool
