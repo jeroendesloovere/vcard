@@ -372,6 +372,17 @@ class VCard
     }
 
     /**
+     * Get file extension
+     *
+     * @return string
+     */
+    public function getFileExtension()
+    {
+        return ($this->isIOS()) ?
+            'ics' : 'vcf'
+        ;
+    }
+
      * Is iOS - Check if the user is using an iOS-device
      *
      * @return bool
