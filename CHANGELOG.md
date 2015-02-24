@@ -1,3 +1,14 @@
+1.1.6 (2015-02-24)
+--
+Improvements:
+* Add line folding, by @Synchro
+* Refactored some function
+* PSR-2-code-styling applied
+* PHPCS applied
+
+Bugfixes:
+* Fix fetching PHOTO elements, by @Synchro
+
 1.1.5 (2015-01-30)
 --
 Bugfixes:
