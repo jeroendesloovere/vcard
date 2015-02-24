@@ -285,7 +285,7 @@ class VCard
         $string .= "SUMMARY:Click attached contact below to save to your contacts\n";
         $string .= "DTSTAMP:" . $dtstart . "Z\n";
         $string .= "ATTACH;VALUE=BINARY;ENCODING=BASE64;FMTTYPE=text/directory;\n";
-        $string .= " X-APPLE-FILENAME=" . $this->filename . ".vcf:\n";
+        $string .= " X-APPLE-FILENAME=" . $this->getFilename() . "." . $this->getFileExtension() . ":\n";
 
         // base64 encode it so that it can be used as an attachemnt to the "dummy" calendar appointment
         $b64vcard = base64_encode($this->buildVCard());
@@ -329,7 +329,7 @@ class VCard
 
         // send headers for the type of file
         header('Content-type: ' . $this->getContentType() . '; charset=UTF-8');
-        header('Content-Disposition: attachment; filename=' . $this->getFilename() . ' . ' . $this->getFileExtension());
+        header('Content-Disposition: attachment; filename=' . $this->getFilename() . '.' . $this->getFileExtension());
 
         // send correct headers
         header('Content-Length: ' . strlen($output));
@@ -418,11 +418,12 @@ class VCard
      */
     public function save()
     {
-        // iOS devices - save to file as .ics
-        if ($this->isIOS()) file_put_contents($this->filename . '.ics', $this->buildVCalendar());
+        $file = $this->getFilename() . '.' . $this->getFileExtension();
 
-        // non-iOS devices - save to file as .vcf
-        else file_put_contents($this->filename . '.vcf', $this->buildVCard());
+        file_put_contents(
+            $file,
+            $this->getOutput()
+        );
     }
 
     /**
