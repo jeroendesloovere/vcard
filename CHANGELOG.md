@@ -1,8 +1,11 @@
+1.1.7 (xxxx-xx-xx)
+--
+
 1.1.6 (2015-02-24)
 --
 Improvements:
 * Add line folding, by @Synchro
-* Refactored some function
+* Refactored some functions
 * PSR-2-code-styling applied
 * PHPCS applied
 
