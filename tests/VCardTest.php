@@ -59,6 +59,14 @@ class VCardTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test IOS
+     */
+    public function testIOS()
+    {
+        $this->assertEquals(false, $this->vcard->isIOS());
+    }
+
+    /**
      * Test full blown name
      */
     public function testFullBlownName()
