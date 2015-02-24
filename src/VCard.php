@@ -121,47 +121,40 @@ class VCard
      *
      * @return boolean
      * @param  string $property LOGO|PHOTO
-<<<<<<< HEAD
      * @param  string $url      image url or filename
      * @param  bool   $encode   to integrate / encode or not the file
-=======
-     * @param  string $url image url or filename
-     * @param  bool $encode to integrate / encode or not the file
->>>>>>> e94d88cd0a955bc1ea86b04958f5f2a8cdb30848
      */
     private function addMedia($property, $url, $encode = false)
     {
         if ($encode) {
             $value = file_get_contents($url);
-<<<<<<< HEAD
 
-            $finfo = finfo_open(FILEINFO_MIME);
-            @$mime = finfo_file($finfo, $url);
-
-=======
+            // nothing returned from URL, stop here
             if (!$value) {
-                return false; //Nothing returned from URL
+                return false;
             }
-            if (!function_exists('getimagesizefromstring')) { //Introduced in PHP 5.4
-                $imginfo = getimagesize('data://application/octet-stream;base64,' . base64_encode($value));
-            } else {
+
+            // introduced in PHP 5.4
+            if (function_exists('getimagesizefromstring')) {
                 $imginfo = getimagesizefromstring($value);
+            } else {
+                $imginfo = getimagesize('data://application/octet-stream;base64,' . base64_encode($value));
             }
+
+            // mime type found
             if (array_key_exists('mime', $imginfo)) {
                 $type = strtoupper(str_replace('image/', '', $imginfo['mime']));
+            // returned data doesn't have a MIME type
             } else {
-                return false; //Returned data doesn't have a MIME type
+                return false;
             }
->>>>>>> e94d88cd0a955bc1ea86b04958f5f2a8cdb30848
+
             $value = base64_encode($value);
             $property .= ";ENCODING=b;TYPE=" . $type;
         } else {
             $value = $url;
         }
-<<<<<<< HEAD
 
-=======
->>>>>>> e94d88cd0a955bc1ea86b04958f5f2a8cdb30848
         $this->setProperty($property, $value);
         return true;
     }
