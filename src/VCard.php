@@ -122,9 +122,9 @@ class VCard
      * @return boolean
      * @param  string $property LOGO|PHOTO
      * @param  string $url      image url or filename
-     * @param  bool   $encode   to integrate / encode or not the file
+     * @param  bool   $include   Do we include the image in our vcard or not?
      */
-    private function addMedia($property, $url, $encode = false)
+    private function addMedia($property, $url, $include = true)
     {
         if ($encode) {
             $value = file_get_contents($url);
@@ -236,11 +236,11 @@ class VCard
      *
      * @return void
      * @param  string $url    image url or filename
-     * @param  bool   $encode to integrate / encode or not the file
+     * @param  bool   $include Include the image in our vcard?
      */
-    public function addPhoto($url, $encode = false)
+    public function addPhoto($url, $include = true)
     {
-        $this->addMedia('PHOTO', $url, $encode);
+        $this->addMedia('PHOTO', $url, $include);
     }
 
     /**
