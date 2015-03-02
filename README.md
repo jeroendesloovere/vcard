@@ -3,7 +3,7 @@
 [![License](http://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/jeroendesloovere/vcard/blob/master/LICENSE)
 [![Build Status](https://travis-ci.org/jeroendesloovere/vcard.svg?branch=master)](https://travis-ci.org/jeroendesloovere/vcard)
 
-This VCard PHP class can generate a vCard with some data. When using an iOS device it will export as a .ics file because iOS devices don't support the default .vcf files.
+This VCard PHP class can generate a vCard with some data. When using an iOS device (< iOS 8) it will export as a .ics file because iOS devices don't support the default .vcf files.
 
 ## Usage
 
