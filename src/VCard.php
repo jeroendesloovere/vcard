@@ -284,7 +284,7 @@ class VCard
     }
 
     /**
-     * Build VCalender (.ics) - Safari (iOS) can not open .vcf files, so we have build a workaround.
+     * Build VCalender (.ics) - Safari (< iOS 8) can not open .vcf files, so we have build a workaround.
      *
      * @return string
      */
@@ -402,7 +402,7 @@ class VCard
 
     /**
      * Get output as string
-     * iOS devices (and safari in particular) can not read .vcf (= vcard) files.
+     * iOS devices (and safari < iOS 8 in particular) can not read .vcf (= vcard) files.
      * So I build a workaround to build a .ics (= vcalender) file.
      *
      * @return string
