@@ -490,6 +490,7 @@ class VCard
 
     /**
      * Fold a line according to RFC2425 section 5.8.1.
+     *
      * @link http://tools.ietf.org/html/rfc2425#section-5.8.1
      * @param string $text
      * @return mixed
