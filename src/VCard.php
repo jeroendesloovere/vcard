@@ -473,7 +473,7 @@ class VCard
 
         // overwrite filename or add to filename using a prefix in between
         $this->filename = ($overwrite) ?
-            $value : $this->filename.$separator.$value;
+            $value : $this->filename . $separator . $value;
     }
 
     /**
