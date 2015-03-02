@@ -29,7 +29,7 @@ $vcard->addPhoneNumber(123456789, 'WORK');
 $vcard->addAddress(null, null, 'street', 'worktown', null, 'workpostcode', 'Belgium');
 $vcard->addURL('http://www.siesqo.be');
 
-$vcard->addPhoto(__DIR__ . '/landscape.jpeg', true);
+$vcard->addPhoto(__DIR__ . '/landscape.jpeg');
 
 // return vcard as a string
 //return $vcard->getOutput();
