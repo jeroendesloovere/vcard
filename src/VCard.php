@@ -7,7 +7,7 @@ namespace JeroenDesloovere\VCard;
  *
  * For the full copyright and license information, please view the license
  * file that was distributed with this source code.
- */
+ */ 
 
 use JeroenDesloovere\VCard\Exception as VCardException;
 
@@ -17,7 +17,7 @@ use JeroenDesloovere\VCard\Exception as VCardException;
  * @author Jeroen Desloovere <info@jeroendesloovere.be>
  */
 class VCard
-{
+{ 
     /**
      * Filename
      *
@@ -31,7 +31,13 @@ class VCard
      * @var array
      */
     private $properties;
-
+    /**
+     * Default Charset
+     *
+     * @var string
+     */
+    public $charset = 'utf-8';
+    
     /**
      * Add address
      *
@@ -89,7 +95,7 @@ class VCard
         $this->setProperty('ORG', $company);
 
         // if filename is empty, add to filename
-        if (empty($this->getFilename())) {
+        if ($this->getFilename() === null) {
             $this->setFilename($company);
         }
     }
@@ -122,9 +128,9 @@ class VCard
      * @return boolean
      * @param  string $property LOGO|PHOTO
      * @param  string $url      image url or filename
-     * @param  bool   $encode   to integrate / encode or not the file
+     * @param  bool   $include   Do we include the image in our vcard or not?
      */
-    private function addMedia($property, $url, $encode = false)
+    private function addMedia($property, $url, $include = true)
     {
         if ($encode) {
             $value = file_get_contents($url);
@@ -236,11 +242,11 @@ class VCard
      *
      * @return void
      * @param  string $url    image url or filename
-     * @param  bool   $encode to integrate / encode or not the file
+     * @param  bool   $include Include the image in our vcard?
      */
-    public function addPhoto($url, $encode = false)
+    public function addPhoto($url, $include = true)
     {
-        $this->addMedia('PHOTO', $url, $encode);
+        $this->addMedia('PHOTO', $url, $include);
     }
 
     /**
@@ -284,7 +290,7 @@ class VCard
     }
 
     /**
-     * Build VCalender (.ics) - Safari (iOS) can not open .vcf files, so we have build a workaround.
+     * Build VCalender (.ics) - Safari (< iOS 8) can not open .vcf files, so we have build a workaround.
      *
      * @return string
      */
@@ -330,9 +336,9 @@ class VCard
      * @return string decoded
      * @param  string $value The value to decode
      */
-    private function decode($value)
+    private function decode($value) 
     {
-        return htmlspecialchars_decode((string) $value, ENT_QUOTES);
+        return htmlspecialchars_decode((string) iconv($this->charset,"ISO 8859-9",$value), ENT_QUOTES);
     }
 
     /**
@@ -402,7 +408,7 @@ class VCard
 
     /**
      * Get output as string
-     * iOS devices (and safari in particular) can not read .vcf (= vcard) files.
+     * iOS devices (and safari < iOS 8 in particular) can not read .vcf (= vcard) files.
      * So I build a workaround to build a .ics (= vcalender) file.
      *
      * @return string
@@ -473,7 +479,7 @@ class VCard
 
         // overwrite filename or add to filename using a prefix in between
         $this->filename = ($overwrite) ?
-            $value : $this->filename.$separator.$value;
+            $value : $this->filename . $separator . $value;
     }
 
     /**
@@ -490,6 +496,7 @@ class VCard
 
     /**
      * Fold a line according to RFC2425 section 5.8.1.
+     *
      * @link http://tools.ietf.org/html/rfc2425#section-5.8.1
      * @param string $text
      * @return mixed
