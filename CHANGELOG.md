@@ -11,18 +11,18 @@ Improvements:
 1.1.6 (2015-02-24)
 --
 Improvements:
-* Add line folding, by @Synchro
-* Refactored some functions
-* PSR-2-code-styling applied
-* PHPCS applied
+* Add line folding, check #16
+* Refactored some functions.
+* PSR-2-code-styling applied.
+* PHPCS applied.
 
 Bugfixes:
-* Fix fetching PHOTO elements, by @Synchro
+* Fix fetching PHOTO elements.
 
 1.1.5 (2015-01-30)
 --
 Bugfixes:
-* Updated the deprecated MIME detection.
+* Updated the deprecated MIME detection, check #16
 
 1.1.4 (2015-01-22)
 --
