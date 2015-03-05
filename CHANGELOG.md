@@ -1,4 +1,4 @@
-1.1.7 (2015-03-02)
+1.1.7 (2015-03-05)
 --
 Improvements:
 * Images should per default be included in our vcard.
