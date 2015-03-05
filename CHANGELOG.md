@@ -1,12 +1,10 @@
-1.1.8 (2015-03-05)
---
-Bugfixes:
-* Fix for the ->get() which didn't return anything.
-
 1.1.7 (2015-03-02)
 --
 Improvements:
 * Images should per default be included in our vcard.
+
+Bugfixes:
+* Fix for the ->get() which didn't return anything.
 
 1.1.6 (2015-02-24)
 --
