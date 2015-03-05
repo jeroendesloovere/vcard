@@ -1,3 +1,8 @@
+1.1.8 (xxxx-xx-xx)
+--
+Bugfixes:
+* Fix for the ->get() which didn't return anything.
+
 1.1.7 (2015-03-02)
 --
 Improvements:
