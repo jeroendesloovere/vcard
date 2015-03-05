@@ -375,7 +375,7 @@ class VCard
      */
     public function get()
     {
-        $this->getOutput();
+        return $this->getOutput();
     }
 
     /**
