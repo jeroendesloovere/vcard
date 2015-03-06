@@ -126,7 +126,7 @@ class VCard
      */
     private function addMedia($property, $url, $include = true)
     {
-        if ($encode) {
+        if ($include) {
             $value = file_get_contents($url);
 
             // nothing returned from URL, stop here
