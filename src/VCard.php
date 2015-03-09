@@ -31,6 +31,7 @@ class VCard
      * @var array
      */
     private $properties;
+
     /**
      * Default Charset
      *
