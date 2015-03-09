@@ -480,6 +480,9 @@ class VCard
         // decode value + lowercase the string
         $value = strtolower($this->decode($value));
 
+        // urlize this part
+        $value = Transliterator::urlize($value);
+
         // overwrite filename or add to filename using a prefix in between
         $this->filename = ($overwrite) ?
             $value : $this->filename . $separator . $value;
