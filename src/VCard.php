@@ -497,7 +497,8 @@ class VCard
      */
     private function setProperty($key, $value)
     {
-        $this->properties[$key] = $this->decode($value);
+        // set property
+        $this->properties[$key] = $value;
     }
 
     /**
