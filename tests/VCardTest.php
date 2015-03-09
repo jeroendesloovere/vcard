@@ -38,6 +38,9 @@ class VCardTest extends \PHPUnit_Framework_TestCase
 
         $this->firstName2 = 'Ali';
         $this->lastName2 = 'ÖZSÜT';
+
+        $this->firstName3 = 'Garçon';
+        $this->lastName3 = 'Jéroèn';
     }
 
     /**
@@ -72,6 +75,19 @@ class VCardTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals('ali-ozsut', $this->vcard->getFilename());
+    }
+
+    /**
+     * Test special first name and last name
+     */
+    public function testSpecialFirstNameAndLastName2()
+    {
+        $this->vcard->addName(
+            $this->lastName3,
+            $this->firstName3
+        );
+
+        $this->assertEquals('garcon-jeroen', $this->vcard->getFilename());
     }
 
     /**
