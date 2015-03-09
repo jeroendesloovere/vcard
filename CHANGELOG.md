@@ -1,4 +1,4 @@
-1.1.8 (xxxx-xx-xx)
+1.1.8 (2015-03-09)
 --
 Bugfixes:
 * Fixes $include/$exclude, #27
