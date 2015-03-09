@@ -1,10 +1,8 @@
 1.1.8 (xxxx-xx-xx)
 --
-Improvements:
-* Betters support for strange characters, #26
-
 Bugfixes:
-* Fixed $include/$exclude, #27
+* Fixes $include/$exclude, #27
+* Fixes special characters by using external transliterator class.
 
 1.1.7 (2015-03-05)
 --
