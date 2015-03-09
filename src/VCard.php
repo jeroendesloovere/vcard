@@ -7,7 +7,7 @@ namespace JeroenDesloovere\VCard;
  *
  * For the full copyright and license information, please view the license
  * file that was distributed with this source code.
- */
+ */ 
 
 use JeroenDesloovere\VCard\Exception as VCardException;
 
@@ -17,7 +17,7 @@ use JeroenDesloovere\VCard\Exception as VCardException;
  * @author Jeroen Desloovere <info@jeroendesloovere.be>
  */
 class VCard
-{
+{ 
     /**
      * Filename
      *
@@ -31,7 +31,13 @@ class VCard
      * @var array
      */
     private $properties;
-
+    /**
+     * Default Charset
+     *
+     * @var string
+     */
+    public $charset = 'utf-8';
+    
     /**
      * Add address
      *
@@ -330,9 +336,9 @@ class VCard
      * @return string decoded
      * @param  string $value The value to decode
      */
-    private function decode($value)
+    private function decode($value) 
     {
-        return htmlspecialchars_decode((string) $value, ENT_QUOTES);
+        return htmlspecialchars_decode((string) iconv($this->charset,"ISO 8859-9",$value), ENT_QUOTES);
     }
 
     /**
