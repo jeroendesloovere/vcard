@@ -341,10 +341,7 @@ class VCard
     private function decode($value)
     {
         // convert cyrlic, greek or other caracters to ASCII characters
-        $value = Transliterator::transliterate($value);
-
-        // make a clean url out of it
-        return Transliterator::urlize($value);
+        return Transliterator::transliterate($value);
     }
 
     /**
