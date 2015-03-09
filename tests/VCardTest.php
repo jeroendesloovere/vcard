@@ -35,6 +35,9 @@ class VCardTest extends \PHPUnit_Framework_TestCase
         $this->additional = '&';
         $this->prefix = 'Mister';
         $this->suffix = 'Junior';
+
+        $this->firstName2 = 'Ali';
+        $this->lastName2 = 'ÖZSÜT';
     }
 
     /**
@@ -55,7 +58,20 @@ class VCardTest extends \PHPUnit_Framework_TestCase
             $this->firstName
         );
 
-        $this->assertEquals('jeroen_desloovere', $this->vcard->getFilename());
+        $this->assertEquals('jeroen-desloovere', $this->vcard->getFilename());
+    }
+
+    /**
+     * Test special first name and last name
+     */
+    public function testSpecialFirstNameAndLastName()
+    {
+        $this->vcard->addName(
+            $this->lastName2,
+            $this->firstName2
+        );
+
+        $this->assertEquals('ali-ozsut', $this->vcard->getFilename());
     }
 
     /**
@@ -71,6 +87,6 @@ class VCardTest extends \PHPUnit_Framework_TestCase
             $this->suffix
         );
 
-        $this->assertEquals('mister_jeroen_&_desloovere_junior', $this->vcard->getFilename());
+        $this->assertEquals('mister-jeroen-desloovere-junior', $this->vcard->getFilename());
     }
 }
