@@ -465,7 +465,7 @@ class VCard
 
         // if value is empty, stop here
         if (empty($value)) {
-            return false;
+            return;
         }
 
         // decode value + lowercase the string
