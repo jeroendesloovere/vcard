@@ -10,7 +10,6 @@ namespace JeroenDesloovere\VCard;
  */
 
 use JeroenDesloovere\VCard\Exception as VCardException;
-use Behat\Transliterator\Transliterator;
 
 /**
  * VCard PHP Class to generate .vcard files and save them to a file or output as a download.
@@ -340,11 +339,7 @@ class VCard
      */
     private function decode($value)
     {
-        // convert cyrlic, greek or other caracters to ASCII characters
-        $value = Transliterator::transliterate($value);
-
-        // make a clean url out of it
-        return Transliterator::urlize($value);
+        return htmlspecialchars_decode((string) iconv($this->charset, "ISO 8859-9", $value), ENT_QUOTES);
     }
 
     /**

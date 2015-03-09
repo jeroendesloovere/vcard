@@ -14,8 +14,7 @@
         }
     ],
     "require": {
-        "php": ">=5.3.3",
-        "behat/transliterator": "~1.0"
+        "php": ">=5.3.3"
     },
     "autoload": {
         "psr-4": { "JeroenDesloovere\\VCard\\": "src/" }
