@@ -356,7 +356,7 @@ class VCard
         $output = $this->getOutput();
 
         // send headers for the type of file
-        header('Content-type: ' . $this->getContentType() . '; charset=UTF-8');
+        header('Content-type: ' . $this->getContentType() . '; charset=' . $this->charset);
         header('Content-Disposition: attachment; filename=' . $this->getFilename() . '.' . $this->getFileExtension());
 
         // send correct headers
