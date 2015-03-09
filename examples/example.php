@@ -6,6 +6,7 @@
  * @author Jeroen Desloovere <info@jeroendesloovere.be>
  */
 
+require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../src/VCard.php';
 
 use JeroenDesloovere\VCard\VCard;
