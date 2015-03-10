@@ -512,7 +512,8 @@ class VCard
         if (strlen($text) <= 75) {
             return $text;
         }
-        //Split, wrap and trim trailing separator
+
+        // split, wrap and trim trailing separator
         return substr(chunk_split($text, 73, "\r\n "), 0, -3);
     }
 }
