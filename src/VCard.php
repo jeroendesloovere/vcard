@@ -39,7 +39,7 @@ class VCard
      * @var string
      */
     public $charset = 'utf-8';
-    
+
     /**
      * Add address
      *
@@ -152,7 +152,7 @@ class VCard
             // mime type found
             if (array_key_exists('mime', $imginfo)) {
                 $type = strtoupper(str_replace('image/', '', $imginfo['mime']));
-            // returned data doesn't have a MIME type
+                // returned data doesn't have a MIME type
             } else {
                 return false;
             }
@@ -345,6 +345,34 @@ class VCard
     }
 
     /**
+     * @param bool $merge
+     * @return array
+     */
+    public function getHeaders($merge)
+    {
+        $output = $this->getOutput();
+
+        $headers = array(
+            'Content-type'          => $this->getContentType() . '; charset=' . $this->charset,
+            'Content-Disposition'   => 'attachment; filename=' . $this->getFilename() . '.' . $this->getFileExtension(),
+            'Content-Length'        => strlen($output),
+            'Connection'            => 'close'
+        );
+
+        if($merge){
+            $mergedHeaders = array();
+            foreach($headers as $key => $value)
+            {
+                $mergedHeaders[] = $key . ': ' . $value;
+            }
+
+            return $mergedHeaders;
+        }
+
+        return $headers;
+    }
+
+    /**
      * Download a vcard or vcal file to the browser.
      */
     public function download()
@@ -352,13 +380,10 @@ class VCard
         // define output
         $output = $this->getOutput();
 
-        // send headers for the type of file
-        header('Content-type: ' . $this->getContentType() . '; charset=' . $this->charset);
-        header('Content-Disposition: attachment; filename=' . $this->getFilename() . '.' . $this->getFileExtension());
-
-        // send correct headers
-        header('Content-Length: ' . strlen($output));
-        header('Connection: close');
+        foreach($this->getHeaders(true) as $header)
+        {
+            header($header);
+        }
 
         // echo the output and it will be a download
         echo $output;
@@ -371,9 +396,9 @@ class VCard
      */
     public function getContentType()
     {
-        return ($this->isIOS()) ?
+        return ($this->isIOS7()) ?
             'text/x-vcalendar' : 'text/x-vcard'
-        ;
+            ;
     }
 
     /**
@@ -404,9 +429,9 @@ class VCard
      */
     public function getFileExtension()
     {
-        return ($this->isIOS()) ?
+        return ($this->isIOS7()) ?
             'ics' : 'vcf'
-        ;
+            ;
     }
 
     /**
@@ -418,9 +443,23 @@ class VCard
      */
     public function getOutput()
     {
-        return ($this->isIOS()) ?
+        return ($this->isIOS7()) ?
             $this->buildVCalendar() : $this->buildVCard()
-        ;
+            ;
+    }
+
+    /**
+     * Is iOS less than 7 (to should cal be returned)
+     *
+     * @return bool
+     */
+    public function isIOS7()
+    {
+        if($this->isIOS() && $this->shouldAttachmentBeCal()){
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -434,6 +473,26 @@ class VCard
         $browser = strtolower($_SERVER['HTTP_USER_AGENT']);
 
         return (strpos($browser, 'iphone') || strpos($browser, 'ipod') || strpos($browser, 'ipad'));
+    }
+
+    /**
+     * checks if we should return vcard in cal wrapper
+     *
+     * @return bool
+     */
+    protected function shouldAttachmentBeCal()
+    {
+        $browser = strtolower($_SERVER['HTTP_USER_AGENT']);
+
+        $matches = [];
+        preg_match('/os (\d+)_(\d+)\s+/', $browser, $matches);
+        $version = isset($matches[1]) ? ((int)$matches[1]) : 999;
+
+        if($version < 8){
+            return true;
+        }
+
+        return false;
     }
 
     /**
