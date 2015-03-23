@@ -344,16 +344,32 @@ class VCard
         return Transliterator::transliterate($value);
     }
 
-    public function getHeaders()
+    /**
+     * @param bool $merge
+     * @return array
+     */
+    public function getHeaders($merge)
     {
         $output = $this->getOutput();
 
-        return array(
-            'Content-type: ' . $this->getContentType() . '; charset=' . $this->charset,
-            'Content-Disposition: attachment; filename=' . $this->getFilename() . '.' . $this->getFileExtension(),
-            'Content-Length: ' . strlen($output),
-            'Connection: close'
+        $headers = array(
+            'Content-type'          => $this->getContentType() . '; charset=' . $this->charset,
+            'Content-Disposition'   => 'attachment; filename=' . $this->getFilename() . '.' . $this->getFileExtension(),
+            'Content-Length'        => strlen($output),
+            'Connection'            => 'close'
         );
+
+        if($merge){
+            $mergedHeaders = array();
+            foreach($headers as $key => $value)
+            {
+                $mergedHeaders[] = $key . ': ' . $value;
+            }
+
+            return $mergedHeaders;
+        }
+
+        return $headers;
     }
 
     /**
@@ -364,7 +380,7 @@ class VCard
         // define output
         $output = $this->getOutput();
 
-        foreach($this->getHeaders() as $header)
+        foreach($this->getHeaders(true) as $header)
         {
             header($header);
         }
