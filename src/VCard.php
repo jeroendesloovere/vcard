@@ -44,14 +44,14 @@ class VCard
      * Add address
      *
      * @return void
-     * @param  string[optional] $name
-     * @param  string[optional] $extended
-     * @param  string[optional] $street
-     * @param  string[optional] $city
-     * @param  string[optional] $region
-     * @param  string[optional] $zip
-     * @param  string[optional] $country
-     * @param  string[optional] $type
+     * @param  string [optional] $name
+     * @param  string [optional] $extended
+     * @param  string [optional] $street
+     * @param  string [optional] $city
+     * @param  string [optional] $region
+     * @param  string [optional] $zip
+     * @param  string [optional] $country
+     * @param  string [optional] $type
      *    $type may be DOM | INTL | POSTAL | PARCEL | HOME | WORK
      *    or any combination of these: e.g. "WORK;PARCEL;POSTAL"
      */
@@ -106,7 +106,7 @@ class VCard
      * Add email
      *
      * @return void
-     * @param  string $address The e-mailaddress
+     * @param  string $address The e-mail address
      */
     public function addEmail($address)
     {
@@ -129,8 +129,8 @@ class VCard
      *
      * @return boolean
      * @param  string $property LOGO|PHOTO
-     * @param  string $url      image url or filename
-     * @param  bool   $include   Do we include the image in our vcard or not?
+     * @param  string $url image url or filename
+     * @param  bool   $include Do we include the image in our vcard or not?
      */
     private function addMedia($property, $url, $include = true)
     {
@@ -171,11 +171,11 @@ class VCard
      * Add name
      *
      * @return void
-     * @param  string[optional] $lastName
-     * @param  string[optional] $firstName
-     * @param  string[optional] $additional
-     * @param  string[optional] $prefix
-     * @param  string[optional] $suffix
+     * @param  string [optional] $lastName
+     * @param  string [optional] $firstName
+     * @param  string [optional] $additional
+     * @param  string [optional] $prefix
+     * @param  string [optional] $suffix
      */
     public function addName(
         $lastName = '',
@@ -225,8 +225,8 @@ class VCard
      * Add phone number
      *
      * @return void
-     * @param  string           $number
-     * @param  string[optional] $type
+     * @param  string $number
+     * @param  string [optional] $type
      *    Type may be PREF | WORK | HOME | VOICE | FAX | MSG |
      *    CELL | PAGER | BBS | CAR | MODEM | ISDN | VIDEO
      *    or any senseful combination, e.g. "PREF;WORK;VOICE"
@@ -243,7 +243,7 @@ class VCard
      * Add Photo
      *
      * @return void
-     * @param  string $url    image url or filename
+     * @param  string $url image url or filename
      * @param  bool   $include Include the image in our vcard?
      */
     public function addPhoto($url, $include = true)
@@ -255,8 +255,8 @@ class VCard
      * Add URL
      *
      * @return void
-     * @param  string           $url
-     * @param  string[optional] $type Type may be WORK | HOME
+     * @param  string $url
+     * @param         string [optional] $type Type may be WORK | HOME
      */
     public function addURL($url, $type = '')
     {
@@ -350,24 +350,20 @@ class VCard
      */
     public function getHeaders($asAssociative)
     {
-        if($asAssociative)
-        {
+        if ($asAssociative) {
             return array(
-                'Content-type'          => $this->getContentType() . '; charset=' . $this->charset,
-                'Content-Disposition'   => 'attachment; filename=' . $this->getFilename() . '.' . $this->getFileExtension(),
-                'Content-Length'        => strlen($this->getOutput()),
-                'Connection'            => 'close'
+                'Content-type'        => $this->getContentType() . '; charset=' . $this->charset,
+                'Content-Disposition' => 'attachment; filename=' . $this->getFilename() . '.' . $this->getFileExtension(),
+                'Content-Length'      => strlen($this->getOutput()),
+                'Connection'          => 'close'
             );
         }
-        else
-        {
-            return array(
-                'Content-type: ' . $this->getContentType() . '; charset=' . $this->charset,
-                'Content-Disposition: attachment; filename=' . $this->getFilename() . '.' . $this->getFileExtension(),
-                'Content-Length: ' . strlen($this->getOutput()),
-                'Connection: close'
-            );
-        }
+        return array(
+            'Content-type: ' . $this->getContentType() . '; charset=' . $this->charset,
+            'Content-Disposition: attachment; filename=' . $this->getFilename() . '.' . $this->getFileExtension(),
+            'Content-Length: ' . strlen($this->getOutput()),
+            'Connection: close'
+        );
     }
 
     /**
@@ -378,8 +374,7 @@ class VCard
         // define output
         $output = $this->getOutput();
 
-        foreach($this->getHeaders(false) as $header)
-        {
+        foreach ($this->getHeaders(false) as $header) {
             header($header);
         }
 
@@ -395,8 +390,7 @@ class VCard
     public function getContentType()
     {
         return ($this->isIOS7()) ?
-            'text/x-vcalendar' : 'text/x-vcard'
-            ;
+            'text/x-vcalendar' : 'text/x-vcard';
     }
 
     /**
@@ -428,8 +422,7 @@ class VCard
     public function getFileExtension()
     {
         return ($this->isIOS7()) ?
-            'ics' : 'vcf'
-            ;
+            'ics' : 'vcf';
     }
 
     /**
@@ -442,8 +435,7 @@ class VCard
     public function getOutput()
     {
         return ($this->isIOS7()) ?
-            $this->buildVCalendar() : $this->buildVCard()
-            ;
+            $this->buildVCalendar() : $this->buildVCard();
     }
 
     /**
@@ -454,8 +446,7 @@ class VCard
     public function isIOS7()
     {
         return ($this->isIOS() && $this->shouldAttachmentBeCal()) ?
-            true : false
-            ;
+            true : false;
     }
 
     /**
@@ -485,8 +476,7 @@ class VCard
         $version = isset($matches[1]) ? ((int)$matches[1]) : 999;
 
         return ($version < 8) ?
-            true : false
-            ;
+            true : false;
     }
 
     /**
@@ -509,8 +499,8 @@ class VCard
      *
      * @return void
      * @param  mixed  $value
-     * @param  bool   $overwrite[optional] Default overwrite is true
-     * @param  string $separator[optional] Default separator is an underscore '_'
+     * @param  bool   $overwrite [optional] Default overwrite is true
+     * @param  string $separator [optional] Default separator is an underscore '_'
      */
     public function setFilename($value, $overwrite = true, $separator = '_')
     {
