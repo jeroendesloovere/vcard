@@ -350,19 +350,25 @@ class VCard
      */
     public function getHeaders($asAssociative)
     {
-        if ($asAssociative) {
+        $contentType        = $this->getContentType() . '; charset=' . $this->charset;
+        $contentDisposition = 'attachment; filename=' . $this->getFilename() . '.' . $this->getFileExtension();
+        $contentLength      = strlen($this->getOutput());
+        $connection         = 'close';
+
+        if ($asAssociative){
             return array(
-                'Content-type'        => $this->getContentType() . '; charset=' . $this->charset,
-                'Content-Disposition' => 'attachment; filename=' . $this->getFilename() . '.' . $this->getFileExtension(),
-                'Content-Length'      => strlen($this->getOutput()),
-                'Connection'          => 'close'
+                'Content-type'        => $contentType,
+                'Content-Disposition' => $contentDisposition,
+                'Content-Length'      => $contentLength,
+                'Connection'          => $connection
             );
         }
+        
         return array(
-            'Content-type: ' . $this->getContentType() . '; charset=' . $this->charset,
-            'Content-Disposition: attachment; filename=' . $this->getFilename() . '.' . $this->getFileExtension(),
-            'Content-Length: ' . strlen($this->getOutput()),
-            'Connection: close'
+            'Content-type: ' . $contentType,
+            'Content-Disposition: ' . $contentDisposition,
+            'Content-Length: ' . $contentLength,
+            'Connection: ' . $connection
         );
     }
 
