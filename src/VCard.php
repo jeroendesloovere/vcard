@@ -345,34 +345,6 @@ class VCard
     }
 
     /**
-     * @param bool $asAssociative
-     * @return array
-     */
-    public function getHeaders($asAssociative)
-    {
-        $contentType        = $this->getContentType() . '; charset=' . $this->charset;
-        $contentDisposition = 'attachment; filename=' . $this->getFilename() . '.' . $this->getFileExtension();
-        $contentLength      = strlen($this->getOutput());
-        $connection         = 'close';
-
-        if ($asAssociative) {
-            return array(
-                'Content-type'        => $contentType,
-                'Content-Disposition' => $contentDisposition,
-                'Content-Length'      => $contentLength,
-                'Connection'          => $connection
-            );
-        }
-        
-        return array(
-            'Content-type: ' . $contentType,
-            'Content-Disposition: ' . $contentDisposition,
-            'Content-Length: ' . $contentLength,
-            'Connection: ' . $connection
-        );
-    }
-
-    /**
      * Download a vcard or vcal file to the browser.
      */
     public function download()
@@ -389,14 +361,20 @@ class VCard
     }
 
     /**
-     * Get content type
+     * Fold a line according to RFC2425 section 5.8.1.
      *
-     * @return string
+     * @link http://tools.ietf.org/html/rfc2425#section-5.8.1
+     * @param string $text
+     * @return mixed
      */
-    public function getContentType()
+    protected function fold($text)
     {
-        return ($this->isIOS7()) ?
-            'text/x-vcalendar' : 'text/x-vcard';
+        if (strlen($text) <= 75) {
+            return $text;
+        }
+
+        // split, wrap and trim trailing separator
+        return substr(chunk_split($text, 73, "\r\n "), 0, -3);
     }
 
     /**
@@ -408,6 +386,17 @@ class VCard
     public function get()
     {
         return $this->getOutput();
+    }
+
+    /**
+     * Get content type
+     *
+     * @return string
+     */
+    public function getContentType()
+    {
+        return ($this->isIOS7()) ?
+            'text/x-vcalendar' : 'text/x-vcard';
     }
 
     /**
@@ -432,6 +421,36 @@ class VCard
     }
 
     /**
+     * Get headers
+     *
+     * @param bool $asAssociative
+     * @return array
+     */
+    public function getHeaders($asAssociative)
+    {
+        $contentType        = $this->getContentType() . '; charset=' . $this->charset;
+        $contentDisposition = 'attachment; filename=' . $this->getFilename() . '.' . $this->getFileExtension();
+        $contentLength      = strlen($this->getOutput());
+        $connection         = 'close';
+
+        if ((bool) $asAssociative) {
+            return array(
+                'Content-type'        => $contentType,
+                'Content-Disposition' => $contentDisposition,
+                'Content-Length'      => $contentLength,
+                'Connection'          => $connection
+            );
+        }
+        
+        return array(
+            'Content-type: ' . $contentType,
+            'Content-Disposition: ' . $contentDisposition,
+            'Content-Length: ' . $contentLength,
+            'Connection: ' . $connection
+        );
+    }
+
+    /**
      * Get output as string
      * iOS devices (and safari < iOS 8 in particular) can not read .vcf (= vcard) files.
      * So I build a workaround to build a .ics (= vcalender) file.
@@ -442,17 +461,6 @@ class VCard
     {
         return ($this->isIOS7()) ?
             $this->buildVCalendar() : $this->buildVCard();
-    }
-
-    /**
-     * Is iOS less than 7 (should cal wrapper be returned)
-     *
-     * @return bool
-     */
-    public function isIOS7()
-    {
-        return ($this->isIOS() && $this->shouldAttachmentBeCal()) ?
-            true : false;
     }
 
     /**
@@ -469,19 +477,13 @@ class VCard
     }
 
     /**
-     * checks if we should return vcard in cal wrapper
+     * Is iOS less than 7 (should cal wrapper be returned)
      *
      * @return bool
      */
-    protected function shouldAttachmentBeCal()
+    public function isIOS7()
     {
-        $browser = strtolower($_SERVER['HTTP_USER_AGENT']);
-
-        $matches = [];
-        preg_match('/os (\d+)_(\d+)\s+/', $browser, $matches);
-        $version = isset($matches[1]) ? ((int)$matches[1]) : 999;
-
-        return ($version < 8) ?
+        return ($this->isIOS() && $this->shouldAttachmentBeCal()) ?
             true : false;
     }
 
@@ -550,19 +552,19 @@ class VCard
     }
 
     /**
-     * Fold a line according to RFC2425 section 5.8.1.
+     * checks if we should return vcard in cal wrapper
      *
-     * @link http://tools.ietf.org/html/rfc2425#section-5.8.1
-     * @param string $text
-     * @return mixed
+     * @return bool
      */
-    protected function fold($text)
+    protected function shouldAttachmentBeCal()
     {
-        if (strlen($text) <= 75) {
-            return $text;
-        }
+        $browser = strtolower($_SERVER['HTTP_USER_AGENT']);
 
-        // split, wrap and trim trailing separator
-        return substr(chunk_split($text, 73, "\r\n "), 0, -3);
+        $matches = [];
+        preg_match('/os (\d+)_(\d+)\s+/', $browser, $matches);
+        $version = isset($matches[1]) ? ((int)$matches[1]) : 999;
+
+        return ($version < 8) ?
+            true : false;
     }
 }
