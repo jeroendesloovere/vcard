@@ -355,7 +355,7 @@ class VCard
         $contentLength      = strlen($this->getOutput());
         $connection         = 'close';
 
-        if ($asAssociative){
+        if ($asAssociative) {
             return array(
                 'Content-type'        => $contentType,
                 'Content-Disposition' => $contentDisposition,
