@@ -54,6 +54,17 @@ return $vcard->download();
 
 > [View all examples](/examples/example.php) or check [the VCard class](/src/VCard.php).
 
+**Support for frameworks**
+
+For example: Laravel
+```php
+return Response::make(
+    $this->vcard->getOutput(),
+    200,
+    $this->vcard->getHeaders(true)
+);
+```
+
 ## Documentation
 
 The class is well documented inline. If you use a decent IDE you'll see that each method is documented with PHPDoc.
