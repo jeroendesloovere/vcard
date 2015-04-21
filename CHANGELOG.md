@@ -1,4 +1,4 @@
-1.1.9 (xxxx-xx-xx)
+1.1.9 (2015-04-21)
 --
 Improvements:
 * getHeaders() is now separate function. So frameworks can use this.
