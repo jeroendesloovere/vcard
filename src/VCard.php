@@ -43,7 +43,6 @@ class VCard
     /**
      * Add address
      *
-     * @return void
      * @param  string [optional] $name
      * @param  string [optional] $extended
      * @param  string [optional] $street
@@ -54,6 +53,7 @@ class VCard
      * @param  string [optional] $type
      *    $type may be DOM | INTL | POSTAL | PARCEL | HOME | WORK
      *    or any combination of these: e.g. "WORK;PARCEL;POSTAL"
+     * @return void
      */
     public function addAddress(
         $name = '',
@@ -78,8 +78,8 @@ class VCard
     /**
      * Add birthday
      *
-     * @return void
      * @param  string $date Format is YYYY-MM-DD
+     * @return void
      */
     public function addBirthday($date)
     {
@@ -89,8 +89,8 @@ class VCard
     /**
      * Add company
      *
-     * @return void
      * @param  string $company
+     * @return void
      */
     public function addCompany($company)
     {
@@ -105,8 +105,8 @@ class VCard
     /**
      * Add email
      *
-     * @return void
      * @param  string $address The e-mail address
+     * @return void
      */
     public function addEmail($address)
     {
@@ -116,8 +116,8 @@ class VCard
     /**
      * Add jobtitle
      *
-     * @return void
      * @param  string $jobtitle The jobtitle for the person.
+     * @return void
      */
     public function addJobtitle($jobtitle)
     {
@@ -127,10 +127,10 @@ class VCard
     /**
      * Add a photo or logo (depending on property name)
      *
-     * @return boolean
      * @param  string $property LOGO|PHOTO
      * @param  string $url image url or filename
      * @param  bool   $include Do we include the image in our vcard or not?
+     * @return boolean
      */
     private function addMedia($property, $url, $include = true)
     {
@@ -170,12 +170,12 @@ class VCard
     /**
      * Add name
      *
-     * @return void
      * @param  string [optional] $lastName
      * @param  string [optional] $firstName
      * @param  string [optional] $additional
      * @param  string [optional] $prefix
      * @param  string [optional] $suffix
+     * @return void
      */
     public function addName(
         $lastName = '',
@@ -213,8 +213,8 @@ class VCard
     /**
      * Add note
      *
-     * @return void
      * @param  string $note
+     * @return void
      */
     public function addNote($note)
     {
@@ -224,12 +224,12 @@ class VCard
     /**
      * Add phone number
      *
-     * @return void
      * @param  string $number
      * @param  string [optional] $type
      *    Type may be PREF | WORK | HOME | VOICE | FAX | MSG |
      *    CELL | PAGER | BBS | CAR | MODEM | ISDN | VIDEO
      *    or any senseful combination, e.g. "PREF;WORK;VOICE"
+     * @return void
      */
     public function addPhoneNumber($number, $type = '')
     {
@@ -242,9 +242,9 @@ class VCard
     /**
      * Add Photo
      *
-     * @return void
      * @param  string $url image url or filename
      * @param  bool   $include Include the image in our vcard?
+     * @return void
      */
     public function addPhoto($url, $include = true)
     {
@@ -254,9 +254,9 @@ class VCard
     /**
      * Add URL
      *
-     * @return void
      * @param  string $url
      * @param         string [optional] $type Type may be WORK | HOME
+     * @return void
      */
     public function addURL($url, $type = '')
     {
@@ -335,8 +335,8 @@ class VCard
     /**
      * Decode
      *
-     * @return string decoded
      * @param  string $value The value to decode
+     * @return string decoded
      */
     private function decode($value)
     {
@@ -505,10 +505,10 @@ class VCard
     /**
      * Set filename
      *
-     * @return void
      * @param  mixed  $value
      * @param  bool   $overwrite [optional] Default overwrite is true
      * @param  string $separator [optional] Default separator is an underscore '_'
+     * @return void
      */
     public function setFilename($value, $overwrite = true, $separator = '_')
     {
@@ -542,9 +542,9 @@ class VCard
     /**
      * Set property
      *
-     * @return void
      * @param  string $key
      * @param  string $value
+     * @return void
      */
     private function setProperty($key, $value)
     {
@@ -552,7 +552,7 @@ class VCard
     }
 
     /**
-     * checks if we should return vcard in cal wrapper
+     * Checks if we should return vcard in cal wrapper
      *
      * @return bool
      */
