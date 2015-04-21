@@ -1,3 +1,9 @@
+1.1.9 (xxxx-xx-xx)
+--
+Improvements:
+* getHeaders() is now separate function. So frameworks can use this.
+* Fix for iOS 8 to return vcard without calendar wrapper.
+
 1.1.8 (2015-03-09)
 --
 Bugfixes:
