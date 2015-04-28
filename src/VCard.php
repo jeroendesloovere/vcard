@@ -560,7 +560,7 @@ class VCard
     {
         $browser = strtolower($_SERVER['HTTP_USER_AGENT']);
 
-        $matches = [];
+        $matches = array();
         preg_match('/os (\d+)_(\d+)\s+/', $browser, $matches);
         $version = isset($matches[1]) ? ((int)$matches[1]) : 999;
 
