@@ -22,9 +22,14 @@ use JeroenDesloovere\VCard\VCard;
 class VCardTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var VCard
+     */
+    protected $vcard = null;
+
+    /**
      * Set up before class
      *
-     * @return SocialMedia
+     * @return void
      */
     public function setUp()
     {
@@ -104,5 +109,43 @@ class VCardTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals('mister-jeroen-desloovere-junior', $this->vcard->getFilename());
+    }
+
+    /**
+     * @test
+     * @dataProvider emailDataProvider
+     */
+    public function testEmail($emails = array())
+    {
+        foreach ($emails as $key => $email) {
+            if (is_string($key)) {
+                $this->vcard->addEmail($email, $key);
+            } else {
+                $this->vcard->addEmail($email);
+            }
+        }
+
+        foreach ($emails as $key => $email) {
+            if (is_string($key)) {
+                $this->assertContains($key . ':' . $email, $this->vcard->getOutput());
+            } else {
+                $this->assertContains($email, $this->vcard->getOutput());
+            }
+
+        }
+    }
+
+    /**
+     * data provider for testEmail()
+     *
+     * @return array
+     */
+    public function emailDataProvider() {
+        return array(
+            array(array('john@doe.com')),
+            array(array('john@doe.com', 'WORK' => 'john@work.com')),
+            array(array('WORK' => 'john@work.com', 'HOME' => 'john@home.com')),
+            array(array('PREF;WORK' => 'john@work.com', 'HOME' => 'john@home.com')),
+        );
     }
 }
