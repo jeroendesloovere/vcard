@@ -127,9 +127,9 @@ class VCardTest extends \PHPUnit_Framework_TestCase
 
         foreach ($emails as $key => $email) {
             if (is_string($key)) {
-                $this->assertContains($key . ':' . $email, $this->vcard->getOutput());
+                $this->assertContains('EMAIL;INTERNET;' . $key . ':' . $email, $this->vcard->getOutput());
             } else {
-                $this->assertContains($email, $this->vcard->getOutput());
+                $this->assertContains('EMAIL;INTERNET:' . $email, $this->vcard->getOutput());
             }
 
         }
