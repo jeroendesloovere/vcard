@@ -124,8 +124,7 @@ class VCardTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('mister-jeroen-desloovere-junior', $this->vcard->getFilename());
     }
-
-<<<<<<< HEAD
+    
     /**
      * @test
      * @dataProvider emailDataProvider
@@ -200,5 +199,23 @@ class VCardTest extends \PHPUnit_Framework_TestCase
     public function testAddUrl()
     {
         $this->assertEquals($this->vcard, $this->vcard->addUrl(''));
+    }
+ 
+    /**
+     * @expectedException JeroenDesloovere\VCard\VCardMediaException
+     * @t@github.com:jeroendesloovere/vcard.gitexpectedExceptionMessage Nothing returned from URL.
+     */ 
+    public function testAddPhotoWithNoValue()
+    {
+        $this->vcard->addPhoto(__DIR__.'/emptyfile', true);
+    }
+
+    /**
+     * @expectedException JeroenDesloovere\VCard\VCardMediaException
+     * @expectedExceptionMessage Returned data aren't an image.
+     */
+    public function testAddPhotoWithNoPhoto()
+    {
+        $this->vcard->addPhoto(__DIR__.'/wrongfile', true);
     }
 }

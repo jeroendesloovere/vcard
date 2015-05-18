@@ -146,41 +146,35 @@ class VCard
      * @param  string $property LOGO|PHOTO
      * @param  string $url image url or filename
      * @param  bool   $include Do we include the image in our vcard or not?
-     * @return boolean
+     * @throws VCardMediaException if file is empty or not an image file
      */
     private function addMedia($property, $url, $include = true)
     {
         if ($include) {
             $value = file_get_contents($url);
 
-            // nothing returned from URL, stop here
             if (!$value) {
-                return false;
-            }
-
-            // introduced in PHP 5.4
-            if (function_exists('getimagesizefromstring')) {
-                $imginfo = getimagesizefromstring($value);
-            } else {
-                $imginfo = getimagesize('data://application/octet-stream;base64,' . base64_encode($value));
-            }
-
-            // mime type found
-            if (array_key_exists('mime', $imginfo)) {
-                $type = strtoupper(str_replace('image/', '', $imginfo['mime']));
-                // returned data doesn't have a MIME type
-            } else {
-                return false;
+                throw new VCardMediaException('Nothing returned from URL.');
             }
 
             $value = base64_encode($value);
+
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $mimetype = finfo_file($finfo, 'data://application/octet-stream;base64,' . $value) . "\n";
+            finfo_close($finfo);
+
+            if (preg_match('/^image\//', $mimetype) !== 1) {
+                throw new VCardMediaException('Returned data aren\'t an image.');
+            }
+ 
+            $type = strtoupper(str_replace('image/', '', $mimetype));
+
             $property .= ";ENCODING=b;TYPE=" . $type;
         } else {
             $value = $url;
         }
 
         $this->setProperty($property, $value);
-        return true;
     }
 
     /**
