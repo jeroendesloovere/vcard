@@ -136,7 +136,7 @@ class VCardTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * data provider for testEmail()
+     * Data provider for testEmail()
      *
      * @return array
      */
