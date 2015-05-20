@@ -53,7 +53,7 @@ class VCard
      * @param  string [optional] $type
      *    $type may be DOM | INTL | POSTAL | PARCEL | HOME | WORK
      *    or any combination of these: e.g. "WORK;PARCEL;POSTAL"
-     * @return void
+     * @return $this
      */
     public function addAddress(
         $name = '',
@@ -73,24 +73,28 @@ class VCard
             'ADR' . (($type != '') ? ';' . $type : ''),
             $value
         );
+
+        return $this;
     }
 
     /**
      * Add birthday
      *
      * @param  string $date Format is YYYY-MM-DD
-     * @return void
+     * @return $this
      */
     public function addBirthday($date)
     {
         $this->setProperty('BDAY', $date);
+
+        return $this;
     }
 
     /**
      * Add company
      *
      * @param  string $company
-     * @return void
+     * @return $this
      */
     public function addCompany($company)
     {
@@ -100,6 +104,8 @@ class VCard
         if ($this->getFilename() === null) {
             $this->setFilename($company);
         }
+
+        return $this;
     }
 
     /**
@@ -109,7 +115,7 @@ class VCard
      * @param  string [optional] $type The type of the email address
      *      $type may be  PREF | WORK | HOME
      *      or any combination of these: e.g. "PREF;WORK"
-     * @return void
+     * @return $this
      */
     public function addEmail($address, $type = '')
     {
@@ -117,17 +123,21 @@ class VCard
             'EMAIL;INTERNET' . (($type != '') ? ';' . $type : ''),
             $address
         );
+
+        return $this;
     }
 
     /**
      * Add jobtitle
      *
      * @param  string $jobtitle The jobtitle for the person.
-     * @return void
+     * @return $this
      */
     public function addJobtitle($jobtitle)
     {
         $this->setProperty('TITLE', $jobtitle);
+
+        return $this;
     }
 
     /**
@@ -181,7 +191,7 @@ class VCard
      * @param  string [optional] $additional
      * @param  string [optional] $prefix
      * @param  string [optional] $suffix
-     * @return void
+     * @return $this
      */
     public function addName(
         $lastName = '',
@@ -214,17 +224,21 @@ class VCard
                 trim(implode(' ', $values))
             );
         }
+
+        return $this;
     }
 
     /**
      * Add note
      *
      * @param  string $note
-     * @return void
+     * @return $this
      */
     public function addNote($note)
     {
         $this->setProperty('NOTE', $note);
+
+        return $this;
     }
 
     /**
@@ -235,7 +249,7 @@ class VCard
      *    Type may be PREF | WORK | HOME | VOICE | FAX | MSG |
      *    CELL | PAGER | BBS | CAR | MODEM | ISDN | VIDEO
      *    or any senseful combination, e.g. "PREF;WORK;VOICE"
-     * @return void
+     * @return $this
      */
     public function addPhoneNumber($number, $type = '')
     {
@@ -243,6 +257,8 @@ class VCard
             'TEL' . (($type != '') ? ';' . $type : ''),
             $number
         );
+
+        return $this;
     }
 
     /**
@@ -250,19 +266,21 @@ class VCard
      *
      * @param  string $url image url or filename
      * @param  bool   $include Include the image in our vcard?
-     * @return void
+     * @return $this
      */
     public function addPhoto($url, $include = true)
     {
         $this->addMedia('PHOTO', $url, $include);
+
+        return $this;
     }
 
     /**
      * Add URL
      *
      * @param  string $url
-     * @param         string [optional] $type Type may be WORK | HOME
-     * @return void
+     * @param  string [optional] $type Type may be WORK | HOME
+     * @return $this
      */
     public function addURL($url, $type = '')
     {
@@ -270,6 +288,8 @@ class VCard
             'URL' . (($type != '') ? ';' . $type : ''),
             $url
         );
+
+        return $this;
     }
 
     /**
@@ -581,7 +601,7 @@ class VCard
     {
         $browser = $this->getUserAgent();
 
-        $matches = [];
+        $matches = array();
         preg_match('/os (\d+)_(\d+)\s+/', $browser, $matches);
         $version = isset($matches[1]) ? ((int)$matches[1]) : 999;
 

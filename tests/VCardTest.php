@@ -27,6 +27,20 @@ class VCardTest extends \PHPUnit_Framework_TestCase
     protected $vcard = null;
 
     /**
+     * Data provider for testEmail()
+     *
+     * @return array
+     */
+    public function emailDataProvider() {
+        return array(
+            array(array('john@doe.com')),
+            array(array('john@doe.com', 'WORK' => 'john@work.com')),
+            array(array('WORK' => 'john@work.com', 'HOME' => 'john@home.com')),
+            array(array('PREF;WORK' => 'john@work.com', 'HOME' => 'john@home.com')),
+        );
+    }
+
+    /**
      * Set up before class
      *
      * @return void
@@ -111,6 +125,7 @@ class VCardTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('mister-jeroen-desloovere-junior', $this->vcard->getFilename());
     }
 
+<<<<<<< HEAD
     /**
      * @test
      * @dataProvider emailDataProvider
@@ -135,17 +150,55 @@ class VCardTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    /**
-     * Data provider for testEmail()
-     *
-     * @return array
-     */
-    public function emailDataProvider() {
-        return array(
-            array(array('john@doe.com')),
-            array(array('john@doe.com', 'WORK' => 'john@work.com')),
-            array(array('WORK' => 'john@work.com', 'HOME' => 'john@home.com')),
-            array(array('PREF;WORK' => 'john@work.com', 'HOME' => 'john@home.com')),
-        );
+    public function testAddAddress()
+    {
+        $this->assertEquals($this->vcard, $this->vcard->addAddress());
+    }
+
+    public function testAddBirthday()
+    {
+        $this->assertEquals($this->vcard, $this->vcard->addBirthday(''));
+    }
+
+    public function testAddCompany()
+    {
+        $this->assertEquals($this->vcard, $this->vcard->addCompany(''));
+    }
+
+    public function testAddEmail()
+    {
+        $this->assertEquals($this->vcard, $this->vcard->addEmail(''));
+    }
+
+    public function testAddJobTitle()
+    {
+        $this->assertEquals($this->vcard, $this->vcard->addJobtitle(''));
+    }
+
+    public function testAddName()
+    {
+        $this->assertEquals($this->vcard, $this->vcard->addName(''));
+    }
+
+    public function testAddNote()
+    {
+        $this->assertEquals($this->vcard, $this->vcard->addNote(''));
+    }
+
+    public function testAddPhoneNumber()
+    {
+        $this->assertEquals($this->vcard, $this->vcard->addPhoneNumber(''));
+    }
+
+    public function testAddPhotoWithJpgPhoto()
+    {
+        $return = $this->vcard->addPhoto(__DIR__.'/image.jpg', true);
+
+        $this->assertEquals($this->vcard, $return);
+    }
+
+    public function testAddUrl()
+    {
+        $this->assertEquals($this->vcard, $this->vcard->addUrl(''));
     }
 }
