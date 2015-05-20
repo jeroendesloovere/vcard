@@ -22,9 +22,28 @@ use JeroenDesloovere\VCard\VCard;
 class VCardTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var VCard
+     */
+    protected $vcard = null;
+
+    /**
+     * Data provider for testEmail()
+     *
+     * @return array
+     */
+    public function emailDataProvider() {
+        return array(
+            array(array('john@doe.com')),
+            array(array('john@doe.com', 'WORK' => 'john@work.com')),
+            array(array('WORK' => 'john@work.com', 'HOME' => 'john@home.com')),
+            array(array('PREF;WORK' => 'john@work.com', 'HOME' => 'john@home.com')),
+        );
+    }
+
+    /**
      * Set up before class
      *
-     * @return SocialMedia
+     * @return void
      */
     public function setUp()
     {
@@ -106,7 +125,32 @@ class VCardTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('mister-jeroen-desloovere-junior', $this->vcard->getFilename());
     }
 
-    public function testAddAdress()
+<<<<<<< HEAD
+    /**
+     * @test
+     * @dataProvider emailDataProvider
+     */
+    public function testEmail($emails = array())
+    {
+        foreach ($emails as $key => $email) {
+            if (is_string($key)) {
+                $this->vcard->addEmail($email, $key);
+            } else {
+                $this->vcard->addEmail($email);
+            }
+        }
+
+        foreach ($emails as $key => $email) {
+            if (is_string($key)) {
+                $this->assertContains('EMAIL;INTERNET;' . $key . ':' . $email, $this->vcard->getOutput());
+            } else {
+                $this->assertContains('EMAIL;INTERNET:' . $email, $this->vcard->getOutput());
+            }
+
+        }
+    }
+
+    public function testAddAddress()
     {
         $this->assertEquals($this->vcard, $this->vcard->addAddress());
     }
@@ -126,7 +170,7 @@ class VCardTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->vcard, $this->vcard->addEmail(''));
     }
 
-    public function testAddjobtitle()
+    public function testAddJobTitle()
     {
         $this->assertEquals($this->vcard, $this->vcard->addJobtitle(''));
     }
@@ -146,15 +190,15 @@ class VCardTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->vcard, $this->vcard->addPhoneNumber(''));
     }
 
-    public function testAddUrl()
-    {
-        $this->assertEquals($this->vcard, $this->vcard->addUrl(''));
-    }
- 
     public function testAddPhotoWithJpgPhoto()
     {
         $return = $this->vcard->addPhoto(__DIR__.'/image.jpg', true);
 
         $this->assertEquals($this->vcard, $return);
+    }
+
+    public function testAddUrl()
+    {
+        $this->assertEquals($this->vcard, $this->vcard->addUrl(''));
     }
 }

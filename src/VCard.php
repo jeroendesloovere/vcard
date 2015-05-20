@@ -112,11 +112,17 @@ class VCard
      * Add email
      *
      * @param  string $address The e-mail address
+     * @param  string [optional] $type The type of the email address
+     *      $type may be  PREF | WORK | HOME
+     *      or any combination of these: e.g. "PREF;WORK"
      * @return $this
      */
-    public function addEmail($address)
+    public function addEmail($address, $type = '')
     {
-        $this->setProperty('EMAIL;INTERNET', $address);
+        $this->setProperty(
+            'EMAIL;INTERNET' . (($type != '') ? ';' . $type : ''),
+            $address
+        );
 
         return $this;
     }
@@ -353,6 +359,21 @@ class VCard
     }
 
     /**
+     * Returns the browser user agent string.
+     *
+     * @return string
+     */
+    protected function getUserAgent()
+    {
+        if (array_key_exists('HTTP_USER_AGENT', $_SERVER)) {
+            $browser = strtolower($_SERVER['HTTP_USER_AGENT']);
+        } else {
+            $browser = 'unknown';
+        }
+        return $browser;
+    }
+
+    /**
      * Decode
      *
      * @param  string $value The value to decode
@@ -461,7 +482,7 @@ class VCard
                 'Connection'          => $connection
             );
         }
-        
+
         return array(
             'Content-type: ' . $contentType,
             'Content-Disposition: ' . $contentDisposition,
@@ -491,7 +512,7 @@ class VCard
     public function isIOS()
     {
         // get user agent
-        $browser = strtolower($_SERVER['HTTP_USER_AGENT']);
+        $browser = $this->getUserAgent();
 
         return (strpos($browser, 'iphone') || strpos($browser, 'ipod') || strpos($browser, 'ipad'));
     }
@@ -578,7 +599,7 @@ class VCard
      */
     protected function shouldAttachmentBeCal()
     {
-        $browser = strtolower($_SERVER['HTTP_USER_AGENT']);
+        $browser = $this->getUserAgent();
 
         $matches = array();
         preg_match('/os (\d+)_(\d+)\s+/', $browser, $matches);
