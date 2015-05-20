@@ -1,3 +1,9 @@
+1.1.10 (2015-05-20)
+--
+Improvements:
+* Multiple mailaddresses allowed.
+* Chaining integrated to add functions.
+
 1.1.9 (2015-04-21)
 --
 Improvements:
