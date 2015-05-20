@@ -105,4 +105,56 @@ class VCardTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('mister-jeroen-desloovere-junior', $this->vcard->getFilename());
     }
+
+    public function testAddAdress()
+    {
+        $this->assertEquals($this->vcard, $this->vcard->addAddress());
+    }
+
+    public function testAddBirthday()
+    {
+        $this->assertEquals($this->vcard, $this->vcard->addBirthday(''));
+    }
+
+    public function testAddCompany()
+    {
+        $this->assertEquals($this->vcard, $this->vcard->addCompany(''));
+    }
+
+    public function testAddEmail()
+    {
+        $this->assertEquals($this->vcard, $this->vcard->addEmail(''));
+    }
+
+    public function testAddjobtitle()
+    {
+        $this->assertEquals($this->vcard, $this->vcard->addJobtitle(''));
+    }
+
+    public function testAddName()
+    {
+        $this->assertEquals($this->vcard, $this->vcard->addName(''));
+    }
+
+    public function testAddNote()
+    {
+        $this->assertEquals($this->vcard, $this->vcard->addNote(''));
+    }
+
+    public function testAddPhoneNumber()
+    {
+        $this->assertEquals($this->vcard, $this->vcard->addPhoneNumber(''));
+    }
+
+    public function testAddUrl()
+    {
+        $this->assertEquals($this->vcard, $this->vcard->addUrl(''));
+    }
+ 
+    public function testAddPhotoWithJpgPhoto()
+    {
+        $return = $this->vcard->addPhoto(__DIR__.'/image.jpg', true);
+
+        $this->assertEquals($this->vcard, $return);
+    }
 }
