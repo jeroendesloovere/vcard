@@ -31,7 +31,8 @@ class VCardTest extends \PHPUnit_Framework_TestCase
      *
      * @return array
      */
-    public function emailDataProvider() {
+    public function emailDataProvider()
+    {
         return array(
             array(array('john@doe.com')),
             array(array('john@doe.com', 'WORK' => 'john@work.com')),
@@ -68,86 +69,6 @@ class VCardTest extends \PHPUnit_Framework_TestCase
     public function tearDown()
     {
         $this->vcard = null;
-    }
-
-    /**
-     * Test first name and last name
-     */
-    public function testFirstNameAndLastName()
-    {
-        $this->vcard->addName(
-            $this->lastName,
-            $this->firstName
-        );
-
-        $this->assertEquals('jeroen-desloovere', $this->vcard->getFilename());
-    }
-
-    /**
-     * Test special first name and last name
-     */
-    public function testSpecialFirstNameAndLastName()
-    {
-        $this->vcard->addName(
-            $this->lastName2,
-            $this->firstName2
-        );
-
-        $this->assertEquals('ali-ozsut', $this->vcard->getFilename());
-    }
-
-    /**
-     * Test special first name and last name
-     */
-    public function testSpecialFirstNameAndLastName2()
-    {
-        $this->vcard->addName(
-            $this->lastName3,
-            $this->firstName3
-        );
-
-        $this->assertEquals('garcon-jeroen', $this->vcard->getFilename());
-    }
-
-    /**
-     * Test full blown name
-     */
-    public function testFullBlownName()
-    {
-        $this->vcard->addName(
-            $this->lastName,
-            $this->firstName,
-            $this->additional,
-            $this->prefix,
-            $this->suffix
-        );
-
-        $this->assertEquals('mister-jeroen-desloovere-junior', $this->vcard->getFilename());
-    }
-
-<<<<<<< HEAD
-    /**
-     * @test
-     * @dataProvider emailDataProvider
-     */
-    public function testEmail($emails = array())
-    {
-        foreach ($emails as $key => $email) {
-            if (is_string($key)) {
-                $this->vcard->addEmail($email, $key);
-            } else {
-                $this->vcard->addEmail($email);
-            }
-        }
-
-        foreach ($emails as $key => $email) {
-            if (is_string($key)) {
-                $this->assertContains('EMAIL;INTERNET;' . $key . ':' . $email, $this->vcard->getOutput());
-            } else {
-                $this->assertContains('EMAIL;INTERNET:' . $email, $this->vcard->getOutput());
-            }
-
-        }
     }
 
     public function testAddAddress()
@@ -192,7 +113,7 @@ class VCardTest extends \PHPUnit_Framework_TestCase
 
     public function testAddPhotoWithJpgPhoto()
     {
-        $return = $this->vcard->addPhoto(__DIR__.'/image.jpg', true);
+        $return = $this->vcard->addPhoto(__DIR__ . '/image.jpg', true);
 
         $this->assertEquals($this->vcard, $return);
     }
@@ -200,5 +121,106 @@ class VCardTest extends \PHPUnit_Framework_TestCase
     public function testAddUrl()
     {
         $this->assertEquals($this->vcard, $this->vcard->addUrl(''));
+    }
+
+    /**
+     * Test adding photo with no value
+     *
+     * @expectedException JeroenDesloovere\VCard\VCardMediaException
+     * @t@github.com:jeroendesloovere/vcard.gitexpectedExceptionMessage Nothing returned from URL.
+     */
+    public function testAddPhotoWithNoValue()
+    {
+        $this->vcard->addPhoto(__DIR__ . '/emptyfile', true);
+    }
+
+    /**
+     * Test adding photo with no photo
+     *
+     * @expectedException JeroenDesloovere\VCard\VCardMediaException
+     * @expectedExceptionMessage Returned data aren't an image.
+     */
+    public function testAddPhotoWithNoPhoto()
+    {
+        $this->vcard->addPhoto(__DIR__ . '/wrongfile', true);
+    }
+
+    /**
+     * Test Email
+     *
+     * @dataProvider emailDataProvider $emails
+     */
+    public function testEmail($emails = array())
+    {
+        foreach ($emails as $key => $email) {
+            if (is_string($key)) {
+                $this->vcard->addEmail($email, $key);
+            } else {
+                $this->vcard->addEmail($email);
+            }
+        }
+
+        foreach ($emails as $key => $email) {
+            if (is_string($key)) {
+                $this->assertContains('EMAIL;INTERNET;' . $key . ':' . $email, $this->vcard->getOutput());
+            } else {
+                $this->assertContains('EMAIL;INTERNET:' . $email, $this->vcard->getOutput());
+            }
+        }
+    }
+
+    /**
+     * Test first name and last name
+     */
+    public function testFirstNameAndLastName()
+    {
+        $this->vcard->addName(
+            $this->lastName,
+            $this->firstName
+        );
+
+        $this->assertEquals('jeroen-desloovere', $this->vcard->getFilename());
+    }
+
+    /**
+     * Test full blown name
+     */
+    public function testFullBlownName()
+    {
+        $this->vcard->addName(
+            $this->lastName,
+            $this->firstName,
+            $this->additional,
+            $this->prefix,
+            $this->suffix
+        );
+
+        $this->assertEquals('mister-jeroen-desloovere-junior', $this->vcard->getFilename());
+    }
+
+    /**
+     * Test special first name and last name
+     */
+    public function testSpecialFirstNameAndLastName()
+    {
+        $this->vcard->addName(
+            $this->lastName2,
+            $this->firstName2
+        );
+
+        $this->assertEquals('ali-ozsut', $this->vcard->getFilename());
+    }
+
+    /**
+     * Test special first name and last name
+     */
+    public function testSpecialFirstNameAndLastName2()
+    {
+        $this->vcard->addName(
+            $this->lastName3,
+            $this->firstName3
+        );
+
+        $this->assertEquals('garcon-jeroen', $this->vcard->getFilename());
     }
 }

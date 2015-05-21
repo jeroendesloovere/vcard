@@ -1,3 +1,8 @@
+1.1.11 (2015-05-21)
+--
+Improvements:
+* addMedia updated to check if correct file type.
+
 1.1.10 (2015-05-20)
 --
 Improvements:
