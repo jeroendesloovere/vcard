@@ -11,5 +11,4 @@ namespace JeroenDesloovere\VCard;
 
 class VCardMediaException extends \RuntimeException
 {
-
 }
