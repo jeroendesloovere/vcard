@@ -9,7 +9,6 @@ namespace JeroenDesloovere\VCard;
  * file that was distributed with this source code.
  */
 
-use JeroenDesloovere\VCard\Exception as VCardException;
 use Behat\Transliterator\Transliterator;
 
 /**
@@ -51,8 +50,8 @@ class VCard
      * @param  string [optional] $zip
      * @param  string [optional] $country
      * @param  string [optional] $type
-     *    $type may be DOM | INTL | POSTAL | PARCEL | HOME | WORK
-     *    or any combination of these: e.g. "WORK;PARCEL;POSTAL"
+     *                                     $type may be DOM | INTL | POSTAL | PARCEL | HOME | WORK
+     *                                     or any combination of these: e.g. "WORK;PARCEL;POSTAL"
      * @return $this
      */
     public function addAddress(
@@ -111,10 +110,10 @@ class VCard
     /**
      * Add email
      *
-     * @param  string $address The e-mail address
-     * @param  string [optional] $type The type of the email address
-     *      $type may be  PREF | WORK | HOME
-     *      or any combination of these: e.g. "PREF;WORK"
+     * @param  string            $address The e-mail address
+     * @param  string [optional] $type    The type of the email address
+     *                                    $type may be  PREF | WORK | HOME
+     *                                    or any combination of these: e.g. "PREF;WORK"
      * @return $this
      */
     public function addEmail($address, $type = '')
@@ -143,9 +142,9 @@ class VCard
     /**
      * Add a photo or logo (depending on property name)
      *
-     * @param  string $property LOGO|PHOTO
-     * @param  string $url image url or filename
-     * @param  bool   $include Do we include the image in our vcard or not?
+     * @param  string              $property LOGO|PHOTO
+     * @param  string              $url      image url or filename
+     * @param  bool                $include  Do we include the image in our vcard or not?
      * @throws VCardMediaException if file is empty or not an image file
      */
     private function addMedia($property, $url, $include = true)
@@ -166,7 +165,7 @@ class VCard
             if (preg_match('/^image\//', $mimetype) !== 1) {
                 throw new VCardMediaException('Returned data aren\'t an image.');
             }
- 
+
             $type = strtoupper(str_replace('image/', '', $mimetype));
 
             $property .= ";ENCODING=b;TYPE=" . $type;
@@ -238,11 +237,11 @@ class VCard
     /**
      * Add phone number
      *
-     * @param  string $number
+     * @param  string            $number
      * @param  string [optional] $type
-     *    Type may be PREF | WORK | HOME | VOICE | FAX | MSG |
-     *    CELL | PAGER | BBS | CAR | MODEM | ISDN | VIDEO
-     *    or any senseful combination, e.g. "PREF;WORK;VOICE"
+     *                                   Type may be PREF | WORK | HOME | VOICE | FAX | MSG |
+     *                                   CELL | PAGER | BBS | CAR | MODEM | ISDN | VIDEO
+     *                                   or any senseful combination, e.g. "PREF;WORK;VOICE"
      * @return $this
      */
     public function addPhoneNumber($number, $type = '')
@@ -258,7 +257,7 @@ class VCard
     /**
      * Add Photo
      *
-     * @param  string $url image url or filename
+     * @param  string $url     image url or filename
      * @param  bool   $include Include the image in our vcard?
      * @return $this
      */
@@ -272,7 +271,7 @@ class VCard
     /**
      * Add URL
      *
-     * @param  string $url
+     * @param  string            $url
      * @param  string [optional] $type Type may be WORK | HOME
      * @return $this
      */
@@ -364,6 +363,7 @@ class VCard
         } else {
             $browser = 'unknown';
         }
+
         return $browser;
     }
 
@@ -399,7 +399,7 @@ class VCard
      * Fold a line according to RFC2425 section 5.8.1.
      *
      * @link http://tools.ietf.org/html/rfc2425#section-5.8.1
-     * @param string $text
+     * @param  string $text
      * @return mixed
      */
     protected function fold($text)
@@ -458,7 +458,7 @@ class VCard
     /**
      * Get headers
      *
-     * @param bool $asAssociative
+     * @param  bool  $asAssociative
      * @return array
      */
     public function getHeaders($asAssociative)
@@ -473,7 +473,7 @@ class VCard
                 'Content-type'        => $contentType,
                 'Content-Disposition' => $contentDisposition,
                 'Content-Length'      => $contentLength,
-                'Connection'          => $connection
+                'Connection'          => $connection,
             );
         }
 
@@ -481,7 +481,7 @@ class VCard
             'Content-type: ' . $contentType,
             'Content-Disposition: ' . $contentDisposition,
             'Content-Length: ' . $contentLength,
-            'Connection: ' . $connection
+            'Connection: ' . $connection,
         );
     }
 
@@ -597,7 +597,7 @@ class VCard
 
         $matches = array();
         preg_match('/os (\d+)_(\d+)\s+/', $browser, $matches);
-        $version = isset($matches[1]) ? ((int)$matches[1]) : 999;
+        $version = isset($matches[1]) ? ((int) $matches[1]) : 999;
 
         return ($version < 8) ?
             true : false;
