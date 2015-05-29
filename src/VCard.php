@@ -159,7 +159,7 @@ class VCard
             $value = base64_encode($value);
 
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
-            $mimetype = finfo_file($finfo, 'data://application/octet-stream;base64,' . $value) . "\n";
+            $mimetype = finfo_file($finfo, 'data://application/octet-stream;base64,' . $value);
             finfo_close($finfo);
 
             if (preg_match('/^image\//', $mimetype) !== 1) {
