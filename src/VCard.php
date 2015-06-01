@@ -518,8 +518,7 @@ class VCard
      */
     public function isIOS7()
     {
-        return ($this->isIOS() && $this->shouldAttachmentBeCal()) ?
-            true : false;
+        return ($this->isIOS() && $this->shouldAttachmentBeCal());
     }
 
     /**
