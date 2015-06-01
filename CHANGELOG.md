@@ -1,4 +1,4 @@
-1.1.12 (xxxx-xx-xx)
+1.2.0 (2015-06-01)
 --
 Improvements:
 * You can now add some properties multiple times: email, address, phone number and url
