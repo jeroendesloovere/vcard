@@ -13,7 +13,7 @@ This VCard PHP class can generate a vCard with some data. When using an iOS devi
 ``` json
 {
     "require": {
-        "jeroendesloovere/vcard": "1.1.*"
+        "jeroendesloovere/vcard": "1.2.*"
     }
 }
 ```
