@@ -55,6 +55,9 @@ class VCardTest extends \PHPUnit_Framework_TestCase
         $this->additional = '&';
         $this->prefix = 'Mister';
         $this->suffix = 'Junior';
+        
+        $this->emailAddress1 = '';
+        $this->emailAddress2 = '';
 
         $this->firstName2 = 'Ali';
         $this->lastName2 = 'ÖZSÜT';
@@ -88,7 +91,9 @@ class VCardTest extends \PHPUnit_Framework_TestCase
 
     public function testAddEmail()
     {
-        $this->assertEquals($this->vcard, $this->vcard->addEmail(''));
+        $this->assertEquals($this->vcard, $this->vcard->addEmail($this->emailAddress1));
+        $this->assertEquals($this->vcard, $this->vcard->addEmail($this->emailAddress2));
+        $this->assertEquals(2, count($this->vcard->getProperties()));
     }
 
     public function testAddJobTitle()
@@ -109,6 +114,8 @@ class VCardTest extends \PHPUnit_Framework_TestCase
     public function testAddPhoneNumber()
     {
         $this->assertEquals($this->vcard, $this->vcard->addPhoneNumber(''));
+        $this->assertEquals($this->vcard, $this->vcard->addPhoneNumber(''));
+        $this->assertEquals(2, count($this->vcard->getProperties()));
     }
 
     public function testAddPhotoWithJpgPhoto()
@@ -120,7 +127,9 @@ class VCardTest extends \PHPUnit_Framework_TestCase
 
     public function testAddUrl()
     {
-        $this->assertEquals($this->vcard, $this->vcard->addUrl(''));
+        $this->assertEquals($this->vcard, $this->vcard->addUrl('1'));
+        $this->assertEquals($this->vcard, $this->vcard->addUrl('2'));
+        $this->assertEquals(2, count($this->vcard->getProperties()));
     }
 
     /**
@@ -196,6 +205,61 @@ class VCardTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals('mister-jeroen-desloovere-junior', $this->vcard->getFilename());
+    }
+
+    /**
+     * Test multiple birthdays
+     *
+     * @expectedException JeroenDesloovere\VCard\Exception
+     */
+    public function testMultipleBirthdays()
+    {
+        $this->assertEquals($this->vcard, $this->vcard->addBirthday('1'));
+        $this->assertEquals($this->vcard, $this->vcard->addBirthday('2'));
+    }
+
+    /**
+     * Test multiple companies
+     *
+     * @expectedException JeroenDesloovere\VCard\Exception
+     */
+    public function testMultipleCompanies()
+    {
+        $this->assertEquals($this->vcard, $this->vcard->addCompany('1'));
+        $this->assertEquals($this->vcard, $this->vcard->addCompany('2'));
+    }
+
+    /**
+     * Test multiple job titles
+     *
+     * @expectedException JeroenDesloovere\VCard\Exception
+     */
+    public function testMultipleJobtitles()
+    {
+        $this->assertEquals($this->vcard, $this->vcard->addJobtitle('1'));
+        $this->assertEquals($this->vcard, $this->vcard->addJobtitle('2'));
+    }
+
+    /**
+     * Test multiple names
+     *
+     * @expectedException JeroenDesloovere\VCard\Exception
+     */
+    public function testMultipleNames()
+    {
+        $this->assertEquals($this->vcard, $this->vcard->addName('1'));
+        $this->assertEquals($this->vcard, $this->vcard->addName('2'));
+    }
+
+    /**
+     * Test multiple notes
+     *
+     * @expectedException JeroenDesloovere\VCard\Exception
+     */
+    public function testMultipleNotes()
+    {
+        $this->assertEquals($this->vcard, $this->vcard->addNote('1'));
+        $this->assertEquals($this->vcard, $this->vcard->addNote('2'));
     }
 
     /**

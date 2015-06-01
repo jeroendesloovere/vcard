@@ -19,11 +19,30 @@ use Behat\Transliterator\Transliterator;
 class VCard
 {
     /**
+     * definedElements
+     *
+     * @var array
+     */
+    private $definedElements;
+
+    /**
      * Filename
      *
      * @var string
      */
     private $filename;
+
+    /**
+     * Multiple properties for element allowed
+     *
+     * @var array
+     */
+    private $multiplePropertiesForElementAllowed = array(
+        'email',
+        'address',
+        'phoneNumber',
+        'url'
+    );
 
     /**
      * Properties
@@ -69,6 +88,7 @@ class VCard
 
         // set property
         $this->setProperty(
+            'address',
             'ADR' . (($type != '') ? ';' . $type : ''),
             $value
         );
@@ -84,7 +104,11 @@ class VCard
      */
     public function addBirthday($date)
     {
-        $this->setProperty('BDAY', $date);
+        $this->setProperty(
+            'birthday',
+            'BDAY',
+            $date
+        );
 
         return $this;
     }
@@ -97,7 +121,11 @@ class VCard
      */
     public function addCompany($company)
     {
-        $this->setProperty('ORG', $company);
+        $this->setProperty(
+            'company',
+            'ORG',
+            $company
+        );
 
         // if filename is empty, add to filename
         if ($this->getFilename() === null) {
@@ -119,6 +147,7 @@ class VCard
     public function addEmail($address, $type = '')
     {
         $this->setProperty(
+            'email',
             'EMAIL;INTERNET' . (($type != '') ? ';' . $type : ''),
             $address
         );
@@ -134,7 +163,11 @@ class VCard
      */
     public function addJobtitle($jobtitle)
     {
-        $this->setProperty('TITLE', $jobtitle);
+        $this->setProperty(
+            'jobtitle',
+            'TITLE',
+            $jobtitle
+        );
 
         return $this;
     }
@@ -147,7 +180,7 @@ class VCard
      * @param  bool                $include  Do we include the image in our vcard or not?
      * @throws VCardMediaException if file is empty or not an image file
      */
-    private function addMedia($property, $url, $include = true)
+    private function addMedia($property, $url, $include = true, $element)
     {
         if ($include) {
             $value = file_get_contents($url);
@@ -173,7 +206,11 @@ class VCard
             $value = $url;
         }
 
-        $this->setProperty($property, $value);
+        $this->setProperty(
+            $element,
+            $property,
+            $value
+        );
     }
 
     /**
@@ -207,12 +244,17 @@ class VCard
 
         // set property
         $property = $lastName . ';' . $firstName . ';' . $additional . ';' . $prefix . ';' . $suffix;
-        $this->setProperty('N', $property);
+        $this->setProperty(
+            'name',
+            'N',
+            $property
+        );
 
         // is property FN set?
-        if (!isset($this->properties['FN']) || $this->properties['FN'] == '') {
+        if (!$this->hasProperty('FN')) {
             // set property
             $this->setProperty(
+                'fullname',
                 'FN',
                 trim(implode(' ', $values))
             );
@@ -229,7 +271,11 @@ class VCard
      */
     public function addNote($note)
     {
-        $this->setProperty('NOTE', $note);
+        $this->setProperty(
+            'note',
+            'NOTE',
+            $note
+        );
 
         return $this;
     }
@@ -247,6 +293,7 @@ class VCard
     public function addPhoneNumber($number, $type = '')
     {
         $this->setProperty(
+            'phoneNumber',
             'TEL' . (($type != '') ? ';' . $type : ''),
             $number
         );
@@ -263,7 +310,12 @@ class VCard
      */
     public function addPhoto($url, $include = true)
     {
-        $this->addMedia('PHOTO', $url, $include);
+        $this->addMedia(
+            'PHOTO',
+            $url,
+            $include,
+            'photo'
+        );
 
         return $this;
     }
@@ -278,6 +330,7 @@ class VCard
     public function addURL($url, $type = '')
     {
         $this->setProperty(
+            'url',
             'URL' . (($type != '') ? ';' . $type : ''),
             $url
         );
@@ -298,9 +351,10 @@ class VCard
         $string .= "REV:" . date("Y-m-d") . "T" . date("H:i:s") . "Z\r\n";
 
         // loop all properties
-        foreach ($this->properties as $key => $value) {
+        $properties = $this->getProperties();
+        foreach ($properties as $property) {
             // add to string
-            $string .= $this->fold($key . ':' . $value . "\r\n");
+            $string .= $this->fold($property['key'] . ':' . $property['value'] . "\r\n");
         }
 
         // add to string
@@ -499,6 +553,35 @@ class VCard
     }
 
     /**
+     * Get properties
+     *
+     * @return array
+     */
+    public function getProperties()
+    {
+        return $this->properties;
+    }
+
+    /**
+     * Has property
+     *
+     * @param  string $key
+     * @return bool
+     */
+    public function hasProperty($key)
+    {
+        $properties = $this->getProperties();
+
+        foreach ($properties as $property) {
+            if ($property['key'] === $key && $property['value'] !== '') {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Is iOS - Check if the user is using an iOS-device
      *
      * @return bool
@@ -576,13 +659,27 @@ class VCard
     /**
      * Set property
      *
+     * @param  string $element The element name you want to set, f.e.: name, email, phoneNumber, ...
      * @param  string $key
      * @param  string $value
      * @return void
      */
-    private function setProperty($key, $value)
+    private function setProperty($element, $key, $value)
     {
-        $this->properties[$key] = $value;
+        if (!in_array($element, $this->multiplePropertiesForElementAllowed)
+            && isset($this->definedElements[$element])
+        ) {
+            throw new Exception('You can only set "' . $element . '" once.');
+        }
+
+        // we define that we set this element
+        $this->definedElements[$element] = true;
+
+        // adding property
+        $this->properties[] = array(
+            'key' => $key,
+            'value' => $value
+        );
     }
 
     /**
