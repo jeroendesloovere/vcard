@@ -17,9 +17,12 @@ $vcard = new VCard();
 // define variables
 $firstname = 'Jeroen';
 $lastname = 'Desloovere';
+$additional = '';
+$prefix = '';
+$suffix = '';
 
 // add personal data
-$vcard->addName($lastname, $firstname);
+$vcard->addName($lastname, $firstname, $additional, $prefix, $suffix);
 
 // add work data
 $vcard->addCompany('Siesqo');
