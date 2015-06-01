@@ -60,7 +60,9 @@ return $vcard->download();
 
 **Support for frameworks**
 
-For example: Laravel
+I've created a Symfony Bundle: [VCard Bundle](https://github.com/jeroendesloovere/vcard-bundle)
+
+Usage in for example: Laravel
 ```php
 return Response::make(
     $this->vcard->getOutput(),
