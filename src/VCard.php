@@ -598,7 +598,6 @@ class VCard
         preg_match('/os (\d+)_(\d+)\s+/', $browser, $matches);
         $version = isset($matches[1]) ? ((int) $matches[1]) : 999;
 
-        return ($version < 8) ?
-            true : false;
+        return ($version < 8);
     }
 }
