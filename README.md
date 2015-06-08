@@ -45,7 +45,7 @@ $vcard->addEmail('info@jeroendesloovere.be');
 $vcard->addPhoneNumber(1234121212, 'PREF;WORK');
 $vcard->addPhoneNumber(123456789, 'WORK');
 $vcard->addAddress(null, null, 'street', 'worktown', null, 'workpostcode', 'Belgium');
-$vcard->addURL('http://www.siesqo.be');
+$vcard->addURL('http://www.jeroendesloovere.be');
 
 $vcard->addPhoto(__DIR__ . '/landscape.jpeg');
 
