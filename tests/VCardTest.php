@@ -55,7 +55,7 @@ class VCardTest extends \PHPUnit_Framework_TestCase
         $this->additional = '&';
         $this->prefix = 'Mister';
         $this->suffix = 'Junior';
-        
+
         $this->emailAddress1 = '';
         $this->emailAddress2 = '';
 
@@ -169,11 +169,16 @@ class VCardTest extends \PHPUnit_Framework_TestCase
             }
         }
 
-        foreach ($emails as $key => $email) {
-            if (is_string($key)) {
-                $this->assertContains('EMAIL;INTERNET;' . $key . ':' . $email, $this->vcard->getOutput());
+        foreach ($emails as $types => $email) {
+            if (is_string($types)) {
+                $types = explode(';', $types);
+                foreach ($types as $key => $type) {
+                    $types[$key] = 'type=' . $type;
+                }
+                $types = implode(';', $types);
+                $this->assertContains('EMAIL;type=INTERNET;' . $types . ':' . $email, $this->vcard->getOutput());
             } else {
-                $this->assertContains('EMAIL;INTERNET:' . $email, $this->vcard->getOutput());
+                $this->assertContains('EMAIL;type=INTERNET:' . $email, $this->vcard->getOutput());
             }
         }
     }
