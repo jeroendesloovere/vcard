@@ -478,6 +478,16 @@ class VCard
     }
 
     /**
+     * Get charset
+     *
+     * @return string
+     */
+    public function getCharset()
+    {
+        return $this->charset;
+    }
+
+    /**
      * Get content type
      *
      * @return string
@@ -517,7 +527,7 @@ class VCard
      */
     public function getHeaders($asAssociative)
     {
-        $contentType        = $this->getContentType() . '; charset=' . $this->charset;
+        $contentType        = $this->getContentType() . '; charset=' . $this->getCharset();
         $contentDisposition = 'attachment; filename=' . $this->getFilename() . '.' . $this->getFileExtension();
         $contentLength      = strlen($this->getOutput());
         $connection         = 'close';
@@ -617,6 +627,17 @@ class VCard
             $file,
             $this->getOutput()
         );
+    }
+
+    /**
+     * Set charset
+     *
+     * @param  mixed  $charset
+     * @return void
+     */
+    public function setCharset($charset)
+    {
+        $this->charset = $charset;
     }
 
     /**

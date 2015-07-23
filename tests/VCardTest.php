@@ -155,6 +155,16 @@ class VCardTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test charset
+     */
+    public function testCharset()
+    {
+        $charset = 'ISO-8859-1';
+        $this->vcard->setCharset($charset);
+        $this->assertEquals($charset, $this->vcard->getCharset());
+    }
+
+    /**
      * Test Email
      *
      * @dataProvider emailDataProvider $emails
