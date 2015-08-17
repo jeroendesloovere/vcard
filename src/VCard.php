@@ -89,7 +89,7 @@ class VCard
         // set property
         $this->setProperty(
             'address',
-            'ADR' . (($type != '') ? ';' . $type : ''),
+            'ADR;CHARSET='. $this->charset . (($type != '') ? ';' . $type : ''),
             $value
         );
 
@@ -123,7 +123,7 @@ class VCard
     {
         $this->setProperty(
             'company',
-            'ORG',
+            'ORG;CHARSET='.$this->charset,
             $company
         );
 
@@ -148,7 +148,7 @@ class VCard
     {
         $this->setProperty(
             'email',
-            'EMAIL;INTERNET' . (($type != '') ? ';' . $type : ''),
+            'EMAIL;INTERNET;CHARSET=' . $this->charset . (($type != '') ? ';' . $type : ''),
             $address
         );
 
@@ -165,7 +165,7 @@ class VCard
     {
         $this->setProperty(
             'jobtitle',
-            'TITLE',
+            'TITLE;CHARSET=' . $this->charset,
             $jobtitle
         );
 
@@ -246,7 +246,7 @@ class VCard
         $property = $lastName . ';' . $firstName . ';' . $additional . ';' . $prefix . ';' . $suffix;
         $this->setProperty(
             'name',
-            'N',
+            'N;CHARSET=' . $this->charset,
             $property
         );
 
@@ -255,7 +255,7 @@ class VCard
             // set property
             $this->setProperty(
                 'fullname',
-                'FN',
+                'FN;CHARSET=' . $this->charset,
                 trim(implode(' ', $values))
             );
         }
@@ -273,7 +273,7 @@ class VCard
     {
         $this->setProperty(
             'note',
-            'NOTE',
+            'NOTE;CHARSET=' . $this->charset,
             $note
         );
 
