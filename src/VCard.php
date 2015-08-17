@@ -148,7 +148,7 @@ class VCard
     {
         $this->setProperty(
             'email',
-            'EMAIL;INTERNET;CHARSET=' . $this->charset . (($type != '') ? ';' . $type : ''),
+            'EMAIL;INTERNET' . (($type != '') ? ';' . $type : ''),
             $address
         );
 
