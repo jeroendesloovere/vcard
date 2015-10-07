@@ -59,6 +59,13 @@ class VCard
     public $charset = 'utf-8';
 
     /**
+     * Charset string
+     *
+     * @var string
+     */
+    private $charsetString = '';
+
+    /**
      * Add address
      *
      * @param  string [optional] $name
@@ -89,7 +96,7 @@ class VCard
         // set property
         $this->setProperty(
             'address',
-            'ADR' . (($type != '') ? ';' . $type : ''),
+            'ADR' . (($type != '') ? ';' . $type : '') . $this->getCharsetString(),
             $value
         );
 
@@ -123,7 +130,7 @@ class VCard
     {
         $this->setProperty(
             'company',
-            'ORG',
+            'ORG' . $this->getCharsetString(),
             $company
         );
 
@@ -165,7 +172,7 @@ class VCard
     {
         $this->setProperty(
             'jobtitle',
-            'TITLE',
+            'TITLE' . $this->getCharsetString(),
             $jobtitle
         );
 
@@ -246,7 +253,7 @@ class VCard
         $property = $lastName . ';' . $firstName . ';' . $additional . ';' . $prefix . ';' . $suffix;
         $this->setProperty(
             'name',
-            'N',
+            'N' . $this->getCharsetString(),
             $property
         );
 
@@ -255,7 +262,7 @@ class VCard
             // set property
             $this->setProperty(
                 'fullname',
-                'FN',
+                'FN' . $this->getCharsetString(),
                 trim(implode(' ', $values))
             );
         }
@@ -273,7 +280,7 @@ class VCard
     {
         $this->setProperty(
             'note',
-            'NOTE',
+            'NOTE' . $this->getCharsetString(),
             $note
         );
 
@@ -488,6 +495,16 @@ class VCard
     }
 
     /**
+     * Get charset string
+     *
+     * @return string
+     */
+    public function getCharsetString()
+    {
+        return $this->charsetString;
+    }
+
+    /**
      * Get content type
      *
      * @return string
@@ -638,6 +655,19 @@ class VCard
     public function setCharset($charset)
     {
         $this->charset = $charset;
+    }
+
+    /**
+     * Set charset string
+     *
+     * @param  string $charset The charset for one property
+     * @return void
+     */
+    public function setCharsetString($charset)
+    {
+        if ($charset) {
+            $this->charsetString = ';CHARSET=' . $charset;
+        }
     }
 
     /**
