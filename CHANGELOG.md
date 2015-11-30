@@ -1,3 +1,8 @@
+1.2.2 (2015-11-30)
+--
+Improvements:
+* Probably a fix for UTF-8 in outlook 2010
+
 1.2.1 (2015-07-23)
 --
 Improvements:
