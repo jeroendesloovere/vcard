@@ -302,6 +302,25 @@ class VCard
     }
 
     /**
+     * Add Logo
+     *
+     * @param  string $url     image url or filename
+     * @param  bool   $include Include the image in our vcard?
+     * @return $this
+     */
+    public function addLogo($url, $include = true)
+    {
+        $this->addMedia(
+            'LOGO',
+            $url,
+            $include,
+            'logo'
+        );
+
+        return $this;
+    }
+
+    /**
      * Add Photo
      *
      * @param  string $url     image url or filename
