@@ -59,13 +59,6 @@ class VCard
     public $charset = 'utf-8';
 
     /**
-     * Charset string
-     *
-     * @var string
-     */
-    private $charsetString = '';
-
-    /**
      * Add address
      *
      * @param  string [optional] $name
@@ -501,7 +494,11 @@ class VCard
      */
     public function getCharsetString()
     {
-        return $this->charsetString;
+        $charsetString = '';
+        if ($this->charset == 'utf-8') {
+            $charsetString = ';CHARSET=' . $this->charset;
+        }
+        return $charsetString;
     }
 
     /**
@@ -655,19 +652,6 @@ class VCard
     public function setCharset($charset)
     {
         $this->charset = $charset;
-    }
-
-    /**
-     * Set charset string
-     *
-     * @param  string $charset The charset for one property
-     * @return void
-     */
-    public function setCharsetString($charset)
-    {
-        if ($charset) {
-            $this->charsetString = ';CHARSET=' . $charset;
-        }
     }
 
     /**
