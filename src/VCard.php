@@ -89,7 +89,7 @@ class VCard
         // set property
         $this->setProperty(
             'address',
-            'ADR' . (($type != '') ? ';' . $type : ''),
+            'ADR' . (($type != '') ? ';' . $type : '') . $this->getCharsetString(),
             $value
         );
 
@@ -123,7 +123,7 @@ class VCard
     {
         $this->setProperty(
             'company',
-            'ORG',
+            'ORG' . $this->getCharsetString(),
             $company
         );
 
@@ -165,7 +165,7 @@ class VCard
     {
         $this->setProperty(
             'jobtitle',
-            'TITLE',
+            'TITLE' . $this->getCharsetString(),
             $jobtitle
         );
 
@@ -246,7 +246,7 @@ class VCard
         $property = $lastName . ';' . $firstName . ';' . $additional . ';' . $prefix . ';' . $suffix;
         $this->setProperty(
             'name',
-            'N',
+            'N' . $this->getCharsetString(),
             $property
         );
 
@@ -255,7 +255,7 @@ class VCard
             // set property
             $this->setProperty(
                 'fullname',
-                'FN',
+                'FN' . $this->getCharsetString(),
                 trim(implode(' ', $values))
             );
         }
@@ -273,7 +273,7 @@ class VCard
     {
         $this->setProperty(
             'note',
-            'NOTE',
+            'NOTE' . $this->getCharsetString(),
             $note
         );
 
@@ -485,6 +485,20 @@ class VCard
     public function getCharset()
     {
         return $this->charset;
+    }
+
+    /**
+     * Get charset string
+     *
+     * @return string
+     */
+    public function getCharsetString()
+    {
+        $charsetString = '';
+        if ($this->charset == 'utf-8') {
+            $charsetString = ';CHARSET=' . $this->charset;
+        }
+        return $charsetString;
     }
 
     /**
