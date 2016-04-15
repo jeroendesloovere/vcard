@@ -575,11 +575,6 @@ class VCard
         $output = ($this->isIOS7()) ?
             $this->buildVCalendar() : $this->buildVCard();
 
-        // we need to decode the output for outlook
-        if ($this->getCharset() == 'utf-8') {
-            $output = utf8_decode($output);
-        }
-
         return $output;
     }
 
