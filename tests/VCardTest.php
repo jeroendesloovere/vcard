@@ -132,6 +132,13 @@ class VCardTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->vcard, $return);
     }
 
+    public function testAddLogoWithJpgImageNoInclude()
+    {
+        $return = $this->vcard->addLogo(__DIR__ . '/image.jpg', false);
+
+        $this->assertEquals($this->vcard, $return);
+    }
+
     public function testAddUrl()
     {
         $this->assertEquals($this->vcard, $this->vcard->addUrl('1'));
