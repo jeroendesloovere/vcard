@@ -34,7 +34,6 @@ namespace JeroenDesloovere\VCard;
  */
 class VCardParser
 {
-
     /**
      * The raw VCard content.
     *

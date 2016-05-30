@@ -12,7 +12,6 @@ use JeroenDesloovere\VCard\VCardParser;
  */
 class VCardParserTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @expectedException OutOfBoundsException
      */
