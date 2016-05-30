@@ -150,7 +150,7 @@ class VCardTest extends \PHPUnit_Framework_TestCase
      * Test adding photo with no photo
      *
      * @expectedException JeroenDesloovere\VCard\VCardMediaException
-     * @expectedExceptionMessage Returned data aren't an image.
+     * @expectedExceptionMessage Returned data isn't an image.
      */
     public function testAddPhotoWithNoPhoto()
     {

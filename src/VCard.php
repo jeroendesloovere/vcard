@@ -89,7 +89,7 @@ class VCard
         // set property
         $this->setProperty(
             'address',
-            'ADR' . (($type != '') ? ';' . $type : '') . $this->getCharsetString(),
+            'ADR' . (($type != '') ? ';' . $type : ''),
             $value
         );
 
@@ -123,7 +123,7 @@ class VCard
     {
         $this->setProperty(
             'company',
-            'ORG' . $this->getCharsetString(),
+            'ORG',
             $company
         );
 
@@ -165,7 +165,7 @@ class VCard
     {
         $this->setProperty(
             'jobtitle',
-            'TITLE' . $this->getCharsetString(),
+            'TITLE',
             $jobtitle
         );
 
@@ -196,14 +196,27 @@ class VCard
             finfo_close($finfo);
 
             if (preg_match('/^image\//', $mimetype) !== 1) {
-                throw new VCardMediaException('Returned data aren\'t an image.');
+                throw new VCardMediaException('Returned data isn\'t an image.');
             }
 
             $type = strtoupper(str_replace('image/', '', $mimetype));
 
             $property .= ";ENCODING=b;TYPE=" . $type;
         } else {
+
+            $propertySuffix = ';VALUE=URL';
+
+            $headers = get_headers($url);
+            $imageTypeMatched = preg_match('/Content-Type:\simage\/([a-z]+)/i', $headers[8], $m);
+            if(!$imageTypeMatched) {
+                throw new VCardMediaException('Returned data isn\'t an image.');
+            }
+
+            $propertySuffix .= ';TYPE=' . strtoupper($m[1]);
+
+            $property = $property . $propertySuffix;
             $value = $url;
+
         }
 
         $this->setProperty(
@@ -246,7 +259,7 @@ class VCard
         $property = $lastName . ';' . $firstName . ';' . $additional . ';' . $prefix . ';' . $suffix;
         $this->setProperty(
             'name',
-            'N' . $this->getCharsetString(),
+            'N',
             $property
         );
 
@@ -255,7 +268,7 @@ class VCard
             // set property
             $this->setProperty(
                 'fullname',
-                'FN' . $this->getCharsetString(),
+                'FN',
                 trim(implode(' ', $values))
             );
         }
@@ -273,7 +286,7 @@ class VCard
     {
         $this->setProperty(
             'note',
-            'NOTE' . $this->getCharsetString(),
+            'NOTE',
             $note
         );
 
@@ -485,20 +498,6 @@ class VCard
     public function getCharset()
     {
         return $this->charset;
-    }
-
-    /**
-     * Get charset string
-     *
-     * @return string
-     */
-    public function getCharsetString()
-    {
-        $charsetString = '';
-        if ($this->charset == 'utf-8') {
-            $charsetString = ';CHARSET=' . $this->charset;
-        }
-        return $charsetString;
     }
 
     /**
