@@ -166,6 +166,7 @@ class VCardParserTest extends \PHPUnit_Framework_TestCase
     public function testPhoto()
     {
         $image = __DIR__ . '/image.jpg';
+        $imageUrl = 'https://raw.githubusercontent.com/jeroendesloovere/vcard/master/tests/image.jpg';
 
         $vcard = new VCard();
         $vcard->addPhoto($image, true);
@@ -176,6 +177,11 @@ class VCardParserTest extends \PHPUnit_Framework_TestCase
         $vcard->addPhoto($image, false);
         $parser = new VCardParser($vcard->buildVCard());
         $this->assertEquals($parser->getCardAtIndex(0)->photo, __DIR__ . '/image.jpg');
+
+        $vcard = new VCard();
+        $vcard->addPhoto($imageUrl, false);
+        $parser = new VCardParser($vcard->buildVCard());
+        $this->assertEquals($parser->getCardAtIndex(0)->photo, $imageUrl);
     }
 
     public function testVcardDB()
