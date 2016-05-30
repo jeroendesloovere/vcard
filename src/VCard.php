@@ -203,7 +203,32 @@ class VCard
 
             $property .= ";ENCODING=b;TYPE=" . $type;
         } else {
-            $value = $url;
+            if (filter_var($url, FILTER_VALIDATE_URL) !== FALSE) {
+                $propertySuffix = ';VALUE=URL';
+
+                $headers = get_headers($url);
+
+                $imageTypeMatched = false;
+                $fileType = null;
+
+                foreach ($headers as $header) {
+                    if (preg_match('/Content-Type:\simage\/([a-z]+)/i', $header, $m)) {
+                        $fileType = $m[1];
+                        $imageTypeMatched = true;
+                    }
+                }
+
+                if (!$imageTypeMatched) {
+                    throw new VCardMediaException('Returned data isn\'t an image.');
+                }
+
+                $propertySuffix .= ';TYPE=' . strtoupper($fileType);
+
+                $property = $property . $propertySuffix;
+                $value = $url;
+            } else {
+                $value = $url;
+            }
         }
 
         $this->setProperty(
