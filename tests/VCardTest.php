@@ -48,6 +48,9 @@ class VCardTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
+        // set timezone
+        date_default_timezone_set('Europe/Brussels');
+
         $this->vcard = new VCard();
 
         $this->firstName = 'Jeroen';
@@ -150,7 +153,7 @@ class VCardTest extends \PHPUnit_Framework_TestCase
      * Test adding photo with no value
      *
      * @expectedException JeroenDesloovere\VCard\VCardMediaException
-     * @t@github.com:jeroendesloovere/vcard.gitexpectedExceptionMessage Nothing returned from URL.
+     * @expectedExceptionMessage Nothing returned from URL.
      */
     public function testAddPhotoWithNoValue()
     {

@@ -89,7 +89,7 @@ class VCard
         // set property
         $this->setProperty(
             'address',
-            'ADR' . (($type != '') ? ';' . $type : ''),
+            'ADR' . (($type != '') ? ';' . $type : '') . $this->getCharsetString(),
             $value
         );
 
@@ -123,7 +123,7 @@ class VCard
     {
         $this->setProperty(
             'company',
-            'ORG',
+            'ORG' . $this->getCharsetString(),
             $company
         );
 
@@ -165,7 +165,7 @@ class VCard
     {
         $this->setProperty(
             'jobtitle',
-            'TITLE',
+            'TITLE' . $this->getCharsetString(),
             $jobtitle
         );
 
@@ -203,7 +203,32 @@ class VCard
 
             $property .= ";ENCODING=b;TYPE=" . $type;
         } else {
-            $value = $url;
+            if (filter_var($url, FILTER_VALIDATE_URL) !== FALSE) {
+                $propertySuffix = ';VALUE=URL';
+
+                $headers = get_headers($url);
+
+                $imageTypeMatched = false;
+                $fileType = null;
+
+                foreach ($headers as $header) {
+                    if (preg_match('/Content-Type:\simage\/([a-z]+)/i', $header, $m)) {
+                        $fileType = $m[1];
+                        $imageTypeMatched = true;
+                    }
+                }
+
+                if (!$imageTypeMatched) {
+                    throw new VCardMediaException('Returned data isn\'t an image.');
+                }
+
+                $propertySuffix .= ';TYPE=' . strtoupper($fileType);
+
+                $property = $property . $propertySuffix;
+                $value = $url;
+            } else {
+                $value = $url;
+            }
         }
 
         $this->setProperty(
@@ -246,7 +271,7 @@ class VCard
         $property = $lastName . ';' . $firstName . ';' . $additional . ';' . $prefix . ';' . $suffix;
         $this->setProperty(
             'name',
-            'N',
+            'N' . $this->getCharsetString(),
             $property
         );
 
@@ -255,7 +280,7 @@ class VCard
             // set property
             $this->setProperty(
                 'fullname',
-                'FN',
+                'FN' . $this->getCharsetString(),
                 trim(implode(' ', $values))
             );
         }
@@ -273,7 +298,7 @@ class VCard
     {
         $this->setProperty(
             'note',
-            'NOTE',
+            'NOTE' . $this->getCharsetString(),
             $note
         );
 
@@ -507,6 +532,20 @@ class VCard
     }
 
     /**
+     * Get charset string
+     *
+     * @return string
+     */
+    public function getCharsetString()
+    {
+        $charsetString = '';
+        if ($this->charset == 'utf-8') {
+            $charsetString = ';CHARSET=' . $this->charset;
+        }
+        return $charsetString;
+    }
+
+    /**
      * Get content type
      *
      * @return string
@@ -579,11 +618,6 @@ class VCard
     {
         $output = ($this->isIOS7()) ?
             $this->buildVCalendar() : $this->buildVCard();
-
-        // we need to decode the output for outlook
-        if ($this->getCharset() == 'utf-8') {
-            $output = utf8_decode($output);
-        }
 
         return $output;
     }
