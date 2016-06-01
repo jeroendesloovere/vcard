@@ -206,4 +206,12 @@ class VCardParserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($parser->getCardAtIndex(0)->lastname, "Admiraal");
         $this->assertEquals($parser->getCardAtIndex(0)->fullname, "Wouter Admiraal");
     }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testFileNotFound()
+    {
+        $parser = VCardParser::parseFromFile(__DIR__ . '/does-not-exist.vcf');
+    }
 }
