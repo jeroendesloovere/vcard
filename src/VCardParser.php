@@ -208,6 +208,13 @@ class VCardParser
                             $cardData->photo = $value;
                         }
                         break;
+                    case 'LOGO':
+                        if ($rawValue) {
+                            $cardData->rawLogo = $value;
+                        } else {
+                            $cardData->logo = $value;
+                        }
+                        break;
                 }
             }
         }
