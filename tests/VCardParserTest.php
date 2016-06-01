@@ -202,9 +202,11 @@ class VCardParserTest extends \PHPUnit_Framework_TestCase
     public function testFromFile()
     {
         $parser = VCardParser::parseFromFile(__DIR__ . '/example.vcf');
-        $this->assertEquals($parser->getCardAtIndex(0)->firstname, "Wouter");
-        $this->assertEquals($parser->getCardAtIndex(0)->lastname, "Admiraal");
-        $this->assertEquals($parser->getCardAtIndex(0)->fullname, "Wouter Admiraal");
+        // Use this opportunity to test fetching all cards directly.
+        $cards = $parser->getCards();
+        $this->assertEquals($cards[0]->firstname, "Wouter");
+        $this->assertEquals($cards[0]->lastname, "Admiraal");
+        $this->assertEquals($cards[0]->fullname, "Wouter Admiraal");
     }
 
     /**

@@ -72,6 +72,17 @@ class VCardParser
     }
 
     /**
+     * Fetch all the imported VCards.
+     *
+     * @return array
+     *    A list of VCard card data objects.
+     */
+    public function getCards()
+    {
+        return $this->vcardObjects;
+    }
+
+    /**
      * Fetch the imported VCard at the specified index.
      *
      * @throws OutOfBoundsException
