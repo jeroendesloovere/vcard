@@ -199,6 +199,24 @@ class VCardParserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($parser->getCardAtIndex(1)->fullname, "Ipsum Lorem");
     }
 
+    public function testIteration()
+    {
+        // Prepare a VCard DB.
+        $db = '';
+        $vcard = new VCard();
+        $vcard->addName("Admiraal", "Wouter");
+        $db .= $vcard->buildVCard();
+
+        $vcard = new VCard();
+        $vcard->addName("Lorem", "Ipsum");
+        $db .= $vcard->buildVCard();
+
+        $parser = new VCardParser($db);
+        foreach ($parser as $i => $card) {
+            $this->assertEquals($card->fullname, $i == 0 ? "Wouter Admiraal" : "Ipsum Lorem");
+        }
+    }
+
     public function testFromFile()
     {
         $parser = VCardParser::parseFromFile(__DIR__ . '/example.vcf');
