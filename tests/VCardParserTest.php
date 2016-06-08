@@ -12,7 +12,6 @@ use JeroenDesloovere\VCard\VCardParser;
  */
 class VCardParserTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @expectedException OutOfBoundsException
      */
@@ -200,11 +199,39 @@ class VCardParserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($parser->getCardAtIndex(1)->fullname, "Ipsum Lorem");
     }
 
+    public function testIteration()
+    {
+        // Prepare a VCard DB.
+        $db = '';
+        $vcard = new VCard();
+        $vcard->addName("Admiraal", "Wouter");
+        $db .= $vcard->buildVCard();
+
+        $vcard = new VCard();
+        $vcard->addName("Lorem", "Ipsum");
+        $db .= $vcard->buildVCard();
+
+        $parser = new VCardParser($db);
+        foreach ($parser as $i => $card) {
+            $this->assertEquals($card->fullname, $i == 0 ? "Wouter Admiraal" : "Ipsum Lorem");
+        }
+    }
+
     public function testFromFile()
     {
         $parser = VCardParser::parseFromFile(__DIR__ . '/example.vcf');
-        $this->assertEquals($parser->getCardAtIndex(0)->firstname, "Wouter");
-        $this->assertEquals($parser->getCardAtIndex(0)->lastname, "Admiraal");
-        $this->assertEquals($parser->getCardAtIndex(0)->fullname, "Wouter Admiraal");
+        // Use this opportunity to test fetching all cards directly.
+        $cards = $parser->getCards();
+        $this->assertEquals($cards[0]->firstname, "Wouter");
+        $this->assertEquals($cards[0]->lastname, "Admiraal");
+        $this->assertEquals($cards[0]->fullname, "Wouter Admiraal");
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testFileNotFound()
+    {
+        $parser = VCardParser::parseFromFile(__DIR__ . '/does-not-exist.vcf');
     }
 }
