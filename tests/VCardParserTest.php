@@ -153,6 +153,20 @@ class VCardParserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($parser->getCardAtIndex(0)->url['PREF;WORK'][0], 'http://work1.example.com');
         $this->assertEquals($parser->getCardAtIndex(0)->url['PREF;WORK'][1], 'http://work2.example.com');
     }
+    
+    public function testNote()
+    {
+        $vcard = new VCard();
+        $vcard->addNote('This is a testnote');
+        $parser = new VCardParser($vcard->buildVCard());
+        
+        $vcardMultiline = new VCard();
+        $vcardMultiline->addNote("This is a multiline note\nNew line content!");
+        $parserMultiline = new VCardParser($vcardMultiline->buildVCard());
+        
+        $this->assertEquals($parser->getCardAtIndex(0)->note, 'This is a testnote');
+        $this->assertEquals($parserMultiline->getCardAtIndex(0)->note, "This is a multiline note\nNew line content!");
+    }
 
     public function testTitle()
     {
