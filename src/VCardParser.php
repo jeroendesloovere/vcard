@@ -256,7 +256,7 @@ class VCardParser implements Iterator
                         }
                         break;
                     case 'NOTE':
-                        $cardData->note = $value;
+                        $cardData->note = $this->unescape($value);
                         break;
                 }
             }
@@ -308,4 +308,8 @@ class VCardParser implements Iterator
         );
     }
 
+    protected function unescape($text)
+    {
+        return str_replace("\\n", PHP_EOL, $text);
+    }
 }

@@ -161,11 +161,11 @@ class VCardParserTest extends \PHPUnit_Framework_TestCase
         $parser = new VCardParser($vcard->buildVCard());
         
         $vcardMultiline = new VCard();
-        $vcardMultiline->addNote("This is a multiline note\nNew line content!");
+        $vcardMultiline->addNote("This is a multiline note\nNew line content!\r\nLine 2");
         $parserMultiline = new VCardParser($vcardMultiline->buildVCard());
         
         $this->assertEquals($parser->getCardAtIndex(0)->note, 'This is a testnote');
-        $this->assertEquals($parserMultiline->getCardAtIndex(0)->note, "This is a multiline note\nNew line content!");
+        $this->assertEquals(nl2br($parserMultiline->getCardAtIndex(0)->note), nl2br("This is a multiline note" . PHP_EOL . "New line content!" . PHP_EOL . "Line 2"));
     }
 
     public function testTitle()
