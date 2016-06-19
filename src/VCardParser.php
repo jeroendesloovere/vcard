@@ -255,6 +255,9 @@ class VCardParser implements Iterator
                             $cardData->photo = $value;
                         }
                         break;
+                    case 'NOTE':
+                        $cardData->note = $value;
+                        break;
                 }
             }
         }
