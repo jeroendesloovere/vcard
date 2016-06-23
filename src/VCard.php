@@ -41,7 +41,8 @@ class VCard
         'email',
         'address',
         'phoneNumber',
-        'url'
+        'url',
+        'label'
     );
 
     /**
@@ -167,6 +168,25 @@ class VCard
             'jobtitle',
             'TITLE' . $this->getCharsetString(),
             $jobtitle
+        );
+
+        return $this;
+    }
+
+    /**
+     * Add a label
+     *
+     * @param string $label
+     * @param string $type
+     *
+     * @return $this
+     */
+    public function addLabel($label, $type = '')
+    {
+        $this->setProperty(
+            'label',
+            'LABEL' . ($type !== '' ? ';' . $type : ''),
+            $label
         );
 
         return $this;
