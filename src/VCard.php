@@ -398,7 +398,7 @@ class VCard
         $properties = $this->getProperties();
         foreach ($properties as $property) {
             // add to string
-            $string .= $this->fold($property['key'] . ':' . $property['value'] . "\r\n");
+            $string .= $this->fold($property['key'] . ':' . $this->escape($property['value']) . "\r\n");
         }
 
         // add to string
@@ -508,6 +508,21 @@ class VCard
 
         // split, wrap and trim trailing separator
         return substr(chunk_split($text, 73, "\r\n "), 0, -3);
+    }
+    
+    /**
+     * Escape newline characters according to RFC2425 section 5.8.4.
+     *
+     * @link http://tools.ietf.org/html/rfc2425#section-5.8.4
+     * @param  string $text
+     * @return string
+     */
+    protected function escape($text)
+    {
+        $text = str_replace("\r\n", "\\n", $text);
+        $text = str_replace("\n", "\\n", $text);
+        
+        return $text;
     }
 
     /**

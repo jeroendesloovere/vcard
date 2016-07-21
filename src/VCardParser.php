@@ -21,6 +21,8 @@ namespace JeroenDesloovere\VCard;
  * Original code is available at: http://code.google.com/p/zendvcard/
  */
 
+use Iterator;
+
 /**
  * VCard PHP Class to parse .vcard files.
  *
@@ -32,9 +34,8 @@ namespace JeroenDesloovere\VCard;
  * @author ruzicka.jan
  * @author Wouter Admiraal <wad@wadmiraal.net>
  */
-class VCardParser
+class VCardParser implements Iterator
 {
-
     /**
      * The raw VCard content.
     *
@@ -48,6 +49,13 @@ class VCardParser
      * @var array
      */
     protected $vcardObjects;
+
+    /**
+     * The iterator position.
+     *
+     * @var int
+     */
+    protected $position;
 
     /**
      * Helper function to parse a file directly.
@@ -69,7 +77,46 @@ class VCardParser
     {
         $this->content = $content;
         $this->vcardObjects = array();
+        $this->rewind();
         $this->parse();
+    }
+
+    public function rewind()
+    {
+        $this->position = 0;
+    }
+
+    public function current()
+    {
+        if ($this->valid()) {
+            return $this->getCardAtIndex($this->position);
+        }
+    }
+
+    public function key()
+    {
+        return $this->position;
+    }
+
+    public function next()
+    {
+        $this->position++;
+    }
+
+    public function valid()
+    {
+        return !empty($this->vcardObjects[$this->position]);
+    }
+
+    /**
+     * Fetch all the imported VCards.
+     *
+     * @return array
+     *    A list of VCard card data objects.
+     */
+    public function getCards()
+    {
+        return $this->vcardObjects;
     }
 
     /**
@@ -215,6 +262,9 @@ class VCardParser
                             $cardData->logo = $value;
                         }
                         break;
+                    case 'NOTE':
+                        $cardData->note = $this->unescape($value);
+                        break;
                 }
             }
         }
@@ -265,4 +315,16 @@ class VCardParser
         );
     }
 
+    /**
+     * Unescape newline characters according to RFC2425 section 5.8.4.
+     * This function will replace escaped line breaks with PHP_EOL.
+     *
+     * @link http://tools.ietf.org/html/rfc2425#section-5.8.4
+     * @param  string $text
+     * @return string
+     */
+    protected function unescape($text)
+    {
+        return str_replace("\\n", PHP_EOL, $text);
+    }
 }
