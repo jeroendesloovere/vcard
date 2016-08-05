@@ -173,6 +173,23 @@ class VCard
     }
 
     /**
+     * Add role
+     *
+     * @param  string $role The role for the person.
+     * @return $this
+     */
+    public function addRole($role)
+    {
+        $this->setProperty(
+            'role',
+            'ROLE' . $this->getCharsetString(),
+            $role
+        );
+
+        return $this;
+    }
+
+    /**
      * Add a photo or logo (depending on property name)
      *
      * @param  string              $property LOGO|PHOTO

@@ -104,6 +104,11 @@ class VCardTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->vcard, $this->vcard->addJobtitle(''));
     }
 
+    public function testAddRole()
+    {
+        $this->assertEquals($this->vcard, $this->vcard->addRole(''));
+    }
+
     public function testAddName()
     {
         $this->assertEquals($this->vcard, $this->vcard->addName(''));
@@ -251,6 +256,17 @@ class VCardTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals($this->vcard, $this->vcard->addJobtitle('1'));
         $this->assertEquals($this->vcard, $this->vcard->addJobtitle('2'));
+    }
+
+    /**
+     * Test multiple roles
+     *
+     * @expectedException JeroenDesloovere\VCard\Exception
+     */
+    public function testMultipleRoles()
+    {
+        $this->assertEquals($this->vcard, $this->vcard->addRole('1'));
+        $this->assertEquals($this->vcard, $this->vcard->addRole('2'));
     }
 
     /**
