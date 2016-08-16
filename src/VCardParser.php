@@ -255,6 +255,13 @@ class VCardParser implements Iterator
                             $cardData->photo = $value;
                         }
                         break;
+                    case 'LOGO':
+                        if ($rawValue) {
+                            $cardData->rawLogo = $value;
+                        } else {
+                            $cardData->logo = $value;
+                        }
+                        break;
                     case 'NOTE':
                         $cardData->note = $this->unescape($value);
                         break;

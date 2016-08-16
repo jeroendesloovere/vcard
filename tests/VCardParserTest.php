@@ -176,6 +176,27 @@ class VCardParserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($parser->getCardAtIndex(0)->title, 'Ninja');
     }
 
+    public function testLogo()
+    {
+        $image = __DIR__ . '/image.jpg';
+        $imageUrl = 'https://raw.githubusercontent.com/jeroendesloovere/vcard/master/tests/image.jpg';
+
+        $vcard = new VCard();
+        $vcard->addLogo($image, true);
+        $parser = new VCardParser($vcard->buildVCard());
+        $this->assertEquals($parser->getCardAtIndex(0)->rawLogo, file_get_contents($image));
+
+        $vcard = new VCard();
+        $vcard->addLogo($image, false);
+        $parser = new VCardParser($vcard->buildVCard());
+        $this->assertEquals($parser->getCardAtIndex(0)->logo, __DIR__ . '/image.jpg');
+
+        $vcard = new VCard();
+        $vcard->addLogo($imageUrl, false);
+        $parser = new VCardParser($vcard->buildVCard());
+        $this->assertEquals($parser->getCardAtIndex(0)->logo, $imageUrl);
+    }
+
     public function testPhoto()
     {
         $image = __DIR__ . '/image.jpg';
