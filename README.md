@@ -1,8 +1,6 @@
 # VCard PHP class
-[![Latest Stable Version](http://img.shields.io/packagist/v/jeroendesloovere/vcard.svg)](https://packagist.org/packages/jeroendesloovere/vcard)
+[![Latest Stable Version](http://img.shields.io/packagist/v/jeroendesloovere/vcard.svg)](https://packagist.org/packages/anakadote/vcard)
 [![License](http://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/jeroendesloovere/vcard/blob/master/LICENSE)
-[![Build Status](https://travis-ci.org/jeroendesloovere/vcard.svg?branch=master)](https://travis-ci.org/jeroendesloovere/vcard)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/jeroendesloovere/vcard/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/jeroendesloovere/vcard/?branch=master)
 
 This VCard PHP class can generate a vCard with some data. When using an iOS device < iOS 8 it will export as a .ics file because iOS devices don't support the default .vcf files.
 
@@ -13,7 +11,7 @@ This VCard PHP class can generate a vCard with some data. When using an iOS devi
 ``` json
 {
     "require": {
-        "jeroendesloovere/vcard": "1.2.*"
+        "anakadote/vcard": "1.2.*"
     }
 }
 ```
