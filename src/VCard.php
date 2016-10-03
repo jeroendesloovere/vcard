@@ -595,9 +595,9 @@ class VCard
      *
      * @return string
      */
-    public function getFilename(emptyAsUnknown = false)
+    public function getFilename($emptyAsUnknown = false)
     {
-        if (emptyAsUnknown and not $this->filename) {
+        if ($emptyAsUnknown and not $this->filename) {
             return 'unknown';
         }
         return $this->filename;
