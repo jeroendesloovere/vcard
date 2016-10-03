@@ -445,7 +445,7 @@ class VCard
         $string .= "SUMMARY:Click attached contact below to save to your contacts\n";
         $string .= "DTSTAMP:" . $dtstart . "Z\n";
         $string .= "ATTACH;VALUE=BINARY;ENCODING=BASE64;FMTTYPE=text/directory;\n";
-        $string .= " X-APPLE-FILENAME=" . $this->getFilename() . "." . $this->getFileExtension() . ":\n";
+        $string .= " X-APPLE-FILENAME=" . $this->getFilename(true) . "." . $this->getFileExtension() . ":\n";
 
         // base64 encode it so that it can be used as an attachemnt to the "dummy" calendar appointment
         $b64vcard = base64_encode($this->buildVCard());
@@ -591,10 +591,15 @@ class VCard
     /**
      * Get filename
      *
+     * @param boolean $emptyAsUnknown when true, returns "unknown" instead of ""
+     *
      * @return string
      */
-    public function getFilename()
+    public function getFilename(emptyAsUnknown = false)
     {
+        if (emptyAsUnknown and not $this->filename) {
+            return 'unknown';
+        }
         return $this->filename;
     }
 
@@ -618,7 +623,7 @@ class VCard
     public function getHeaders($asAssociative)
     {
         $contentType        = $this->getContentType() . '; charset=' . $this->getCharset();
-        $contentDisposition = 'attachment; filename=' . $this->getFilename() . '.' . $this->getFileExtension();
+        $contentDisposition = 'attachment; filename=' . $this->getFilename(true) . '.' . $this->getFileExtension();
         $contentLength      = strlen($this->getOutput());
         $connection         = 'close';
 
@@ -713,7 +718,7 @@ class VCard
      */
     public function save()
     {
-        $file = $this->getFilename() . '.' . $this->getFileExtension();
+        $file = $this->getFilename(true) . '.' . $this->getFileExtension();
 
         file_put_contents(
             $file,
