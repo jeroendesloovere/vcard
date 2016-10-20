@@ -128,7 +128,7 @@ class VCard
         );
 
         // if filename is empty, add to filename
-        if ($this->getFilename() === null) {
+        if ($this->filename === null) {
             $this->setFilename($company);
         }
 
@@ -595,6 +595,9 @@ class VCard
      */
     public function getFilename()
     {
+        if (!$this->filename) {
+            return 'unknown';
+        }
         return $this->filename;
     }
 
