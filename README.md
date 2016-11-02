@@ -55,6 +55,11 @@ $vcard->addPhoto(__DIR__ . '/landscape.jpeg');
 
 // return vcard as a download
 return $vcard->download();
+
+// save vcard on disk
+//$vcard->setSavePath('/path/to/directory');
+//$vcard->save();
+
 ```
 
 > [View all examples](/examples/example.php) or check [the VCard class](/src/VCard.php).
