@@ -796,7 +796,7 @@ class VCard
             throw new Exception('Output directory does not exist.');
         }
 
-        // Add trailing directory separator the the save path
+        // Add trailing directory separator the save path
         if (substr($savePath, -1) != DIRECTORY_SEPARATOR) {
             $savePath .= DIRECTORY_SEPARATOR;
         }
