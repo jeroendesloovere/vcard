@@ -265,6 +265,9 @@ class VCardParser implements Iterator
                     case 'NOTE':
                         $cardData->note = $this->unescape($value);
                         break;
+                    case 'CATEGORIES':
+                        $cardData->categories = array_map('trim', explode(',', $value));
+                        break;
                 }
             }
         }

@@ -92,6 +92,11 @@ class VCardTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->vcard, $this->vcard->addCompany(''));
     }
 
+    public function testAddCategories()
+    {
+        $this->assertEquals($this->vcard, $this->vcard->addCategories([]));
+    }
+
     public function testAddEmail()
     {
         $this->assertEquals($this->vcard, $this->vcard->addEmail($this->emailAddress1));
@@ -270,6 +275,17 @@ class VCardTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals($this->vcard, $this->vcard->addBirthday('1'));
         $this->assertEquals($this->vcard, $this->vcard->addBirthday('2'));
+    }
+
+    /**
+     * Test multiple categories
+     *
+     * @expectedException JeroenDesloovere\VCard\Exception
+     */
+    public function testMultipleCategories()
+    {
+        $this->assertEquals($this->vcard, $this->vcard->addCategories(['1']));
+        $this->assertEquals($this->vcard, $this->vcard->addCategories(['2']));
     }
 
     /**
