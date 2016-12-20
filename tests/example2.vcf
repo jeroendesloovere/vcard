@@ -1,0 +1,14 @@
+BEGIN:VCARD
+VERSION:3.0
+N;CHARSET=utf-8:Doe;John;;Dr.;
+FN;CHARSET=utf-8:Dr. John Doe
+ORG;CHARSET=utf-8:Some Foundation
+TITLE;CHARSET=utf-8:Redaktion & Gestaltung
+PHOTO;VALUE=URL;TYPE=JPEG:https://raw.githubusercontent.com/jeroendesloov
+ ere/vcard/master/tests/image.jpg
+ADR;TYPE=HOME;CHARSET=utf-8:;;Heidestraße 17;Köln;;51147;Germany
+TEL;TYPE=WORK,VOICE:+49 221 9999123
+TEL;TYPE=HOME,VOICE:+49 221 1234567
+URL;default:http://example.com/
+EMAIL;INTERNET;TYPE=PREF:john@doe.com
+END:VCARD

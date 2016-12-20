@@ -59,6 +59,158 @@ class VCard
     public $charset = 'utf-8';
 
     /**
+     * Create a VCard from an object.
+     *
+     * @param object $card The data object containing all VCard information.
+     *                     The object should be similar to what VCardParser
+     *                     returns, and contain the
+     *                     following properties (all others will be ignored):
+     *                      - logo (string)
+     *                        The "logo" property should contain a path or a URL
+     *                        pointing to a file. Base64 encoded files are not
+     *                        supported.
+     *                      - lastname (string)
+     *                      - firstname (string)
+     *                      - additional (string)
+     *                      - prefix (string)
+     *                      - suffix (string)
+     *                      - birthday (string)
+     *                      - address (array)
+     *                        Has to be keyed, and can contain multiple values
+     *                        (like address["WORK;POSTAL"][n]). Each address
+     *                        item is itself an object (stdClass) and can
+     *                        have the following properties:
+     *                        - name (string)
+     *                        - extended (string)
+     *                        - street (string)
+     *                        - city (string)
+     *                        - region (string)
+     *                        - zip (string)
+     *                        - country (string)
+     *                      - phone (array)
+     *                        Has to be keyed, and can contain multiple values
+     *                        (like phone["default"][n]). Each item is a string
+     *                        value.
+     *                      - email (array)
+     *                        Has to be keyed, and can contain multiple values
+     *                        (like email["default"][n]). Each item is a string
+     *                        value.
+     *                      - url (array)
+     *                        Has to be keyed, and can contain multiple values
+     *                        (like url["default"][n]). Each item is a string
+     *                        value.
+     *                      - organization (string)
+     *                      - title (string)
+     *                      - photo (string)
+     *                        The "photo" property should contain a path or a
+     *                        URL pointing to a file. Base64 encoded files are
+     *                        not supported.
+     *                      - note (string)
+     * @param  bool   $include Include the image in our vcard?
+     *
+     * @return JeroenDesloovere\VCard\VCard
+     */
+    public static function fromObject($card, $include = true)
+    {
+        $vcard = new VCard();
+
+        // Handle the name next.
+        $lastname = isset($card->lastname) ? $card->lastname : '';
+        $firstname = isset($card->firstname) ? $card->firstname : '';
+        $additional = isset($card->additional) ? $card->additional : '';
+        $prefix = isset($card->prefix) ? $card->prefix : '';
+        $suffix = isset($card->suffix) ? $card->suffix : '';
+        $vcard->addName(
+            $lastname,
+            $firstname,
+            $additional,
+            $prefix,
+            $suffix
+        );
+
+        // Start with single properties.
+        foreach ([
+            'birthday' => 'addBirthday',
+            'organization' => 'addCompany',
+            'title' => 'addJobtitle',
+            'note' => 'addNote',
+        ] as $property => $method) {
+            if (isset($card->{$property})) {
+                call_user_method($method, $vcard, $card->{$property});
+            }
+        }
+
+        // Get files.
+        foreach ([
+            'photo' => 'addPhoto',
+            'logo' => 'addLogo',
+        ] as $property => $method) {
+            if (isset($card->{$property})) {
+                call_user_method($method, $vcard, $card->{$property}, $include);
+            }
+        }
+
+        // Get addresses.
+        if (!empty($card->address) && is_array($card->address)) {
+            foreach ($card->address as $type => $values) {
+                if (is_array($values)) {
+                    foreach ($values as $value) {
+                        $name = isset($value->name) ? $value->name : '';
+                        $extended = isset($value->extended) ? $value->extended : '';
+                        $street = isset($value->street) ? $value->street : '';
+                        $city = isset($value->city) ? $value->city : '';
+                        $region = isset($value->region) ? $value->region : '';
+                        $zip = isset($value->zip) ? $value->zip : '';
+                        $country = isset($value->country) ? $value->country : '';
+
+                        $vcard->addAddress(
+                            $name,
+                            $extended,
+                            $street,
+                            $city,
+                            $region,
+                            $zip,
+                            $country,
+                            $type
+                        );
+                    }
+                }
+            }
+        }
+
+        // End with multi-properties.
+        foreach ([
+            'phone' => 'addPhoneNumber',
+            'url' => 'addURL',
+            'email' => 'addEmail',
+        ] as $property => $method) {
+            if (!empty($card->{$property}) && is_array($card->{$property})) {
+                foreach ($card->{$property} as $type => $values) {
+                    if (is_array($values)) {
+                        if ($method == 'addEmail') {
+                            // The addEmail() method is inconsistent, in
+                            // that the passed type should omit "INTERNET"
+                            // in its type. Remove it.
+                            $type = str_replace('INTERNET;', '', $type);
+                        }
+
+                        foreach ($values as $value) {
+                            call_user_method(
+                                $method,
+                                $vcard,
+                                $value,
+                                $type
+                            );
+                        }
+                    }
+                }
+            }
+        }
+
+        return $vcard;
+    }
+
+    /**
      * Add address
      *
      * @param  string [optional] $name

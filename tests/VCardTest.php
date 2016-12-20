@@ -13,6 +13,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
  */
 
 use JeroenDesloovere\VCard\VCard;
+use JeroenDesloovere\VCard\VCardParser;
 
 /**
  * This class will test our VCard PHP Class which can generate VCards.
@@ -335,5 +336,21 @@ class VCardTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals('garcon-jeroen', $this->vcard->getFilename());
+    }
+
+    /**
+     * Test creating a VCard from a parsed object.
+     */
+    public function testObjectToVCardConversion()
+    {
+        $parser = VCardParser::parseFromFile(__DIR__ . '/example2.vcf');
+        $card = $parser->getCardAtIndex(0);
+        $vcard = VCard::fromObject($card, false);
+        $this->assertEquals(
+            trim(file_get_contents(__DIR__ . '/example2.vcf')),
+            // Get rid of the REV line. It won't ever match anyway.
+            // Get rid of trailing whitespace.
+            trim(preg_replace('/REV:.+\r*\n*/', '', $vcard->buildVCard()))
+        );
     }
 }
