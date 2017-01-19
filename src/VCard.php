@@ -526,7 +526,7 @@ class VCard
         // split, wrap and trim trailing separator
         return substr(chunk_split($text, 73, "\r\n "), 0, -3);
     }
-    
+
     /**
      * Escape newline characters according to RFC2425 section 5.8.4.
      *
@@ -538,7 +538,7 @@ class VCard
     {
         $text = str_replace("\r\n", "\\n", $text);
         $text = str_replace("\n", "\\n", $text);
-        
+
         return $text;
     }
 
@@ -622,7 +622,7 @@ class VCard
     {
         $contentType        = $this->getContentType() . '; charset=' . $this->getCharset();
         $contentDisposition = 'attachment; filename=' . $this->getFilename() . '.' . $this->getFileExtension();
-        $contentLength      = strlen($this->getOutput());
+        $contentLength      = mb_strlen($this->getOutput(), $this->getCharset());
         $connection         = 'close';
 
         if ((bool) $asAssociative) {
