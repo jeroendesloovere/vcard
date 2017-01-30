@@ -279,7 +279,7 @@ class VCard
         );
 
         // if filename is empty, add to filename
-        if ($this->getFilename() === null) {
+        if ($this->filename === null) {
             $this->setFilename($company);
         }
 
@@ -318,6 +318,23 @@ class VCard
             'jobtitle',
             'TITLE' . $this->getCharsetString(),
             $jobtitle
+        );
+
+        return $this;
+    }
+
+    /**
+     * Add role
+     *
+     * @param  string $role The role for the person.
+     * @return $this
+     */
+    public function addRole($role)
+    {
+        $this->setProperty(
+            'role',
+            'ROLE' . $this->getCharsetString(),
+            $role
         );
 
         return $this;
@@ -729,6 +746,9 @@ class VCard
      */
     public function getFilename()
     {
+        if (!$this->filename) {
+            return 'unknown';
+        }
         return $this->filename;
     }
 
