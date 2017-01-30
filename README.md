@@ -10,15 +10,10 @@ This VCard PHP class can generate a vCard with some data. When using an iOS devi
 
 ### Installation
 
-``` json
-{
-    "require": {
-        "jeroendesloovere/vcard": "1.2.*"
-    }
-}
+```bash
+composer require jeroendesloovere/vcard
 ```
-
-> Add the above in your `composer.json` file when using [Composer](https://getcomposer.org).
+> This will install the latest version of vcard with [Composer](https://getcomposer.org)
 
 ### Example
 
