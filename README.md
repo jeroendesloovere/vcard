@@ -64,6 +64,10 @@ return $vcard->download();
 The parser can either get passed a VCard string, like so:
 
 ```php
+
+// load VCardParser classes
+use JeroenDesloovere\VCard\VCardParser;
+
 $parser = new VCardParser($vcardString);
 echo $parser->getCardAtIndex(0)->fullname; // Prints the full name.
 ```
