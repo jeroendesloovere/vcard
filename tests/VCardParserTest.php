@@ -168,6 +168,21 @@ class VCardParserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(nl2br($parserMultiline->getCardAtIndex(0)->note), nl2br("This is a multiline note" . PHP_EOL . "New line content!" . PHP_EOL . "Line 2"));
     }
 
+    public function testCategories()
+    {
+        $vcard = new VCard();
+        $vcard->addCategories([
+            'Category 1',
+            'cat-2',
+            'another long category!'
+        ]);
+        $parser = new VCardParser($vcard->buildVCard());
+
+        $this->assertEquals($parser->getCardAtIndex(0)->categories[0], 'Category 1');
+        $this->assertEquals($parser->getCardAtIndex(0)->categories[1], 'cat-2');
+        $this->assertEquals($parser->getCardAtIndex(0)->categories[2], 'another long category!');
+    }
+
     public function testTitle()
     {
         $vcard = new VCard();

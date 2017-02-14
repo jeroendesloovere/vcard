@@ -323,6 +323,23 @@ class VCard
     }
 
     /**
+     * Add categories
+     *
+     * @param array $categories
+     * @return $this
+     */
+    public function addCategories($categories)
+    {
+        $this->setProperty(
+            'categories',
+            'CATEGORIES' . $this->getCharsetString(),
+            trim(implode(',', $categories))
+        );
+
+        return $this;
+    }
+
+    /**
      * Add phone number
      *
      * @param  string            $number
