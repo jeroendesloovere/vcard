@@ -220,7 +220,7 @@ class VCard
 
             $property .= ";ENCODING=b;TYPE=" . $type;
         } else {
-            if (filter_var($url, FILTER_VALIDATE_URL) !== FALSE) {
+            if (filter_var($url, FILTER_VALIDATE_URL) !== false) {
                 $propertySuffix = ';VALUE=URL';
 
                 $headers = get_headers($url);

@@ -52,3 +52,4 @@ echo 'A personal vCard is saved in this folder: ' . __DIR__;
 
 // echo message
 // echo 'A personal vCard is saved in this folder: ' . __DIR__;
+

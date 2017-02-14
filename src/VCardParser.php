@@ -190,7 +190,8 @@ class VCardParser implements Iterator
                     } elseif (strpos(strtolower($type), 'charset=') === 0) {
                         try {
                             $value = mb_convert_encoding($value, "UTF-8", substr($type, 8));
-                        } catch (\Exception $e) { }
+                        } catch (\Exception $e) {
+                        }
                         unset($types[$i]);
                     }
                     $i++;
@@ -201,7 +202,7 @@ class VCardParser implements Iterator
                         $cardData->fullname = $value;
                         break;
                     case 'N':
-                        foreach($this->parseName($value) as $key => $val) {
+                        foreach ($this->parseName($value) as $key => $val) {
                             $cardData->{$key} = $val;
                         }
                         break;
