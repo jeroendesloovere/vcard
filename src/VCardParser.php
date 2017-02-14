@@ -164,6 +164,12 @@ class VCardParser implements Iterator
             } elseif (strtoupper($line) == "END:VCARD") {
                 $this->vcardObjects[] = $cardData;
             } elseif (!empty($line)) {
+                // Strip grouping information. We don't use the group names. We
+                // simply use a list for entries that have multiple values.
+                // As per RFC, group names are alphanumerical, and end with a
+                // period (.).
+                $line = preg_replace('/^\w+\./', '', $line);
+
                 $type = '';
                 $value = '';
                 @list($type, $value) = explode(':', $line, 2);
@@ -172,6 +178,16 @@ class VCardParser implements Iterator
                 $element = strtoupper($types[0]);
 
                 array_shift($types);
+
+                // Normalize types. A type can either be a type-param directly,
+                // or can be prefixed with "type=". E.g.: "INTERNET" or
+                // "type=INTERNET".
+                if (!empty($types)) {
+                    $types = array_map(function($type) {
+                        return preg_replace('/^type=/i', '', $type);
+                    }, $types);
+                }
+
                 $i = 0;
                 $rawValue = false;
                 foreach ($types as $type) {
