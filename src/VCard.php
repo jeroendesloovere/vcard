@@ -33,6 +33,13 @@ class VCard
     private $filename;
 
     /**
+     * Save Path
+     *
+     * @var string
+     */
+    private $savePath = null;
+
+    /**
      * Multiple properties for element allowed
      *
      * @var array
@@ -738,6 +745,11 @@ class VCard
     {
         $file = $this->getFilename() . '.' . $this->getFileExtension();
 
+        // Add save path if given
+        if (null !== $this->savePath) {
+            $file = $this->savePath . $file;
+        }
+
         file_put_contents(
             $file,
             $this->getOutput()
@@ -790,6 +802,26 @@ class VCard
         // overwrite filename or add to filename using a prefix in between
         $this->filename = ($overwrite) ?
             $value : $this->filename . $separator . $value;
+    }
+
+    /**
+     * Set the save path directory
+     *
+     * @param  string $savePath Save Path
+     * @throws Exception
+     */
+    public function setSavePath($savePath)
+    {
+        if (!is_dir($savePath)) {
+            throw new Exception('Output directory does not exist.');
+        }
+
+        // Add trailing directory separator the save path
+        if (substr($savePath, -1) != DIRECTORY_SEPARATOR) {
+            $savePath .= DIRECTORY_SEPARATOR;
+        }
+
+        $this->savePath = $savePath;
     }
 
     /**
