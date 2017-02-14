@@ -2,8 +2,6 @@
 
 /**
  * VCard generator test - can save to file or output as a download
- *
- * @author Jeroen Desloovere <info@jeroendesloovere.be>
  */
 
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -52,4 +50,3 @@ echo 'A personal vCard is saved in this folder: ' . __DIR__;
 
 // echo message
 // echo 'A personal vCard is saved in this folder: ' . __DIR__;
-
