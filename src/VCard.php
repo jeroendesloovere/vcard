@@ -594,7 +594,7 @@ class VCard
     {
         $charsetString = '';
         if ($this->charset == 'utf-8') {
-            $charsetString = ';CHARSET=' . $this->charset;
+            $charsetString = ';charset=UTF-8';
         }
 
         return $charsetString;
@@ -646,7 +646,7 @@ class VCard
     {
         $contentType = $this->getContentType() . '; charset=' . $this->getCharset();
         $contentDisposition = 'attachment; filename=' . $this->getFilename() . '.' . $this->getFileExtension();
-        $contentLength = mb_strlen($this->getOutput(), $this->getCharset());
+        $contentLength = mb_strlen($this->getOutput(), '8bit');
         $connection = 'close';
 
         if ((bool)$asAssociative) {
