@@ -594,7 +594,7 @@ class VCard
     {
         $charsetString = '';
         if ($this->charset == 'utf-8') {
-            $charsetString = ';CHARSET=' . $this->charset;
+            $charsetString = ';charset=UTF-8';
         }
 
         return $charsetString;
