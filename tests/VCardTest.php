@@ -368,4 +368,23 @@ class VCardTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('garcon-jeroen', $this->vcard->getFilename());
     }
+
+    public function testChunkSplitUnicode()
+    {
+        $class_handler  = new \ReflectionClass('JeroenDesloovere\VCard\VCard');
+        $method_handler = $class_handler->getMethod('chunk_split_unicode');
+        $method_handler->setAccessible(true);
+
+        $ascii_input="Lorem ipsum dolor sit amet,";
+        $ascii_output = $method_handler->invokeArgs(new VCard(), [$ascii_input,10,'|']);
+        $unicode_input='Τη γλώσσα μου έδωσαν ελληνική το σπίτι φτωχικό στις αμμουδιές του Ομήρου.';
+        $unicode_output = $method_handler->invokeArgs(new VCard(), [$unicode_input,10,'|']);
+
+        $this->assertEquals(
+            "Lorem ipsu|m dolor si|t amet,|",
+            $ascii_output);
+        $this->assertEquals(
+            "Τη γλώσσα |μου έδωσαν| ελληνική |το σπίτι φ|τωχικό στι|ς αμμουδιέ|ς του Ομήρ|ου.|",
+            $unicode_output);
+    }
 }
