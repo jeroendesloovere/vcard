@@ -211,11 +211,7 @@ class VCard
         $mimeType = null;
 
         //Is this URL for a remote resource?
-        if (filter_var(
-                $url,
-                FILTER_VALIDATE_URL,
-                FILTER_FLAG_SCHEME_REQUIRED | FILTER_FLAG_HOST_REQUIRED
-            ) !== false) {
+        if (filter_var($url, FILTER_VALIDATE_URL) !== false) {
             $headers = get_headers($url, 1);
 
             if (array_key_exists('Content-Type', $headers)) {
