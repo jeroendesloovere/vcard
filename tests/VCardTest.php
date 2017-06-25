@@ -138,6 +138,16 @@ class VCardTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->vcard, $return);
     }
 
+    public function testAddPhotoWithRemoteJpgPhoto()
+    {
+        $return = $this->vcard->addPhoto(
+            'https://raw.githubusercontent.com/jeroendesloovere/vcard/master/tests/image.jpg',
+            true
+        );
+
+        $this->assertEquals($this->vcard, $return);
+    }
+
     public function testAddLogoWithJpgImage()
     {
         $return = $this->vcard->addLogo(__DIR__ . '/image.jpg', true);
@@ -163,7 +173,7 @@ class VCardTest extends \PHPUnit_Framework_TestCase
      * Test adding photo with no value
      *
      * @expectedException JeroenDesloovere\VCard\VCardMediaException
-     * @expectedExceptionMessage Nothing returned from URL.
+     * @expectedExceptionMessage Returned data is not an image.
      */
     public function testAddPhotoWithNoValue()
     {
@@ -185,7 +195,7 @@ class VCardTest extends \PHPUnit_Framework_TestCase
      * Test adding photo with no photo
      *
      * @expectedException JeroenDesloovere\VCard\VCardMediaException
-     * @expectedExceptionMessage Returned data aren't an image.
+     * @expectedExceptionMessage Returned data is not an image.
      */
     public function testAddPhotoWithNoPhoto()
     {
@@ -196,7 +206,7 @@ class VCardTest extends \PHPUnit_Framework_TestCase
      * Test adding logo with no image
      *
      * @expectedException JeroenDesloovere\VCard\VCardMediaException
-     * @expectedExceptionMessage Returned data aren't an image.
+     * @expectedExceptionMessage Returned data is not an image.
      */
     public function testAddLogoWithNoImage()
     {

@@ -123,7 +123,8 @@ class VCard
     /**
      * Add company
      *
-     * @param  string $company
+     * @param string $company
+     * @param string $department
      * @return $this
      */
     public function addCompany($company, $department = '')
@@ -200,13 +201,38 @@ class VCard
     /**
      * Add a photo or logo (depending on property name)
      *
-     * @param  string $property LOGO|PHOTO
-     * @param  string $url image url or filename
-     * @param  bool $include Do we include the image in our vcard or not?
-     * @throws VCardMediaException if file is empty or not an image file
+     * @param string $property LOGO|PHOTO
+     * @param string $url image url or filename
+     * @param bool $include Do we include the image in our vcard or not?
+     * @param string $element The name of the element to set
      */
     private function addMedia($property, $url, $include = true, $element)
     {
+        $mimeType = null;
+
+        //Is this URL for a remote resource?
+        if (filter_var(
+                $url,
+                FILTER_VALIDATE_URL,
+                FILTER_FLAG_SCHEME_REQUIRED | FILTER_FLAG_HOST_REQUIRED
+            ) !== false) {
+            $headers = get_headers($url, 1);
+
+            if (array_key_exists('Content-Type', $headers)) {
+                $mimeType = $headers['Content-Type'];
+            }
+        } else {
+            //Local file, so inspect it directly
+            $mimeType = mime_content_type($url);
+        }
+        if (strpos($mimeType, ';') !== false) {
+            $mimeType = strstr($mimeType, ';', true);
+        }
+        if (!is_string($mimeType) or substr($mimeType, 0, 6) != 'image/') {
+            throw new VCardMediaException('Returned data is not an image.');
+        }
+        $fileType = strtoupper(substr($mimeType, 6));
+
         if ($include) {
             $value = file_get_contents($url);
 
@@ -215,35 +241,10 @@ class VCard
             }
 
             $value = base64_encode($value);
-            $mimetype = mime_content_type($url);
-
-            if (preg_match('/^image\//', $mimetype) !== 1) {
-                throw new VCardMediaException('Returned data aren\'t an image.');
-            }
-
-            $type = strtoupper(str_replace('image/', '', $mimetype));
-
-            $property .= ";ENCODING=b;TYPE=" . $type;
+            $property .= ";ENCODING=b;TYPE=" . $fileType;
         } else {
             if (filter_var($url, FILTER_VALIDATE_URL) !== false) {
                 $propertySuffix = ';VALUE=URL';
-
-                $headers = get_headers($url);
-
-                $imageTypeMatched = false;
-                $fileType = null;
-
-                foreach ($headers as $header) {
-                    if (preg_match('/Content-Type:\simage\/([a-z]+)/i', $header, $m)) {
-                        $fileType = $m[1];
-                        $imageTypeMatched = true;
-                    }
-                }
-
-                if (!$imageTypeMatched) {
-                    throw new VCardMediaException('Returned data isn\'t an image.');
-                }
-
                 $propertySuffix .= ';TYPE=' . strtoupper($fileType);
 
                 $property = $property . $propertySuffix;
