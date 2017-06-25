@@ -224,7 +224,7 @@ class VCard
         if (strpos($mimeType, ';') !== false) {
             $mimeType = strstr($mimeType, ';', true);
         }
-        if (!is_string($mimeType) or substr($mimeType, 0, 6) != 'image/') {
+        if (!is_string($mimeType) || substr($mimeType, 0, 6) !== 'image/') {
             throw new VCardMediaException('Returned data is not an image.');
         }
         $fileType = strtoupper(substr($mimeType, 6));
