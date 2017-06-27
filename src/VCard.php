@@ -44,12 +44,12 @@ class VCard
      *
      * @var array
      */
-    private $multiplePropertiesForElementAllowed = array(
+    private $multiplePropertiesForElementAllowed = [
         'email',
         'address',
         'phoneNumber',
         'url'
-    );
+    ];
 
     /**
      * Properties
@@ -225,7 +225,7 @@ class VCard
             $mimeType = strstr($mimeType, ';', true);
         }
         if (!is_string($mimeType) || substr($mimeType, 0, 6) !== 'image/') {
-            throw new VCardMediaException('Returned data is not an image.');
+            throw VCardException::invalidImage();
         }
         $fileType = strtoupper(substr($mimeType, 6));
 
@@ -233,7 +233,7 @@ class VCard
             $value = file_get_contents($url);
 
             if (!$value) {
-                throw new VCardMediaException('Nothing returned from URL.');
+                throw VCardException::emptyURL();
             }
 
             $value = base64_encode($value);
@@ -275,13 +275,13 @@ class VCard
         $suffix = ''
     ) {
         // define values with non-empty values
-        $values = array_filter(array(
+        $values = array_filter([
             $prefix,
             $firstName,
             $additional,
             $lastName,
             $suffix,
-        ));
+        ]);
 
         // define filename
         $this->setFilename($values);
@@ -647,20 +647,20 @@ class VCard
         $connection = 'close';
 
         if ((bool)$asAssociative) {
-            return array(
+            return [
                 'Content-type' => $contentType,
                 'Content-Disposition' => $contentDisposition,
                 'Content-Length' => $contentLength,
                 'Connection' => $connection,
-            );
+            ];
         }
 
-        return array(
+        return [
             'Content-type: ' . $contentType,
             'Content-Disposition: ' . $contentDisposition,
             'Content-Length: ' . $contentLength,
             'Connection: ' . $connection,
-        );
+        ];
     }
 
     /**
@@ -802,12 +802,12 @@ class VCard
      * Set the save path directory
      *
      * @param  string $savePath Save Path
-     * @throws Exception
+     * @throws VCardException
      */
     public function setSavePath($savePath)
     {
         if (!is_dir($savePath)) {
-            throw new Exception('Output directory does not exist.');
+            throw VCardException::outputDirectoryNotExists();
         }
 
         // Add trailing directory separator the save path
@@ -824,24 +824,24 @@ class VCard
      * @param  string $element The element name you want to set, f.e.: name, email, phoneNumber, ...
      * @param  string $key
      * @param  string $value
-     * @throws Exception
+     * @throws VCardException
      */
     private function setProperty($element, $key, $value)
     {
         if (!in_array($element, $this->multiplePropertiesForElementAllowed)
             && isset($this->definedElements[$element])
         ) {
-            throw new Exception('You can only set "' . $element . '" once.');
+            throw VCardException::elementAlreadyExists($element);
         }
 
         // we define that we set this element
         $this->definedElements[$element] = true;
 
         // adding property
-        $this->properties[] = array(
+        $this->properties[] = [
             'key' => $key,
             'value' => $value
-        );
+        ];
     }
 
     /**
@@ -853,7 +853,7 @@ class VCard
     {
         $browser = $this->getUserAgent();
 
-        $matches = array();
+        $matches = [];
         preg_match('/os (\d+)_(\d+)\s+/', $browser, $matches);
         $version = isset($matches[1]) ? ((int)$matches[1]) : 999;
 

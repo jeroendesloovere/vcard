@@ -61,13 +61,12 @@ class VCardParser implements Iterator
      * Helper function to parse a file directly.
      *
      * @param string $filename
-     *
-     * @return JeroenDesloovere\VCard\VCardParser
+     * @return self
      */
     public static function parseFromFile($filename)
     {
         if (file_exists($filename) && is_readable($filename)) {
-            return new VCardParser(file_get_contents($filename));
+            return new self(file_get_contents($filename));
         } else {
             throw new \RuntimeException(sprintf("File %s is not readable, or doesn't exist.", $filename));
         }
@@ -76,7 +75,7 @@ class VCardParser implements Iterator
     public function __construct($content)
     {
         $this->content = $content;
-        $this->vcardObjects = array();
+        $this->vcardObjects = [];
         $this->rewind();
         $this->parse();
     }
@@ -145,7 +144,7 @@ class VCardParser implements Iterator
     protected function parse()
     {
         // Normalize new lines.
-        $this->content = str_replace(array("\r\n", "\r"), "\n", $this->content);
+        $this->content = str_replace(["\r\n", "\r"], "\n", $this->content);
 
         // RFC2425 5.8.1. Line delimiting and folding
         // Unfolding is accomplished by regarding CRLF immediately followed by
@@ -227,21 +226,21 @@ class VCardParser implements Iterator
                         break;
                     case 'ADR':
                         if (!isset($cardData->address)) {
-                            $cardData->address = array();
+                            $cardData->address = [];
                         }
                         $key = !empty($types) ? implode(';', $types) : 'WORK;POSTAL';
                         $cardData->address[$key][] = $this->parseAddress($value);
                         break;
                     case 'TEL':
                         if (!isset($cardData->phone)) {
-                            $cardData->phone = array();
+                            $cardData->phone = [];
                         }
                         $key = !empty($types) ? implode(';', $types) : 'default';
                         $cardData->phone[$key][] = $value;
                         break;
                     case 'EMAIL':
                         if (!isset($cardData->email)) {
-                            $cardData->email = array();
+                            $cardData->email = [];
                         }
                         $key = !empty($types) ? implode(';', $types) : 'default';
                         $cardData->email[$key][] = $value;
@@ -257,7 +256,7 @@ class VCardParser implements Iterator
                         break;
                     case 'URL':
                         if (!isset($cardData->url)) {
-                            $cardData->url = array();
+                            $cardData->url = [];
                         }
                         $key = !empty($types) ? implode(';', $types) : 'default';
                         $cardData->url[$key][] = $value;
@@ -299,13 +298,13 @@ class VCardParser implements Iterator
             $prefix,
             $suffix
         ) = explode(';', $value);
-        return (object) array(
+        return (object) [
             'lastname' => $lastname,
             'firstname' => $firstname,
             'additional' => $additional,
             'prefix' => $prefix,
             'suffix' => $suffix,
-        );
+        ];
     }
 
     protected function parseBirthday($value)
@@ -324,7 +323,7 @@ class VCardParser implements Iterator
             $zip,
             $country,
         ) = explode(';', $value);
-        return (object) array(
+        return (object) [
             'name' => $name,
             'extended' => $extended,
             'street' => $street,
@@ -332,7 +331,7 @@ class VCardParser implements Iterator
             'region' => $region,
             'zip' => $zip,
             'country' => $country,
-        );
+        ];
     }
 
     /**
