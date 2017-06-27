@@ -138,6 +138,30 @@ class VCardTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->vcard, $return);
     }
 
+    public function testAddPhotoWithRemoteJpgPhoto()
+    {
+        $return = $this->vcard->addPhoto(
+            'https://raw.githubusercontent.com/jeroendesloovere/vcard/master/tests/image.jpg',
+            true
+        );
+
+        $this->assertEquals($this->vcard, $return);
+    }
+
+    /**
+     * Test adding remote empty photo
+     *
+     * @expectedException JeroenDesloovere\VCard\VCardMediaException
+     * @expectedExceptionMessage Nothing returned from URL.
+     */
+    public function testAddPhotoWithRemoteEmptyJpgPhoto()
+    {
+        $this->vcard->addPhoto(
+            'https://raw.githubusercontent.com/Synchro/vcard/master/tests/empty.jpg',
+            true
+        );
+    }
+
     public function testAddLogoWithJpgImage()
     {
         $return = $this->vcard->addLogo(__DIR__ . '/image.jpg', true);
@@ -160,12 +184,12 @@ class VCardTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test adding photo with no value
+     * Test adding local photo using an empty file
      *
      * @expectedException JeroenDesloovere\VCard\VCardMediaException
-     * @expectedExceptionMessage Nothing returned from URL.
+     * @expectedExceptionMessage Returned data is not an image.
      */
-    public function testAddPhotoWithNoValue()
+    public function testAddPhotoWithEmptyFile()
     {
         $this->vcard->addPhoto(__DIR__ . '/emptyfile', true);
     }
@@ -185,7 +209,7 @@ class VCardTest extends \PHPUnit_Framework_TestCase
      * Test adding photo with no photo
      *
      * @expectedException JeroenDesloovere\VCard\VCardMediaException
-     * @expectedExceptionMessage Returned data aren't an image.
+     * @expectedExceptionMessage Returned data is not an image.
      */
     public function testAddPhotoWithNoPhoto()
     {
@@ -196,7 +220,7 @@ class VCardTest extends \PHPUnit_Framework_TestCase
      * Test adding logo with no image
      *
      * @expectedException JeroenDesloovere\VCard\VCardMediaException
-     * @expectedExceptionMessage Returned data aren't an image.
+     * @expectedExceptionMessage Returned data is not an image.
      */
     public function testAddLogoWithNoImage()
     {
