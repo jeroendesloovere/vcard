@@ -157,7 +157,7 @@ class VCardTest extends \PHPUnit_Framework_TestCase
     public function testAddPhotoWithRemoteEmptyJpgPhoto()
     {
         $this->vcard->addPhoto(
-            'https://raw.githubusercontent.com/Synchro/vcard/master/tests/empty.jpg',
+            'https://raw.githubusercontent.com/jeroendesloovere/vcard/master/tests/empty.jpg',
             true
         );
     }
