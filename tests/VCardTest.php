@@ -196,7 +196,7 @@ class VCardTest extends \PHPUnit_Framework_TestCase
      * Test adding logo with no value
      *
      * @expectedException Exception
-     * @t@github.com:jeroendesloovere/vcard.gitexpectedExceptionMessage Returned data is not an image.
+     * @expectedExceptionMessage Returned data is not an image.
      */
     public function testAddLogoWithNoValue()
     {
