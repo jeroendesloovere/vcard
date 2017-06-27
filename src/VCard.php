@@ -13,8 +13,6 @@ use Behat\Transliterator\Transliterator;
 
 /**
  * VCard PHP Class to generate .vcard files and save them to a file or output as a download.
- *
- * @author Jeroen Desloovere <info@jeroendesloovere.be>
  */
 class VCard
 {

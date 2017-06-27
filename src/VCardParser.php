@@ -3,22 +3,10 @@
 namespace JeroenDesloovere\VCard;
 
 /*
- * Copyright 2010 Thomas Schaaf <Thomaschaaf@gmail.com>
+ * This file is part of the VCard PHP Class from Jeroen Desloovere.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * Changes by: Wouter Admiraal <wad@wadmiraal.net>
- * Original code is available at: http://code.google.com/p/zendvcard/
+ * For the full copyright and license information, please view the license
+ * file that was distributed with this source code.
  */
 
 use Iterator;
@@ -29,10 +17,6 @@ use Iterator;
  * This class is heavily based on the Zendvcard project (seemingly abandoned),
  * which is licensed under the Apache 2.0 license.
  * More information can be found at https://code.google.com/archive/p/zendvcard/
- *
- * @author Thomas Schaaf <Thomaschaaf@gmail.com>
- * @author ruzicka.jan
- * @author Wouter Admiraal <wad@wadmiraal.net>
  */
 class VCardParser implements Iterator
 {

@@ -11,8 +11,6 @@ namespace JeroenDesloovere\VCard;
 
 /**
  * VCard Exception PHP Class.
- *
- * @author Jeroen Desloovere <info@jeroendesloovere.be>
  */
 class VCardException extends \Exception
 {

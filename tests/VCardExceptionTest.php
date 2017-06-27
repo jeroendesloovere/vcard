@@ -14,8 +14,6 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 /**
  * VCard Exception Test.
- *
- * @author Jeroen Desloovere <info@jeroendesloovere.be>
  */
 class VCardExceptionTest extends \PHPUnit_Framework_TestCase
 {

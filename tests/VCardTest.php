@@ -16,8 +16,6 @@ use JeroenDesloovere\VCard\VCard;
 
 /**
  * This class will test our VCard PHP Class which can generate VCards.
- *
- * @author Jeroen Desloovere <info@jeroendesloovere.be>
  */
 class VCardTest extends \PHPUnit_Framework_TestCase
 {
