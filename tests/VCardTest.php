@@ -99,6 +99,19 @@ class VCardTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals($this->vcard, $this->vcard->addEmail($this->emailAddress1));
         $this->assertEquals($this->vcard, $this->vcard->addEmail($this->emailAddress2));
+        $this->assertEquals(2, count($this->vcard->getProperty()));
+    }
+
+    public function testAddEmailMultiple()
+    {
+        $this->assertEquals($this->vcard, $this->vcard->addEmail($this->emailAddress1));
+        $this->assertEquals($this->vcard, $this->vcard->addEmail($this->emailAddress2));
+        $this->assertEquals(2, count($this->vcard->getProperty()));
+        $this->assertEquals(1, count($this->vcard->getProperties()));
+        $this->vcard->new();
+        $this->assertEquals($this->vcard, $this->vcard->addEmail($this->emailAddress1));
+        $this->assertEquals($this->vcard, $this->vcard->addEmail($this->emailAddress2));
+        $this->assertEquals(2, count($this->vcard->getProperty()));
         $this->assertEquals(2, count($this->vcard->getProperties()));
     }
 
@@ -126,6 +139,19 @@ class VCardTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals($this->vcard, $this->vcard->addPhoneNumber(''));
         $this->assertEquals($this->vcard, $this->vcard->addPhoneNumber(''));
+        $this->assertEquals(2, count($this->vcard->getProperty()));
+    }
+
+    public function testAddPhoneNumberMultiple()
+    {
+        $this->assertEquals($this->vcard, $this->vcard->addPhoneNumber(''));
+        $this->assertEquals($this->vcard, $this->vcard->addPhoneNumber(''));
+        $this->assertEquals(2, count($this->vcard->getProperty()));
+        $this->assertEquals(1, count($this->vcard->getProperties()));
+        $this->vcard->new();
+        $this->assertEquals($this->vcard, $this->vcard->addPhoneNumber(''));
+        $this->assertEquals($this->vcard, $this->vcard->addPhoneNumber(''));
+        $this->assertEquals(2, count($this->vcard->getProperty()));
         $this->assertEquals(2, count($this->vcard->getProperties()));
     }
 
@@ -178,6 +204,19 @@ class VCardTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals($this->vcard, $this->vcard->addUrl('1'));
         $this->assertEquals($this->vcard, $this->vcard->addUrl('2'));
+        $this->assertEquals(2, count($this->vcard->getProperty()));
+    }
+
+    public function testAddUrlMultiple()
+    {
+        $this->assertEquals($this->vcard, $this->vcard->addUrl('1'));
+        $this->assertEquals($this->vcard, $this->vcard->addUrl('2'));
+        $this->assertEquals(2, count($this->vcard->getProperty()));
+        $this->assertEquals(1, count($this->vcard->getProperties()));
+        $this->vcard->new();
+        $this->assertEquals($this->vcard, $this->vcard->addUrl('1'));
+        $this->assertEquals($this->vcard, $this->vcard->addUrl('2'));
+        $this->assertEquals(2, count($this->vcard->getProperty()));
         $this->assertEquals(2, count($this->vcard->getProperties()));
     }
 

@@ -436,7 +436,7 @@ class VCard
     {
         $properties = $this->getProperties();
 
-        foreach ($properties as $key => $value) {
+        for($i = 0;$i < count($properties);$i++) {
             // init string
             (empty($string)) ? $string = "BEGIN:VCARD\r\n" : $string .= "BEGIN:VCARD\r\n";
             
@@ -444,7 +444,7 @@ class VCard
             $string .= "REV:" . date("Y-m-d") . "T" . date("H:i:s") . "Z\r\n";
 
             // loop all properties
-            $property = $this->getProperty($key);
+            $property = $this->getProperty($i);
             foreach ($property as $data) {
                 // add to string
                 $string .= $this->fold($data['key'] . ':' . $this->escape($data['value']) . "\r\n");
@@ -697,9 +697,9 @@ class VCard
      *
      * @return array
      */
-    public function getProperty($index = null)
+    public function getProperty($index = -1)
     {
-        ($index == null) ? $this->index : $index;
+        $index = ($index == -1) ? $this->index : $index;
 
         return $this->properties[$index];
     }
@@ -722,10 +722,10 @@ class VCard
      */
     public function hasProperty($key)
     {
-        $properties = $this->getProperty();
+        $property = $this->getProperty();
 
-        foreach ($properties as $property) {
-            if ($property['key'] === $key && $property['value'] !== '') {
+        foreach ($property as $data) {
+            if ($data['key'] === $key && $data['value'] !== '') {
                 return true;
             }
         }
@@ -855,13 +855,13 @@ class VCard
     private function setProperty($element, $key, $value)
     {
         if (!in_array($element, $this->multiplePropertiesForElementAllowed)
-            && isset($this->definedElements[$element])
+            && isset($this->definedElements[$this->index][$element])
         ) {
             throw VCardException::elementAlreadyExists($element);
         }
 
         // we define that we set this element
-        $this->definedElements[$element] = true;
+        $this->definedElements[$this->index][$element] = true;
 
         // adding property
         $this->properties[$this->index][] = [
