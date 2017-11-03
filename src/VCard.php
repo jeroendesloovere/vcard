@@ -256,6 +256,36 @@ class VCard
     }
 
     /**
+     * Add a photo or logo (depending on property name)
+     *
+     * @param string $property LOGO|PHOTO
+     * @param string $content image content
+     * @param string $element The name of the element to set
+     */
+    private function addMediaContent($property, $content, $element)
+    {
+        $finfo = new \finfo();
+        $mimeType = $finfo->buffer($content, FILEINFO_MIME_TYPE);
+
+        if (strpos($mimeType, ';') !== false) {
+            $mimeType = strstr($mimeType, ';', true);
+        }
+        if (!is_string($mimeType) || substr($mimeType, 0, 6) !== 'image/') {
+            throw VCardException::invalidImage();
+        }
+        $fileType = strtoupper(substr($mimeType, 6));
+
+        $content = base64_encode($content);
+        $property .= ";ENCODING=b;TYPE=" . $fileType;
+
+        $this->setProperty(
+            $element,
+            $property,
+            $content
+        );
+    }
+
+    /**
      * Add name
      *
      * @param  string [optional] $lastName
@@ -380,6 +410,23 @@ class VCard
     }
 
     /**
+     * Add Logo content
+     *
+     * @param  string $content image content
+     * @return $this
+     */
+    public function addLogoContent($content)
+    {
+        $this->addMediaContent(
+            'LOGO',
+            $content,
+            'logo'
+        );
+
+        return $this;
+    }
+
+    /**
      * Add Photo
      *
      * @param  string $url image url or filename
@@ -392,6 +439,23 @@ class VCard
             'PHOTO',
             $url,
             $include,
+            'photo'
+        );
+
+        return $this;
+    }
+
+    /**
+     * Add Photo content
+     *
+     * @param  string $content image content
+     * @return $this
+     */
+    public function addPhotoContent($content)
+    {
+        $this->addMediaContent(
+            'PHOTO',
+            $content,
             'photo'
         );
 
