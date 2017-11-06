@@ -21,6 +21,6 @@
         "phpunit/phpunit": "4.6.*"
     },
     "autoload": {
-        "psr-4": { "JeroenDesloovere\\VCard\\": "src/" }
+        "psr-4": { "JeroenDesloovere\\VCard\\": "src/VCard/" }
     }
 }

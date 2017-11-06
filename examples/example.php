@@ -4,23 +4,46 @@
  * VCard generator test - can save to file or output as a download
  */
 
+declare(strict_types=1);
 require_once __DIR__ . '/../vendor/autoload.php';
-require_once __DIR__ . '/../src/VCard.php';
+require_once __DIR__ . '/../src/VCard/VCard.php';
+require_once __DIR__ . '/../src/VCard/Formatter/Formatter.php';
+require_once __DIR__ . '/../src/VCard/Formatter/FormatterInterface.php';
+require_once __DIR__ . '/../src/VCard/Formatter/VcfFormatter.php';
+require_once __DIR__ . '/../src/VCard/Property/PropertyInterface.php';
+require_once __DIR__ . '/../src/VCard/Property/Name.php';
+require_once __DIR__ . '/../src/VCard/Property/Address.php';
+require_once __DIR__ . '/../src/VCard/Property/Type.php';
+require_once __DIR__ . '/../src/VCard/Property/Kind.php';
 
 use JeroenDesloovere\VCard\VCard;
+use JeroenDesloovere\VCard\Formatter\Formatter;
+use JeroenDesloovere\VCard\Formatter\VcfFormatter;
+use JeroenDesloovere\VCard\Property\Name;
+use JeroenDesloovere\VCard\Property\Address;
+use JeroenDesloovere\VCard\Property\Type;
 
-// define vcard
-$vcard = new VCard();
+// Step one: build one or more vCards
+$vCard = new VCard();
 
-// define variables
-$firstname = 'Jeroen';
-$lastname = 'Desloovere';
-$additional = '';
-$prefix = '';
-$suffix = '';
+$vCard->add(new Name('Desloovere', 'Jeroen'));
+$vCard->add(new Address(Type::home(), 'Overpoort 1', 'Gent', '9000', 'BE'));
 
-// add personal data
-$vcard->addName($lastname, $firstname, $additional, $prefix, $suffix);
+// Step two: use the VcfFormatter to create a .vcf file (which can contain multiple vCards)
+$vcf = new Formatter(new VcfFormatter(), 'example');
+$vcf->addVCard($vCard);
+
+// Step three: "download", "save" or custom method.
+$vcf->download();
+
+// Or save to a file
+$vcf->save(__DIR__);
+
+// Or get content and headers for use in your framework
+$vcf->getContent();
+$vcf->getHeaders();
+
+/*
 
 // add work data
 $vcard->addCompany('Siesqo');
@@ -50,3 +73,4 @@ echo 'A personal vCard is saved in this folder: ' . __DIR__;
 
 // echo message
 // echo 'A personal vCard is saved in this folder: ' . __DIR__;
+*/
