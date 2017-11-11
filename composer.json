@@ -14,11 +14,13 @@
         }
     ],
     "require": {
-        "php": ">=5.3.3",
+        "php": "^7.0",
         "behat/transliterator": "~1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "4.6.*"
+        "m6web/Symfony2-coding-standard": "^3.3",
+        "m6web/coke": "^2.2",
+        "phpunit/phpunit": "^6.4"
     },
     "autoload": {
         "psr-4": { "JeroenDesloovere\\VCard\\": "src/" }

@@ -11,7 +11,7 @@ use JeroenDesloovere\VCard\VCardParser;
 class VCardParserTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @expectedException OutOfBoundsException
+     * @expectedException \OutOfBoundsException
      */
     public function testOutOfRangeException()
     {
@@ -22,11 +22,11 @@ class VCardParserTest extends \PHPUnit_Framework_TestCase
     public function testSimpleVcard()
     {
         $vcard = new VCard();
-        $vcard->addName("Desloovere", "Jeroen");
+        $vcard->addName('Desloovere', 'Jeroen');
         $parser = new VCardParser($vcard->buildVCard());
-        $this->assertEquals($parser->getCardAtIndex(0)->firstname, "Jeroen");
-        $this->assertEquals($parser->getCardAtIndex(0)->lastname, "Desloovere");
-        $this->assertEquals($parser->getCardAtIndex(0)->fullname, "Jeroen Desloovere");
+        $this->assertEquals($parser->getCardAtIndex(0)->firstname, 'Jeroen');
+        $this->assertEquals($parser->getCardAtIndex(0)->lastname, 'Desloovere');
+        $this->assertEquals($parser->getCardAtIndex(0)->fullname, 'Jeroen Desloovere');
     }
 
     public function testBDay()
@@ -41,61 +41,61 @@ class VCardParserTest extends \PHPUnit_Framework_TestCase
     {
         $vcard = new VCard();
         $vcard->addAddress(
-            "Lorem Corp.",
-            "(extended info)",
-            "54th Ipsum Street",
-            "PHPsville",
-            "Guacamole",
-            "01158",
-            "Gitland",
+            'Lorem Corp.',
+            '(extended info)',
+            '54th Ipsum Street',
+            'PHPsville',
+            'Guacamole',
+            '01158',
+            'Gitland',
             'WORK;POSTAL'
         );
         $vcard->addAddress(
-            "Jeroen Desloovere",
-            "(extended info, again)",
-            "25th Some Address",
-            "Townsville",
-            "Area 51",
-            "045784",
-            "Europe (is a country, right?)",
+            'Jeroen Desloovere',
+            '(extended info, again)',
+            '25th Some Address',
+            'Townsville',
+            'Area 51',
+            '045784',
+            'Europe (is a country, right?)',
             'WORK;PERSONAL'
         );
         $vcard->addAddress(
-            "Georges Desloovere",
-            "(extended info, again, again)",
-            "26th Some Address",
-            "Townsville-South",
-            "Area 51B",
-            "04554",
+            'Georges Desloovere',
+            '(extended info, again, again)',
+            '26th Some Address',
+            'Townsville-South',
+            'Area 51B',
+            '04554',
             "Europe (no, it isn't)",
             'WORK;PERSONAL'
         );
         $parser = new VCardParser($vcard->buildVCard());
         $this->assertEquals($parser->getCardAtIndex(0)->address['WORK;POSTAL'][0], (object) array(
-            'name' => "Lorem Corp.",
-            'extended' => "(extended info)",
-            'street' => "54th Ipsum Street",
-            'city' => "PHPsville",
-            'region' => "Guacamole",
-            'zip' => "01158",
-            'country' => "Gitland",
+            'name' => 'Lorem Corp.',
+            'extended' => '(extended info)',
+            'street' => '54th Ipsum Street',
+            'city' => 'PHPsville',
+            'region' => 'Guacamole',
+            'zip' => '01158',
+            'country' => 'Gitland',
         ));
         $this->assertEquals($parser->getCardAtIndex(0)->address['WORK;PERSONAL'][0], (object) array(
-            'name' => "Jeroen Desloovere",
-            'extended' => "(extended info, again)",
-            'street' => "25th Some Address",
-            'city' => "Townsville",
-            'region' => "Area 51",
-            'zip' => "045784",
-            'country' => "Europe (is a country, right?)",
+            'name' => 'Jeroen Desloovere',
+            'extended' => '(extended info, again)',
+            'street' => '25th Some Address',
+            'city' => 'Townsville',
+            'region' => 'Area 51',
+            'zip' => '045784',
+            'country' => 'Europe (is a country, right?)',
         ));
         $this->assertEquals($parser->getCardAtIndex(0)->address['WORK;PERSONAL'][1], (object) array(
-            'name' => "Georges Desloovere",
-            'extended' => "(extended info, again, again)",
-            'street' => "26th Some Address",
-            'city' => "Townsville-South",
-            'region' => "Area 51B",
-            'zip' => "04554",
+            'name' => 'Georges Desloovere',
+            'extended' => '(extended info, again, again)',
+            'street' => '26th Some Address',
+            'city' => 'Townsville-South',
+            'region' => 'Area 51B',
+            'zip' => '04554',
             'country' => "Europe (no, it isn't)",
         ));
     }
@@ -163,7 +163,7 @@ class VCardParserTest extends \PHPUnit_Framework_TestCase
         $parserMultiline = new VCardParser($vcardMultiline->buildVCard());
 
         $this->assertEquals($parser->getCardAtIndex(0)->note, 'This is a testnote');
-        $this->assertEquals(nl2br($parserMultiline->getCardAtIndex(0)->note), nl2br("This is a multiline note" . PHP_EOL . "New line content!" . PHP_EOL . "Line 2"));
+        $this->assertEquals(nl2br($parserMultiline->getCardAtIndex(0)->note), nl2br('This is a multiline note' . PHP_EOL . 'New line content!' . PHP_EOL . 'Line 2'));
     }
 
     public function testCategories()
@@ -235,16 +235,16 @@ class VCardParserTest extends \PHPUnit_Framework_TestCase
     {
         $db = '';
         $vcard = new VCard();
-        $vcard->addName("Desloovere", "Jeroen");
+        $vcard->addName('Desloovere', 'Jeroen');
         $db .= $vcard->buildVCard();
 
         $vcard = new VCard();
-        $vcard->addName("Lorem", "Ipsum");
+        $vcard->addName('Lorem', 'Ipsum');
         $db .= $vcard->buildVCard();
 
         $parser = new VCardParser($db);
-        $this->assertEquals($parser->getCardAtIndex(0)->fullname, "Jeroen Desloovere");
-        $this->assertEquals($parser->getCardAtIndex(1)->fullname, "Ipsum Lorem");
+        $this->assertEquals($parser->getCardAtIndex(0)->fullname, 'Jeroen Desloovere');
+        $this->assertEquals($parser->getCardAtIndex(1)->fullname, 'Ipsum Lorem');
     }
 
     public function testIteration()
@@ -252,16 +252,16 @@ class VCardParserTest extends \PHPUnit_Framework_TestCase
         // Prepare a VCard DB.
         $db = '';
         $vcard = new VCard();
-        $vcard->addName("Desloovere", "Jeroen");
+        $vcard->addName('Desloovere', 'Jeroen');
         $db .= $vcard->buildVCard();
 
         $vcard = new VCard();
-        $vcard->addName("Lorem", "Ipsum");
+        $vcard->addName('Lorem', 'Ipsum');
         $db .= $vcard->buildVCard();
 
         $parser = new VCardParser($db);
         foreach ($parser as $i => $card) {
-            $this->assertEquals($card->fullname, $i == 0 ? "Jeroen Desloovere" : "Ipsum Lorem");
+            $this->assertEquals($card->fullname, $i == 0 ? 'Jeroen Desloovere' : 'Ipsum Lorem');
         }
     }
 
@@ -270,9 +270,9 @@ class VCardParserTest extends \PHPUnit_Framework_TestCase
         $parser = VCardParser::parseFromFile(__DIR__ . '/example.vcf');
         // Use this opportunity to test fetching all cards directly.
         $cards = $parser->getCards();
-        $this->assertEquals($cards[0]->firstname, "Jeroen");
-        $this->assertEquals($cards[0]->lastname, "Desloovere");
-        $this->assertEquals($cards[0]->fullname, "Jeroen Desloovere");
+        $this->assertEquals($cards[0]->firstname, 'Jeroen');
+        $this->assertEquals($cards[0]->lastname, 'Desloovere');
+        $this->assertEquals($cards[0]->fullname, 'Jeroen Desloovere');
         // Check the parsing of grouped items as well, which are present in the
         // example file.
         $this->assertEquals($cards[0]->url['default'][0], 'http://www.jeroendesloovere.be');

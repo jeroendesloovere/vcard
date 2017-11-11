@@ -105,11 +105,11 @@ class VCardParser implements Iterator
     /**
      * Fetch the imported VCard at the specified index.
      *
-     * @throws OutOfBoundsException
+     * @throws \OutOfBoundsException
      *
      * @param int $i
      *
-     * @return stdClass
+     * @return \stdClass
      *    The card data object.
      */
     public function getCardAtIndex($i)
@@ -135,16 +135,16 @@ class VCardParser implements Iterator
         // a white space character (namely HTAB ASCII decimal 9 or. SPACE ASCII
         // decimal 32) as equivalent to no characters at all (i.e., the CRLF
         // and single white space character are removed).
-        $this->content = preg_replace("/\n(?:[ \t])/", "", $this->content);
+        $this->content = preg_replace("/\n(?:[ \t])/", '', $this->content);
         $lines = explode("\n", $this->content);
 
         // Parse the VCard, line by line.
         foreach ($lines as $line) {
             $line = trim($line);
 
-            if (strtoupper($line) == "BEGIN:VCARD") {
+            if (strtoupper($line) == 'BEGIN:VCARD') {
                 $cardData = new \stdClass();
-            } elseif (strtoupper($line) == "END:VCARD") {
+            } elseif (strtoupper($line) == 'END:VCARD') {
                 $this->vcardObjects[] = $cardData;
             } elseif (!empty($line)) {
                 // Strip grouping information. We don't use the group names. We
@@ -188,7 +188,7 @@ class VCardParser implements Iterator
                         $rawValue = true;
                     } elseif (strpos(strtolower($type), 'charset=') === 0) {
                         try {
-                            $value = mb_convert_encoding($value, "UTF-8", substr($type, 8));
+                            $value = mb_convert_encoding($value, 'UTF-8', substr($type, 8));
                         } catch (\Exception $e) {
                         }
                         unset($types[$i]);

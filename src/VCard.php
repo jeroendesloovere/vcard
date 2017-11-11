@@ -235,7 +235,7 @@ class VCard
             }
 
             $value = base64_encode($value);
-            $property .= ";ENCODING=b;TYPE=" . $fileType;
+            $property .= ';ENCODING=b;TYPE='. $fileType;
         } else {
             if (filter_var($url, FILTER_VALIDATE_URL) !== false) {
                 $propertySuffix = ';VALUE=URL';
@@ -426,7 +426,7 @@ class VCard
         // init string
         $string = "BEGIN:VCARD\r\n";
         $string .= "VERSION:3.0\r\n";
-        $string .= "REV:" . date("Y-m-d") . "T" . date("H:i:s") . "Z\r\n";
+        $string .= 'REV:'.date('Y-m-d').'T'. date('H:i:s')."Z\r\n";
 
         // loop all properties
         $properties = $this->getProperties();
@@ -450,19 +450,19 @@ class VCard
     public function buildVCalendar()
     {
         // init dates
-        $dtstart = date("Ymd") . "T" . date("Hi") . "00";
-        $dtend = date("Ymd") . "T" . date("Hi") . "01";
+        $dtstart = date('Ymd') .'T'. date('Hi') .'00';
+        $dtend = date('Ymd') .'T'. date('Hi') .'01';
 
         // init string
         $string = "BEGIN:VCALENDAR\n";
         $string .= "VERSION:2.0\n";
         $string .= "BEGIN:VEVENT\n";
-        $string .= "DTSTART;TZID=Europe/London:" . $dtstart . "\n";
-        $string .= "DTEND;TZID=Europe/London:" . $dtend . "\n";
+        $string .= 'DTSTART;TZID=Europe/London:'.$dtstart."\n";
+        $string .= 'DTEND;TZID=Europe/London:'.$dtend."\n";
         $string .= "SUMMARY:Click attached contact below to save to your contacts\n";
-        $string .= "DTSTAMP:" . $dtstart . "Z\n";
+        $string .= 'DTSTAMP:'.$dtstart."Z\n";
         $string .= "ATTACH;VALUE=BINARY;ENCODING=BASE64;FMTTYPE=text/directory;\n";
-        $string .= " X-APPLE-FILENAME=" . $this->getFilename() . "." . $this->getFileExtension() . ":\n";
+        $string .= ' X-APPLE-FILENAME='.$this->getFilename().'.'.$this->getFileExtension().":\n";
 
         // base64 encode it so that it can be used as an attachemnt to the "dummy" calendar appointment
         $b64vcard = base64_encode($this->buildVCard());
