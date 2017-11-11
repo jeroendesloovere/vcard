@@ -7,7 +7,8 @@ namespace JeroenDesloovere\VCard\Model;
  *
  * @package JeroenDesloovere\VCard\Model
  */
-class VCard extends \stdClass {
+class VCard extends \stdClass
+{
     /**
      * @var string
      */

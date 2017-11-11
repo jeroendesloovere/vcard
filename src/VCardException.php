@@ -16,7 +16,7 @@ class VCardException extends \Exception
 {
     public static function elementAlreadyExists($element)
     {
-        return new self('You can only set "' . $element . '" once.');
+        return new self('You can only set "'.$element.'" once.');
     }
 
     public static function emptyURL()

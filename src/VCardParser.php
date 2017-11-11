@@ -166,7 +166,7 @@ class VCardParser implements Iterator
                 // or can be prefixed with "type=". E.g.: "INTERNET" or
                 // "type=INTERNET".
                 if (!empty($types)) {
-                    $types = array_map(function($type) {
+                    $types = array_map(function ($type) {
                         return preg_replace('/^type=/i', '', $type);
                     }, $types);
                 }
