@@ -14,7 +14,7 @@ class ElementAlreadyExistsException extends VCardException
      *
      * @param string $element
      */
-    public function __construct($element)
+    public function __construct(string $element)
     {
         parent::__construct('You can only set "'.$element.'" once.');
     }

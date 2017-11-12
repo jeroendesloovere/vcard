@@ -47,7 +47,7 @@ class VCard
      *
      * @var array
      */
-    private $multiplePropertiesForElementAllowed = [
+    private static $multiplePropertiesForElementAllowed = [
         'email',
         'address',
         'phoneNumber',
@@ -79,19 +79,21 @@ class VCard
      * @param string $zip      [optional]
      * @param string $country  [optional]
      * @param string $type     [optional]
-     *                             $type may be DOM | INTL | POSTAL | PARCEL | HOME | WORK
-     *                             or any combination of these: e.g. "WORK;PARCEL;POSTAL"
+     *                         $type may be DOM | INTL | POSTAL | PARCEL | HOME | WORK
+     *                         or any combination of these: e.g. "WORK;PARCEL;POSTAL"
+     *
      * @return $this
+     * @throws ElementAlreadyExistsException
      */
     public function addAddress(
-        $name = '',
-        $extended = '',
-        $street = '',
-        $city = '',
-        $region = '',
-        $zip = '',
-        $country = '',
-        $type = 'WORK;POSTAL'
+        string $name = '',
+        string $extended = '',
+        string $street = '',
+        string $city = '',
+        string $region = '',
+        string $zip = '',
+        string $country = '',
+        string $type = 'WORK;POSTAL'
     ) {
         // init value
         $value = $name.';'.$extended.';'.$street.';'.$city.';'.$region.';'.$zip.';'.$country;
@@ -99,7 +101,7 @@ class VCard
         // set property
         $this->setProperty(
             'address',
-            'ADR'.(($type != '') ? ';'.$type : '').$this->getCharsetString(),
+            'ADR'.(($type !== '') ? ';'.$type : '').$this->getCharsetString(),
             $value
         );
 
@@ -109,10 +111,12 @@ class VCard
     /**
      * Add birthday
      *
-     * @param  string $date Format is YYYY-MM-DD
+     * @param string $date Format is YYYY-MM-DD
+     *
      * @return $this
+     * @throws ElementAlreadyExistsException
      */
-    public function addBirthday($date)
+    public function addBirthday(string $date)
     {
         $this->setProperty(
             'birthday',
@@ -128,14 +132,16 @@ class VCard
      *
      * @param string $company
      * @param string $department
+     *
      * @return $this
+     * @throws ElementAlreadyExistsException
      */
-    public function addCompany($company, $department = '')
+    public function addCompany(string $company, string $department = '')
     {
         $this->setProperty(
             'company',
             'ORG'.$this->getCharsetString(),
-            $company.($department != '' ? ';'.$department : '')
+            $company.($department !== '' ? ';'.$department : '')
         );
 
         // if filename is empty, add to filename
@@ -149,13 +155,16 @@ class VCard
     /**
      * Add email
      *
-     * @param  string $address The e-mail address
-     * @param  string $type    [optional] The type of the email address
-     *                                    $type may be  PREF | WORK | HOME
-     *                                    or any combination of these: e.g. "PREF;WORK"
+     * @param string $address The e-mail address
+     * @param string $type    [optional]
+     *                        The type of the email address
+     *                        $type may be  PREF | WORK | HOME
+     *                        or any combination of these: e.g. "PREF;WORK"
+     *
      * @return $this
+     * @throws ElementAlreadyExistsException
      */
-    public function addEmail($address, $type = '')
+    public function addEmail(string $address, string $type = '')
     {
         $this->setProperty(
             'email',
@@ -169,10 +178,12 @@ class VCard
     /**
      * Add jobtitle
      *
-     * @param  string $jobtitle The jobtitle for the person.
+     * @param string $jobtitle The jobtitle for the person.
+     *
      * @return $this
+     * @throws ElementAlreadyExistsException
      */
-    public function addJobtitle($jobtitle)
+    public function addJobtitle(string $jobtitle)
     {
         $this->setProperty(
             'jobtitle',
@@ -186,10 +197,12 @@ class VCard
     /**
      * Add role
      *
-     * @param  string $role The role for the person.
+     * @param string $role The role for the person.
+     *
      * @return $this
+     * @throws ElementAlreadyExistsException
      */
-    public function addRole($role)
+    public function addRole(string $role)
     {
         $this->setProperty(
             'role',
@@ -203,19 +216,21 @@ class VCard
     /**
      * Add name
      *
-     * @param  string $lastName   [optional]
-     * @param  string $firstName  [optional]
-     * @param  string $additional [optional]
-     * @param  string $prefix     [optional]
-     * @param  string $suffix     [optional]
+     * @param string $lastName   [optional]
+     * @param string $firstName  [optional]
+     * @param string $additional [optional]
+     * @param string $prefix     [optional]
+     * @param string $suffix     [optional]
+     *
      * @return $this
+     * @throws ElementAlreadyExistsException
      */
     public function addName(
-        $lastName = '',
-        $firstName = '',
-        $additional = '',
-        $prefix = '',
-        $suffix = ''
+        string $lastName = '',
+        string $firstName = '',
+        string $additional = '',
+        string $prefix = '',
+        string $suffix = ''
     ) {
         // define values with non-empty values
         $values = array_filter([
@@ -253,10 +268,12 @@ class VCard
     /**
      * Add note
      *
-     * @param  string $note
+     * @param string $note
+     *
      * @return $this
+     * @throws ElementAlreadyExistsException
      */
-    public function addNote($note)
+    public function addNote(string $note)
     {
         $this->setProperty(
             'note',
@@ -271,9 +288,11 @@ class VCard
      * Add categories
      *
      * @param array $categories
+     *
      * @return $this
+     * @throws ElementAlreadyExistsException
      */
-    public function addCategories($categories)
+    public function addCategories(array $categories)
     {
         $this->setProperty(
             'categories',
@@ -287,14 +306,16 @@ class VCard
     /**
      * Add phone number
      *
-     * @param  string $number
-     * @param  string $type   [optional]
-     *                           Type may be PREF | WORK | HOME | VOICE | FAX | MSG |
-     *                           CELL | PAGER | BBS | CAR | MODEM | ISDN | VIDEO
-     *                           or any senseful combination, e.g. "PREF;WORK;VOICE"
+     * @param string $number
+     * @param string $type   [optional]
+     *                       Type may be PREF | WORK | HOME | VOICE | FAX | MSG |
+     *                       CELL | PAGER | BBS | CAR | MODEM | ISDN | VIDEO
+     *                       or any senseful combination, e.g. "PREF;WORK;VOICE"
+     *
      * @return $this
+     * @throws ElementAlreadyExistsException
      */
-    public function addPhoneNumber($number, $type = '')
+    public function addPhoneNumber(string $number, string $type = '')
     {
         $this->setProperty(
             'phoneNumber',
@@ -310,9 +331,13 @@ class VCard
      *
      * @param string $url     image url or filename
      * @param bool   $include Include the image in our vcard?
+     *
      * @return $this
+     * @throws ElementAlreadyExistsException
+     * @throws EmptyUrlException
+     * @throws InvalidImageException
      */
-    public function addLogo($url, $include = true)
+    public function addLogo(string $url, bool $include = true)
     {
         $this->addMedia(
             'LOGO',
@@ -329,9 +354,13 @@ class VCard
      *
      * @param string $url     image url or filename
      * @param bool   $include Include the image in our vcard?
+     *
      * @return $this
+     * @throws ElementAlreadyExistsException
+     * @throws EmptyUrlException
+     * @throws InvalidImageException
      */
-    public function addPhoto($url, $include = true)
+    public function addPhoto(string $url, bool $include = true)
     {
         $this->addMedia(
             'PHOTO',
@@ -348,13 +377,15 @@ class VCard
      *
      * @param string $url
      * @param string $type [optional] Type may be WORK | HOME
+     *
      * @return $this
+     * @throws ElementAlreadyExistsException
      */
-    public function addURL($url, $type = '')
+    public function addURL(string $url, string $type = '')
     {
         $this->setProperty(
             'url',
-            'URL'.(($type != '') ? ';'.$type : ''),
+            'URL'.(($type !== '') ? ';'.$type : ''),
             $url
         );
 
@@ -366,7 +397,7 @@ class VCard
      *
      * @return string
      */
-    public function buildVCard()
+    public function buildVCard(): string
     {
         // init string
         $string = "BEGIN:VCARD\r\n";
@@ -392,7 +423,7 @@ class VCard
      *
      * @return string
      */
-    public function buildVCalendar()
+    public function buildVCalendar(): string
     {
         // init dates
         $dtstart = date('Ymd').'T'.date('Hi').'00';
@@ -450,7 +481,7 @@ class VCard
      *
      * @return string
      */
-    public function get()
+    public function get(): string
     {
         return $this->getOutput();
     }
@@ -460,7 +491,7 @@ class VCard
      *
      * @return string
      */
-    public function getCharset()
+    public function getCharset(): string
     {
         return $this->charset;
     }
@@ -470,10 +501,11 @@ class VCard
      *
      * @return string
      */
-    public function getCharsetString()
+    public function getCharsetString(): string
     {
         $charsetString = '';
-        if ($this->charset == 'utf-8') {
+
+        if ($this->charset === 'utf-8') {
             $charsetString = ';CHARSET='.$this->charset;
         }
 
@@ -485,9 +517,9 @@ class VCard
      *
      * @return string
      */
-    public function getContentType()
+    public function getContentType(): string
     {
-        return ($this->isIOS7()) ?
+        return $this->isIOS7() ?
             'text/x-vcalendar' : 'text/x-vcard';
     }
 
@@ -496,7 +528,7 @@ class VCard
      *
      * @return string
      */
-    public function getFilename()
+    public function getFilename(): string
     {
         if (!$this->filename) {
             return 'unknown';
@@ -510,26 +542,26 @@ class VCard
      *
      * @return string
      */
-    public function getFileExtension()
+    public function getFileExtension(): string
     {
-        return ($this->isIOS7()) ?
+        return $this->isIOS7() ?
             'ics' : 'vcf';
     }
 
     /**
      * Get headers
      *
-     * @param  bool $asAssociative
+     * @param bool $asAssociative
      * @return array
      */
-    public function getHeaders($asAssociative)
+    public function getHeaders(bool $asAssociative): array
     {
         $contentType = $this->getContentType().'; charset='.$this->getCharset();
         $contentDisposition = 'attachment; filename='.$this->getFilename().'.'.$this->getFileExtension();
         $contentLength = mb_strlen($this->getOutput(), $this->getCharset());
         $connection = 'close';
 
-        if ((bool) $asAssociative) {
+        if ($asAssociative) {
             return [
                 'Content-type' => $contentType,
                 'Content-Disposition' => $contentDisposition,
@@ -553,9 +585,9 @@ class VCard
      *
      * @return string
      */
-    public function getOutput()
+    public function getOutput(): string
     {
-        $output = ($this->isIOS7()) ?
+        $output = $this->isIOS7() ?
             $this->buildVCalendar() : $this->buildVCard();
 
         return $output;
@@ -566,7 +598,7 @@ class VCard
      *
      * @return array
      */
-    public function getProperties()
+    public function getProperties(): array
     {
         return $this->properties;
     }
@@ -574,10 +606,10 @@ class VCard
     /**
      * Has property
      *
-     * @param  string $key
+     * @param string $key
      * @return bool
      */
-    public function hasProperty($key)
+    public function hasProperty(string $key): bool
     {
         $properties = $this->getProperties();
 
@@ -595,7 +627,7 @@ class VCard
      *
      * @return bool
      */
-    public function isIOS()
+    public function isIOS(): bool
     {
         // get user agent
         $browser = $this->getUserAgent();
@@ -608,7 +640,7 @@ class VCard
      *
      * @return bool
      */
-    public function isIOS7()
+    public function isIOS7(): bool
     {
         return ($this->isIOS() && $this->shouldAttachmentBeCal());
     }
@@ -636,10 +668,10 @@ class VCard
     /**
      * Set charset
      *
-     * @param  mixed $charset
+     * @param string $charset
      * @return void
      */
-    public function setCharset($charset)
+    public function setCharset(string $charset)
     {
         $this->charset = $charset;
     }
@@ -647,9 +679,9 @@ class VCard
     /**
      * Set filename
      *
-     * @param mixed  $value
-     * @param bool   $overwrite [optional] Default overwrite is true
-     * @param string $separator [optional] Default separator is an underscore '_'
+     * @param string|array $value
+     * @param bool         $overwrite [optional] Default overwrite is true
+     * @param string       $separator [optional] Default separator is an underscore '_'
      * @return void
      */
     public function setFilename($value, $overwrite = true, $separator = '_')
@@ -677,15 +709,16 @@ class VCard
         $value = Transliterator::urlize($value);
 
         // overwrite filename or add to filename using a prefix in between
-        $this->filename = ($overwrite) ?
+        $this->filename = $overwrite ?
             $value : $this->filename.$separator.$value;
     }
 
     /**
      * Set the save path directory
      *
-     * @param  string $savePath Save Path
-     * @throws VCardException
+     * @param string $savePath Save Path
+     *
+     * @throws OutputDirectoryNotExistsException
      */
     public function setSavePath($savePath)
     {
@@ -694,7 +727,7 @@ class VCard
         }
 
         // Add trailing directory separator the save path
-        if (substr($savePath, -1) != DIRECTORY_SEPARATOR) {
+        if (substr($savePath, -1) !== DIRECTORY_SEPARATOR) {
             $savePath .= DIRECTORY_SEPARATOR;
         }
 
@@ -706,7 +739,7 @@ class VCard
      *
      * @return bool
      */
-    protected function shouldAttachmentBeCal()
+    protected function shouldAttachmentBeCal(): bool
     {
         $browser = $this->getUserAgent();
 
@@ -721,8 +754,10 @@ class VCard
      * Fold a line according to RFC2425 section 5.8.1.
      *
      * @link http://tools.ietf.org/html/rfc2425#section-5.8.1
-     * @param  string $text
-     * @return mixed
+     *
+     * @param string $text
+     *
+     * @return bool|string
      */
     protected function fold($text)
     {
@@ -738,13 +773,14 @@ class VCard
      * Escape newline characters according to RFC2425 section 5.8.4.
      *
      * @link http://tools.ietf.org/html/rfc2425#section-5.8.4
-     * @param  string $text
+     *
+     * @param string $text
+     *
      * @return string
      */
-    protected function escape($text)
+    protected function escape(string $text): string
     {
-        $text = str_replace("\r\n", "\\n", $text);
-        $text = str_replace("\n", "\\n", $text);
+        $text = str_replace(array("\r\n", "\n"), "\\n", $text);
 
         return $text;
     }
@@ -754,12 +790,12 @@ class VCard
      *
      * @return string
      */
-    protected function getUserAgent()
+    protected function getUserAgent(): string
     {
+        $browser = 'unknown';
+
         if (array_key_exists('HTTP_USER_AGENT', $_SERVER)) {
             $browser = strtolower($_SERVER['HTTP_USER_AGENT']);
-        } else {
-            $browser = 'unknown';
         }
 
         return $browser;
@@ -768,16 +804,16 @@ class VCard
     /**
      * Set property
      *
-     * @param  string $element The element name you want to set, f.e.: name, email, phoneNumber, ...
-     * @param  string $key
-     * @param  string $value
-     * @throws VCardException
+     * @param string $element The element name you want to set, f.e.: name, email, phoneNumber, ...
+     * @param string $key
+     * @param string $value
+     *
+     * @throws ElementAlreadyExistsException
      */
-    private function setProperty($element, $key, $value)
+    private function setProperty(string $element, string $key, string $value)
     {
-        if (!in_array($element, $this->multiplePropertiesForElementAllowed)
-            && isset($this->definedElements[$element])
-        ) {
+        if (isset($this->definedElements[$element])
+            && !in_array($element, $this::$multiplePropertiesForElementAllowed, true)) {
             throw new ElementAlreadyExistsException($element);
         }
 
@@ -794,10 +830,11 @@ class VCard
     /**
      * Decode
      *
-     * @param  string $value The value to decode
+     * @param string $value The value to decode
+     *
      * @return string decoded
      */
-    private function decode($value)
+    private function decode(string $value): string
     {
         // convert cyrlic, greek or other caracters to ASCII characters
         return Transliterator::transliterate($value);
@@ -810,8 +847,12 @@ class VCard
      * @param string $url      image url or filename
      * @param string $element  The name of the element to set
      * @param bool   $include  Do we include the image in our vcard or not?
+     *
+     * @throws ElementAlreadyExistsException
+     * @throws EmptyUrlException
+     * @throws InvalidImageException
      */
-    private function addMedia($property, $url, $element, $include = true)
+    private function addMedia(string $property, string $url, string $element, bool $include = true)
     {
         $mimeType = null;
 
@@ -829,7 +870,7 @@ class VCard
         if (strpos($mimeType, ';') !== false) {
             $mimeType = strstr($mimeType, ';', true);
         }
-        if (!is_string($mimeType) || substr($mimeType, 0, 6) !== 'image/') {
+        if (!is_string($mimeType) || 0 !== strpos($mimeType, 'image/')) {
             throw new InvalidImageException();
         }
         $fileType = strtoupper(substr($mimeType, 6));
@@ -848,7 +889,7 @@ class VCard
                 $propertySuffix = ';VALUE=URL';
                 $propertySuffix .= ';TYPE='.strtoupper($fileType);
 
-                $property = $property.$propertySuffix;
+                $property .= $propertySuffix;
                 $value = $url;
             } else {
                 $value = $url;

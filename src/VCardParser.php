@@ -162,9 +162,9 @@ class VCardParser implements Iterator
         foreach ($lines as $line) {
             $line = trim($line);
 
-            if (strtoupper($line) == 'BEGIN:VCARD') {
+            if (strtoupper($line) === 'BEGIN:VCARD') {
                 $cardData = new \stdClass();
-            } elseif (strtoupper($line) == 'END:VCARD') {
+            } elseif (strtoupper($line) === 'END:VCARD') {
                 $this->vcardObjects[] = $cardData;
             } elseif (!empty($line)) {
                 // Strip grouping information. We don't use the group names. We
@@ -194,7 +194,7 @@ class VCardParser implements Iterator
                 $i = 0;
                 $rawValue = false;
                 foreach ($types as $type) {
-                    if (preg_match('/base64/', strtolower($type))) {
+                    if (false !== stripos($type, 'base64')) {
                         $value = base64_decode($value);
                         unset($types[$i]);
                         $rawValue = true;
@@ -202,11 +202,11 @@ class VCardParser implements Iterator
                         $value = base64_decode($value);
                         unset($types[$i]);
                         $rawValue = true;
-                    } elseif (preg_match('/quoted-printable/', strtolower($type))) {
+                    } elseif (false !== stripos($type, 'quoted-printable')) {
                         $value = quoted_printable_decode($value);
                         unset($types[$i]);
                         $rawValue = true;
-                    } elseif (strpos(strtolower($type), 'charset=') === 0) {
+                    } elseif (stripos($type, 'charset=') === 0) {
                         try {
                             $value = mb_convert_encoding($value, 'UTF-8', substr($type, 8));
                         } catch (\Exception $e) {
@@ -345,10 +345,10 @@ class VCardParser implements Iterator
      * This function will replace escaped line breaks with PHP_EOL.
      *
      * @link http://tools.ietf.org/html/rfc2425#section-5.8.4
-     * @param  string $text
+     * @param string $text
      * @return string
      */
-    protected function unescape($text)
+    protected function unescape($text): string
     {
         return str_replace("\\n", PHP_EOL, $text);
     }

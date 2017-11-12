@@ -57,8 +57,7 @@ class VCardParserTest extends TestCase
             'PHPsville',
             'Guacamole',
             '01158',
-            'Gitland',
-            'WORK;POSTAL'
+            'Gitland'
         );
         $vcard->addAddress(
             'Jeroen Desloovere',
@@ -82,7 +81,7 @@ class VCardParserTest extends TestCase
         );
         $parser = new VCardParser($vcard->buildVCard());
         $this->assertEquals(
-            (object) array(
+            (object) [
                 'name' => 'Lorem Corp.',
                 'extended' => '(extended info)',
                 'street' => '54th Ipsum Street',
@@ -90,11 +89,11 @@ class VCardParserTest extends TestCase
                 'region' => 'Guacamole',
                 'zip' => '01158',
                 'country' => 'Gitland',
-            ),
+            ],
             $parser->getCardAtIndex(0)->address['WORK;POSTAL'][0]
         );
         $this->assertEquals(
-            (object) array(
+            (object) [
                 'name' => 'Jeroen Desloovere',
                 'extended' => '(extended info, again)',
                 'street' => '25th Some Address',
@@ -102,11 +101,11 @@ class VCardParserTest extends TestCase
                 'region' => 'Area 51',
                 'zip' => '045784',
                 'country' => 'Europe (is a country, right?)',
-            ),
+            ],
             $parser->getCardAtIndex(0)->address['WORK;PERSONAL'][0]
         );
         $this->assertEquals(
-            (object) array(
+            (object) [
                 'name' => 'Georges Desloovere',
                 'extended' => '(extended info, again, again)',
                 'street' => '26th Some Address',
@@ -114,7 +113,7 @@ class VCardParserTest extends TestCase
                 'region' => 'Area 51B',
                 'zip' => '04554',
                 'country' => "Europe (no, it isn't)",
-            ),
+            ],
             $parser->getCardAtIndex(0)->address['WORK;PERSONAL'][1]
         );
     }
@@ -241,7 +240,7 @@ class VCardParserTest extends TestCase
         $imageUrl = 'https://raw.githubusercontent.com/jeroendesloovere/vcard/master/tests/image.jpg';
 
         $vcard = new VCard();
-        $vcard->addLogo($image, true);
+        $vcard->addLogo($image);
         $parser = new VCardParser($vcard->buildVCard());
         $this->assertStringEqualsFile($image, $parser->getCardAtIndex(0)->rawLogo);
 
@@ -265,7 +264,7 @@ class VCardParserTest extends TestCase
         $imageUrl = 'https://raw.githubusercontent.com/jeroendesloovere/vcard/master/tests/image.jpg';
 
         $vcard = new VCard();
-        $vcard->addPhoto($image, true);
+        $vcard->addPhoto($image);
         $parser = new VCardParser($vcard->buildVCard());
         $this->assertStringEqualsFile($image, $parser->getCardAtIndex(0)->rawPhoto);
 
