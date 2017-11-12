@@ -4,8 +4,8 @@
  * VCard generator test - can save to file or output as a download
  */
 
-require_once __DIR__ . '/../vendor/autoload.php';
-require_once __DIR__ . '/../src/VCard.php';
+require_once __DIR__.'/../vendor/autoload.php';
+require_once __DIR__.'/../src/VCard.php';
 
 use JeroenDesloovere\VCard\VCard;
 
@@ -31,7 +31,7 @@ $vcard->addPhoneNumber(123456789, 'WORK');
 $vcard->addAddress(null, null, 'street', 'worktown', null, 'workpostcode', 'Belgium');
 $vcard->addURL('http://www.jeroendesloovere.be');
 
-$vcard->addPhoto(__DIR__ . '/assets/landscape.jpeg');
+$vcard->addPhoto(__DIR__.'/assets/landscape.jpeg');
 //$vcard->addPhoto('https://raw.githubusercontent.com/jeroendesloovere/vcard/master/tests/image.jpg');
 
 // return vcard as a string
@@ -41,7 +41,7 @@ $vcard->addPhoto(__DIR__ . '/assets/landscape.jpeg');
 return $vcard->download();
 
 // echo message
-echo 'A personal vCard is saved in this folder: ' . __DIR__;
+echo 'A personal vCard is saved in this folder: '.__DIR__;
 
 // or
 
