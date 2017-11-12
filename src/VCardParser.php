@@ -56,6 +56,11 @@ class VCardParser implements Iterator
         }
     }
 
+    /**
+     * VCardParser constructor.
+     *
+     * @param string $content
+     */
     public function __construct($content)
     {
         $this->content = $content;
@@ -64,11 +69,17 @@ class VCardParser implements Iterator
         $this->parse();
     }
 
+    /**
+     *
+     */
     public function rewind()
     {
         $this->position = 0;
     }
 
+    /**
+     * @return mixed|\stdClass
+     */
     public function current()
     {
         if ($this->valid()) {
@@ -76,16 +87,25 @@ class VCardParser implements Iterator
         }
     }
 
+    /**
+     * @return int|mixed
+     */
     public function key()
     {
         return $this->position;
     }
 
+    /**
+     *
+     */
     public function next()
     {
         $this->position++;
     }
 
+    /**
+     * @return bool
+     */
     public function valid()
     {
         return !empty($this->vcardObjects[$this->position]);
@@ -282,6 +302,7 @@ class VCardParser implements Iterator
             $prefix,
             $suffix
         ) = explode(';', $value);
+
         return (object) [
             'lastname' => $lastname,
             'firstname' => $firstname,
@@ -307,6 +328,7 @@ class VCardParser implements Iterator
             $zip,
             $country,
         ) = explode(';', $value);
+
         return (object) [
             'name' => $name,
             'extended' => $extended,

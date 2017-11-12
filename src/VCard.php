@@ -10,6 +10,11 @@ namespace JeroenDesloovere\VCard;
  */
 
 use Behat\Transliterator\Transliterator;
+use JeroenDesloovere\VCard\Exception\ElementAlreadyExistsException;
+use JeroenDesloovere\VCard\Exception\EmptyUrlException;
+use JeroenDesloovere\VCard\Exception\InvalidImageException;
+use JeroenDesloovere\VCard\Exception\OutputDirectoryNotExistsException;
+use JeroenDesloovere\VCard\Exception\VCardException;
 
 /**
  * VCard PHP Class to generate .vcard files and save them to a file or output as a download.
@@ -46,7 +51,7 @@ class VCard
         'email',
         'address',
         'phoneNumber',
-        'url'
+        'url',
     ];
 
     /**
@@ -196,65 +201,6 @@ class VCard
     }
 
     /**
-     * Add a photo or logo (depending on property name)
-     *
-     * @param string $property LOGO|PHOTO
-     * @param string $url image url or filename
-     * @param bool $include Do we include the image in our vcard or not?
-     * @param string $element The name of the element to set
-     */
-    private function addMedia($property, $url, $include = true, $element)
-    {
-        $mimeType = null;
-
-        //Is this URL for a remote resource?
-        if (filter_var($url, FILTER_VALIDATE_URL) !== false) {
-            $headers = get_headers($url, 1);
-
-            if (array_key_exists('Content-Type', $headers)) {
-                $mimeType = $headers['Content-Type'];
-            }
-        } else {
-            //Local file, so inspect it directly
-            $mimeType = mime_content_type($url);
-        }
-        if (strpos($mimeType, ';') !== false) {
-            $mimeType = strstr($mimeType, ';', true);
-        }
-        if (!is_string($mimeType) || substr($mimeType, 0, 6) !== 'image/') {
-            throw VCardException::invalidImage();
-        }
-        $fileType = strtoupper(substr($mimeType, 6));
-
-        if ($include) {
-            $value = file_get_contents($url);
-
-            if (!$value) {
-                throw VCardException::emptyURL();
-            }
-
-            $value = base64_encode($value);
-            $property .= ';ENCODING=b;TYPE='.$fileType;
-        } else {
-            if (filter_var($url, FILTER_VALIDATE_URL) !== false) {
-                $propertySuffix = ';VALUE=URL';
-                $propertySuffix .= ';TYPE='.strtoupper($fileType);
-
-                $property = $property.$propertySuffix;
-                $value = $url;
-            } else {
-                $value = $url;
-            }
-        }
-
-        $this->setProperty(
-            $element,
-            $property,
-            $value
-        );
-    }
-
-    /**
      * Add name
      *
      * @param  string $lastName   [optional]
@@ -362,8 +308,8 @@ class VCard
     /**
      * Add Logo
      *
-     * @param  string $url     image url or filename
-     * @param  bool   $include Include the image in our vcard?
+     * @param string $url     image url or filename
+     * @param bool   $include Include the image in our vcard?
      * @return $this
      */
     public function addLogo($url, $include = true)
@@ -371,8 +317,8 @@ class VCard
         $this->addMedia(
             'LOGO',
             $url,
-            $include,
-            'logo'
+            'logo',
+            $include
         );
 
         return $this;
@@ -390,8 +336,8 @@ class VCard
         $this->addMedia(
             'PHOTO',
             $url,
-            $include,
-            'photo'
+            'photo',
+            $include
         );
 
         return $this;
@@ -483,34 +429,6 @@ class VCard
     }
 
     /**
-     * Returns the browser user agent string.
-     *
-     * @return string
-     */
-    protected function getUserAgent()
-    {
-        if (array_key_exists('HTTP_USER_AGENT', $_SERVER)) {
-            $browser = strtolower($_SERVER['HTTP_USER_AGENT']);
-        } else {
-            $browser = 'unknown';
-        }
-
-        return $browser;
-    }
-
-    /**
-     * Decode
-     *
-     * @param  string $value The value to decode
-     * @return string decoded
-     */
-    private function decode($value)
-    {
-        // convert cyrlic, greek or other caracters to ASCII characters
-        return Transliterator::transliterate($value);
-    }
-
-    /**
      * Download a vcard or vcal file to the browser.
      */
     public function download()
@@ -524,38 +442,6 @@ class VCard
 
         // echo the output and it will be a download
         echo $output;
-    }
-
-    /**
-     * Fold a line according to RFC2425 section 5.8.1.
-     *
-     * @link http://tools.ietf.org/html/rfc2425#section-5.8.1
-     * @param  string $text
-     * @return mixed
-     */
-    protected function fold($text)
-    {
-        if (strlen($text) <= 75) {
-            return $text;
-        }
-
-        // split, wrap and trim trailing separator
-        return substr(chunk_split($text, 73, "\r\n "), 0, -3);
-    }
-
-    /**
-     * Escape newline characters according to RFC2425 section 5.8.4.
-     *
-     * @link http://tools.ietf.org/html/rfc2425#section-5.8.4
-     * @param  string $text
-     * @return string
-     */
-    protected function escape($text)
-    {
-        $text = str_replace("\r\n", "\\n", $text);
-        $text = str_replace("\n", "\\n", $text);
-
-        return $text;
     }
 
     /**
@@ -804,7 +690,7 @@ class VCard
     public function setSavePath($savePath)
     {
         if (!is_dir($savePath)) {
-            throw VCardException::outputDirectoryNotExists();
+            throw new OutputDirectoryNotExistsException();
         }
 
         // Add trailing directory separator the save path
@@ -813,32 +699,6 @@ class VCard
         }
 
         $this->savePath = $savePath;
-    }
-
-    /**
-     * Set property
-     *
-     * @param  string $element The element name you want to set, f.e.: name, email, phoneNumber, ...
-     * @param  string $key
-     * @param  string $value
-     * @throws VCardException
-     */
-    private function setProperty($element, $key, $value)
-    {
-        if (!in_array($element, $this->multiplePropertiesForElementAllowed)
-            && isset($this->definedElements[$element])
-        ) {
-            throw VCardException::elementAlreadyExists($element);
-        }
-
-        // we define that we set this element
-        $this->definedElements[$element] = true;
-
-        // adding property
-        $this->properties[] = [
-            'key' => $key,
-            'value' => $value
-        ];
     }
 
     /**
@@ -855,5 +715,150 @@ class VCard
         $version = isset($matches[1]) ? ((int) $matches[1]) : 999;
 
         return ($version < 8);
+    }
+
+    /**
+     * Fold a line according to RFC2425 section 5.8.1.
+     *
+     * @link http://tools.ietf.org/html/rfc2425#section-5.8.1
+     * @param  string $text
+     * @return mixed
+     */
+    protected function fold($text)
+    {
+        if (strlen($text) <= 75) {
+            return $text;
+        }
+
+        // split, wrap and trim trailing separator
+        return substr(chunk_split($text, 73, "\r\n "), 0, -3);
+    }
+
+    /**
+     * Escape newline characters according to RFC2425 section 5.8.4.
+     *
+     * @link http://tools.ietf.org/html/rfc2425#section-5.8.4
+     * @param  string $text
+     * @return string
+     */
+    protected function escape($text)
+    {
+        $text = str_replace("\r\n", "\\n", $text);
+        $text = str_replace("\n", "\\n", $text);
+
+        return $text;
+    }
+
+    /**
+     * Returns the browser user agent string.
+     *
+     * @return string
+     */
+    protected function getUserAgent()
+    {
+        if (array_key_exists('HTTP_USER_AGENT', $_SERVER)) {
+            $browser = strtolower($_SERVER['HTTP_USER_AGENT']);
+        } else {
+            $browser = 'unknown';
+        }
+
+        return $browser;
+    }
+
+    /**
+     * Set property
+     *
+     * @param  string $element The element name you want to set, f.e.: name, email, phoneNumber, ...
+     * @param  string $key
+     * @param  string $value
+     * @throws VCardException
+     */
+    private function setProperty($element, $key, $value)
+    {
+        if (!in_array($element, $this->multiplePropertiesForElementAllowed)
+            && isset($this->definedElements[$element])
+        ) {
+            throw new ElementAlreadyExistsException($element);
+        }
+
+        // we define that we set this element
+        $this->definedElements[$element] = true;
+
+        // adding property
+        $this->properties[] = [
+            'key' => $key,
+            'value' => $value,
+        ];
+    }
+
+    /**
+     * Decode
+     *
+     * @param  string $value The value to decode
+     * @return string decoded
+     */
+    private function decode($value)
+    {
+        // convert cyrlic, greek or other caracters to ASCII characters
+        return Transliterator::transliterate($value);
+    }
+
+    /**
+     * Add a photo or logo (depending on property name)
+     *
+     * @param string $property LOGO|PHOTO
+     * @param string $url      image url or filename
+     * @param string $element  The name of the element to set
+     * @param bool   $include  Do we include the image in our vcard or not?
+     */
+    private function addMedia($property, $url, $element, $include = true)
+    {
+        $mimeType = null;
+
+        //Is this URL for a remote resource?
+        if (filter_var($url, FILTER_VALIDATE_URL) !== false) {
+            $headers = get_headers($url, 1);
+
+            if (array_key_exists('Content-Type', $headers)) {
+                $mimeType = $headers['Content-Type'];
+            }
+        } else {
+            //Local file, so inspect it directly
+            $mimeType = mime_content_type($url);
+        }
+        if (strpos($mimeType, ';') !== false) {
+            $mimeType = strstr($mimeType, ';', true);
+        }
+        if (!is_string($mimeType) || substr($mimeType, 0, 6) !== 'image/') {
+            throw new InvalidImageException();
+        }
+        $fileType = strtoupper(substr($mimeType, 6));
+
+        if ($include) {
+            $value = file_get_contents($url);
+
+            if (!$value) {
+                throw new EmptyUrlException();
+            }
+
+            $value = base64_encode($value);
+            $property .= ';ENCODING=b;TYPE='.$fileType;
+        } else {
+            if (filter_var($url, FILTER_VALIDATE_URL) !== false) {
+                $propertySuffix = ';VALUE=URL';
+                $propertySuffix .= ';TYPE='.strtoupper($fileType);
+
+                $property = $property.$propertySuffix;
+                $value = $url;
+            } else {
+                $value = $url;
+            }
+        }
+
+        $this->setProperty(
+            $element,
+            $property,
+            $value
+        );
     }
 }
