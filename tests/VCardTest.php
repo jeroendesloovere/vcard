@@ -2,9 +2,6 @@
 
 namespace JeroenDesloovere\VCard\tests;
 
-// required to load
-require_once __DIR__ . '/../vendor/autoload.php';
-
 /*
  * This file is part of the VCard PHP Class from Jeroen Desloovere.
  *
@@ -13,23 +10,79 @@ require_once __DIR__ . '/../vendor/autoload.php';
  */
 
 use JeroenDesloovere\VCard\VCard;
+use PHPUnit\Framework\TestCase;
 
 /**
  * This class will test our VCard PHP Class which can generate VCards.
  */
-class VCardTest extends \PHPUnit_Framework_TestCase
+class VCardTest extends TestCase
 {
     /**
      * @var VCard
      */
-    protected $vcard = null;
+    protected $vcard;
+
+    /**
+     * @var string
+     */
+    protected $firstName;
+
+    /**
+     * @var string
+     */
+    protected $lastName;
+
+    /**
+     * @var string
+     */
+    protected $additional;
+
+    /**
+     * @var string
+     */
+    protected $prefix;
+
+    /**
+     * @var string
+     */
+    protected $suffix;
+
+    /**
+     * @var string
+     */
+    protected $emailAddress1;
+
+    /**
+     * @var string
+     */
+    protected $emailAddress2;
+
+    /**
+     * @var string
+     */
+    protected $firstName2;
+
+    /**
+     * @var string
+     */
+    protected $lastName2;
+
+    /**
+     * @var string
+     */
+    protected $firstName3;
+
+    /**
+     * @var string
+     */
+    protected $lastName3;
 
     /**
      * Data provider for testEmail()
      *
      * @return array
      */
-    public function emailDataProvider()
+    public function emailDataProvider(): array
     {
         return [
             [['john@doe.com']],
@@ -56,7 +109,7 @@ class VCardTest extends \PHPUnit_Framework_TestCase
         $this->additional = '&';
         $this->prefix = 'Mister';
         $this->suffix = 'Junior';
-        
+
         $this->emailAddress1 = '';
         $this->emailAddress2 = '';
 
@@ -75,72 +128,107 @@ class VCardTest extends \PHPUnit_Framework_TestCase
         $this->vcard = null;
     }
 
+    /**
+     *
+     */
     public function testAddAddress()
     {
         $this->assertEquals($this->vcard, $this->vcard->addAddress());
     }
 
+    /**
+     *
+     */
     public function testAddBirthday()
     {
         $this->assertEquals($this->vcard, $this->vcard->addBirthday(''));
     }
 
+    /**
+     *
+     */
     public function testAddCompany()
     {
         $this->assertEquals($this->vcard, $this->vcard->addCompany(''));
     }
 
+    /**
+     *
+     */
     public function testAddCategories()
     {
         $this->assertEquals($this->vcard, $this->vcard->addCategories([]));
     }
 
+    /**
+     *
+     */
     public function testAddEmail()
     {
         $this->assertEquals($this->vcard, $this->vcard->addEmail($this->emailAddress1));
         $this->assertEquals($this->vcard, $this->vcard->addEmail($this->emailAddress2));
-        $this->assertEquals(2, count($this->vcard->getProperties()));
+        $this->assertCount(2, $this->vcard->getProperties());
     }
 
+    /**
+     *
+     */
     public function testAddJobTitle()
     {
         $this->assertEquals($this->vcard, $this->vcard->addJobtitle(''));
     }
 
+    /**
+     *
+     */
     public function testAddRole()
     {
         $this->assertEquals($this->vcard, $this->vcard->addRole(''));
     }
 
+    /**
+     *
+     */
     public function testAddName()
     {
-        $this->assertEquals($this->vcard, $this->vcard->addName(''));
+        $this->assertEquals($this->vcard, $this->vcard->addName());
     }
 
+    /**
+     *
+     */
     public function testAddNote()
     {
         $this->assertEquals($this->vcard, $this->vcard->addNote(''));
     }
 
+    /**
+     *
+     */
     public function testAddPhoneNumber()
     {
         $this->assertEquals($this->vcard, $this->vcard->addPhoneNumber(''));
         $this->assertEquals($this->vcard, $this->vcard->addPhoneNumber(''));
-        $this->assertEquals(2, count($this->vcard->getProperties()));
+        $this->assertCount(2, $this->vcard->getProperties());
     }
 
+    /**
+     *
+     */
     public function testAddPhotoWithJpgPhoto()
     {
-        $return = $this->vcard->addPhoto(__DIR__ . '/image.jpg', true);
+        $return = $this->vcard->addPhoto(__DIR__.'/image.jpg');
 
         $this->assertEquals($this->vcard, $return);
     }
 
+    /**
+     *
+     */
     public function testAddPhotoWithRemoteJpgPhoto()
     {
         $return = $this->vcard->addPhoto(
-            'https://raw.githubusercontent.com/jeroendesloovere/vcard/master/tests/image.jpg',
-            true
+            'https://raw.githubusercontent.com/jeroendesloovere/vcard/master/tests/image.jpg'
         );
 
         $this->assertEquals($this->vcard, $return);
@@ -149,80 +237,88 @@ class VCardTest extends \PHPUnit_Framework_TestCase
     /**
      * Test adding remote empty photo
      *
-     * @expectedException Exception
+     * @expectedException \JeroenDesloovere\VCard\Exception\InvalidImageException
      * @expectedExceptionMessage Returned data is not an image.
      */
     public function testAddPhotoWithRemoteEmptyJpgPhoto()
     {
         $this->vcard->addPhoto(
-            'https://raw.githubusercontent.com/jeroendesloovere/vcard/master/tests/empty.jpg',
-            true
+            'https://raw.githubusercontent.com/jeroendesloovere/vcard/master/tests/empty.jpg'
         );
     }
 
+    /**
+     *
+     */
     public function testAddLogoWithJpgImage()
     {
-        $return = $this->vcard->addLogo(__DIR__ . '/image.jpg', true);
+        $return = $this->vcard->addLogo(__DIR__.'/image.jpg');
 
         $this->assertEquals($this->vcard, $return);
     }
 
+    /**
+     *
+     */
     public function testAddLogoWithJpgImageNoInclude()
     {
-        $return = $this->vcard->addLogo(__DIR__ . '/image.jpg', false);
+        $return = $this->vcard->addLogo(__DIR__.'/image.jpg', false);
 
         $this->assertEquals($this->vcard, $return);
     }
 
+    /**
+     *
+     */
     public function testAddUrl()
     {
-        $this->assertEquals($this->vcard, $this->vcard->addUrl('1'));
-        $this->assertEquals($this->vcard, $this->vcard->addUrl('2'));
-        $this->assertEquals(2, count($this->vcard->getProperties()));
+        $this->assertEquals($this->vcard, $this->vcard->addURL('1'));
+        $this->assertEquals($this->vcard, $this->vcard->addURL('2'));
+        $this->assertCount(2, $this->vcard->getProperties());
     }
 
     /**
      * Test adding local photo using an empty file
      *
-     * @expectedException Exception
+     * @expectedException \JeroenDesloovere\VCard\Exception\InvalidImageException
      * @expectedExceptionMessage Returned data is not an image.
      */
     public function testAddPhotoWithEmptyFile()
     {
-        $this->vcard->addPhoto(__DIR__ . '/emptyfile', true);
+        $this->vcard->addPhoto(__DIR__.'/emptyfile');
     }
 
     /**
      * Test adding logo with no value
      *
-     * @expectedException Exception
+     * @expectedException \JeroenDesloovere\VCard\Exception\InvalidImageException
      * @expectedExceptionMessage Returned data is not an image.
      */
     public function testAddLogoWithNoValue()
     {
-        $this->vcard->addLogo(__DIR__ . '/emptyfile', true);
+        $this->vcard->addLogo(__DIR__.'/emptyfile');
     }
 
     /**
      * Test adding photo with no photo
      *
-     * @expectedException Exception
+     * @expectedException \JeroenDesloovere\VCard\Exception\InvalidImageException
      * @expectedExceptionMessage Returned data is not an image.
      */
     public function testAddPhotoWithNoPhoto()
     {
-        $this->vcard->addPhoto(__DIR__ . '/wrongfile', true);
+        $this->vcard->addPhoto(__DIR__.'/wrongfile');
     }
 
     /**
      * Test adding logo with no image
      *
-     * @expectedException Exception
+     * @expectedException \JeroenDesloovere\VCard\Exception\InvalidImageException
      * @expectedExceptionMessage Returned data is not an image.
      */
     public function testAddLogoWithNoImage()
     {
-        $this->vcard->addLogo(__DIR__ . '/wrongfile', true);
+        $this->vcard->addLogo(__DIR__.'/wrongfile');
     }
 
     /**
@@ -239,8 +335,10 @@ class VCardTest extends \PHPUnit_Framework_TestCase
      * Test Email
      *
      * @dataProvider emailDataProvider $emails
+     *
+     * @param array $emails
      */
-    public function testEmail($emails = [])
+    public function testEmail(array $emails = [])
     {
         foreach ($emails as $key => $email) {
             if (is_string($key)) {
@@ -252,9 +350,9 @@ class VCardTest extends \PHPUnit_Framework_TestCase
 
         foreach ($emails as $key => $email) {
             if (is_string($key)) {
-                $this->assertContains('EMAIL;INTERNET;' . $key . ':' . $email, $this->vcard->getOutput());
+                $this->assertContains('EMAIL;INTERNET;'.$key.':'.$email, $this->vcard->getOutput());
             } else {
-                $this->assertContains('EMAIL;INTERNET:' . $email, $this->vcard->getOutput());
+                $this->assertContains('EMAIL;INTERNET:'.$email, $this->vcard->getOutput());
             }
         }
     }
@@ -291,7 +389,7 @@ class VCardTest extends \PHPUnit_Framework_TestCase
     /**
      * Test multiple birthdays
      *
-     * @expectedException Exception
+     * @expectedException \JeroenDesloovere\VCard\Exception\ElementAlreadyExistsException
      */
     public function testMultipleBirthdays()
     {
@@ -302,7 +400,7 @@ class VCardTest extends \PHPUnit_Framework_TestCase
     /**
      * Test multiple categories
      *
-     * @expectedException Exception
+     * @expectedException \JeroenDesloovere\VCard\Exception\ElementAlreadyExistsException
      */
     public function testMultipleCategories()
     {
@@ -313,7 +411,7 @@ class VCardTest extends \PHPUnit_Framework_TestCase
     /**
      * Test multiple companies
      *
-     * @expectedException Exception
+     * @expectedException \JeroenDesloovere\VCard\Exception\ElementAlreadyExistsException
      */
     public function testMultipleCompanies()
     {
@@ -324,7 +422,7 @@ class VCardTest extends \PHPUnit_Framework_TestCase
     /**
      * Test multiple job titles
      *
-     * @expectedException Exception
+     * @expectedException \JeroenDesloovere\VCard\Exception\ElementAlreadyExistsException
      */
     public function testMultipleJobtitles()
     {
@@ -335,7 +433,7 @@ class VCardTest extends \PHPUnit_Framework_TestCase
     /**
      * Test multiple roles
      *
-     * @expectedException Exception
+     * @expectedException \JeroenDesloovere\VCard\Exception\ElementAlreadyExistsException
      */
     public function testMultipleRoles()
     {
@@ -346,7 +444,7 @@ class VCardTest extends \PHPUnit_Framework_TestCase
     /**
      * Test multiple names
      *
-     * @expectedException Exception
+     * @expectedException \JeroenDesloovere\VCard\Exception\ElementAlreadyExistsException
      */
     public function testMultipleNames()
     {
@@ -357,7 +455,7 @@ class VCardTest extends \PHPUnit_Framework_TestCase
     /**
      * Test multiple notes
      *
-     * @expectedException Exception
+     * @expectedException \JeroenDesloovere\VCard\Exception\ElementAlreadyExistsException
      */
     public function testMultipleNotes()
     {

@@ -2,9 +2,6 @@
 
 namespace JeroenDesloovere\VCard;
 
-// required to load
-require_once __DIR__ . '/../vendor/autoload.php';
-
 /*
  * This file is part of the VCard PHP Class from Jeroen Desloovere.
  *
@@ -12,13 +9,16 @@ require_once __DIR__ . '/../vendor/autoload.php';
  * file that was distributed with this source code.
  */
 
+use JeroenDesloovere\VCard\Exception\VCardException;
+use PHPUnit\Framework\TestCase;
+
 /**
  * VCard Exception Test.
  */
-class VCardExceptionTest extends \PHPUnit_Framework_TestCase
+class VCardExceptionTest extends TestCase
 {
     /**
-     * @expectedException \JeroenDesloovere\VCard\VCardException
+     * @expectedException \JeroenDesloovere\VCard\Exception\VCardException
      */
     public function testException()
     {
