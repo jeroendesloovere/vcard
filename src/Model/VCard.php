@@ -12,113 +12,614 @@ class VCard extends \stdClass
     /**
      * @var string
      */
-    public $fullname;
+    protected $fullName;
 
     /**
-     * @var string
+     * @var string|null
      */
-    public $lastname;
+    protected $lastName;
 
     /**
-     * @var string
+     * @var string|null
      */
-    public $firstname;
+    protected $firstName;
 
     /**
-     * @var string
+     * @var string|null
      */
-    public $additional;
+    protected $additional;
 
     /**
-     * @var string
+     * @var string|null
      */
-    public $prefix;
+    protected $prefix;
 
     /**
-     * @var string
+     * @var string|null
      */
-    public $suffix;
+    protected $suffix;
 
     /**
-     * @var \DateTime
+     * @var \DateTime|null
      */
-    public $birthday;
+    protected $birthday;
 
     /**
-     * @var array
+     * @var VCardAddress[][]|null
      */
-    public $address;
+    protected $address;
 
     /**
-     * @var array
+     * @var string[]|null
      */
-    public $phone;
+    protected $phone;
 
     /**
-     * @var array
+     * @var string[]|null
      */
-    public $email;
+    protected $email;
 
     /**
-     * @var string
+     * @var string|null
      */
-    public $revision;
+    protected $revision;
 
     /**
-     * @var string
+     * @var string|null
      */
-    public $version;
+    protected $version;
 
     /**
-     * @var string
+     * @var string|null
      */
-    public $organization;
+    protected $organization;
 
     /**
-     * @var array
+     * @var string[]|null
      */
-    public $url;
+    protected $url;
 
     /**
-     * @var string
+     * @var string|null
      */
-    public $title;
-
-    public $rawPhoto;
-
-    public $photo;
-
-    public $rawLogo;
-
-    public $logo;
+    protected $title;
 
     /**
-     * @var string
+     * @var string|null
      */
-    public $note;
+    protected $rawPhoto;
 
     /**
-     * @var string
+     * @var string|null
      */
-    public $geo;
+    protected $photo;
 
     /**
-     * @var string
+     * @var string|null
      */
-    public $gender;
+    protected $rawLogo;
 
     /**
-     * @var array
+     * @var string|null
      */
-    public $nickname;
+    protected $logo;
 
     /**
-     * @var array
+     * @var string|null
      */
-    public $skype;
+    protected $note;
 
     /**
-     * @var array
+     * @var array|null
      */
-    public $item;
+    protected $categories;
+
+    /**
+     * @var string|null
+     */
+    protected $geo;
+
+    /**
+     * @var string|null
+     */
+    protected $gender;
+
+    /**
+     * @var string[]|null
+     */
+    protected $nickname;
+
+    /**
+     * @var string[]|null
+     */
+    protected $skype;
+
+    /**
+     * @var array|null
+     */
+    protected $item;
+
+    /**
+     * @return string
+     */
+    public function getFullName(): string
+    {
+        return $this->fullName;
+    }
+
+    /**
+     * @param string $fullName
+     */
+    public function setFullName(string $fullName): void
+    {
+        $this->fullName = $fullName;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    /**
+     * @param null|string $lastName
+     */
+    public function setLastName(?string $lastName): void
+    {
+        $this->lastName = $lastName;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * @param null|string $firstName
+     */
+    public function setFirstName(?string $firstName): void
+    {
+        $this->firstName = $firstName;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getAdditional(): ?string
+    {
+        return $this->additional;
+    }
+
+    /**
+     * @param null|string $additional
+     */
+    public function setAdditional(?string $additional): void
+    {
+        $this->additional = $additional;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getPrefix(): ?string
+    {
+        return $this->prefix;
+    }
+
+    /**
+     * @param null|string $prefix
+     */
+    public function setPrefix(?string $prefix): void
+    {
+        $this->prefix = $prefix;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getSuffix(): ?string
+    {
+        return $this->suffix;
+    }
+
+    /**
+     * @param null|string $suffix
+     */
+    public function setSuffix(?string $suffix): void
+    {
+        $this->suffix = $suffix;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getBirthday(): ?\DateTime
+    {
+        return $this->birthday;
+    }
+
+    /**
+     * @param \DateTime|null $birthday
+     */
+    public function setBirthday(?\DateTime $birthday): void
+    {
+        $this->birthday = $birthday;
+    }
+
+    /**
+     * @return VCardAddress[][]|null
+     */
+    public function getAddresses(): ?array
+    {
+        return $this->address;
+    }
+
+    /**
+     * @param VCardAddress[][]|null $address
+     */
+    public function setAddresses(?array $address): void
+    {
+        $this->address = $address;
+    }
+
+    /**
+     * @param string $key
+     *
+     * @return VCardAddress[]|null
+     */
+    public function getAddress(string $key): ?array
+    {
+        return $this->address[$key];
+    }
+
+    /**
+     * @param string       $key
+     * @param VCardAddress $address
+     */
+    public function addAddress(string $key, VCardAddress $address): void
+    {
+        if ($this->address === null) {
+            $this->address = [];
+        }
+
+        $this->address[$key][] = $address;
+    }
+
+    /**
+     * @return null|string[]
+     */
+    public function getPhones(): ?array
+    {
+        return $this->phone;
+    }
+
+    /**
+     * @param null|string[] $phone
+     */
+    public function setPhones(?array $phone): void
+    {
+        $this->phone = $phone;
+    }
+
+    // TODO add getPhone($key)
+
+    /**
+     * @param string $key
+     * @param string $phone
+     */
+    public function addPhone(string $key, string $phone): void
+    {
+        if ($this->phone === null) {
+            $this->phone = [];
+        }
+
+        $this->phone[$key][] = $phone;
+    }
+
+    /**
+     * @return null|string[]
+     */
+    public function getEmails(): ?array
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param null|string[] $email
+     */
+    public function setEmails(?array $email): void
+    {
+        $this->email = $email;
+    }
+
+    // TODO add getEmail($key)
+
+    /**
+     * @param string $key
+     * @param string $email
+     */
+    public function addEmail(string $key, string $email): void
+    {
+        if ($this->email === null) {
+            $this->email = [];
+        }
+
+        $this->email[$key][] = $email;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getRevision(): ?string
+    {
+        return $this->revision;
+    }
+
+    /**
+     * @param null|string $revision
+     */
+    public function setRevision(?string $revision): void
+    {
+        $this->revision = $revision;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getVersion(): ?string
+    {
+        return $this->version;
+    }
+
+    /**
+     * @param null|string $version
+     */
+    public function setVersion(?string $version): void
+    {
+        $this->version = $version;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getOrganization(): ?string
+    {
+        return $this->organization;
+    }
+
+    /**
+     * @param null|string $organization
+     */
+    public function setOrganization(?string $organization): void
+    {
+        $this->organization = $organization;
+    }
+
+    /**
+     * @return null|string[]
+     */
+    public function getUrls(): ?array
+    {
+        return $this->url;
+    }
+
+    /**
+     * @param null|string[] $url
+     */
+    public function setUrls(?array $url): void
+    {
+        $this->url = $url;
+    }
+
+    // TODO add getUrl($key)
+
+    /**
+     * @param string $key
+     * @param string $url
+     */
+    public function addUrl(string $key, string $url): void
+    {
+        if ($this->url === null) {
+            $this->url = [];
+        }
+
+        $this->url[$key][] = $url;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param null|string $title
+     */
+    public function setTitle(?string $title): void
+    {
+        $this->title = $title;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getRawPhoto(): ?string
+    {
+        return $this->rawPhoto;
+    }
+
+    /**
+     * @param null|string $rawPhoto
+     */
+    public function setRawPhoto(?string $rawPhoto): void
+    {
+        $this->rawPhoto = $rawPhoto;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getPhoto(): ?string
+    {
+        return $this->photo;
+    }
+
+    /**
+     * @param null|string $photo
+     */
+    public function setPhoto(?string $photo): void
+    {
+        $this->photo = $photo;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getRawLogo(): ?string
+    {
+        return $this->rawLogo;
+    }
+
+    /**
+     * @param null|string $rawLogo
+     */
+    public function setRawLogo(?string $rawLogo): void
+    {
+        $this->rawLogo = $rawLogo;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getLogo(): ?string
+    {
+        return $this->logo;
+    }
+
+    /**
+     * @param null|string $logo
+     */
+    public function setLogo(?string $logo): void
+    {
+        $this->logo = $logo;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getNote(): ?string
+    {
+        return $this->note;
+    }
+
+    /**
+     * @param null|string $note
+     */
+    public function setNote(?string $note): void
+    {
+        $this->note = $note;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getCategories(): ?array
+    {
+        return $this->categories;
+    }
+
+    /**
+     * @param array|null $categories
+     */
+    public function setCategories(?array $categories): void
+    {
+        $this->categories = $categories;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getGeo(): ?string
+    {
+        return $this->geo;
+    }
+
+    /**
+     * @param null|string $geo
+     */
+    public function setGeo(?string $geo): void
+    {
+        $this->geo = $geo;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getGender(): ?string
+    {
+        return $this->gender;
+    }
+
+    /**
+     * @param null|string $gender
+     */
+    public function setGender(?string $gender): void
+    {
+        $this->gender = $gender;
+    }
+
+    /**
+     * @return null|string[]
+     */
+    public function getNickname(): ?array
+    {
+        return $this->nickname;
+    }
+
+    /**
+     * @param null|string[] $nickname
+     */
+    public function setNickname(?array $nickname): void
+    {
+        $this->nickname = $nickname;
+    }
+
+    /**
+     * @return null|string[]
+     */
+    public function getSkype(): ?array
+    {
+        return $this->skype;
+    }
+
+    /**
+     * @param null|string[] $skype
+     */
+    public function setSkype(?array $skype): void
+    {
+        $this->skype = $skype;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getItem(): ?array
+    {
+        return $this->item;
+    }
+
+    /**
+     * @param array|null $item
+     */
+    public function setItem(?array $item): void
+    {
+        $this->item = $item;
+    }
 }

@@ -10,6 +10,9 @@ namespace JeroenDesloovere\VCard;
  */
 
 use Iterator;
+use JeroenDesloovere\VCard\Exception\InvalidVersionException;
+use JeroenDesloovere\VCard\Model\VCard;
+use JeroenDesloovere\VCard\Model\VCardAddress;
 
 /**
  * VCard PHP Class to parse .vcard files.
@@ -45,21 +48,25 @@ class VCardParser implements Iterator
      * Helper function to parse a file directly.
      *
      * @param string $filename
+     *
      * @return self
+     * @throws \RuntimeException
      */
-    public static function parseFromFile($filename)
+    public static function parseFromFile($filename): ?VCardParser
     {
         if (file_exists($filename) && is_readable($filename)) {
             return new self(file_get_contents($filename));
-        } else {
-            throw new \RuntimeException(sprintf("File %s is not readable, or doesn't exist.", $filename));
         }
+
+        throw new \RuntimeException(sprintf("File %s is not readable, or doesn't exist.", $filename));
     }
 
     /**
      * VCardParser constructor.
      *
      * @param string $content
+     *
+     * @throws InvalidVersionException
      */
     public function __construct($content)
     {
@@ -72,19 +79,21 @@ class VCardParser implements Iterator
     /**
      *
      */
-    public function rewind()
+    public function rewind(): void
     {
         $this->position = 0;
     }
 
     /**
-     * @return mixed|\stdClass
+     * @return VCard|mixed|null
      */
     public function current()
     {
         if ($this->valid()) {
             return $this->getCardAtIndex($this->position);
         }
+
+        return null;
     }
 
     /**
@@ -98,7 +107,7 @@ class VCardParser implements Iterator
     /**
      *
      */
-    public function next()
+    public function next(): void
     {
         $this->position++;
     }
@@ -106,7 +115,7 @@ class VCardParser implements Iterator
     /**
      * @return bool
      */
-    public function valid()
+    public function valid(): bool
     {
         return !empty($this->vcardObjects[$this->position]);
     }
@@ -114,10 +123,10 @@ class VCardParser implements Iterator
     /**
      * Fetch all the imported VCards.
      *
-     * @return array
+     * @return VCard[]
      *    A list of VCard card data objects.
      */
-    public function getCards()
+    public function getCards(): array
     {
         return $this->vcardObjects;
     }
@@ -129,7 +138,7 @@ class VCardParser implements Iterator
      *
      * @param int $i
      *
-     * @return \stdClass
+     * @return VCard
      *    The card data object.
      */
     public function getCardAtIndex($i)
@@ -144,6 +153,8 @@ class VCardParser implements Iterator
      * Start the parsing process.
      *
      * This method will populate the data object.
+     *
+     * @throws InvalidVersionException
      */
     protected function parse()
     {
@@ -163,7 +174,7 @@ class VCardParser implements Iterator
             $line = trim($line);
 
             if (strtoupper($line) === 'BEGIN:VCARD') {
-                $cardData = new \stdClass();
+                $cardData = new VCard();
             } elseif (strtoupper($line) === 'END:VCARD') {
                 $this->vcardObjects[] = $cardData;
             } elseif (!empty($line)) {
@@ -173,8 +184,6 @@ class VCardParser implements Iterator
                 // period (.).
                 $line = preg_replace('/^\w+\./', '', $line);
 
-                $type = '';
-                $value = '';
                 @list($type, $value) = explode(':', $line, 2);
 
                 $types = explode(';', $type);
@@ -191,9 +200,8 @@ class VCardParser implements Iterator
                     }, $types);
                 }
 
-                $i = 0;
                 $rawValue = false;
-                foreach ($types as $type) {
+                foreach ($types as $i => $type) {
                     if (false !== stripos($type, 'base64')) {
                         $value = base64_decode($value);
                         unset($types[$i]);
@@ -210,134 +218,98 @@ class VCardParser implements Iterator
                         try {
                             $value = mb_convert_encoding($value, 'UTF-8', substr($type, 8));
                         } catch (\Exception $e) {
+                            // not empty
                         }
                         unset($types[$i]);
                     }
-                    $i++;
                 }
 
                 switch (strtoupper($element)) {
                     case 'FN':
-                        $cardData->fullname = $value;
+                        $cardData->setFullName($value);
                         break;
                     case 'N':
-                        foreach ($this->parseName($value) as $key => $val) {
-                            $cardData->{$key} = $val;
-                        }
+                        @list(
+                            $lastname,
+                            $firstname,
+                            $additional,
+                            $prefix,
+                            $suffix
+                            ) = explode(';', $value);
+
+                        $cardData->setLastName($lastname);
+                        $cardData->setFirstName($firstname);
+                        $cardData->setAdditional($additional);
+                        $cardData->setPrefix($prefix);
+                        $cardData->setSuffix($suffix);
                         break;
                     case 'BDAY':
-                        $cardData->birthday = $this->parseBirthday($value);
+                        $cardData->setBirthday(new \DateTime($value));
                         break;
                     case 'ADR':
-                        if (!isset($cardData->address)) {
-                            $cardData->address = [];
-                        }
-                        $key = !empty($types) ? implode(';', $types) : 'WORK;POSTAL';
-                        $cardData->address[$key][] = $this->parseAddress($value);
+                        $key = $this->parseKey($types, 'WORK;POSTAL');
+                        $address = new VCardAddress();
+                        $address->parseAddress('4.0', $key, $value);
+                        $cardData->addAddress($key, $address);
                         break;
                     case 'TEL':
-                        if (!isset($cardData->phone)) {
-                            $cardData->phone = [];
-                        }
-                        $key = !empty($types) ? implode(';', $types) : 'default';
-                        $cardData->phone[$key][] = $value;
+                        $key = $this->parseKey($types);
+                        $cardData->addPhone($key, $value);
                         break;
                     case 'EMAIL':
-                        if (!isset($cardData->email)) {
-                            $cardData->email = [];
-                        }
-                        $key = !empty($types) ? implode(';', $types) : 'default';
-                        $cardData->email[$key][] = $value;
+                        $key = $this->parseKey($types);
+                        $cardData->addEmail($key, $value);
                         break;
                     case 'REV':
-                        $cardData->revision = $value;
+                        $cardData->setRevision($value);
                         break;
                     case 'VERSION':
-                        $cardData->version = $value;
+                        $cardData->setVersion($value);
                         break;
                     case 'ORG':
-                        $cardData->organization = $value;
+                        $cardData->setOrganization($value);
                         break;
                     case 'URL':
-                        if (!isset($cardData->url)) {
-                            $cardData->url = [];
-                        }
-                        $key = !empty($types) ? implode(';', $types) : 'default';
-                        $cardData->url[$key][] = $value;
+                        $key = $this->parseKey($types);
+                        $cardData->addUrl($key, $value);
                         break;
                     case 'TITLE':
-                        $cardData->title = $value;
+                        $cardData->setTitle($value);
                         break;
                     case 'PHOTO':
                         if ($rawValue) {
-                            $cardData->rawPhoto = $value;
+                            $cardData->setRawPhoto($value);
                         } else {
-                            $cardData->photo = $value;
+                            $cardData->setPhoto($value);
                         }
                         break;
                     case 'LOGO':
                         if ($rawValue) {
-                            $cardData->rawLogo = $value;
+                            $cardData->setRawLogo($value);
                         } else {
-                            $cardData->logo = $value;
+                            $cardData->setLogo($value);
                         }
                         break;
                     case 'NOTE':
-                        $cardData->note = $this->unescape($value);
+                        $cardData->setNote($this->unescape($value));
                         break;
                     case 'CATEGORIES':
-                        $cardData->categories = array_map('trim', explode(',', $value));
+                        $cardData->setCategories(array_map('trim', explode(',', $value)));
                         break;
                 }
             }
         }
     }
 
-    protected function parseName($value)
+    /**
+     * @param array  $types
+     * @param string $default
+     *
+     * @return string
+     */
+    protected function parseKey(array $types, string $default = 'default'): string
     {
-        @list(
-            $lastname,
-            $firstname,
-            $additional,
-            $prefix,
-            $suffix
-        ) = explode(';', $value);
-
-        return (object) [
-            'lastname' => $lastname,
-            'firstname' => $firstname,
-            'additional' => $additional,
-            'prefix' => $prefix,
-            'suffix' => $suffix,
-        ];
-    }
-
-    protected function parseBirthday($value)
-    {
-        return new \DateTime($value);
-    }
-
-    protected function parseAddress($value)
-    {
-        @list(
-            $name,
-            $extended,
-            $street,
-            $city,
-            $region,
-            $zip,
-            $country,
-        ) = explode(';', $value);
-
-        return (object) [
-            'name' => $name,
-            'extended' => $extended,
-            'street' => $street,
-            'city' => $city,
-            'region' => $region,
-            'zip' => $zip,
-            'country' => $country,
-        ];
+        return !empty($types) ? implode(';', $types) : $default;
     }
 
     /**
