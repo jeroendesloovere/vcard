@@ -13,7 +13,7 @@ use JeroenDesloovere\VCard\VCardParser;
 $pathToVCardExample = __DIR__.'/assets/contacts.vcf';
 $parser = VCardParser::parseFromFile($pathToVCardExample);
 
-foreach ($parser as $vcard) {
+foreach ($parser->getCards() as $vcard) {
     $lastName = $vcard->getLastName();
     $firstName = $vcard->getFirstName();
     $birthday = $vcard->getBirthday()->format('Y-m-d');

@@ -283,10 +283,6 @@ class VCard extends \stdClass
      */
     public function addAddress(VCardAddress $address, string $key = ''): void
     {
-        if ($this->address === null) {
-            $this->address = [];
-        }
-
         $this->address[$key][] = $address;
     }
 
@@ -314,10 +310,6 @@ class VCard extends \stdClass
      */
     public function addPhone(string $phone, string $key = ''): void
     {
-        if ($this->phone === null) {
-            $this->phone = [];
-        }
-
         $this->phone[$key][] = $phone;
     }
 
@@ -345,10 +337,6 @@ class VCard extends \stdClass
      */
     public function addEmail(string $email, string $key = ''): void
     {
-        if ($this->email === null) {
-            $this->email = [];
-        }
-
         $this->email[$key][] = $email;
     }
 
@@ -424,10 +412,6 @@ class VCard extends \stdClass
      */
     public function addUrl(string $url, string $key = ''): void
     {
-        if ($this->url === null) {
-            $this->url = [];
-        }
-
         $this->url[$key][] = $url;
     }
 
