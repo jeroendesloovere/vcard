@@ -25,10 +25,17 @@ class VCardParser implements Iterator
 {
     /**
      * The raw VCard content.
-    *
+     *
      * @var string
      */
     protected $content;
+
+    /**
+     * The raw VCard content.
+     *
+     * @var string[]
+     */
+    protected $cardsContent;
 
     /**
      * The VCard data objects.
@@ -161,23 +168,40 @@ class VCardParser implements Iterator
         // Normalize new lines.
         $this->content = str_replace(["\r\n", "\r"], "\n", $this->content);
 
+        $this->content = trim($this->content);
+
+        $this->content = substr($this->content, 12, -10);
+
         // RFC2425 5.8.1. Line delimiting and folding
         // Unfolding is accomplished by regarding CRLF immediately followed by
         // a white space character (namely HTAB ASCII decimal 9 or. SPACE ASCII
         // decimal 32) as equivalent to no characters at all (i.e., the CRLF
         // and single white space character are removed).
         $this->content = preg_replace("/\n(?:[ \t])/", '', $this->content);
-        $lines = explode("\n", $this->content);
+
+        $this->cardsContent = preg_split('/\nEND:VCARD\s+BEGIN:VCARD\n/', $this->content);
+
+        foreach ($this->cardsContent as $cardContent) {
+            $this->parseCard($cardContent);
+        }
+    }
+
+    /**
+     * @param string $cardContent
+     *
+     * @throws InvalidVersionException
+     */
+    protected function parseCard(string $cardContent)
+    {
+        $cardData = new VCard();
+
+        $lines = explode("\n", $cardContent);
 
         // Parse the VCard, line by line.
         foreach ($lines as $line) {
             $line = trim($line);
 
-            if (strtoupper($line) === 'BEGIN:VCARD') {
-                $cardData = new VCard();
-            } elseif (strtoupper($line) === 'END:VCARD') {
-                $this->vcardObjects[] = $cardData;
-            } elseif (!empty($line)) {
+            if (!empty($line)) {
                 // Strip grouping information. We don't use the group names. We
                 // simply use a list for entries that have multiple values.
                 // As per RFC, group names are alphanumerical, and end with a
@@ -195,9 +219,12 @@ class VCardParser implements Iterator
                 // or can be prefixed with "type=". E.g.: "INTERNET" or
                 // "type=INTERNET".
                 if (!empty($types)) {
-                    $types = array_map(function ($type) {
-                        return preg_replace('/^type=/i', '', $type);
-                    }, $types);
+                    $types = array_map(
+                        function ($type) {
+                            return preg_replace('/^type=/i', '', $type);
+                        },
+                        $types
+                    );
                 }
 
                 $rawValue = false;
@@ -299,6 +326,8 @@ class VCardParser implements Iterator
                 }
             }
         }
+
+        $this->vcardObjects[] = $cardData;
     }
 
     /**
