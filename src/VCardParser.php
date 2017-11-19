@@ -13,6 +13,7 @@ use Iterator;
 use JeroenDesloovere\VCard\Exception\InvalidVersionException;
 use JeroenDesloovere\VCard\Model\VCard;
 use JeroenDesloovere\VCard\Model\VCardAddress;
+use JeroenDesloovere\VCard\Model\VCardName;
 
 /**
  * VCard PHP Class to parse .vcard files.
@@ -52,7 +53,7 @@ class VCardParser implements Iterator
      * @return self
      * @throws \RuntimeException
      */
-    public static function parseFromFile($filename): ?VCardParser
+    public static function parseFromFile(string $filename): VCardParser
     {
         if (file_exists($filename) && is_readable($filename)) {
             return new self(file_get_contents($filename));
@@ -250,15 +251,15 @@ class VCardParser implements Iterator
                         $key = $this->parseKey($types, 'WORK;POSTAL');
                         $address = new VCardAddress();
                         $address->parseAddress('4.0', $key, $value);
-                        $cardData->addAddress($key, $address);
+                        $cardData->addAddress($address, $key);
                         break;
                     case 'TEL':
                         $key = $this->parseKey($types);
-                        $cardData->addPhone($key, $value);
+                        $cardData->addPhone($value, $key);
                         break;
                     case 'EMAIL':
                         $key = $this->parseKey($types);
-                        $cardData->addEmail($key, $value);
+                        $cardData->addEmail($value, $key);
                         break;
                     case 'REV':
                         $cardData->setRevision($value);
@@ -271,7 +272,7 @@ class VCardParser implements Iterator
                         break;
                     case 'URL':
                         $key = $this->parseKey($types);
-                        $cardData->addUrl($key, $value);
+                        $cardData->addUrl($value, $key);
                         break;
                     case 'TITLE':
                         $cardData->setTitle($value);
@@ -280,14 +281,14 @@ class VCardParser implements Iterator
                         if ($rawValue) {
                             $cardData->setRawPhoto($value);
                         } else {
-                            $cardData->setPhoto($value);
+                            $cardData->setUrlPhoto($value);
                         }
                         break;
                     case 'LOGO':
                         if ($rawValue) {
                             $cardData->setRawLogo($value);
                         } else {
-                            $cardData->setLogo($value);
+                            $cardData->setUrlLogo($value);
                         }
                         break;
                     case 'NOTE':

@@ -216,4 +216,12 @@ class VCardAddress
         $this->setPostalCode($postalCode);
         $this->setCountry($country);
     }
+
+    /**
+     * @return string
+     */
+    public function getAddress(): string
+    {
+        return $this->getName().';'.$this->getExtended().';'.$this->getStreet().';'.$this->getLocality().';'.$this->getRegion().';'.$this->getPostalCode().';'.$this->getCountry();
+    }
 }

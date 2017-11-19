@@ -14,12 +14,13 @@ use JeroenDesloovere\VCard\Exception\ElementAlreadyExistsException;
 use JeroenDesloovere\VCard\Exception\EmptyUrlException;
 use JeroenDesloovere\VCard\Exception\InvalidImageException;
 use JeroenDesloovere\VCard\Exception\OutputDirectoryNotExistsException;
-use JeroenDesloovere\VCard\Exception\VCardException;
+use JeroenDesloovere\VCard\Model\VCard;
+use JeroenDesloovere\VCard\Model\VCardAddress;
 
 /**
  * VCard PHP Class to generate .vcard files and save them to a file or output as a download.
  */
-class VCard
+class VCardBuilder
 {
     /**
      * definedElements
@@ -40,7 +41,7 @@ class VCard
      *
      * @var string
      */
-    private $savePath = null;
+    private $savePath;
 
     /**
      * Multiple properties for element allowed
@@ -69,148 +70,178 @@ class VCard
     public $charset = 'utf-8';
 
     /**
-     * Add address
+     * @var VCard[]
+     */
+    private $vCards;
+
+    /**
+     * VCardBuilder constructor.
      *
-     * @param string $name     [optional]
-     * @param string $extended [optional]
-     * @param string $street   [optional]
-     * @param string $city     [optional]
-     * @param string $region   [optional]
-     * @param string $zip      [optional]
-     * @param string $country  [optional]
-     * @param string $type     [optional]
-     *                         $type may be DOM | INTL | POSTAL | PARCEL | HOME | WORK
-     *                         or any combination of these: e.g. "WORK;PARCEL;POSTAL"
+     * @param VCard|VCard[] $vCard
      *
-     * @return $this
+     * @throws ElementAlreadyExistsException
+     * @throws EmptyUrlException
+     * @throws InvalidImageException
+     */
+    public function __construct($vCard)
+    {
+        $this->vCards = $vCard;
+        if (!\is_array($vCard)) {
+            $this->vCards = [$vCard];
+        }
+        $this->parseVCarts();
+    }
+
+    /**
      * @throws ElementAlreadyExistsException
      */
-    public function addAddress(
-        string $name = '',
-        string $extended = '',
-        string $street = '',
-        string $city = '',
-        string $region = '',
-        string $zip = '',
-        string $country = '',
-        string $type = 'WORK;POSTAL'
-    ) {
-        // init value
-        $value = $name.';'.$extended.';'.$street.';'.$city.';'.$region.';'.$zip.';'.$country;
+    protected function parseVCarts(): void
+    {
+        foreach ($this->vCards as $vCard) {
+            $this->parseVCart($vCard);
+        }
+    }
 
-        // set property
-        $this->setProperty(
-            'address',
-            'ADR'.(($type !== '') ? ';'.$type : '').$this->getCharsetString(),
-            $value
-        );
+    /**
+     * @param VCard $vCard
+     *
+     * @throws ElementAlreadyExistsException
+     */
+    protected function parseVCart(VCard $vCard): void
+    {
+        $this->addAddress($vCard->getAddresses());
+        $this->addBirthday($vCard->getBirthday());
+        $this->addOrganization($vCard->getOrganization());
+        $this->addEmail($vCard->getEmails());
+        $this->addTitle($vCard->getTitle());
+        $this->addRole(null); // TODO add Role to \JeroenDesloovere\VCard\Model\VCard
+        $this->addName($vCard->getLastName(), $vCard->getFirstName(), $vCard->getAdditional(), $vCard->getPrefix(), $vCard->getSuffix());
+        $this->addNote($vCard->getNote());
+        $this->addCategories($vCard->getCategories());
+        $this->addPhoneNumber($vCard->getPhones());
+//        $this->addRawLogo($vCard->getRawLogo());
+//        $this->addLogo($vCard->getUrlLogo(), false);
+//        $this->addRawPhoto($vCard->getRawPhoto());
+//        $this->addPhoto($vCard->getUrlPhoto(), false);
+        $this->addUrl($vCard->getUrls());
+    }
 
-        return $this;
+    /**
+     * @param VCardAddress[][]|null $addresses
+     *
+     * @throws ElementAlreadyExistsException
+     */
+    protected function addAddress($addresses): void
+    {
+        if ($addresses !== null) {
+            foreach ($addresses as $type => $sub) {
+                foreach ($sub as $address) {
+                    $this->setProperty(
+                        'address',
+                        'ADR'.(($type !== '') ? ';'.$type : '').$this->getCharsetString(),
+                        $address->getAddress()
+                    );
+                }
+            }
+        }
     }
 
     /**
      * Add birthday
      *
-     * @param string $date Format is YYYY-MM-DD
+     * @param \DateTime|null $date Format is YYYY-MM-DD
      *
-     * @return $this
      * @throws ElementAlreadyExistsException
      */
-    public function addBirthday(string $date)
+    protected function addBirthday(?\DateTime $date): void
     {
-        $this->setProperty(
-            'birthday',
-            'BDAY',
-            $date
-        );
-
-        return $this;
+        if ($date !== null) {
+            $this->setProperty(
+                'birthday',
+                'BDAY',
+                $date->format('Y-m-d')
+            );
+        }
     }
 
     /**
      * Add company
      *
-     * @param string $company
-     * @param string $department
+     * @param null|string $company
+     * @param string      $department
      *
-     * @return $this
      * @throws ElementAlreadyExistsException
      */
-    public function addCompany(string $company, string $department = '')
+    protected function addOrganization(?string $company, string $department = ''): void
     {
-        $this->setProperty(
-            'company',
-            'ORG'.$this->getCharsetString(),
-            $company.($department !== '' ? ';'.$department : '')
-        );
+        if ($company !== null) {
+            $this->setProperty(
+                'organization',
+                'ORG'.$this->getCharsetString(),
+                $company.($department !== '' ? ';'.$department : '')
+            );
 
-        // if filename is empty, add to filename
-        if ($this->filename === null) {
-            $this->setFilename($company);
+            // if filename is empty, add to filename
+            if ($this->filename === null) {
+                $this->setFilename($company);
+            }
         }
-
-        return $this;
     }
 
     /**
-     * Add email
+     * @param string[][]|null $addresses
      *
-     * @param string $address The e-mail address
-     * @param string $type    [optional]
-     *                        The type of the email address
-     *                        $type may be  PREF | WORK | HOME
-     *                        or any combination of these: e.g. "PREF;WORK"
-     *
-     * @return $this
      * @throws ElementAlreadyExistsException
      */
-    public function addEmail(string $address, string $type = '')
+    protected function addEmail($addresses): void
     {
-        $this->setProperty(
-            'email',
-            'EMAIL;INTERNET'.(($type != '') ? ';'.$type : ''),
-            $address
-        );
-
-        return $this;
+        if ($addresses !== null) {
+            foreach ($addresses as $type => $sub) {
+                foreach ($sub as $address) {
+                    $this->setProperty(
+                        'email',
+                        'EMAIL;INTERNET'.(($type !== '') ? ';'.$type : ''),
+                        $address
+                    );
+                }
+            }
+        }
     }
 
     /**
-     * Add jobtitle
+     * Add title
      *
-     * @param string $jobtitle The jobtitle for the person.
+     * @param null|string $title The title for the person.
      *
-     * @return $this
      * @throws ElementAlreadyExistsException
      */
-    public function addJobtitle(string $jobtitle)
+    protected function addTitle(?string $title): void
     {
-        $this->setProperty(
-            'jobtitle',
-            'TITLE'.$this->getCharsetString(),
-            $jobtitle
-        );
-
-        return $this;
+        if ($title !== null) {
+            $this->setProperty(
+                'title',
+                'TITLE'.$this->getCharsetString(),
+                $title
+            );
+        }
     }
 
     /**
      * Add role
      *
-     * @param string $role The role for the person.
+     * @param null|string $role The role for the person.
      *
-     * @return $this
      * @throws ElementAlreadyExistsException
      */
-    public function addRole(string $role)
+    protected function addRole(?string $role): void
     {
-        $this->setProperty(
-            'role',
-            'ROLE'.$this->getCharsetString(),
-            $role
-        );
-
-        return $this;
+        if ($role !== null) {
+            $this->setProperty(
+                'role',
+                'ROLE'.$this->getCharsetString(),
+                $role
+            );
+        }
     }
 
     /**
@@ -222,174 +253,208 @@ class VCard
      * @param string $prefix     [optional]
      * @param string $suffix     [optional]
      *
-     * @return $this
      * @throws ElementAlreadyExistsException
      */
-    public function addName(
-        string $lastName = '',
-        string $firstName = '',
-        string $additional = '',
-        string $prefix = '',
-        string $suffix = ''
-    ) {
-        // define values with non-empty values
-        $values = array_filter([
-            $prefix,
-            $firstName,
-            $additional,
-            $lastName,
-            $suffix,
-        ]);
-
-        // define filename
-        $this->setFilename($values);
-
-        // set property
-        $property = $lastName.';'.$firstName.';'.$additional.';'.$prefix.';'.$suffix;
-        $this->setProperty(
-            'name',
-            'N'.$this->getCharsetString(),
-            $property
-        );
-
-        // is property FN set?
-        if (!$this->hasProperty('FN')) {
-            // set property
-            $this->setProperty(
-                'fullname',
-                'FN'.$this->getCharsetString(),
-                trim(implode(' ', $values))
+    protected function addName(
+        ?string $lastName = '',
+        ?string $firstName = '',
+        ?string $additional = '',
+        ?string $prefix = '',
+        ?string $suffix = ''
+    ): void {
+        if ($lastName !== null) {
+            // define values with non-empty values
+            $values = array_filter(
+                [
+                    $prefix,
+                    $firstName,
+                    $additional,
+                    $lastName,
+                    $suffix,
+                ]
             );
-        }
 
-        return $this;
+            // define filename
+            $this->setFilename($values);
+
+            // set property
+            $property = $lastName.';'.$firstName.';'.$additional.';'.$prefix.';'.$suffix;
+            $this->setProperty(
+                'name',
+                'N'.$this->getCharsetString(),
+                $property
+            );
+
+            // is property FN set?
+            if (!$this->hasProperty('FN'.$this->getCharsetString())) {
+                // set property
+                $this->setProperty(
+                    'fullname',
+                    'FN'.$this->getCharsetString(),
+                    trim(implode(' ', $values))
+                );
+            }
+        }
     }
 
     /**
      * Add note
      *
-     * @param string $note
+     * @param null|string $note
      *
-     * @return $this
      * @throws ElementAlreadyExistsException
      */
-    public function addNote(string $note)
+    protected function addNote(?string $note): void
     {
-        $this->setProperty(
-            'note',
-            'NOTE'.$this->getCharsetString(),
-            $note
-        );
-
-        return $this;
+        if ($note !== null) {
+            $this->setProperty(
+                'note',
+                'NOTE'.$this->getCharsetString(),
+                $note
+            );
+        }
     }
 
     /**
      * Add categories
      *
-     * @param array $categories
+     * @param null|array $categories
      *
-     * @return $this
      * @throws ElementAlreadyExistsException
      */
-    public function addCategories(array $categories)
+    protected function addCategories(?array $categories): void
     {
-        $this->setProperty(
-            'categories',
-            'CATEGORIES'.$this->getCharsetString(),
-            trim(implode(',', $categories))
-        );
-
-        return $this;
+        if ($categories !== null) {
+            $this->setProperty(
+                'categories',
+                'CATEGORIES'.$this->getCharsetString(),
+                trim(implode(',', $categories))
+            );
+        }
     }
 
     /**
      * Add phone number
      *
-     * @param string $number
-     * @param string $type   [optional]
-     *                       Type may be PREF | WORK | HOME | VOICE | FAX | MSG |
-     *                       CELL | PAGER | BBS | CAR | MODEM | ISDN | VIDEO
-     *                       or any senseful combination, e.g. "PREF;WORK;VOICE"
+     * @param null|string[][] $numbers
      *
-     * @return $this
      * @throws ElementAlreadyExistsException
      */
-    public function addPhoneNumber(string $number, string $type = '')
+    protected function addPhoneNumber($numbers): void
     {
-        $this->setProperty(
-            'phoneNumber',
-            'TEL'.(($type != '') ? ';'.$type : ''),
-            $number
-        );
-
-        return $this;
+        if ($numbers !== null) {
+            foreach ($numbers as $type => $sub) {
+                foreach ($sub as $number) {
+                    $this->setProperty(
+                        'phoneNumber',
+                        'TEL'.(($type !== '') ? ';'.$type : ''),
+                        $number
+                    );
+                }
+            }
+        }
     }
 
     /**
      * Add Logo
      *
-     * @param string $url     image url or filename
-     * @param bool   $include Include the image in our vcard?
+     * @param null|string $url     image url or filename
+     * @param bool        $include Include the image in our vcard?
      *
-     * @return $this
      * @throws ElementAlreadyExistsException
      * @throws EmptyUrlException
      * @throws InvalidImageException
      */
-    public function addLogo(string $url, bool $include = true)
+    protected function addLogo(?string $url, bool $include = true): void
     {
-        $this->addMedia(
-            'LOGO',
-            $url,
-            'logo',
-            $include
-        );
+        if ($url !== null) {
+            $this->addMedia(
+                'LOGO',
+                $url,
+                'logo',
+                $include
+            );
+        }
+    }
 
-        return $this;
+    /**
+     * Add Raw Logo
+     *
+     * @param null|string $raw
+     *
+     * @throws ElementAlreadyExistsException
+     */
+    protected function addRawLogo(?string $raw): void
+    {
+        if ($raw !== null) {
+            $this->addRawMedia(
+                'LOGO',
+                $raw,
+                'logo'
+            );
+        }
     }
 
     /**
      * Add Photo
      *
-     * @param string $url     image url or filename
-     * @param bool   $include Include the image in our vcard?
+     * @param null|string $url     image url or filename
+     * @param bool        $include Include the image in our vcard?
      *
-     * @return $this
      * @throws ElementAlreadyExistsException
      * @throws EmptyUrlException
      * @throws InvalidImageException
      */
-    public function addPhoto(string $url, bool $include = true)
+    protected function addPhoto(?string $url, bool $include = true): void
     {
-        $this->addMedia(
-            'PHOTO',
-            $url,
-            'photo',
-            $include
-        );
+        if ($url !== null) {
+            $this->addMedia(
+                'PHOTO',
+                $url,
+                'photo',
+                $include
+            );
+        }
+    }
 
-        return $this;
+    /**
+     * Add Raw Photo
+     *
+     * @param null|string $raw
+     *
+     * @throws ElementAlreadyExistsException
+     */
+    protected function addRawPhoto(?string $raw): void
+    {
+        if ($raw !== null) {
+            $this->addRawMedia(
+                'PHOTO',
+                $raw,
+                'photo'
+            );
+        }
     }
 
     /**
      * Add URL
      *
-     * @param string $url
-     * @param string $type [optional] Type may be WORK | HOME
+     * @param null|string[][] $urls
      *
-     * @return $this
      * @throws ElementAlreadyExistsException
      */
-    public function addURL(string $url, string $type = '')
+    protected function addUrl($urls): void
     {
-        $this->setProperty(
-            'url',
-            'URL'.(($type !== '') ? ';'.$type : ''),
-            $url
-        );
-
-        return $this;
+        if ($urls !== null) {
+            foreach ($urls as $type => $sub) {
+                foreach ($sub as $url) {
+                    $this->setProperty(
+                        'url',
+                        'URL'.(($type !== '') ? ';'.$type : ''),
+                        $url
+                    );
+                }
+            }
+        }
     }
 
     /**
@@ -462,7 +527,7 @@ class VCard
     /**
      * Download a vcard or vcal file to the browser.
      */
-    public function download()
+    public function download(): void
     {
         // define output
         $output = $this->getOutput();
@@ -473,17 +538,6 @@ class VCard
 
         // echo the output and it will be a download
         echo $output;
-    }
-
-    /**
-     * Get output as string
-     * @deprecated in the future
-     *
-     * @return string
-     */
-    public function get(): string
-    {
-        return $this->getOutput();
     }
 
     /**
@@ -650,7 +704,7 @@ class VCard
      *
      * @return void
      */
-    public function save()
+    public function save(): void
     {
         $file = $this->getFilename().'.'.$this->getFileExtension();
 
@@ -671,7 +725,7 @@ class VCard
      * @param string $charset
      * @return void
      */
-    public function setCharset(string $charset)
+    public function setCharset(string $charset): void
     {
         $this->charset = $charset;
     }
@@ -684,10 +738,10 @@ class VCard
      * @param string       $separator [optional] Default separator is an underscore '_'
      * @return void
      */
-    public function setFilename($value, $overwrite = true, $separator = '_')
+    public function setFilename($value, $overwrite = true, $separator = '_'): void
     {
         // recast to string if $value is array
-        if (is_array($value)) {
+        if (\is_array($value)) {
             $value = implode($separator, $value);
         }
 
@@ -702,8 +756,11 @@ class VCard
             return;
         }
 
-        // decode value + lowercase the string
-        $value = strtolower($this->decode($value));
+        // decode value
+        $value = Transliterator::transliterate($value);
+
+        // lowercase the string
+        $value = strtolower($value);
 
         // urlize this part
         $value = Transliterator::urlize($value);
@@ -720,7 +777,7 @@ class VCard
      *
      * @throws OutputDirectoryNotExistsException
      */
-    public function setSavePath($savePath)
+    public function setSavePath($savePath): void
     {
         if (!is_dir($savePath)) {
             throw new OutputDirectoryNotExistsException();
@@ -761,7 +818,7 @@ class VCard
      */
     protected function fold($text)
     {
-        if (strlen($text) <= 75) {
+        if (\strlen($text) <= 75) {
             return $text;
         }
 
@@ -810,10 +867,10 @@ class VCard
      *
      * @throws ElementAlreadyExistsException
      */
-    private function setProperty(string $element, string $key, string $value)
+    private function setProperty(string $element, string $key, string $value): void
     {
         if (isset($this->definedElements[$element])
-            && !in_array($element, $this::$multiplePropertiesForElementAllowed, true)) {
+            && !\in_array($element, $this::$multiplePropertiesForElementAllowed, true)) {
             throw new ElementAlreadyExistsException($element);
         }
 
@@ -828,19 +885,6 @@ class VCard
     }
 
     /**
-     * Decode
-     *
-     * @param string $value The value to decode
-     *
-     * @return string decoded
-     */
-    private function decode(string $value): string
-    {
-        // convert cyrlic, greek or other caracters to ASCII characters
-        return Transliterator::transliterate($value);
-    }
-
-    /**
      * Add a photo or logo (depending on property name)
      *
      * @param string $property LOGO|PHOTO
@@ -852,7 +896,7 @@ class VCard
      * @throws EmptyUrlException
      * @throws InvalidImageException
      */
-    private function addMedia(string $property, string $url, string $element, bool $include = true)
+    private function addMedia(string $property, string $url, string $element, bool $include = true): void
     {
         $mimeType = null;
 
@@ -870,7 +914,7 @@ class VCard
         if (strpos($mimeType, ';') !== false) {
             $mimeType = strstr($mimeType, ';', true);
         }
-        if (!is_string($mimeType) || 0 !== strpos($mimeType, 'image/')) {
+        if (!\is_string($mimeType) || 0 !== strpos($mimeType, 'image/')) {
             throw new InvalidImageException();
         }
         $fileType = strtoupper(substr($mimeType, 6));
@@ -900,6 +944,33 @@ class VCard
             $element,
             $property,
             $value
+        );
+    }
+
+    /**
+     * Add a photo or logo (depending on property name)
+     *
+     * @param string      $property LOGO|PHOTO
+     * @param string      $raw      image url or filename
+     * @param string      $element  The name of the element to set
+     * @param null|string $fileType
+     *
+     * @throws ElementAlreadyExistsException
+     */
+    private function addRawMedia(string $property, string $raw, string $element, ?string $fileType = null): void
+    {
+        $raw = base64_encode($raw);
+
+        if ($fileType !== null) {
+            $property .= ';ENCODING=b;TYPE='.$fileType;
+        } else {
+            $property .= ';ENCODING=b';
+        }
+
+        $this->setProperty(
+            $element,
+            $property,
+            $raw
         );
     }
 }

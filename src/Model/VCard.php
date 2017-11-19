@@ -50,12 +50,12 @@ class VCard extends \stdClass
     protected $address;
 
     /**
-     * @var string[]|null
+     * @var string[][]|null
      */
     protected $phone;
 
     /**
-     * @var string[]|null
+     * @var string[][]|null
      */
     protected $email;
 
@@ -75,7 +75,7 @@ class VCard extends \stdClass
     protected $organization;
 
     /**
-     * @var string[]|null
+     * @var string[][]|null
      */
     protected $url;
 
@@ -92,7 +92,7 @@ class VCard extends \stdClass
     /**
      * @var string|null
      */
-    protected $photo;
+    protected $urlPhoto;
 
     /**
      * @var string|null
@@ -102,7 +102,7 @@ class VCard extends \stdClass
     /**
      * @var string|null
      */
-    protected $logo;
+    protected $urlLogo;
 
     /**
      * @var string|null
@@ -125,12 +125,12 @@ class VCard extends \stdClass
     protected $gender;
 
     /**
-     * @var string[]|null
+     * @var string[][]|null
      */
     protected $nickname;
 
     /**
-     * @var string[]|null
+     * @var string[][]|null
      */
     protected $skype;
 
@@ -278,10 +278,10 @@ class VCard extends \stdClass
     }
 
     /**
-     * @param string       $key
      * @param VCardAddress $address
+     * @param string       $key
      */
-    public function addAddress(string $key, VCardAddress $address): void
+    public function addAddress(VCardAddress $address, string $key = ''): void
     {
         if ($this->address === null) {
             $this->address = [];
@@ -291,7 +291,7 @@ class VCard extends \stdClass
     }
 
     /**
-     * @return null|string[]
+     * @return null|string[][]
      */
     public function getPhones(): ?array
     {
@@ -299,7 +299,7 @@ class VCard extends \stdClass
     }
 
     /**
-     * @param null|string[] $phone
+     * @param null|string[][] $phone
      */
     public function setPhones(?array $phone): void
     {
@@ -309,10 +309,10 @@ class VCard extends \stdClass
     // TODO add getPhone($key)
 
     /**
-     * @param string $key
      * @param string $phone
+     * @param string $key
      */
-    public function addPhone(string $key, string $phone): void
+    public function addPhone(string $phone, string $key = ''): void
     {
         if ($this->phone === null) {
             $this->phone = [];
@@ -322,7 +322,7 @@ class VCard extends \stdClass
     }
 
     /**
-     * @return null|string[]
+     * @return null|string[][]
      */
     public function getEmails(): ?array
     {
@@ -330,7 +330,7 @@ class VCard extends \stdClass
     }
 
     /**
-     * @param null|string[] $email
+     * @param null|string[][] $email
      */
     public function setEmails(?array $email): void
     {
@@ -340,10 +340,10 @@ class VCard extends \stdClass
     // TODO add getEmail($key)
 
     /**
-     * @param string $key
      * @param string $email
+     * @param string $key
      */
-    public function addEmail(string $key, string $email): void
+    public function addEmail(string $email, string $key = ''): void
     {
         if ($this->email === null) {
             $this->email = [];
@@ -401,7 +401,7 @@ class VCard extends \stdClass
     }
 
     /**
-     * @return null|string[]
+     * @return null|string[][]
      */
     public function getUrls(): ?array
     {
@@ -409,7 +409,7 @@ class VCard extends \stdClass
     }
 
     /**
-     * @param null|string[] $url
+     * @param null|string[][] $url
      */
     public function setUrls(?array $url): void
     {
@@ -419,10 +419,10 @@ class VCard extends \stdClass
     // TODO add getUrl($key)
 
     /**
-     * @param string $key
      * @param string $url
+     * @param string $key
      */
-    public function addUrl(string $key, string $url): void
+    public function addUrl(string $url, string $key = ''): void
     {
         if ($this->url === null) {
             $this->url = [];
@@ -450,6 +450,22 @@ class VCard extends \stdClass
     /**
      * @return null|string
      */
+    public function getPhoto(): ?string
+    {
+        return null;
+    }
+
+    /**
+     * @param null|string $photo
+     */
+    public function setPhoto(?string $photo): void
+    {
+        // dd
+    }
+
+    /**
+     * @return null|string
+     */
     public function getRawPhoto(): ?string
     {
         return $this->rawPhoto;
@@ -466,17 +482,33 @@ class VCard extends \stdClass
     /**
      * @return null|string
      */
-    public function getPhoto(): ?string
+    public function getUrlPhoto(): ?string
     {
-        return $this->photo;
+        return $this->urlPhoto;
     }
 
     /**
-     * @param null|string $photo
+     * @param null|string $urlPhoto
      */
-    public function setPhoto(?string $photo): void
+    public function setUrlPhoto(?string $urlPhoto): void
     {
-        $this->photo = $photo;
+        $this->urlPhoto = $urlPhoto;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getLogo(): ?string
+    {
+        return null;
+    }
+
+    /**
+     * @param null|string $logo
+     */
+    public function setLogo(?string $logo): void
+    {
+        // dd
     }
 
     /**
@@ -498,17 +530,17 @@ class VCard extends \stdClass
     /**
      * @return null|string
      */
-    public function getLogo(): ?string
+    public function getUrlLogo(): ?string
     {
-        return $this->logo;
+        return $this->urlLogo;
     }
 
     /**
-     * @param null|string $logo
+     * @param null|string $urlLogo
      */
-    public function setLogo(?string $logo): void
+    public function setUrlLogo(?string $urlLogo): void
     {
-        $this->logo = $logo;
+        $this->urlLogo = $urlLogo;
     }
 
     /**
@@ -576,7 +608,7 @@ class VCard extends \stdClass
     }
 
     /**
-     * @return null|string[]
+     * @return null|string[][]
      */
     public function getNickname(): ?array
     {
@@ -584,7 +616,7 @@ class VCard extends \stdClass
     }
 
     /**
-     * @param null|string[] $nickname
+     * @param null|string[][] $nickname
      */
     public function setNickname(?array $nickname): void
     {
@@ -592,7 +624,7 @@ class VCard extends \stdClass
     }
 
     /**
-     * @return null|string[]
+     * @return null|string[][]
      */
     public function getSkype(): ?array
     {
@@ -600,7 +632,7 @@ class VCard extends \stdClass
     }
 
     /**
-     * @param null|string[] $skype
+     * @param null|string[][] $skype
      */
     public function setSkype(?array $skype): void
     {
