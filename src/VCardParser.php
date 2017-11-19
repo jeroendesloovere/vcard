@@ -13,7 +13,6 @@ use Iterator;
 use JeroenDesloovere\VCard\Exception\InvalidVersionException;
 use JeroenDesloovere\VCard\Model\VCard;
 use JeroenDesloovere\VCard\Model\VCardAddress;
-use JeroenDesloovere\VCard\Model\VCardName;
 
 /**
  * VCard PHP Class to parse .vcard files.
@@ -142,7 +141,7 @@ class VCardParser implements Iterator
      * @return VCard
      *    The card data object.
      */
-    public function getCardAtIndex($i)
+    public function getCardAtIndex($i): VCard
     {
         if (isset($this->vcardObjects[$i])) {
             return $this->vcardObjects[$i];
@@ -157,7 +156,7 @@ class VCardParser implements Iterator
      *
      * @throws InvalidVersionException
      */
-    protected function parse()
+    protected function parse(): void
     {
         // Normalize new lines.
         $this->content = str_replace(["\r\n", "\r"], "\n", $this->content);

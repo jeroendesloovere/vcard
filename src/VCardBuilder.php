@@ -80,8 +80,6 @@ class VCardBuilder
      * @param VCard|VCard[] $vCard
      *
      * @throws ElementAlreadyExistsException
-     * @throws EmptyUrlException
-     * @throws InvalidImageException
      */
     public function __construct($vCard)
     {
@@ -90,6 +88,340 @@ class VCardBuilder
             $this->vCards = [$vCard];
         }
         $this->parseVCarts();
+    }
+
+    /**
+     * Build VCard (.vcf)
+     *
+     * @return string
+     */
+    public function buildVCard(): string
+    {
+        // init string
+        $string = "BEGIN:VCARD\r\n";
+        $string .= "VERSION:3.0\r\n";
+        $string .= 'REV:'.date('Y-m-d').'T'.date('H:i:s')."Z\r\n";
+
+        // loop all properties
+        $properties = $this->getProperties();
+        foreach ($properties as $property) {
+            // add to string
+            $string .= $this->fold($property['key'].':'.$this->escape($property['value'])."\r\n");
+        }
+
+        // add to string
+        $string .= "END:VCARD\r\n";
+
+        // return
+        return $string;
+    }
+
+    /**
+     * Build VCalender (.ics) - Safari (< iOS 8) can not open .vcf files, so we have build a workaround.
+     *
+     * @return string
+     */
+    public function buildVCalendar(): string
+    {
+        // init dates
+        $dtstart = date('Ymd').'T'.date('Hi').'00';
+        $dtend = date('Ymd').'T'.date('Hi').'01';
+
+        // init string
+        $string = "BEGIN:VCALENDAR\n";
+        $string .= "VERSION:2.0\n";
+        $string .= "BEGIN:VEVENT\n";
+        $string .= 'DTSTART;TZID=Europe/London:'.$dtstart."\n";
+        $string .= 'DTEND;TZID=Europe/London:'.$dtend."\n";
+        $string .= "SUMMARY:Click attached contact below to save to your contacts\n";
+        $string .= 'DTSTAMP:'.$dtstart."Z\n";
+        $string .= "ATTACH;VALUE=BINARY;ENCODING=BASE64;FMTTYPE=text/directory;\n";
+        $string .= ' X-APPLE-FILENAME='.$this->getFilename().'.'.$this->getFileExtension().":\n";
+
+        // base64 encode it so that it can be used as an attachemnt to the "dummy" calendar appointment
+        $b64vcard = base64_encode($this->buildVCard());
+
+        // chunk the single long line of b64 text in accordance with RFC2045
+        // (and the exact line length determined from the original .ics file exported from Apple calendar
+        $b64mline = chunk_split($b64vcard, 74, "\n");
+
+        // need to indent all the lines by 1 space for the iphone (yes really?!!)
+        $b64final = preg_replace('/(.+)/', ' $1', $b64mline);
+        $string .= $b64final;
+
+        // output the correctly formatted encoded text
+        $string .= "END:VEVENT\n";
+        $string .= "END:VCALENDAR\n";
+
+        // return
+        return $string;
+    }
+
+    /**
+     * Download a vcard or vcal file to the browser.
+     */
+    public function download(): void
+    {
+        // define output
+        $output = $this->getOutput();
+
+        foreach ($this->getHeaders(false) as $header) {
+            header($header);
+        }
+
+        // echo the output and it will be a download
+        echo $output;
+    }
+
+    /**
+     * Get charset
+     *
+     * @return string
+     */
+    public function getCharset(): string
+    {
+        return $this->charset;
+    }
+
+    /**
+     * Get charset string
+     *
+     * @return string
+     */
+    public function getCharsetString(): string
+    {
+        $charsetString = '';
+
+        if ($this->charset === 'utf-8') {
+            $charsetString = ';CHARSET='.$this->charset;
+        }
+
+        return $charsetString;
+    }
+
+    /**
+     * Get content type
+     *
+     * @return string
+     */
+    public function getContentType(): string
+    {
+        return $this->isIOS7() ?
+            'text/x-vcalendar' : 'text/x-vcard';
+    }
+
+    /**
+     * Get filename
+     *
+     * @return string
+     */
+    public function getFilename(): string
+    {
+        if (!$this->filename) {
+            return 'unknown';
+        }
+
+        return $this->filename;
+    }
+
+    /**
+     * Get file extension
+     *
+     * @return string
+     */
+    public function getFileExtension(): string
+    {
+        return $this->isIOS7() ?
+            'ics' : 'vcf';
+    }
+
+    /**
+     * Get headers
+     *
+     * @param bool $asAssociative
+     * @return array
+     */
+    public function getHeaders(bool $asAssociative): array
+    {
+        $contentType = $this->getContentType().'; charset='.$this->getCharset();
+        $contentDisposition = 'attachment; filename='.$this->getFilename().'.'.$this->getFileExtension();
+        $contentLength = mb_strlen($this->getOutput(), $this->getCharset());
+        $connection = 'close';
+
+        if ($asAssociative) {
+            return [
+                'Content-type' => $contentType,
+                'Content-Disposition' => $contentDisposition,
+                'Content-Length' => $contentLength,
+                'Connection' => $connection,
+            ];
+        }
+
+        return [
+            'Content-type: '.$contentType,
+            'Content-Disposition: '.$contentDisposition,
+            'Content-Length: '.$contentLength,
+            'Connection: '.$connection,
+        ];
+    }
+
+    /**
+     * Get output as string
+     * iOS devices (and safari < iOS 8 in particular) can not read .vcf (= vcard) files.
+     * So I build a workaround to build a .ics (= vcalender) file.
+     *
+     * @return string
+     */
+    public function getOutput(): string
+    {
+        $output = $this->isIOS7() ?
+            $this->buildVCalendar() : $this->buildVCard();
+
+        return $output;
+    }
+
+    /**
+     * Get properties
+     *
+     * @return array
+     */
+    public function getProperties(): array
+    {
+        return $this->properties;
+    }
+
+    /**
+     * Has property
+     *
+     * @param string $key
+     * @return bool
+     */
+    public function hasProperty(string $key): bool
+    {
+        $properties = $this->getProperties();
+
+        foreach ($properties as $property) {
+            if ($property['key'] === $key && $property['value'] !== '') {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Is iOS - Check if the user is using an iOS-device
+     *
+     * @return bool
+     */
+    public function isIOS(): bool
+    {
+        // get user agent
+        $browser = $this->getUserAgent();
+
+        return (strpos($browser, 'iphone') || strpos($browser, 'ipod') || strpos($browser, 'ipad'));
+    }
+
+    /**
+     * Is iOS less than 7 (should cal wrapper be returned)
+     *
+     * @return bool
+     */
+    public function isIOS7(): bool
+    {
+        return ($this->isIOS() && $this->shouldAttachmentBeCal());
+    }
+
+    /**
+     * Save to a file
+     *
+     * @return void
+     */
+    public function save(): void
+    {
+        $file = $this->getFilename().'.'.$this->getFileExtension();
+
+        // Add save path if given
+        if (null !== $this->savePath) {
+            $file = $this->savePath.$file;
+        }
+
+        file_put_contents(
+            $file,
+            $this->getOutput()
+        );
+    }
+
+    /**
+     * Set charset
+     *
+     * @param string $charset
+     * @return void
+     */
+    public function setCharset(string $charset): void
+    {
+        $this->charset = $charset;
+    }
+
+    /**
+     * Set filename
+     *
+     * @param string|array $value
+     * @param bool         $overwrite [optional] Default overwrite is true
+     * @param string       $separator [optional] Default separator is an underscore '_'
+     * @return void
+     */
+    public function setFilename($value, $overwrite = true, $separator = '_'): void
+    {
+        // recast to string if $value is array
+        if (\is_array($value)) {
+            $value = implode($separator, $value);
+        }
+
+        // trim unneeded values
+        $value = trim($value, $separator);
+
+        // remove all spaces
+        $value = preg_replace('/\s+/', $separator, $value);
+
+        // if value is empty, stop here
+        if (empty($value)) {
+            return;
+        }
+
+        // decode value
+        $value = Transliterator::transliterate($value);
+
+        // lowercase the string
+        $value = strtolower($value);
+
+        // urlize this part
+        $value = Transliterator::urlize($value);
+
+        // overwrite filename or add to filename using a prefix in between
+        $this->filename = $overwrite ?
+            $value : $this->filename.$separator.$value;
+    }
+
+    /**
+     * Set the save path directory
+     *
+     * @param string $savePath Save Path
+     *
+     * @throws OutputDirectoryNotExistsException
+     */
+    public function setSavePath($savePath): void
+    {
+        if (!is_dir($savePath)) {
+            throw new OutputDirectoryNotExistsException();
+        }
+
+        // Add trailing directory separator the save path
+        if (substr($savePath, -1) !== DIRECTORY_SEPARATOR) {
+            $savePath .= DIRECTORY_SEPARATOR;
+        }
+
+        $this->savePath = $savePath;
     }
 
     /**
@@ -458,340 +790,6 @@ class VCardBuilder
     }
 
     /**
-     * Build VCard (.vcf)
-     *
-     * @return string
-     */
-    public function buildVCard(): string
-    {
-        // init string
-        $string = "BEGIN:VCARD\r\n";
-        $string .= "VERSION:3.0\r\n";
-        $string .= 'REV:'.date('Y-m-d').'T'.date('H:i:s')."Z\r\n";
-
-        // loop all properties
-        $properties = $this->getProperties();
-        foreach ($properties as $property) {
-            // add to string
-            $string .= $this->fold($property['key'].':'.$this->escape($property['value'])."\r\n");
-        }
-
-        // add to string
-        $string .= "END:VCARD\r\n";
-
-        // return
-        return $string;
-    }
-
-    /**
-     * Build VCalender (.ics) - Safari (< iOS 8) can not open .vcf files, so we have build a workaround.
-     *
-     * @return string
-     */
-    public function buildVCalendar(): string
-    {
-        // init dates
-        $dtstart = date('Ymd').'T'.date('Hi').'00';
-        $dtend = date('Ymd').'T'.date('Hi').'01';
-
-        // init string
-        $string = "BEGIN:VCALENDAR\n";
-        $string .= "VERSION:2.0\n";
-        $string .= "BEGIN:VEVENT\n";
-        $string .= 'DTSTART;TZID=Europe/London:'.$dtstart."\n";
-        $string .= 'DTEND;TZID=Europe/London:'.$dtend."\n";
-        $string .= "SUMMARY:Click attached contact below to save to your contacts\n";
-        $string .= 'DTSTAMP:'.$dtstart."Z\n";
-        $string .= "ATTACH;VALUE=BINARY;ENCODING=BASE64;FMTTYPE=text/directory;\n";
-        $string .= ' X-APPLE-FILENAME='.$this->getFilename().'.'.$this->getFileExtension().":\n";
-
-        // base64 encode it so that it can be used as an attachemnt to the "dummy" calendar appointment
-        $b64vcard = base64_encode($this->buildVCard());
-
-        // chunk the single long line of b64 text in accordance with RFC2045
-        // (and the exact line length determined from the original .ics file exported from Apple calendar
-        $b64mline = chunk_split($b64vcard, 74, "\n");
-
-        // need to indent all the lines by 1 space for the iphone (yes really?!!)
-        $b64final = preg_replace('/(.+)/', ' $1', $b64mline);
-        $string .= $b64final;
-
-        // output the correctly formatted encoded text
-        $string .= "END:VEVENT\n";
-        $string .= "END:VCALENDAR\n";
-
-        // return
-        return $string;
-    }
-
-    /**
-     * Download a vcard or vcal file to the browser.
-     */
-    public function download(): void
-    {
-        // define output
-        $output = $this->getOutput();
-
-        foreach ($this->getHeaders(false) as $header) {
-            header($header);
-        }
-
-        // echo the output and it will be a download
-        echo $output;
-    }
-
-    /**
-     * Get charset
-     *
-     * @return string
-     */
-    public function getCharset(): string
-    {
-        return $this->charset;
-    }
-
-    /**
-     * Get charset string
-     *
-     * @return string
-     */
-    public function getCharsetString(): string
-    {
-        $charsetString = '';
-
-        if ($this->charset === 'utf-8') {
-            $charsetString = ';CHARSET='.$this->charset;
-        }
-
-        return $charsetString;
-    }
-
-    /**
-     * Get content type
-     *
-     * @return string
-     */
-    public function getContentType(): string
-    {
-        return $this->isIOS7() ?
-            'text/x-vcalendar' : 'text/x-vcard';
-    }
-
-    /**
-     * Get filename
-     *
-     * @return string
-     */
-    public function getFilename(): string
-    {
-        if (!$this->filename) {
-            return 'unknown';
-        }
-
-        return $this->filename;
-    }
-
-    /**
-     * Get file extension
-     *
-     * @return string
-     */
-    public function getFileExtension(): string
-    {
-        return $this->isIOS7() ?
-            'ics' : 'vcf';
-    }
-
-    /**
-     * Get headers
-     *
-     * @param bool $asAssociative
-     * @return array
-     */
-    public function getHeaders(bool $asAssociative): array
-    {
-        $contentType = $this->getContentType().'; charset='.$this->getCharset();
-        $contentDisposition = 'attachment; filename='.$this->getFilename().'.'.$this->getFileExtension();
-        $contentLength = mb_strlen($this->getOutput(), $this->getCharset());
-        $connection = 'close';
-
-        if ($asAssociative) {
-            return [
-                'Content-type' => $contentType,
-                'Content-Disposition' => $contentDisposition,
-                'Content-Length' => $contentLength,
-                'Connection' => $connection,
-            ];
-        }
-
-        return [
-            'Content-type: '.$contentType,
-            'Content-Disposition: '.$contentDisposition,
-            'Content-Length: '.$contentLength,
-            'Connection: '.$connection,
-        ];
-    }
-
-    /**
-     * Get output as string
-     * iOS devices (and safari < iOS 8 in particular) can not read .vcf (= vcard) files.
-     * So I build a workaround to build a .ics (= vcalender) file.
-     *
-     * @return string
-     */
-    public function getOutput(): string
-    {
-        $output = $this->isIOS7() ?
-            $this->buildVCalendar() : $this->buildVCard();
-
-        return $output;
-    }
-
-    /**
-     * Get properties
-     *
-     * @return array
-     */
-    public function getProperties(): array
-    {
-        return $this->properties;
-    }
-
-    /**
-     * Has property
-     *
-     * @param string $key
-     * @return bool
-     */
-    public function hasProperty(string $key): bool
-    {
-        $properties = $this->getProperties();
-
-        foreach ($properties as $property) {
-            if ($property['key'] === $key && $property['value'] !== '') {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Is iOS - Check if the user is using an iOS-device
-     *
-     * @return bool
-     */
-    public function isIOS(): bool
-    {
-        // get user agent
-        $browser = $this->getUserAgent();
-
-        return (strpos($browser, 'iphone') || strpos($browser, 'ipod') || strpos($browser, 'ipad'));
-    }
-
-    /**
-     * Is iOS less than 7 (should cal wrapper be returned)
-     *
-     * @return bool
-     */
-    public function isIOS7(): bool
-    {
-        return ($this->isIOS() && $this->shouldAttachmentBeCal());
-    }
-
-    /**
-     * Save to a file
-     *
-     * @return void
-     */
-    public function save(): void
-    {
-        $file = $this->getFilename().'.'.$this->getFileExtension();
-
-        // Add save path if given
-        if (null !== $this->savePath) {
-            $file = $this->savePath.$file;
-        }
-
-        file_put_contents(
-            $file,
-            $this->getOutput()
-        );
-    }
-
-    /**
-     * Set charset
-     *
-     * @param string $charset
-     * @return void
-     */
-    public function setCharset(string $charset): void
-    {
-        $this->charset = $charset;
-    }
-
-    /**
-     * Set filename
-     *
-     * @param string|array $value
-     * @param bool         $overwrite [optional] Default overwrite is true
-     * @param string       $separator [optional] Default separator is an underscore '_'
-     * @return void
-     */
-    public function setFilename($value, $overwrite = true, $separator = '_'): void
-    {
-        // recast to string if $value is array
-        if (\is_array($value)) {
-            $value = implode($separator, $value);
-        }
-
-        // trim unneeded values
-        $value = trim($value, $separator);
-
-        // remove all spaces
-        $value = preg_replace('/\s+/', $separator, $value);
-
-        // if value is empty, stop here
-        if (empty($value)) {
-            return;
-        }
-
-        // decode value
-        $value = Transliterator::transliterate($value);
-
-        // lowercase the string
-        $value = strtolower($value);
-
-        // urlize this part
-        $value = Transliterator::urlize($value);
-
-        // overwrite filename or add to filename using a prefix in between
-        $this->filename = $overwrite ?
-            $value : $this->filename.$separator.$value;
-    }
-
-    /**
-     * Set the save path directory
-     *
-     * @param string $savePath Save Path
-     *
-     * @throws OutputDirectoryNotExistsException
-     */
-    public function setSavePath($savePath): void
-    {
-        if (!is_dir($savePath)) {
-            throw new OutputDirectoryNotExistsException();
-        }
-
-        // Add trailing directory separator the save path
-        if (substr($savePath, -1) !== DIRECTORY_SEPARATOR) {
-            $savePath .= DIRECTORY_SEPARATOR;
-        }
-
-        $this->savePath = $savePath;
-    }
-
-    /**
      * Checks if we should return vcard in cal wrapper
      *
      * @return bool
@@ -867,7 +865,7 @@ class VCardBuilder
      *
      * @throws ElementAlreadyExistsException
      */
-    private function setProperty(string $element, string $key, string $value): void
+    protected function setProperty(string $element, string $key, string $value): void
     {
         if (isset($this->definedElements[$element])
             && !\in_array($element, $this::$multiplePropertiesForElementAllowed, true)) {
@@ -896,7 +894,7 @@ class VCardBuilder
      * @throws EmptyUrlException
      * @throws InvalidImageException
      */
-    private function addMedia(string $property, string $url, string $element, bool $include = true): void
+    protected function addMedia(string $property, string $url, string $element, bool $include = true): void
     {
         $mimeType = null;
 
@@ -957,7 +955,7 @@ class VCardBuilder
      *
      * @throws ElementAlreadyExistsException
      */
-    private function addRawMedia(string $property, string $raw, string $element, ?string $fileType = null): void
+    protected function addRawMedia(string $property, string $raw, string $element, ?string $fileType = null): void
     {
         $raw = base64_encode($raw);
 
