@@ -9,7 +9,6 @@ namespace JeroenDesloovere\VCard;
  * file that was distributed with this source code.
  */
 
-use Iterator;
 use JeroenDesloovere\VCard\Exception\InvalidVersionException;
 use JeroenDesloovere\VCard\Model\VCard;
 use JeroenDesloovere\VCard\Model\VCardAddress;
@@ -21,7 +20,7 @@ use JeroenDesloovere\VCard\Model\VCardAddress;
  * which is licensed under the Apache 2.0 license.
  * More information can be found at https://code.google.com/archive/p/zendvcard/
  */
-class VCardParser implements Iterator
+class VCardParser
 {
     /**
      * The raw VCard content.
@@ -45,11 +44,18 @@ class VCardParser implements Iterator
     protected $vcardObjects;
 
     /**
-     * The iterator position.
+     * VCardParser constructor.
      *
-     * @var int
+     * @param string $content
+     *
+     * @throws InvalidVersionException
      */
-    protected $position;
+    public function __construct($content)
+    {
+        $this->content = $content;
+        $this->vcardObjects = [];
+        $this->parse();
+    }
 
     /**
      * Helper function to parse a file directly.
@@ -66,65 +72,6 @@ class VCardParser implements Iterator
         }
 
         throw new \RuntimeException(sprintf("File %s is not readable, or doesn't exist.", $filename));
-    }
-
-    /**
-     * VCardParser constructor.
-     *
-     * @param string $content
-     *
-     * @throws InvalidVersionException
-     */
-    public function __construct($content)
-    {
-        $this->content = $content;
-        $this->vcardObjects = [];
-        $this->rewind();
-        $this->parse();
-    }
-
-    /**
-     *
-     */
-    public function rewind(): void
-    {
-        $this->position = 0;
-    }
-
-    /**
-     * @return VCard|mixed|null
-     */
-    public function current()
-    {
-        if ($this->valid()) {
-            return $this->getCardAtIndex($this->position);
-        }
-
-        return null;
-    }
-
-    /**
-     * @return int|mixed
-     */
-    public function key()
-    {
-        return $this->position;
-    }
-
-    /**
-     *
-     */
-    public function next(): void
-    {
-        $this->position++;
-    }
-
-    /**
-     * @return bool
-     */
-    public function valid(): bool
-    {
-        return !empty($this->vcardObjects[$this->position]);
     }
 
     /**
@@ -148,12 +95,23 @@ class VCardParser implements Iterator
      * @return VCard
      *    The card data object.
      */
-    public function getCardAtIndex($i): VCard
+    public function getCardAtIndex(int $i): VCard
     {
         if (isset($this->vcardObjects[$i])) {
             return $this->vcardObjects[$i];
         }
+
         throw new \OutOfBoundsException();
+    }
+
+    /**
+     * @param int $i
+     *
+     * @return bool
+     */
+    public function hasCardAtIndex(int $i): bool
+    {
+        return !empty($this->vcardObjects[$i]);
     }
 
     /**
@@ -191,7 +149,7 @@ class VCardParser implements Iterator
      *
      * @throws InvalidVersionException
      */
-    protected function parseCard(string $cardContent)
+    protected function parseCard(string $cardContent): void
     {
         $cardData = new VCard();
 
@@ -233,7 +191,7 @@ class VCardParser implements Iterator
                         $value = base64_decode($value);
                         unset($types[$i]);
                         $rawValue = true;
-                    } elseif (preg_match('/encoding=b/', strtolower($type))) {
+                    } elseif (preg_match('/encoding=b/i', $type)) {
                         $value = base64_decode($value);
                         unset($types[$i]);
                         $rawValue = true;

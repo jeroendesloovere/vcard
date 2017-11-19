@@ -346,7 +346,7 @@ class VCardParserTest extends TestCase
         $db .= $builder->buildVCard();
 
         $parser = new VCardParser($db);
-        foreach ($parser as $i => $card) {
+        foreach ($parser->getCards() as $i => $card) {
             $this->assertEquals($i === 0 ? 'Jeroen Desloovere' : 'Ipsum Lorem', $card->getFullName());
         }
     }
