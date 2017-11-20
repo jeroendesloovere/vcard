@@ -3,7 +3,6 @@ language: php
 php:
   - 7.1
   - 7.2
-  - hhvm
 
 sudo: false
 
@@ -16,6 +15,4 @@ script:
   - vendor/bin/coke
 
 matrix:
-  allow_failures:
-    - php: hhvm
   fast_finish: true
