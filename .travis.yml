@@ -13,6 +13,7 @@ before_script:
 
 script:
   - phpunit --coverage-text
+  - vendor/bin/coke
 
 matrix:
   allow_failures:
