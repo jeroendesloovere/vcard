@@ -16,6 +16,7 @@ use JeroenDesloovere\VCard\Exception\InvalidImageException;
 use JeroenDesloovere\VCard\Exception\OutputDirectoryNotExistsException;
 use JeroenDesloovere\VCard\Model\VCard;
 use JeroenDesloovere\VCard\Model\VCardAddress;
+use JeroenDesloovere\VCard\Model\VCardMedia;
 
 /**
  * VCard PHP Class to generate .vcard files and save them to a file or output as a download.
@@ -426,6 +427,8 @@ class VCardBuilder
 
     /**
      * @throws ElementAlreadyExistsException
+     * @throws EmptyUrlException
+     * @throws InvalidImageException
      */
     protected function parseVCarts(): void
     {
@@ -438,6 +441,8 @@ class VCardBuilder
      * @param VCard $vCard
      *
      * @throws ElementAlreadyExistsException
+     * @throws EmptyUrlException
+     * @throws InvalidImageException
      */
     protected function parseVCart(VCard $vCard): void
     {
@@ -451,10 +456,10 @@ class VCardBuilder
         $this->addNote($vCard->getNote());
         $this->addCategories($vCard->getCategories());
         $this->addPhoneNumber($vCard->getPhones());
-//        $this->addRawLogo($vCard->getRawLogo());
-//        $this->addLogo($vCard->getUrlLogo(), false);
-//        $this->addRawPhoto($vCard->getRawPhoto());
-//        $this->addPhoto($vCard->getUrlPhoto(), false);
+        $this->addRawLogo($vCard->getLogo());
+        $this->addLogo($vCard->getLogo(), false);
+        $this->addRawPhoto($vCard->getPhoto());
+        $this->addPhoto($vCard->getPhoto(), false);
         $this->addUrl($vCard->getUrls());
     }
 
@@ -690,21 +695,22 @@ class VCardBuilder
     /**
      * Add Logo
      *
-     * @param null|string $url     image url or filename
-     * @param bool        $include Include the image in our vcard?
+     * @param VCardMedia|null $media
+     * @param bool            $include Include the image in our vcard?
      *
      * @throws ElementAlreadyExistsException
      * @throws EmptyUrlException
      * @throws InvalidImageException
      */
-    protected function addLogo(?string $url, bool $include = true): void
+    protected function addLogo(?VCardMedia $media, bool $include = true): void
     {
-        if ($url !== null) {
-            $this->addMedia(
-                'LOGO',
-                $url,
+        if ($media !== null) {
+            $result = $media->builderUrl('LOGO', $include);
+
+            $this->setProperty(
                 'logo',
-                $include
+                $result['key'],
+                $result['value']
             );
         }
     }
@@ -712,17 +718,19 @@ class VCardBuilder
     /**
      * Add Raw Logo
      *
-     * @param null|string $raw
+     * @param VCardMedia|null $media
      *
      * @throws ElementAlreadyExistsException
      */
-    protected function addRawLogo(?string $raw): void
+    protected function addRawLogo(?VCardMedia $media): void
     {
-        if ($raw !== null) {
-            $this->addRawMedia(
-                'LOGO',
-                $raw,
-                'logo'
+        if ($media !== null) {
+            $result = $media->builderRaw('LOGO');
+
+            $this->setProperty(
+                'logo',
+                $result['key'],
+                $result['value']
             );
         }
     }
@@ -730,21 +738,22 @@ class VCardBuilder
     /**
      * Add Photo
      *
-     * @param null|string $url     image url or filename
-     * @param bool        $include Include the image in our vcard?
+     * @param VCardMedia|null $media
+     * @param bool            $include Include the image in our vcard?
      *
      * @throws ElementAlreadyExistsException
      * @throws EmptyUrlException
      * @throws InvalidImageException
      */
-    protected function addPhoto(?string $url, bool $include = true): void
+    protected function addPhoto(?VCardMedia $media, bool $include = true): void
     {
-        if ($url !== null) {
-            $this->addMedia(
-                'PHOTO',
-                $url,
+        if ($media !== null) {
+            $result = $media->builderUrl('PHOTO', $include);
+
+            $this->setProperty(
                 'photo',
-                $include
+                $result['key'],
+                $result['value']
             );
         }
     }
@@ -752,17 +761,19 @@ class VCardBuilder
     /**
      * Add Raw Photo
      *
-     * @param null|string $raw
+     * @param VCardMedia|null $media
      *
      * @throws ElementAlreadyExistsException
      */
-    protected function addRawPhoto(?string $raw): void
+    protected function addRawPhoto(?VCardMedia $media): void
     {
-        if ($raw !== null) {
-            $this->addRawMedia(
-                'PHOTO',
-                $raw,
-                'photo'
+        if ($media !== null) {
+            $result = $media->builderRaw('PHOTO');
+
+            $this->setProperty(
+                'photo',
+                $result['key'],
+                $result['value']
             );
         }
     }
@@ -880,95 +891,5 @@ class VCardBuilder
             'key' => $key,
             'value' => $value,
         ];
-    }
-
-    /**
-     * Add a photo or logo (depending on property name)
-     *
-     * @param string $property LOGO|PHOTO
-     * @param string $url      image url or filename
-     * @param string $element  The name of the element to set
-     * @param bool   $include  Do we include the image in our vcard or not?
-     *
-     * @throws ElementAlreadyExistsException
-     * @throws EmptyUrlException
-     * @throws InvalidImageException
-     */
-    protected function addMedia(string $property, string $url, string $element, bool $include = true): void
-    {
-        $mimeType = null;
-
-        //Is this URL for a remote resource?
-        if (filter_var($url, FILTER_VALIDATE_URL) !== false) {
-            $headers = get_headers($url, 1);
-
-            if (array_key_exists('Content-Type', $headers)) {
-                $mimeType = $headers['Content-Type'];
-            }
-        } else {
-            //Local file, so inspect it directly
-            $mimeType = mime_content_type($url);
-        }
-        if (strpos($mimeType, ';') !== false) {
-            $mimeType = strstr($mimeType, ';', true);
-        }
-        if (!\is_string($mimeType) || 0 !== strpos($mimeType, 'image/')) {
-            throw new InvalidImageException();
-        }
-        $fileType = strtoupper(substr($mimeType, 6));
-
-        if ($include) {
-            $value = file_get_contents($url);
-
-            if (!$value) {
-                throw new EmptyUrlException();
-            }
-
-            $value = base64_encode($value);
-            $property .= ';ENCODING=b;TYPE='.$fileType;
-        } else {
-            if (filter_var($url, FILTER_VALIDATE_URL) !== false) {
-                $propertySuffix = ';VALUE=URL';
-                $propertySuffix .= ';TYPE='.strtoupper($fileType);
-
-                $property .= $propertySuffix;
-                $value = $url;
-            } else {
-                $value = $url;
-            }
-        }
-
-        $this->setProperty(
-            $element,
-            $property,
-            $value
-        );
-    }
-
-    /**
-     * Add a photo or logo (depending on property name)
-     *
-     * @param string      $property LOGO|PHOTO
-     * @param string      $raw      image url or filename
-     * @param string      $element  The name of the element to set
-     * @param null|string $fileType
-     *
-     * @throws ElementAlreadyExistsException
-     */
-    protected function addRawMedia(string $property, string $raw, string $element, ?string $fileType = null): void
-    {
-        $raw = base64_encode($raw);
-
-        if ($fileType !== null) {
-            $property .= ';ENCODING=b;TYPE='.$fileType;
-        } else {
-            $property .= ';ENCODING=b';
-        }
-
-        $this->setProperty(
-            $element,
-            $property,
-            $raw
-        );
     }
 }

@@ -155,6 +155,21 @@ class VCardBuilderTest extends TestCase
     }
 
 //    /**
+//     * Test adding remote empty photo
+//     *
+//     * @expectedException \JeroenDesloovere\VCard\Exception\InvalidImageException
+//     * @expectedExceptionMessage Returned data is not an image.
+//     */
+//    public function testAddPhotoWithRemoteEmptyJpgPhoto()
+//    {
+//        $vcard = new VCard();
+//        $vcardMedia = new VCardMedia();
+//        $vcardMedia->setUrl('https://raw.githubusercontent.com/jeroendesloovere/vcard/master/tests/empty.jpg');
+//        $vcard->setPhoto($vcardMedia);
+//        $builder = new VCardBuilder($vcard);
+//    }
+
+//    /**
 //     *
 //     */
 //    public function testAddPhotoWithJpgPhoto()
