@@ -17,6 +17,7 @@ use JeroenDesloovere\VCard\Exception\OutputDirectoryNotExistsException;
 use JeroenDesloovere\VCard\Model\VCard;
 use JeroenDesloovere\VCard\Model\VCardAddress;
 use JeroenDesloovere\VCard\Model\VCardMedia;
+use JeroenDesloovere\VCard\Util\GeneralUtil;
 
 /**
  * VCard PHP Class to generate .vcard files and save them to a file or output as a download.
@@ -81,6 +82,8 @@ class VCardBuilder
      * @param VCard|VCard[] $vCard
      *
      * @throws ElementAlreadyExistsException
+     * @throws EmptyUrlException
+     * @throws InvalidImageException
      */
     public function __construct($vCard)
     {
@@ -107,7 +110,7 @@ class VCardBuilder
         $properties = $this->getProperties();
         foreach ($properties as $property) {
             // add to string
-            $string .= $this->fold($property['key'].':'.$this->escape($property['value'])."\r\n");
+            $string .= GeneralUtil::fold($property['key'].':'.GeneralUtil::escape($property['value'])."\r\n");
         }
 
         // add to string
@@ -207,7 +210,7 @@ class VCardBuilder
      */
     public function getContentType(): string
     {
-        return $this->isIOS7() ?
+        return GeneralUtil::isIOS7() ?
             'text/x-vcalendar' : 'text/x-vcard';
     }
 
@@ -232,7 +235,7 @@ class VCardBuilder
      */
     public function getFileExtension(): string
     {
-        return $this->isIOS7() ?
+        return GeneralUtil::isIOS7() ?
             'ics' : 'vcf';
     }
 
@@ -275,7 +278,7 @@ class VCardBuilder
      */
     public function getOutput(): string
     {
-        $output = $this->isIOS7() ?
+        $output = GeneralUtil::isIOS7() ?
             $this->buildVCalendar() : $this->buildVCard();
 
         return $output;
@@ -308,29 +311,6 @@ class VCardBuilder
         }
 
         return false;
-    }
-
-    /**
-     * Is iOS - Check if the user is using an iOS-device
-     *
-     * @return bool
-     */
-    public function isIOS(): bool
-    {
-        // get user agent
-        $browser = $this->getUserAgent();
-
-        return (strpos($browser, 'iphone') || strpos($browser, 'ipod') || strpos($browser, 'ipad'));
-    }
-
-    /**
-     * Is iOS less than 7 (should cal wrapper be returned)
-     *
-     * @return bool
-     */
-    public function isIOS7(): bool
-    {
-        return ($this->isIOS() && $this->shouldAttachmentBeCal());
     }
 
     /**
@@ -798,73 +778,6 @@ class VCardBuilder
                 }
             }
         }
-    }
-
-    /**
-     * Checks if we should return vcard in cal wrapper
-     *
-     * @return bool
-     */
-    protected function shouldAttachmentBeCal(): bool
-    {
-        $browser = $this->getUserAgent();
-
-        $matches = [];
-        preg_match('/os (\d+)_(\d+)\s+/', $browser, $matches);
-        $version = isset($matches[1]) ? ((int) $matches[1]) : 999;
-
-        return ($version < 8);
-    }
-
-    /**
-     * Fold a line according to RFC2425 section 5.8.1.
-     *
-     * @link http://tools.ietf.org/html/rfc2425#section-5.8.1
-     *
-     * @param string $text
-     *
-     * @return bool|string
-     */
-    protected function fold($text)
-    {
-        if (\strlen($text) <= 75) {
-            return $text;
-        }
-
-        // split, wrap and trim trailing separator
-        return substr(chunk_split($text, 73, "\r\n "), 0, -3);
-    }
-
-    /**
-     * Escape newline characters according to RFC2425 section 5.8.4.
-     *
-     * @link http://tools.ietf.org/html/rfc2425#section-5.8.4
-     *
-     * @param string $text
-     *
-     * @return string
-     */
-    protected function escape(string $text): string
-    {
-        $text = str_replace(array("\r\n", "\n"), "\\n", $text);
-
-        return $text;
-    }
-
-    /**
-     * Returns the browser user agent string.
-     *
-     * @return string
-     */
-    protected function getUserAgent(): string
-    {
-        $browser = 'unknown';
-
-        if (array_key_exists('HTTP_USER_AGENT', $_SERVER)) {
-            $browser = strtolower($_SERVER['HTTP_USER_AGENT']);
-        }
-
-        return $browser;
     }
 
     /**
