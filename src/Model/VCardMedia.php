@@ -4,6 +4,7 @@ namespace JeroenDesloovere\VCard\Model;
 
 use JeroenDesloovere\VCard\Exception\EmptyUrlException;
 use JeroenDesloovere\VCard\Exception\InvalidImageException;
+use JeroenDesloovere\VCard\Util\GeneralUtil;
 
 /**
  * Class VCardMedia
@@ -115,22 +116,7 @@ class VCardMedia
      */
     public function addUrlMedia(string $url, bool $include = true): void
     {
-        $mimeType = null;
-
-        //Is this URL for a remote resource?
-        if (filter_var($url, FILTER_VALIDATE_URL) !== false) {
-            $headers = get_headers($url, 1);
-
-            if (array_key_exists('Content-Type', $headers)) {
-                $mimeType = $headers['Content-Type'];
-            }
-        } else {
-            //Local file, so inspect it directly
-            $mimeType = mime_content_type($url);
-        }
-        if (strpos($mimeType, ';') !== false) {
-            $mimeType = strstr($mimeType, ';', true);
-        }
+        $mimeType = GeneralUtil::getMimeType($url);
         if (!\is_string($mimeType) || 0 !== strpos($mimeType, 'image/')) {
             throw new InvalidImageException();
         }

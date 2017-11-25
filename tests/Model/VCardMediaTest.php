@@ -1,6 +1,6 @@
 <?php
 
-namespace JeroenDesloovere\VCard\tests;
+namespace JeroenDesloovere\VCard\Tests\Model;
 
 /*
  * This file is part of the VCard PHP Class from Jeroen Desloovere.

@@ -69,6 +69,34 @@ class GeneralUtil
     }
 
     /**
+     * @param string $url
+     *
+     * @return null|string
+     */
+    public static function getMimeType(string $url): ?string
+    {
+        $mimeType = null;
+
+        //Is this URL for a remote resource?
+        if (filter_var($url, FILTER_VALIDATE_URL) !== false) {
+            $headers = get_headers($url, 1);
+
+            if (array_key_exists('Content-Type', $headers)) {
+                $mimeType = $headers['Content-Type'];
+            }
+        } else {
+            //Local file, so inspect it directly
+            $mimeType = mime_content_type($url);
+        }
+
+        if (strpos($mimeType, ';') !== false) {
+            $mimeType = strstr($mimeType, ';', true);
+        }
+
+        return $mimeType;
+    }
+
+    /**
      * Returns the browser user agent string.
      *
      * @return string

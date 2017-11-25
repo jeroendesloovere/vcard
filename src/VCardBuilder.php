@@ -437,8 +437,8 @@ class VCardBuilder
         $this->addNote($vCard->getNote());
         $this->addCategories($vCard->getCategories());
         $this->addPhoneNumber($vCard->getPhones());
-        $this->addLogo($vCard->getLogo());
-        $this->addPhoto($vCard->getPhoto());
+        $this->setMedia('logo', 'LOGO', $vCard->getLogo());
+        $this->setMedia('photo', 'PHOTO', $vCard->getPhoto());
         $this->addUrl($vCard->getUrls());
     }
 
@@ -672,58 +672,30 @@ class VCardBuilder
     }
 
     /**
-     * Add Logo
+     * Set Media
      *
+     * @param string          $element
+     * @param string          $property
      * @param VCardMedia|null $media
      *
      * @throws ElementAlreadyExistsException
      */
-    protected function addLogo(?VCardMedia $media): void
+    protected function setMedia(string $element, string $property, ?VCardMedia $media): void
     {
         if ($media !== null) {
             $result = [];
 
             if ($media->getUrl() !== null) {
-                $result = $media->builderUrl('LOGO');
+                $result = $media->builderUrl($property);
             }
 
             if ($media->getRaw() !== null) {
-                $result = $media->builderRaw('LOGO');
+                $result = $media->builderRaw($property);
             }
 
             if ($media->getUrl() !== null || $media->getRaw() !== null) {
                 $this->setProperty(
-                    'logo',
-                    $result['key'],
-                    $result['value']
-                );
-            }
-        }
-    }
-
-    /**
-     * Add Photo
-     *
-     * @param VCardMedia|null $media
-     *
-     * @throws ElementAlreadyExistsException
-     */
-    protected function addPhoto(?VCardMedia $media): void
-    {
-        if ($media !== null) {
-            $result = [];
-
-            if ($media->getUrl() !== null) {
-                $result = $media->builderUrl('PHOTO');
-            }
-
-            if ($media->getRaw() !== null) {
-                $result = $media->builderRaw('PHOTO');
-            }
-
-            if ($media->getUrl() !== null || $media->getRaw() !== null) {
-                $this->setProperty(
-                    'photo',
+                    $element,
                     $result['key'],
                     $result['value']
                 );
