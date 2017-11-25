@@ -8,9 +8,11 @@ require_once __DIR__.'/../vendor/autoload.php';
 require_once __DIR__.'/../src/VCardBuilder.php';
 require_once __DIR__.'/../src/Model/VCard.php';
 require_once __DIR__.'/../src/Model/VCardAddress.php';
+require_once __DIR__.'/../src/Model/VCardMedia.php';
 
 use JeroenDesloovere\VCard\Model\VCard;
 use JeroenDesloovere\VCard\Model\VCardAddress;
+use JeroenDesloovere\VCard\Model\VCardMedia;
 use JeroenDesloovere\VCard\VCardBuilder;
 
 // define vcard
@@ -49,8 +51,10 @@ $vcard->addAddress($vcardAddress);
 
 $vcard->addUrl('http://www.jeroendesloovere.be');
 
-$vcard->setPhoto(__DIR__.'/assets/landscape.jpeg');
-//$vcard->setPhoto('https://raw.githubusercontent.com/jeroendesloovere/vcard/master/tests/image.jpg');
+$vcardMedia = new VCardMedia();
+$vcardMedia->setUrl(__DIR__.'/assets/landscape.jpeg');
+//$vcardMedia->setUrl('https://raw.githubusercontent.com/jeroendesloovere/vcard/master/tests/image.jpg');
+$vcard->setPhoto($vcardMedia);
 
 $vcardBuilder = new VCardBuilder($vcard);
 
