@@ -186,7 +186,7 @@ class VCardAddress
      *
      * @throws InvalidVersionException
      */
-    public function parseAddress(string $version, string $key, string $value): void
+    public function parser(string $version, string $key, string $value): void
     {
         if ($version === '3.0') {
             $this->setLabel($key);

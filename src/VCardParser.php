@@ -12,6 +12,8 @@ namespace JeroenDesloovere\VCard;
 use JeroenDesloovere\VCard\Exception\InvalidVersionException;
 use JeroenDesloovere\VCard\Model\VCard;
 use JeroenDesloovere\VCard\Model\VCardAddress;
+use JeroenDesloovere\VCard\Model\VCardMedia;
+use JeroenDesloovere\VCard\Util\GeneralUtil;
 
 /**
  * VCard PHP Class to parse .vcard files.
@@ -157,158 +159,161 @@ class VCardParser
 
         // Parse the VCard, line by line.
         foreach ($lines as $line) {
-            $line = trim($line);
-
-            if (!empty($line)) {
-                // Strip grouping information. We don't use the group names. We
-                // simply use a list for entries that have multiple values.
-                // As per RFC, group names are alphanumerical, and end with a
-                // period (.).
-                $line = preg_replace('/^\w+\./', '', $line);
-
-                @list($type, $value) = explode(':', $line, 2);
-
-                $types = explode(';', $type);
-                $element = strtoupper($types[0]);
-
-                array_shift($types);
-
-                // Normalize types. A type can either be a type-param directly,
-                // or can be prefixed with "type=". E.g.: "INTERNET" or
-                // "type=INTERNET".
-                if (!empty($types)) {
-                    $types = array_map(
-                        function ($type) {
-                            return preg_replace('/^type=/i', '', $type);
-                        },
-                        $types
-                    );
-                }
-
-                $rawValue = false;
-                foreach ($types as $i => $type) {
-                    if (false !== stripos($type, 'base64')) {
-                        $value = base64_decode($value);
-                        unset($types[$i]);
-                        $rawValue = true;
-                    } elseif (preg_match('/encoding=b/i', $type)) {
-                        $value = base64_decode($value);
-                        unset($types[$i]);
-                        $rawValue = true;
-                    } elseif (false !== stripos($type, 'quoted-printable')) {
-                        $value = quoted_printable_decode($value);
-                        unset($types[$i]);
-                        $rawValue = true;
-                    } elseif (stripos($type, 'charset=') === 0) {
-                        try {
-                            $value = mb_convert_encoding($value, 'UTF-8', substr($type, 8));
-                        } catch (\Exception $e) {
-                            // not empty
-                        }
-                        unset($types[$i]);
-                    }
-                }
-
-                switch (strtoupper($element)) {
-                    case 'FN':
-                        $cardData->setFullName($value);
-                        break;
-                    case 'N':
-                        @list(
-                            $lastname,
-                            $firstname,
-                            $additional,
-                            $prefix,
-                            $suffix
-                            ) = explode(';', $value);
-
-                        $cardData->setLastName($lastname);
-                        $cardData->setFirstName($firstname);
-                        $cardData->setAdditional($additional);
-                        $cardData->setPrefix($prefix);
-                        $cardData->setSuffix($suffix);
-                        break;
-                    case 'BDAY':
-                        $cardData->setBirthday(new \DateTime($value));
-                        break;
-                    case 'ADR':
-                        $key = $this->parseKey($types, 'WORK;POSTAL');
-                        $address = new VCardAddress();
-                        $address->parseAddress('4.0', $key, $value);
-                        $cardData->addAddress($address, $key);
-                        break;
-                    case 'TEL':
-                        $key = $this->parseKey($types);
-                        $cardData->addPhone($value, $key);
-                        break;
-                    case 'EMAIL':
-                        $key = $this->parseKey($types);
-                        $cardData->addEmail($value, $key);
-                        break;
-                    case 'REV':
-                        $cardData->setRevision($value);
-                        break;
-                    case 'VERSION':
-                        $cardData->setVersion($value);
-                        break;
-                    case 'ORG':
-                        $cardData->setOrganization($value);
-                        break;
-                    case 'URL':
-                        $key = $this->parseKey($types);
-                        $cardData->addUrl($value, $key);
-                        break;
-                    case 'TITLE':
-                        $cardData->setTitle($value);
-                        break;
-                    case 'PHOTO':
-                        if ($rawValue) {
-                            $cardData->setRawPhoto($value);
-                        } else {
-                            $cardData->setUrlPhoto($value);
-                        }
-                        break;
-                    case 'LOGO':
-                        if ($rawValue) {
-                            $cardData->setRawLogo($value);
-                        } else {
-                            $cardData->setUrlLogo($value);
-                        }
-                        break;
-                    case 'NOTE':
-                        $cardData->setNote($this->unescape($value));
-                        break;
-                    case 'CATEGORIES':
-                        $cardData->setCategories(array_map('trim', explode(',', $value)));
-                        break;
-                }
-            }
+            $cardData = $this->parseLine($cardData, $line);
         }
 
         $this->vcardObjects[] = $cardData;
     }
 
     /**
-     * @param array  $types
-     * @param string $default
+     * @param VCard  $cardData
+     * @param string $line
      *
-     * @return string
+     * @return VCard
+     * @throws InvalidVersionException
      */
-    protected function parseKey(array $types, string $default = 'default'): string
+    protected function parseLine(VCard $cardData, string $line): VCard
     {
-        return !empty($types) ? implode(';', $types) : $default;
+        $line = trim($line);
+
+        if (!empty($line)) {
+            // Strip grouping information. We don't use the group names. We
+            // simply use a list for entries that have multiple values.
+            // As per RFC, group names are alphanumerical, and end with a
+            // period (.).
+            $line = preg_replace('/^\w+\./', '', $line);
+
+            @list($type, $value) = explode(':', $line, 2);
+
+            $types = explode(';', $type);
+            $element = strtoupper($types[0]);
+
+            array_shift($types);
+
+            // Normalize types. A type can either be a type-param directly,
+            // or can be prefixed with "type=". E.g.: "INTERNET" or
+            // "type=INTERNET".
+            if (!empty($types)) {
+                $types = array_map(
+                    function ($type) {
+                        return preg_replace('/^type=/i', '', $type);
+                    },
+                    $types
+                );
+            }
+
+            $rawValue = false;
+            foreach ($types as $i => $type) {
+                if (false !== stripos($type, 'base64')) {
+                    $value = base64_decode($value);
+                    unset($types[$i]);
+                    $rawValue = true;
+                } elseif (preg_match('/encoding=b/i', $type)) {
+                    $value = base64_decode($value);
+                    unset($types[$i]);
+                    $rawValue = true;
+                } elseif (false !== stripos($type, 'quoted-printable')) {
+                    $value = quoted_printable_decode($value);
+                    unset($types[$i]);
+                    $rawValue = true;
+                } elseif (stripos($type, 'charset=') === 0) {
+                    try {
+                        $value = mb_convert_encoding($value, 'UTF-8', substr($type, 8));
+                    } catch (\Exception $e) {
+                        // not empty
+                    }
+                    unset($types[$i]);
+                }
+            }
+
+            $cardData = $this->parseOutput($cardData, $element, $value, $types, $rawValue);
+        }
+
+        return $cardData;
     }
 
     /**
-     * Unescape newline characters according to RFC2425 section 5.8.4.
-     * This function will replace escaped line breaks with PHP_EOL.
+     * @param VCard  $cardData
+     * @param string $element
+     * @param string $value
+     * @param array  $types
+     * @param bool   $rawValue
      *
-     * @link http://tools.ietf.org/html/rfc2425#section-5.8.4
-     * @param string $text
-     * @return string
+     * @return VCard
+     * @throws InvalidVersionException
      */
-    protected function unescape($text): string
+    protected function parseOutput(VCard $cardData, string $element, string $value, array $types, bool $rawValue): VCard
     {
-        return str_replace("\\n", PHP_EOL, $text);
+        switch (strtoupper($element)) {
+            case 'FN':
+                $cardData->setFullName($value);
+                break;
+            case 'N':
+                @list(
+                    $lastname,
+                    $firstname,
+                    $additional,
+                    $prefix,
+                    $suffix
+                    ) = explode(';', $value);
+
+                $cardData->setLastName($lastname);
+                $cardData->setFirstName($firstname);
+                $cardData->setAdditional($additional);
+                $cardData->setPrefix($prefix);
+                $cardData->setSuffix($suffix);
+                break;
+            case 'BDAY':
+                $cardData->setBirthday(new \DateTime($value));
+                break;
+            case 'ADR':
+                $key = GeneralUtil::parseKey($types, 'WORK;POSTAL');
+                $address = new VCardAddress();
+                $address->parser('4.0', $key, $value);
+                $cardData->addAddress($address, $key);
+                break;
+            case 'TEL':
+                $key = GeneralUtil::parseKey($types);
+                $cardData->addPhone($value, $key);
+                break;
+            case 'EMAIL':
+                $key = GeneralUtil::parseKey($types);
+                $cardData->addEmail($value, $key);
+                break;
+            case 'REV':
+                $cardData->setRevision($value);
+                break;
+            case 'VERSION':
+                $cardData->setVersion($value);
+                break;
+            case 'ORG':
+                $cardData->setOrganization($value);
+                break;
+            case 'URL':
+                $key = GeneralUtil::parseKey($types);
+                $cardData->addUrl($value, $key);
+                break;
+            case 'TITLE':
+                $cardData->setTitle($value);
+                break;
+            case 'PHOTO':
+                $media = new VCardMedia();
+                $media->parser($value, $rawValue);
+                $cardData->setPhoto($media);
+                break;
+            case 'LOGO':
+                $media = new VCardMedia();
+                $media->parser($value, $rawValue);
+                $cardData->setLogo($media);
+                break;
+            case 'NOTE':
+                $cardData->setNote(GeneralUtil::unescape($value));
+                break;
+            case 'CATEGORIES':
+                $cardData->setCategories(array_map('trim', explode(',', $value)));
+                break;
+        }
+
+        return $cardData;
     }
 }

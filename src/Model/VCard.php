@@ -85,24 +85,14 @@ class VCard extends \stdClass
     protected $title;
 
     /**
-     * @var string|null
+     * @var VCardMedia|null
      */
-    protected $rawPhoto;
+    protected $photo;
 
     /**
-     * @var string|null
+     * @var VCardMedia|null
      */
-    protected $urlPhoto;
-
-    /**
-     * @var string|null
-     */
-    protected $rawLogo;
-
-    /**
-     * @var string|null
-     */
-    protected $urlLogo;
+    protected $logo;
 
     /**
      * @var string|null
@@ -432,99 +422,35 @@ class VCard extends \stdClass
     }
 
     /**
-     * @return null|string
+     * @return null|VCardMedia
      */
-    public function getPhoto(): ?string
+    public function getPhoto(): ?VCardMedia
     {
-        return null;
+        return $this->photo;
     }
 
     /**
-     * @param null|string $photo
+     * @param null|VCardMedia $photo
      */
-    public function setPhoto(?string $photo): void
+    public function setPhoto(?VCardMedia $photo): void
     {
-        // dd
+        $this->photo = $photo;
     }
 
     /**
-     * @return null|string
+     * @return null|VCardMedia
      */
-    public function getRawPhoto(): ?string
+    public function getLogo(): ?VCardMedia
     {
-        return $this->rawPhoto;
+        return $this->logo;
     }
 
     /**
-     * @param null|string $rawPhoto
+     * @param null|VCardMedia $logo
      */
-    public function setRawPhoto(?string $rawPhoto): void
+    public function setLogo(?VCardMedia $logo): void
     {
-        $this->rawPhoto = $rawPhoto;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getUrlPhoto(): ?string
-    {
-        return $this->urlPhoto;
-    }
-
-    /**
-     * @param null|string $urlPhoto
-     */
-    public function setUrlPhoto(?string $urlPhoto): void
-    {
-        $this->urlPhoto = $urlPhoto;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getLogo(): ?string
-    {
-        return null;
-    }
-
-    /**
-     * @param null|string $logo
-     */
-    public function setLogo(?string $logo): void
-    {
-        // dd
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getRawLogo(): ?string
-    {
-        return $this->rawLogo;
-    }
-
-    /**
-     * @param null|string $rawLogo
-     */
-    public function setRawLogo(?string $rawLogo): void
-    {
-        $this->rawLogo = $rawLogo;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getUrlLogo(): ?string
-    {
-        return $this->urlLogo;
-    }
-
-    /**
-     * @param null|string $urlLogo
-     */
-    public function setUrlLogo(?string $urlLogo): void
-    {
-        $this->urlLogo = $urlLogo;
+        $this->logo = $logo;
     }
 
     /**
