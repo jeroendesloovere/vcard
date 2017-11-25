@@ -128,8 +128,9 @@ class VCardBuilder
     public function buildVCalendar(): string
     {
         // init dates
-        $dtstart = date('Ymd').'T'.date('Hi').'00';
-        $dtend = date('Ymd').'T'.date('Hi').'01';
+        $dtbase = date('Ymd').'T'.date('Hi');
+        $dtstart = $dtbase.'00';
+        $dtend = $dtbase.'01';
 
         // init string
         $string = "BEGIN:VCALENDAR\n";
@@ -436,10 +437,8 @@ class VCardBuilder
         $this->addNote($vCard->getNote());
         $this->addCategories($vCard->getCategories());
         $this->addPhoneNumber($vCard->getPhones());
-        $this->addRawLogo($vCard->getLogo());
-        $this->addLogo($vCard->getLogo(), false);
-        $this->addRawPhoto($vCard->getPhoto());
-        $this->addPhoto($vCard->getPhoto(), false);
+        $this->addLogo($vCard->getLogo());
+        $this->addPhoto($vCard->getPhoto());
         $this->addUrl($vCard->getUrls());
     }
 
@@ -676,42 +675,29 @@ class VCardBuilder
      * Add Logo
      *
      * @param VCardMedia|null $media
-     * @param bool            $include Include the image in our vcard?
-     *
-     * @throws ElementAlreadyExistsException
-     * @throws EmptyUrlException
-     * @throws InvalidImageException
-     */
-    protected function addLogo(?VCardMedia $media, bool $include = true): void
-    {
-        if ($media !== null) {
-            $result = $media->builderUrl('LOGO', $include);
-
-            $this->setProperty(
-                'logo',
-                $result['key'],
-                $result['value']
-            );
-        }
-    }
-
-    /**
-     * Add Raw Logo
-     *
-     * @param VCardMedia|null $media
      *
      * @throws ElementAlreadyExistsException
      */
-    protected function addRawLogo(?VCardMedia $media): void
+    protected function addLogo(?VCardMedia $media): void
     {
         if ($media !== null) {
-            $result = $media->builderRaw('LOGO');
+            $result = [];
 
-            $this->setProperty(
-                'logo',
-                $result['key'],
-                $result['value']
-            );
+            if ($media->getUrl() !== null) {
+                $result = $media->builderUrl('LOGO');
+            }
+
+            if ($media->getRaw() !== null) {
+                $result = $media->builderRaw('LOGO');
+            }
+
+            if ($media->getUrl() !== null || $media->getRaw() !== null) {
+                $this->setProperty(
+                    'logo',
+                    $result['key'],
+                    $result['value']
+                );
+            }
         }
     }
 
@@ -719,42 +705,29 @@ class VCardBuilder
      * Add Photo
      *
      * @param VCardMedia|null $media
-     * @param bool            $include Include the image in our vcard?
-     *
-     * @throws ElementAlreadyExistsException
-     * @throws EmptyUrlException
-     * @throws InvalidImageException
-     */
-    protected function addPhoto(?VCardMedia $media, bool $include = true): void
-    {
-        if ($media !== null) {
-            $result = $media->builderUrl('PHOTO', $include);
-
-            $this->setProperty(
-                'photo',
-                $result['key'],
-                $result['value']
-            );
-        }
-    }
-
-    /**
-     * Add Raw Photo
-     *
-     * @param VCardMedia|null $media
      *
      * @throws ElementAlreadyExistsException
      */
-    protected function addRawPhoto(?VCardMedia $media): void
+    protected function addPhoto(?VCardMedia $media): void
     {
         if ($media !== null) {
-            $result = $media->builderRaw('PHOTO');
+            $result = [];
 
-            $this->setProperty(
-                'photo',
-                $result['key'],
-                $result['value']
-            );
+            if ($media->getUrl() !== null) {
+                $result = $media->builderUrl('PHOTO');
+            }
+
+            if ($media->getRaw() !== null) {
+                $result = $media->builderRaw('PHOTO');
+            }
+
+            if ($media->getUrl() !== null || $media->getRaw() !== null) {
+                $this->setProperty(
+                    'photo',
+                    $result['key'],
+                    $result['value']
+                );
+            }
         }
     }
 

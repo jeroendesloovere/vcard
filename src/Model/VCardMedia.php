@@ -20,6 +20,11 @@ class VCardMedia
     /**
      * @var string|null
      */
+    protected $fileType;
+
+    /**
+     * @var string|null
+     */
     protected $url;
 
 //    /**
@@ -57,6 +62,22 @@ class VCardMedia
     /**
      * @return null|string
      */
+    public function getFileType(): ?string
+    {
+        return $this->fileType;
+    }
+
+    /**
+     * @param null|string $fileType
+     */
+    public function setFileType(?string $fileType): void
+    {
+        $this->fileType = $fileType;
+    }
+
+    /**
+     * @return null|string
+     */
     public function getUrl(): ?string
     {
         return $this->url;
@@ -83,108 +104,17 @@ class VCardMedia
         }
     }
 
-//    /**
-//     * Add a photo or logo (depending on property name)
-//     *
-//     * @param string $property LOGO|PHOTO
-//     * @param string $url      image url or filename
-//     * @param string $element  The name of the element to set
-//     * @param bool   $include  Do we include the image in our vcard or not?
-//     *
-//     * @throws ElementAlreadyExistsException
-//     * @throws EmptyUrlException
-//     * @throws InvalidImageException
-//     */
-//    protected function addMedia(string $property, string $url, string $element, bool $include = true): void
-//    {
-//        $mimeType = null;
-//
-//        //Is this URL for a remote resource?
-//        if (filter_var($url, FILTER_VALIDATE_URL) !== false) {
-//            $headers = get_headers($url, 1);
-//
-//            if (array_key_exists('Content-Type', $headers)) {
-//                $mimeType = $headers['Content-Type'];
-//            }
-//        } else {
-//            //Local file, so inspect it directly
-//            $mimeType = mime_content_type($url);
-//        }
-//        if (strpos($mimeType, ';') !== false) {
-//            $mimeType = strstr($mimeType, ';', true);
-//        }
-//        if (!\is_string($mimeType) || 0 !== strpos($mimeType, 'image/')) {
-//            throw new InvalidImageException();
-//        }
-//        $fileType = strtoupper(substr($mimeType, 6));
-//
-//        if ($include) {
-//            $value = file_get_contents($url);
-//
-//            if (!$value) {
-//                throw new EmptyUrlException();
-//            }
-//
-//            $value = base64_encode($value);
-//            $property .= ';ENCODING=b;TYPE='.$fileType;
-//        } else {
-//            if (filter_var($url, FILTER_VALIDATE_URL) !== false) {
-//                $propertySuffix = ';VALUE=URL';
-//                $propertySuffix .= ';TYPE='.strtoupper($fileType);
-//
-//                $property .= $propertySuffix;
-//                $value = $url;
-//            } else {
-//                $value = $url;
-//            }
-//        }
-//
-//        $this->setProperty(
-//            $element,
-//            $property,
-//            $value
-//        );
-//    }
-//
-//    /**
-//     * Add a photo or logo (depending on property name)
-//     *
-//     * @param string      $property LOGO|PHOTO
-//     * @param string      $raw      image url or filename
-//     * @param string      $element  The name of the element to set
-//     * @param null|string $fileType
-//     *
-//     * @throws ElementAlreadyExistsException
-//     */
-//    protected function addRawMedia(string $property, string $raw, string $element, ?string $fileType = null): void
-//    {
-//        $raw = base64_encode($raw);
-//
-//        if ($fileType !== null) {
-//            $property .= ';ENCODING=b;TYPE='.$fileType;
-//        } else {
-//            $property .= ';ENCODING=b';
-//        }
-//
-//        $this->setProperty(
-//            $element,
-//            $property,
-//            $raw
-//        );
-//    }
-
     /**
-     * @param string $property
-     * @param bool   $include
+     * Add a photo or logo (depending on property name)
      *
-     * @return array
+     * @param string $url     image url or filename
+     * @param bool   $include Do we include the image in our vcard or not?
+     *
      * @throws EmptyUrlException
      * @throws InvalidImageException
      */
-    public function builderUrl(string $property, bool $include = true): array
+    public function addUrlMedia(string $url, bool $include = true): void
     {
-        $url = $this->getUrl();
-
         $mimeType = null;
 
         //Is this URL for a remote resource?
@@ -206,25 +136,54 @@ class VCardMedia
         }
         $fileType = strtoupper(substr($mimeType, 6));
 
-        if ($include) {
-            $fileValue = file_get_contents($url);
+        if ($fileType) {
+            $this->setFileType($fileType);
+        }
 
-            if (!$fileValue) {
+        if ($include) {
+            $value = file_get_contents($url);
+
+            if (!$value) {
                 throw new EmptyUrlException();
             }
 
-            $fileValue = base64_encode($fileValue);
-            $property .= ';ENCODING=b;TYPE='.$fileType;
+            $this->setRaw($value);
         } else {
-            if (filter_var($url, FILTER_VALIDATE_URL) !== false) {
-                $propertySuffix = ';VALUE=URL';
-                $propertySuffix .= ';TYPE='.strtoupper($fileType);
+            $this->setUrl($url);
+        }
+    }
 
-                $property .= $propertySuffix;
-                $fileValue = $url;
-            } else {
-                $fileValue = $url;
-            }
+    /**
+     * Add a photo or logo (depending on property name)
+     *
+     * @param string      $raw
+     * @param null|string $fileType
+     */
+    public function addRawMedia(string $raw, ?string $fileType = null): void
+    {
+        $this->setRaw($raw);
+        $this->setFileType($fileType);
+    }
+
+    /**
+     * @param string $property
+     *
+     * @return array
+     */
+    public function builderUrl(string $property): array
+    {
+        $url = $this->getUrl();
+
+        $fileType = $this->getFileType();
+
+        if (filter_var($url, FILTER_VALIDATE_URL) !== false) {
+            $propertySuffix = ';VALUE=URL';
+            $propertySuffix .= ';TYPE='.strtoupper($fileType);
+
+            $property .= $propertySuffix;
+            $fileValue = $url;
+        } else {
+            $fileValue = $url;
         }
 
         return [
@@ -234,14 +193,14 @@ class VCardMedia
     }
 
     /**
-     * @param string      $property
-     * @param null|string $fileType
+     * @param string $property
      *
      * @return array
      */
-    public function builderRaw(string $property, ?string $fileType = null): array
+    public function builderRaw(string $property): array
     {
         $raw = $this->getRaw();
+        $fileType = $this->getFileType();
 
         $raw = base64_encode($raw);
 

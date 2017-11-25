@@ -10,6 +10,7 @@ namespace JeroenDesloovere\VCard\tests;
  */
 
 use JeroenDesloovere\VCard\Model\VCard;
+use JeroenDesloovere\VCard\Model\VCardMedia;
 use JeroenDesloovere\VCard\VCardBuilder;
 use PHPUnit\Framework\TestCase;
 
@@ -154,75 +155,57 @@ class VCardBuilderTest extends TestCase
         $this->assertCount(2, $builder->getProperties());
     }
 
-//    /**
-//     * Test adding remote empty photo
-//     *
-//     * @expectedException \JeroenDesloovere\VCard\Exception\InvalidImageException
-//     * @expectedExceptionMessage Returned data is not an image.
-//     */
-//    public function testAddPhotoWithRemoteEmptyJpgPhoto()
-//    {
-//        $vcard = new VCard();
-//        $vcardMedia = new VCardMedia();
-//        $vcardMedia->setUrl('https://raw.githubusercontent.com/jeroendesloovere/vcard/master/tests/empty.jpg');
-//        $vcard->setPhoto($vcardMedia);
-//        $builder = new VCardBuilder($vcard);
-//    }
+    /**
+     *
+     */
+    public function testAddPhotoWithJpgPhoto()
+    {
+        $vcard = new VCard();
+        $vcardMedia = new VCardMedia();
+        $vcardMedia->addUrlMedia(__DIR__.'/image.jpg');
+        $vcard->setPhoto($vcardMedia);
+        $builder = new VCardBuilder($vcard);
+        $this->assertCount(1, $builder->getProperties());
+    }
 
-//    /**
-//     *
-//     */
-//    public function testAddPhotoWithJpgPhoto()
-//    {
-//        $return = $this->builder->addPhoto(__DIR__.'/image.jpg');
-//
-//        $this->assertEquals($this->builder, $return);
-//    }
-//
-//    /**
-//     *
-//     */
-//    public function testAddPhotoWithRemoteJpgPhoto()
-//    {
-//        $return = $this->builder->addPhoto(
-//            'https://raw.githubusercontent.com/jeroendesloovere/vcard/master/tests/image.jpg'
-//        );
-//
-//        $this->assertEquals($this->builder, $return);
-//    }
-//
-//    /**
-//     * Test adding remote empty photo
-//     *
-//     * @expectedException \JeroenDesloovere\VCard\Exception\InvalidImageException
-//     * @expectedExceptionMessage Returned data is not an image.
-//     */
-//    public function testAddPhotoWithRemoteEmptyJpgPhoto()
-//    {
-//        $this->builder->addPhoto(
-//            'https://raw.githubusercontent.com/jeroendesloovere/vcard/master/tests/empty.jpg'
-//        );
-//    }
-//
-//    /**
-//     *
-//     */
-//    public function testAddLogoWithJpgImage()
-//    {
-//        $return = $this->builder->addLogo(__DIR__.'/image.jpg');
-//
-//        $this->assertEquals($this->builder, $return);
-//    }
-//
-//    /**
-//     *
-//     */
-//    public function testAddLogoWithJpgImageNoInclude()
-//    {
-//        $return = $this->builder->addLogo(__DIR__.'/image.jpg', false);
-//
-//        $this->assertEquals($this->builder, $return);
-//    }
+    /**
+     *
+     */
+    public function testAddPhotoWithRemoteJpgPhoto()
+    {
+        $vcard = new VCard();
+        $vcardMedia = new VCardMedia();
+        $vcardMedia->addUrlMedia('https://raw.githubusercontent.com/jeroendesloovere/vcard/master/tests/image.jpg');
+        $vcard->setPhoto($vcardMedia);
+        $builder = new VCardBuilder($vcard);
+        $this->assertCount(1, $builder->getProperties());
+    }
+
+    /**
+     *
+     */
+    public function testAddLogoWithJpgImage()
+    {
+        $vcard = new VCard();
+        $vcardMedia = new VCardMedia();
+        $vcardMedia->addUrlMedia(__DIR__.'/image.jpg');
+        $vcard->setLogo($vcardMedia);
+        $builder = new VCardBuilder($vcard);
+        $this->assertCount(1, $builder->getProperties());
+    }
+
+    /**
+     *
+     */
+    public function testAddLogoWithJpgImageNoInclude()
+    {
+        $vcard = new VCard();
+        $vcardMedia = new VCardMedia();
+        $vcardMedia->addUrlMedia(__DIR__.'/image.jpg', false);
+        $vcard->setLogo($vcardMedia);
+        $builder = new VCardBuilder($vcard);
+        $this->assertCount(1, $builder->getProperties());
+    }
 
     /**
      *
@@ -235,50 +218,6 @@ class VCardBuilderTest extends TestCase
         $builder = new VCardBuilder($vcard);
         $this->assertCount(2, $builder->getProperties());
     }
-
-//    /**
-//     * Test adding local photo using an empty file
-//     *
-//     * @expectedException \JeroenDesloovere\VCard\Exception\InvalidImageException
-//     * @expectedExceptionMessage Returned data is not an image.
-//     */
-//    public function testAddPhotoWithEmptyFile()
-//    {
-//        $this->builder->addPhoto(__DIR__.'/emptyfile');
-//    }
-//
-//    /**
-//     * Test adding logo with no value
-//     *
-//     * @expectedException \JeroenDesloovere\VCard\Exception\InvalidImageException
-//     * @expectedExceptionMessage Returned data is not an image.
-//     */
-//    public function testAddLogoWithNoValue()
-//    {
-//        $this->builder->addLogo(__DIR__.'/emptyfile');
-//    }
-//
-//    /**
-//     * Test adding photo with no photo
-//     *
-//     * @expectedException \JeroenDesloovere\VCard\Exception\InvalidImageException
-//     * @expectedExceptionMessage Returned data is not an image.
-//     */
-//    public function testAddPhotoWithNoPhoto()
-//    {
-//        $this->builder->addPhoto(__DIR__.'/wrongfile');
-//    }
-//
-//    /**
-//     * Test adding logo with no image
-//     *
-//     * @expectedException \JeroenDesloovere\VCard\Exception\InvalidImageException
-//     * @expectedExceptionMessage Returned data is not an image.
-//     */
-//    public function testAddLogoWithNoImage()
-//    {
-//        $this->builder->addLogo(__DIR__.'/wrongfile');
-//    }
 
     /**
      * Test charset

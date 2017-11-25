@@ -5,10 +5,6 @@
  */
 
 require_once __DIR__.'/../vendor/autoload.php';
-require_once __DIR__.'/../src/VCardBuilder.php';
-require_once __DIR__.'/../src/Model/VCard.php';
-require_once __DIR__.'/../src/Model/VCardAddress.php';
-require_once __DIR__.'/../src/Model/VCardMedia.php';
 
 use JeroenDesloovere\VCard\Model\VCard;
 use JeroenDesloovere\VCard\Model\VCardAddress;

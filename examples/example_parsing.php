@@ -5,7 +5,6 @@
  */
 
 require_once __DIR__.'/../vendor/autoload.php';
-require_once __DIR__.'/../src/VCardParser.php';
 
 // load VCardParser classes
 use JeroenDesloovere\VCard\VCardParser;
@@ -18,7 +17,7 @@ foreach ($parser->getCards() as $vcard) {
     $firstName = $vcard->getFirstName();
     $birthday = $vcard->getBirthday()->format('Y-m-d');
 
-    printf('"%s","%s","%s"', $lastname, $firstname, $birthday);
+    printf('"%s","%s","%s"', $lastName, $firstName, $birthday);
 
     echo PHP_EOL;
 }
