@@ -252,9 +252,9 @@ class VCardBuilderTest extends TestCase
 
         foreach ($emails as $key => $email) {
             if (\is_string($key)) {
-                $this->assertContains('EMAIL;INTERNET;'.$key.':'.$email, $output);
+                $this->assertContains('EMAIL;INTERNET;'.$key.';CHARSET=utf-8:'.$email, $output);
             } else {
-                $this->assertContains('EMAIL;INTERNET:'.$email, $output);
+                $this->assertContains('EMAIL;INTERNET;CHARSET=utf-8:'.$email, $output);
             }
         }
     }

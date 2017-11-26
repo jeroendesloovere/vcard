@@ -82,8 +82,6 @@ class VCardBuilder
      * @param VCard|VCard[] $vCard
      *
      * @throws ElementAlreadyExistsException
-     * @throws EmptyUrlException
-     * @throws InvalidImageException
      */
     public function __construct($vCard)
     {
@@ -408,8 +406,6 @@ class VCardBuilder
 
     /**
      * @throws ElementAlreadyExistsException
-     * @throws EmptyUrlException
-     * @throws InvalidImageException
      */
     protected function parseVCarts(): void
     {
@@ -422,24 +418,22 @@ class VCardBuilder
      * @param VCard $vCard
      *
      * @throws ElementAlreadyExistsException
-     * @throws EmptyUrlException
-     * @throws InvalidImageException
      */
     protected function parseVCart(VCard $vCard): void
     {
         $this->addAddress($vCard->getAddresses());
         $this->addBirthday($vCard->getBirthday());
         $this->addOrganization($vCard->getOrganization());
-        $this->addEmail($vCard->getEmails());
-        $this->addTitle($vCard->getTitle());
-        $this->addRole(null); // TODO add Role to \JeroenDesloovere\VCard\Model\VCard
+        $this->setArrayProperty('email', 'EMAIL;INTERNET', $vCard->getEmails());
+        $this->setStringProperty('title', 'TITLE', $vCard->getTitle());
+        $this->setStringProperty('role', 'ROLE', null); // TODO add Role to \JeroenDesloovere\VCard\Model\VCard
         $this->addName($vCard->getLastName(), $vCard->getFirstName(), $vCard->getAdditional(), $vCard->getPrefix(), $vCard->getSuffix());
-        $this->addNote($vCard->getNote());
+        $this->setStringProperty('note', 'NOTE', $vCard->getNote());
         $this->addCategories($vCard->getCategories());
-        $this->addPhoneNumber($vCard->getPhones());
+        $this->setArrayProperty('phoneNumber', 'TEL', $vCard->getPhones());
         $this->setMedia('logo', 'LOGO', $vCard->getLogo());
         $this->setMedia('photo', 'PHOTO', $vCard->getPhoto());
-        $this->addUrl($vCard->getUrls());
+        $this->setArrayProperty('url', 'URL', $vCard->getUrls());
     }
 
     /**
@@ -505,62 +499,6 @@ class VCardBuilder
     }
 
     /**
-     * @param string[][]|null $addresses
-     *
-     * @throws ElementAlreadyExistsException
-     */
-    protected function addEmail($addresses): void
-    {
-        if ($addresses !== null) {
-            foreach ($addresses as $type => $sub) {
-                foreach ($sub as $address) {
-                    $this->setProperty(
-                        'email',
-                        'EMAIL;INTERNET'.(($type !== '') ? ';'.$type : ''),
-                        $address
-                    );
-                }
-            }
-        }
-    }
-
-    /**
-     * Add title
-     *
-     * @param null|string $title The title for the person.
-     *
-     * @throws ElementAlreadyExistsException
-     */
-    protected function addTitle(?string $title): void
-    {
-        if ($title !== null) {
-            $this->setProperty(
-                'title',
-                'TITLE'.$this->getCharsetString(),
-                $title
-            );
-        }
-    }
-
-    /**
-     * Add role
-     *
-     * @param null|string $role The role for the person.
-     *
-     * @throws ElementAlreadyExistsException
-     */
-    protected function addRole(?string $role): void
-    {
-        if ($role !== null) {
-            $this->setProperty(
-                'role',
-                'ROLE'.$this->getCharsetString(),
-                $role
-            );
-        }
-    }
-
-    /**
      * Add name
      *
      * @param string $lastName   [optional]
@@ -614,24 +552,6 @@ class VCardBuilder
     }
 
     /**
-     * Add note
-     *
-     * @param null|string $note
-     *
-     * @throws ElementAlreadyExistsException
-     */
-    protected function addNote(?string $note): void
-    {
-        if ($note !== null) {
-            $this->setProperty(
-                'note',
-                'NOTE'.$this->getCharsetString(),
-                $note
-            );
-        }
-    }
-
-    /**
      * Add categories
      *
      * @param null|array $categories
@@ -650,24 +570,46 @@ class VCardBuilder
     }
 
     /**
-     * Add phone number
+     * Add Array
      *
-     * @param null|string[][] $numbers
+     * @param string          $element
+     * @param string          $property
+     * @param null|string[][] $values
      *
      * @throws ElementAlreadyExistsException
      */
-    protected function addPhoneNumber($numbers): void
+    protected function setArrayProperty(string $element, string $property, $values): void
     {
-        if ($numbers !== null) {
-            foreach ($numbers as $type => $sub) {
-                foreach ($sub as $number) {
+        if ($values !== null) {
+            foreach ($values as $type => $sub) {
+                foreach ($sub as $url) {
                     $this->setProperty(
-                        'phoneNumber',
-                        'TEL'.(($type !== '') ? ';'.$type : ''),
-                        $number
+                        $element,
+                        $property.(($type !== '') ? ';'.$type : '').$this->getCharsetString(),
+                        $url
                     );
                 }
             }
+        }
+    }
+
+    /**
+     * Set string property
+     *
+     * @param string      $element
+     * @param string      $property
+     * @param null|string $value
+     *
+     * @throws ElementAlreadyExistsException
+     */
+    protected function setStringProperty(string $element, string $property, ?string $value): void
+    {
+        if ($value !== null) {
+            $this->setProperty(
+                $element,
+                $property.$this->getCharsetString(),
+                $value
+            );
         }
     }
 
@@ -699,28 +641,6 @@ class VCardBuilder
                     $result['key'],
                     $result['value']
                 );
-            }
-        }
-    }
-
-    /**
-     * Add URL
-     *
-     * @param null|string[][] $urls
-     *
-     * @throws ElementAlreadyExistsException
-     */
-    protected function addUrl($urls): void
-    {
-        if ($urls !== null) {
-            foreach ($urls as $type => $sub) {
-                foreach ($sub as $url) {
-                    $this->setProperty(
-                        'url',
-                        'URL'.(($type !== '') ? ';'.$type : ''),
-                        $url
-                    );
-                }
             }
         }
     }
