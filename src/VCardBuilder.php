@@ -11,13 +11,12 @@ namespace JeroenDesloovere\VCard;
 
 use Behat\Transliterator\Transliterator;
 use JeroenDesloovere\VCard\Exception\ElementAlreadyExistsException;
-use JeroenDesloovere\VCard\Exception\EmptyUrlException;
-use JeroenDesloovere\VCard\Exception\InvalidImageException;
 use JeroenDesloovere\VCard\Exception\OutputDirectoryNotExistsException;
 use JeroenDesloovere\VCard\Model\VCard;
 use JeroenDesloovere\VCard\Model\VCardAddress;
 use JeroenDesloovere\VCard\Model\VCardMedia;
 use JeroenDesloovere\VCard\Util\GeneralUtil;
+use JeroenDesloovere\VCard\Util\UserAgentUtil;
 
 /**
  * VCard PHP Class to generate .vcard files and save them to a file or output as a download.
@@ -209,7 +208,7 @@ class VCardBuilder
      */
     public function getContentType(): string
     {
-        return GeneralUtil::isIOS7() ?
+        return UserAgentUtil::isIOS7() ?
             'text/x-vcalendar' : 'text/x-vcard';
     }
 
@@ -234,7 +233,7 @@ class VCardBuilder
      */
     public function getFileExtension(): string
     {
-        return GeneralUtil::isIOS7() ?
+        return UserAgentUtil::isIOS7() ?
             'ics' : 'vcf';
     }
 
@@ -277,7 +276,7 @@ class VCardBuilder
      */
     public function getOutput(): string
     {
-        $output = GeneralUtil::isIOS7() ?
+        $output = UserAgentUtil::isIOS7() ?
             $this->buildVCalendar() : $this->buildVCard();
 
         return $output;
