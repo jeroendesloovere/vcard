@@ -313,4 +313,145 @@ class VCardBuilderTest extends TestCase
 
         $this->assertEquals('garcon-jeroen', $builder->getFilename());
     }
+
+    /**
+     * Test hasProperty is true
+     */
+    public function testHasPropertyTrue()
+    {
+        $vcard = new VCard();
+        $vcard->setFirstName($this->firstName);
+        $vcard->setLastName($this->lastName);
+        $builder = new VCardBuilder($vcard);
+
+        $this->assertEquals(true, $builder->hasProperty('FN'.$builder->getCharsetString()));
+    }
+
+    /**
+     * Test hasProperty is false
+     */
+    public function testHasPropertyFalse()
+    {
+        $vcard = new VCard();
+        $builder = new VCardBuilder($vcard);
+
+        $this->assertEquals(false, $builder->hasProperty('FN'.$builder->getCharsetString()));
+    }
+
+    /**
+     * Test getFilename is unknown if setFilename is empty
+     */
+    public function testSetFilenameEmpty()
+    {
+        $vcard = new VCard();
+        $builder = new VCardBuilder($vcard);
+        $builder->setFilename('');
+
+        $this->assertEquals('unknown', $builder->getFilename());
+    }
+
+    /**
+     * Test hasProperty is false
+     */
+    public function testGetHeadersFalse()
+    {
+        $vcard = new VCard();
+        $builder = new VCardBuilder($vcard);
+
+        $this->assertEquals([
+            'Content-type: text/x-vcard; charset=utf-8',
+            'Content-Disposition: attachment; filename=unknown.vcf',
+            'Content-Length: 63',
+            'Connection: close',
+        ], $builder->getHeaders(false));
+    }
+
+    /**
+     * Test hasProperty is true
+     */
+    public function testGetHeadersTrue()
+    {
+        $vcard = new VCard();
+        $builder = new VCardBuilder($vcard);
+
+        $this->assertEquals([
+            'Content-type' => 'text/x-vcard; charset=utf-8',
+            'Content-Disposition' => 'attachment; filename=unknown.vcf',
+            'Content-Length' => 63,
+            'Connection' =>'close' ,
+        ], $builder->getHeaders(true));
+    }
+
+    /**
+     * Test VCalendar
+     *
+     * @runInSeparateProcess
+     */
+    public function testGetFileExtensionVcf()
+    {
+        $vcard = new VCard();
+        $builder = new VCardBuilder($vcard);
+
+        $this->assertEquals('vcf', $builder->getFileExtension());
+    }
+
+    /**
+     * Test VCalendar
+     *
+     * @runInSeparateProcess
+     */
+    public function testGetFileExtensionIcs()
+    {
+        $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (iPad; U; CPU OS 3_2_2 like Mac OS X; nl-nl) AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 Mobile/7B500 Safari/531.21.10';
+
+        $vcard = new VCard();
+        $builder = new VCardBuilder($vcard);
+
+        $this->assertEquals('ics', $builder->getFileExtension());
+    }
+
+    /**
+     * Test VCalendar
+     *
+     * @runInSeparateProcess
+     */
+    public function testGetContentTypeVCard()
+    {
+        $vcard = new VCard();
+        $builder = new VCardBuilder($vcard);
+
+        $this->assertEquals('text/x-vcard', $builder->getContentType());
+    }
+
+    /**
+     * Test VCalendar
+     *
+     * @runInSeparateProcess
+     */
+    public function testGetContentTypeVCalendar()
+    {
+        $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (iPad; U; CPU OS 3_2_2 like Mac OS X; nl-nl) AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 Mobile/7B500 Safari/531.21.10';
+
+        $vcard = new VCard();
+        $builder = new VCardBuilder($vcard);
+
+        $this->assertEquals('text/x-vcalendar', $builder->getContentType());
+    }
+
+    /**
+     * Test VCalendar
+     *
+     * @runInSeparateProcess
+     */
+    public function testVCalendar()
+    {
+        $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (iPad; U; CPU OS 3_2_2 like Mac OS X; nl-nl) AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 Mobile/7B500 Safari/531.21.10';
+
+        $vcard = new VCard();
+        $builder = new VCardBuilder($vcard);
+
+        $output = $builder->getOutput();
+
+        $this->assertContains('BEGIN:VCALENDAR', $output);
+    }
 }

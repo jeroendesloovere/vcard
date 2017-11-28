@@ -61,7 +61,7 @@ class VCardBuilder
      *
      * @var array
      */
-    private $properties;
+    private $properties = [];
 
     /**
      * Default Charset
