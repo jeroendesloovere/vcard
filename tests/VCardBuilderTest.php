@@ -20,11 +20,6 @@ use PHPUnit\Framework\TestCase;
 class VCardBuilderTest extends TestCase
 {
     /**
-     * @var VCardBuilder
-     */
-    protected $builder;
-
-    /**
      * @var string
      */
     protected $firstName;
@@ -104,9 +99,6 @@ class VCardBuilderTest extends TestCase
         // set timezone
         date_default_timezone_set('Europe/Brussels');
 
-        $vcard = new VCard();
-        $this->builder = new VCardBuilder($vcard);
-
         $this->firstName = 'Jeroen';
         $this->lastName = 'Desloovere';
         $this->additional = '&';
@@ -121,14 +113,6 @@ class VCardBuilderTest extends TestCase
 
         $this->firstName3 = 'Garçon';
         $this->lastName3 = 'Jéroèn';
-    }
-
-    /**
-     * Tear down after class
-     */
-    public function tearDown()
-    {
-        $this->builder = null;
     }
 
     /**
@@ -225,8 +209,9 @@ class VCardBuilderTest extends TestCase
     public function testCharset()
     {
         $charset = 'ISO-8859-1';
-        $this->builder->setCharset($charset);
-        $this->assertEquals($charset, $this->builder->getCharset());
+        $vcard = new VCard();
+        $builder = new VCardBuilder($vcard, $charset);
+        $this->assertEquals($charset, $builder->getCharset());
     }
 
     /**
