@@ -24,9 +24,11 @@ class Formatter
         $this->fileName = $fileName;
     }
 
-    public function addVCard(VCard $vCard)
+    public function addVCard(VCard $vCard): self
     {
         $this->vCards[] = $vCard;
+
+        return $this;
     }
 
     public function download()
@@ -45,7 +47,7 @@ class Formatter
 
     public function getContent(): string
     {
-        return $this->formatter->getContent();
+        return $this->formatter->getContent($this->vCards);
     }
 
     public function getFileName(): string

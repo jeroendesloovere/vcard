@@ -1,4 +1,15 @@
 # VCard PHP class
+
+> This VCard PHP class can generate a vCard 4.0.
+
+Documentation about vCard 4.0:
+* [RFC5646](https://tools.ietf.org/html/rfc6350)
+* [vCard 4.0](https://devguide.calconnect.org/vCard/vcard-4/)
+
+
+==== OLD documentation below
+
+
 [![Latest Stable Version](http://img.shields.io/packagist/v/jeroendesloovere/vcard.svg)](https://packagist.org/packages/jeroendesloovere/vcard)
 [![License](http://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/jeroendesloovere/vcard/blob/master/LICENSE)
 [![Build Status](https://travis-ci.org/jeroendesloovere/vcard.svg?branch=master)](https://travis-ci.org/jeroendesloovere/vcard)

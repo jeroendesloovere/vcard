@@ -2,6 +2,9 @@
 
 namespace JeroenDesloovere\VCard\Property;
 
+use JeroenDesloovere\VCard\Formatter\Property\NameFormatter;
+use JeroenDesloovere\VCard\Formatter\Property\PropertyFormatterInterface;
+
 class Name implements PropertyInterface
 {
     /** @var null|string */
@@ -31,5 +34,35 @@ class Name implements PropertyInterface
         $this->additional = $additional;
         $this->prefix = $prefix;
         $this->suffix = $suffix;
+    }
+
+    public function getAdditional(): ?string
+    {
+        return $this->additional;
+    }
+
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    public function getFormatter(): PropertyFormatterInterface
+    {
+        return new NameFormatter();
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function getPrefix(): ?string
+    {
+        return $this->prefix;
+    }
+
+    public function getSuffix(): ?string
+    {
+        return $this->suffix;
     }
 }

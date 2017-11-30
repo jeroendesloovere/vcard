@@ -4,7 +4,7 @@ namespace JeroenDesloovere\VCard\Formatter;
 
 class XmlFormatter extends Formatter implements FormatterInterface
 {
-    public function getContent(): string
+    public function getContent(array $vCards): string
     {
         return '';
     }

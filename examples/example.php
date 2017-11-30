@@ -10,24 +10,24 @@ require_once __DIR__ . '/../src/VCard/VCard.php';
 require_once __DIR__ . '/../src/VCard/Formatter/Formatter.php';
 require_once __DIR__ . '/../src/VCard/Formatter/FormatterInterface.php';
 require_once __DIR__ . '/../src/VCard/Formatter/VcfFormatter.php';
+require_once __DIR__ . '/../src/VCard/Formatter/XmlFormatter.php';
 require_once __DIR__ . '/../src/VCard/Property/PropertyInterface.php';
 require_once __DIR__ . '/../src/VCard/Property/Name.php';
 require_once __DIR__ . '/../src/VCard/Property/Address.php';
-require_once __DIR__ . '/../src/VCard/Property/Type.php';
-require_once __DIR__ . '/../src/VCard/Property/Kind.php';
+require_once __DIR__ . '/../src/VCard/PropertyParameter/Type.php';
+require_once __DIR__ . '/../src/VCard/PropertyParameter/Kind.php';
 
 use JeroenDesloovere\VCard\VCard;
 use JeroenDesloovere\VCard\Formatter\Formatter;
 use JeroenDesloovere\VCard\Formatter\VcfFormatter;
 use JeroenDesloovere\VCard\Property\Name;
 use JeroenDesloovere\VCard\Property\Address;
-use JeroenDesloovere\VCard\Property\Type;
+use JeroenDesloovere\VCard\PropertyParameter\Type;
 
 // Step one: build one or more vCards
 $vCard = new VCard();
-
 $vCard->add(new Name('Desloovere', 'Jeroen'));
-$vCard->add(new Address(Type::home(), 'Overpoort 1', 'Gent', '9000', 'BE'));
+$vCard->add(new Address(null, 'Penthouse', 'Korenmarkt 1', 'Gent', 'Oost-Vlaanderen', '9000', 'BE', Type::work()));
 
 // Step two: use the VcfFormatter to create a .vcf file (which can contain multiple vCards)
 $vcf = new Formatter(new VcfFormatter(), 'example');

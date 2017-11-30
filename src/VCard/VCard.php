@@ -2,7 +2,7 @@
 
 namespace JeroenDesloovere\VCard;
 
-use JeroenDesloovere\VCard\Property\Kind;
+use JeroenDesloovere\VCard\PropertyParameter\Kind;
 use JeroenDesloovere\VCard\Property\PropertyInterface;
 
 class VCard
@@ -22,9 +22,11 @@ class VCard
         $this->kind = $kind;
     }
 
-    public function add(PropertyInterface $property)
+    public function add(PropertyInterface $property): self
     {
         $this->properties[] = $property;
+
+        return $this;
     }
 
     public function getKind(): Kind

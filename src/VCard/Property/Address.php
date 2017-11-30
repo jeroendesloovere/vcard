@@ -2,15 +2,28 @@
 
 namespace JeroenDesloovere\VCard\Property;
 
+use JeroenDesloovere\VCard\Formatter\Property\AddressFormatter;
+use JeroenDesloovere\VCard\Formatter\Property\PropertyFormatterInterface;
+use JeroenDesloovere\VCard\PropertyParameter\Type;
+
 class Address implements PropertyInterface
 {
-    /** @var null|string */
+    /** @var null|string - shortcode */
+    private $countryName;
+
+    /** @var null|string - e.g., apartment or suite number */
+    private $extendedAddress;
+
+    /** @var null|string - e.g.: city*/
     private $locality;
 
     /** @var null|string */
-    private $countryName;
+    private $postalCode;
 
     /** @var null|string */
+    private $postOfficeBox;
+
+    /** @var null|string  - e.g.: state or province */
     private $region;
 
     /** @var null|string */
@@ -19,22 +32,68 @@ class Address implements PropertyInterface
     /** @var Type */
     private $type;
 
-    /** @var null|string */
-    private $postalCode;
-
     public function __construct(
-        Type $type,
+        ?string $postOfficeBox = null,
+        ?string $extendedAddress = null,
         ?string $streetAddress = null,
         ?string $locality = null,
+        ?string $region = null,
         ?string $postalCode = null,
         ?string $countryName = null,
-        ?string $region = null
+        Type $type = null
     ) {
-        $this->type = $type;
+        $this->postOfficeBox = $postOfficeBox;
+        $this->extendedAddress = $extendedAddress;
         $this->streetAddress = $streetAddress;
         $this->locality = $locality;
+        $this->region = $region;
         $this->postalCode = $postalCode;
         $this->countryName = $countryName;
-        $this->region = $region;
+        $this->type = ($type === null) ? Type::home() : $type;
+    }
+
+    public function getCountryName(): ?string
+    {
+        return $this->countryName;
+    }
+
+    public function getExtendedAddress(): ?string
+    {
+        return $this->extendedAddress;
+    }
+
+    public function getFormatter(): PropertyFormatterInterface
+    {
+        return new AddressFormatter();
+    }
+
+    public function getLocality(): ?string
+    {
+        return $this->locality;
+    }
+
+    public function getPostalCode(): ?string
+    {
+        return $this->postalCode;
+    }
+
+    public function getPostOfficeBox(): ?string
+    {
+        return $this->postOfficeBox;
+    }
+
+    public function getRegion(): ?string
+    {
+        return $this->region;
+    }
+
+    public function getStreetAddress(): ?string
+    {
+        return $this->streetAddress;
+    }
+
+    public function getType(): Type
+    {
+        return $this->type;
     }
 }

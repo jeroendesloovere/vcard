@@ -1,6 +1,6 @@
 <?php
 
-namespace JeroenDesloovere\VCard\Property;
+namespace JeroenDesloovere\VCard\PropertyParameter;
 
 class Kind
 {
@@ -20,7 +20,7 @@ class Kind
 
     public function __construct(string $kind)
     {
-        if (in_array($kind, self::POSSIBLE_VALUES)) {
+        if (!in_array($kind, self::POSSIBLE_VALUES)) {
             throw new \Exception(
                 'The given type "' . $kind . '" is not allowed. Possible values are: ' . implode(', ', self::POSSIBLE_VALUES)
             );
