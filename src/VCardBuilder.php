@@ -218,7 +218,7 @@ class VCardBuilder
      */
     public function getFilename(): string
     {
-        if (!$this->filename) {
+        if ($this->filename === null) {
             return 'unknown';
         }
 

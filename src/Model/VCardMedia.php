@@ -116,6 +116,12 @@ class VCardMedia
      */
     public function addUrlMedia(string $url, bool $include = true): void
     {
+        $url = trim($url);
+
+        if ($url === '') {
+            throw new EmptyUrlException(); // TODO: Chance exception
+        }
+
         $mimeType = GeneralUtil::getMimeType($url);
         if (!\is_string($mimeType) || 0 !== strpos($mimeType, 'image/')) {
             throw new InvalidImageException();
@@ -129,7 +135,7 @@ class VCardMedia
         if ($include) {
             $value = file_get_contents($url);
 
-            if (!$value) {
+            if ($value === false) {
                 throw new EmptyUrlException();
             }
 

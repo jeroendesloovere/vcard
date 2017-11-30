@@ -94,4 +94,25 @@ class VCardMediaTest extends TestCase
         $vcardMedia = new VCardMedia();
         $vcardMedia->addUrlMedia(__DIR__.'/../wrongfile');
     }
+
+
+    /**
+     * @expectedException \JeroenDesloovere\VCard\Exception\EmptyUrlException
+     * @expectedExceptionMessage Nothing returned from URL.
+     */
+    public function testAddUrlMediaWithEmptyStringInput()
+    {
+        $vcardMedia = new VCardMedia();
+        $vcardMedia->addUrlMedia('');
+    }
+
+    /**
+     * @expectedException \JeroenDesloovere\VCard\Exception\EmptyUrlException
+     * @expectedExceptionMessage Nothing returned from URL.
+     */
+    public function testAddUrlMediaWithSpaceStringInput()
+    {
+        $vcardMedia = new VCardMedia();
+        $vcardMedia->addUrlMedia(' ');
+    }
 }
