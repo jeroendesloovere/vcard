@@ -168,6 +168,19 @@ class VCardBuilderTest extends TestCase
     /**
      *
      */
+    public function testAddPhotoWithRemoteJpgPhotoNoInclude()
+    {
+        $vcard = new VCard();
+        $vcardMedia = new VCardMedia();
+        $vcardMedia->addUrlMedia('https://raw.githubusercontent.com/jeroendesloovere/vcard/master/tests/image.jpg', false);
+        $vcard->setPhoto($vcardMedia);
+        $builder = new VCardBuilder($vcard);
+        $this->assertCount(1, $builder->getProperties());
+    }
+
+    /**
+     *
+     */
     public function testAddLogoWithJpgImage()
     {
         $vcard = new VCard();

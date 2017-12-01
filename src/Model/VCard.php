@@ -292,7 +292,15 @@ class VCard extends \stdClass
         $this->phone = $phone;
     }
 
-    // TODO add getPhone($key)
+    /**
+     * @param string $key
+     *
+     * @return string[]|null
+     */
+    public function getPhone(string $key): ?array
+    {
+        return $this->phone[$key];
+    }
 
     /**
      * @param string $phone
@@ -319,7 +327,15 @@ class VCard extends \stdClass
         $this->email = $email;
     }
 
-    // TODO add getEmail($key)
+    /**
+     * @param string $key
+     *
+     * @return string[]|null
+     */
+    public function getEmail(string $key): ?array
+    {
+        return $this->email[$key];
+    }
 
     /**
      * @param string $email
@@ -394,7 +410,15 @@ class VCard extends \stdClass
         $this->url = $url;
     }
 
-    // TODO add getUrl($key)
+    /**
+     * @param string $key
+     *
+     * @return string[]|null
+     */
+    public function getUrl(string $key): ?array
+    {
+        return $this->url[$key];
+    }
 
     /**
      * @param string $url

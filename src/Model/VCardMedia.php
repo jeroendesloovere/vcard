@@ -4,6 +4,7 @@ namespace JeroenDesloovere\VCard\Model;
 
 use JeroenDesloovere\VCard\Exception\EmptyUrlException;
 use JeroenDesloovere\VCard\Exception\InvalidImageException;
+use JeroenDesloovere\VCard\Exception\InvalidUrlException;
 use JeroenDesloovere\VCard\Util\GeneralUtil;
 
 /**
@@ -113,15 +114,10 @@ class VCardMedia
      *
      * @throws EmptyUrlException
      * @throws InvalidImageException
+     * @throws InvalidUrlException
      */
     public function addUrlMedia(string $url, bool $include = true): void
     {
-        $url = trim($url);
-
-        if ($url === '') {
-            throw new EmptyUrlException(); // TODO: Chance exception
-        }
-
         $mimeType = GeneralUtil::getMimeType($url);
         if (!\is_string($mimeType) || 0 !== strpos($mimeType, 'image/')) {
             throw new InvalidImageException();

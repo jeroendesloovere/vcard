@@ -150,4 +150,22 @@ class GeneralUtilTest extends TestCase
         $result = GeneralUtil::getMimeType(__DIR__.'/../wrongfile');
         $this->assertEquals('text/plain', $result);
     }
+
+    /**
+     * @expectedException \JeroenDesloovere\VCard\Exception\InvalidUrlException
+     * @expectedExceptionMessage Invalid Url.
+     */
+    public function testGetMimeTypeWithEmptyStringInput()
+    {
+        GeneralUtil::getMimeType('');
+    }
+
+    /**
+     * @expectedException \JeroenDesloovere\VCard\Exception\InvalidUrlException
+     * @expectedExceptionMessage Invalid Url.
+     */
+    public function testGetMimeTypeWithSpaceStringInput()
+    {
+        GeneralUtil::getMimeType(' ');
+    }
 }

@@ -12,6 +12,7 @@ namespace JeroenDesloovere\VCard\Tests\Exception;
 use JeroenDesloovere\VCard\Exception\ElementAlreadyExistsException;
 use JeroenDesloovere\VCard\Exception\EmptyUrlException;
 use JeroenDesloovere\VCard\Exception\InvalidImageException;
+use JeroenDesloovere\VCard\Exception\InvalidUrlException;
 use JeroenDesloovere\VCard\Exception\InvalidVersionException;
 use JeroenDesloovere\VCard\Exception\OutputDirectoryNotExistsException;
 use JeroenDesloovere\VCard\Exception\VCardException;
@@ -59,6 +60,15 @@ class VCardExceptionTest extends TestCase
     }
 
     /**
+     * @expectedException \JeroenDesloovere\VCard\Exception\InvalidUrlException
+     * @expectedExceptionMessage Invalid Url.
+     */
+    public function testInvalidUrlException()
+    {
+        throw new InvalidUrlException();
+    }
+
+    /**
      * @expectedException \JeroenDesloovere\VCard\Exception\InvalidVersionException
      * @expectedExceptionMessage Invalid VCard version.
      */
@@ -71,7 +81,7 @@ class VCardExceptionTest extends TestCase
      * @expectedException \JeroenDesloovere\VCard\Exception\OutputDirectoryNotExistsException
      * @expectedExceptionMessage Output directory does not exist.
      */
-    public function testException()
+    public function testOutputDirectoryNotExistsException()
     {
         throw new OutputDirectoryNotExistsException();
     }

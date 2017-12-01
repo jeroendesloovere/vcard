@@ -2,6 +2,8 @@
 
 namespace JeroenDesloovere\VCard\Util;
 
+use JeroenDesloovere\VCard\Exception\InvalidUrlException;
+
 /**
  * Class GeneralUtil
  *
@@ -72,10 +74,17 @@ class GeneralUtil
      * @param string $url
      *
      * @return null|string
+     * @throws InvalidUrlException
      */
     public static function getMimeType(string $url): ?string
     {
         $mimeType = null;
+
+        $url = trim($url);
+
+        if ($url === '') {
+            throw new InvalidUrlException();
+        }
 
         //Is this URL for a remote resource?
         if (filter_var($url, FILTER_VALIDATE_URL) !== false) {
