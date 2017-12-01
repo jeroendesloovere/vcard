@@ -2,20 +2,15 @@
 
 namespace JeroenDesloovere\VCard\Tests;
 
-/*
- * This file is part of the VCard PHP Class from Jeroen Desloovere.
- *
- * For the full copyright and license information, please view the license
- * file that was distributed with this source code.
- */
-
 use JeroenDesloovere\VCard\Model\VCard;
 use JeroenDesloovere\VCard\Model\VCardMedia;
 use JeroenDesloovere\VCard\VCardBuilder;
 use PHPUnit\Framework\TestCase;
 
 /**
- * This class will test our VCard PHP Class which can generate VCards.
+ * Class VCardBuilderTest
+ *
+ * @package JeroenDesloovere\VCard\Tests
  */
 class VCardBuilderTest extends TestCase
 {
@@ -140,7 +135,9 @@ class VCardBuilderTest extends TestCase
     }
 
     /**
-     *
+     * @throws \JeroenDesloovere\VCard\Exception\EmptyUrlException
+     * @throws \JeroenDesloovere\VCard\Exception\InvalidImageException
+     * @throws \JeroenDesloovere\VCard\Exception\InvalidUrlException
      */
     public function testAddPhotoWithJpgPhoto()
     {
@@ -153,7 +150,9 @@ class VCardBuilderTest extends TestCase
     }
 
     /**
-     *
+     * @throws \JeroenDesloovere\VCard\Exception\EmptyUrlException
+     * @throws \JeroenDesloovere\VCard\Exception\InvalidImageException
+     * @throws \JeroenDesloovere\VCard\Exception\InvalidUrlException
      */
     public function testAddPhotoWithRemoteJpgPhoto()
     {
@@ -166,7 +165,9 @@ class VCardBuilderTest extends TestCase
     }
 
     /**
-     *
+     * @throws \JeroenDesloovere\VCard\Exception\EmptyUrlException
+     * @throws \JeroenDesloovere\VCard\Exception\InvalidImageException
+     * @throws \JeroenDesloovere\VCard\Exception\InvalidUrlException
      */
     public function testAddPhotoWithRemoteJpgPhotoNoInclude()
     {
@@ -179,7 +180,9 @@ class VCardBuilderTest extends TestCase
     }
 
     /**
-     *
+     * @throws \JeroenDesloovere\VCard\Exception\EmptyUrlException
+     * @throws \JeroenDesloovere\VCard\Exception\InvalidImageException
+     * @throws \JeroenDesloovere\VCard\Exception\InvalidUrlException
      */
     public function testAddLogoWithJpgImage()
     {
@@ -192,7 +195,9 @@ class VCardBuilderTest extends TestCase
     }
 
     /**
-     *
+     * @throws \JeroenDesloovere\VCard\Exception\EmptyUrlException
+     * @throws \JeroenDesloovere\VCard\Exception\InvalidImageException
+     * @throws \JeroenDesloovere\VCard\Exception\InvalidUrlException
      */
     public function testAddLogoWithJpgImageNoInclude()
     {

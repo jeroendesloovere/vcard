@@ -107,7 +107,7 @@ class GeneralUtilTest extends TestCase
     }
 
     /**
-     *
+     * @throws \JeroenDesloovere\VCard\Exception\InvalidUrlException
      */
     public function testGetMimeTypeWithJpgPhoto()
     {
@@ -116,7 +116,7 @@ class GeneralUtilTest extends TestCase
     }
 
     /**
-     *
+     * @throws \JeroenDesloovere\VCard\Exception\InvalidUrlException
      */
     public function testGetMimeTypeWithRemoteJpgPhoto()
     {
@@ -125,7 +125,7 @@ class GeneralUtilTest extends TestCase
     }
 
     /**
-     *
+     * @throws \JeroenDesloovere\VCard\Exception\InvalidUrlException
      */
     public function testGetMimeTypeWithRemoteEmptyJpgPhoto()
     {
@@ -134,7 +134,7 @@ class GeneralUtilTest extends TestCase
     }
 
     /**
-     *
+     * @throws \JeroenDesloovere\VCard\Exception\InvalidUrlException
      */
     public function testGetMimeTypeWithEmptyFile()
     {
@@ -143,7 +143,7 @@ class GeneralUtilTest extends TestCase
     }
 
     /**
-     *
+     * @throws \JeroenDesloovere\VCard\Exception\InvalidUrlException
      */
     public function testGetMimeTypeWithNoPhoto()
     {
@@ -154,6 +154,8 @@ class GeneralUtilTest extends TestCase
     /**
      * @expectedException \JeroenDesloovere\VCard\Exception\InvalidUrlException
      * @expectedExceptionMessage Invalid Url.
+     *
+     * @throws \JeroenDesloovere\VCard\Exception\InvalidUrlException
      */
     public function testGetMimeTypeWithEmptyStringInput()
     {
@@ -163,6 +165,8 @@ class GeneralUtilTest extends TestCase
     /**
      * @expectedException \JeroenDesloovere\VCard\Exception\InvalidUrlException
      * @expectedExceptionMessage Invalid Url.
+     *
+     * @throws \JeroenDesloovere\VCard\Exception\InvalidUrlException
      */
     public function testGetMimeTypeWithSpaceStringInput()
     {

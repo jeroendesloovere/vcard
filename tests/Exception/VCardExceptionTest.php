@@ -2,13 +2,6 @@
 
 namespace JeroenDesloovere\VCard\Tests\Exception;
 
-/*
- * This file is part of the VCard PHP Class from Jeroen Desloovere.
- *
- * For the full copyright and license information, please view the license
- * file that was distributed with this source code.
- */
-
 use JeroenDesloovere\VCard\Exception\ElementAlreadyExistsException;
 use JeroenDesloovere\VCard\Exception\EmptyUrlException;
 use JeroenDesloovere\VCard\Exception\InvalidImageException;
@@ -19,13 +12,17 @@ use JeroenDesloovere\VCard\Exception\VCardException;
 use PHPUnit\Framework\TestCase;
 
 /**
- * VCard Exception Test.
+ * Class VCardExceptionTest
+ *
+ * @package JeroenDesloovere\VCard\Tests\Exception
  */
 class VCardExceptionTest extends TestCase
 {
     /**
      * @expectedException \JeroenDesloovere\VCard\Exception\VCardException
      * @expectedExceptionMessage Testing the VCard error.
+     *
+     * @throws VCardException
      */
     public function testVCardException()
     {
@@ -35,6 +32,8 @@ class VCardExceptionTest extends TestCase
     /**
      * @expectedException \JeroenDesloovere\VCard\Exception\ElementAlreadyExistsException
      * @expectedExceptionMessage You can only set "Testing the VCard error." once.
+     *
+     * @throws ElementAlreadyExistsException
      */
     public function testElementAlreadyExistsException()
     {
@@ -44,6 +43,8 @@ class VCardExceptionTest extends TestCase
     /**
      * @expectedException \JeroenDesloovere\VCard\Exception\EmptyUrlException
      * @expectedExceptionMessage Nothing returned from URL.
+     *
+     * @throws EmptyUrlException
      */
     public function testEmptyUrlException()
     {
@@ -53,6 +54,8 @@ class VCardExceptionTest extends TestCase
     /**
      * @expectedException \JeroenDesloovere\VCard\Exception\InvalidImageException
      * @expectedExceptionMessage Returned data is not an image.
+     *
+     * @throws InvalidImageException
      */
     public function testInvalidImageException()
     {
@@ -62,6 +65,8 @@ class VCardExceptionTest extends TestCase
     /**
      * @expectedException \JeroenDesloovere\VCard\Exception\InvalidUrlException
      * @expectedExceptionMessage Invalid Url.
+     *
+     * @throws InvalidUrlException
      */
     public function testInvalidUrlException()
     {
@@ -71,6 +76,8 @@ class VCardExceptionTest extends TestCase
     /**
      * @expectedException \JeroenDesloovere\VCard\Exception\InvalidVersionException
      * @expectedExceptionMessage Invalid VCard version.
+     *
+     * @throws InvalidVersionException
      */
     public function testInvalidVersionException()
     {
@@ -80,6 +87,8 @@ class VCardExceptionTest extends TestCase
     /**
      * @expectedException \JeroenDesloovere\VCard\Exception\OutputDirectoryNotExistsException
      * @expectedExceptionMessage Output directory does not exist.
+     *
+     * @throws OutputDirectoryNotExistsException
      */
     public function testOutputDirectoryNotExistsException()
     {

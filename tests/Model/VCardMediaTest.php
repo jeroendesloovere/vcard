@@ -2,18 +2,13 @@
 
 namespace JeroenDesloovere\VCard\Tests\Model;
 
-/*
- * This file is part of the VCard PHP Class from Jeroen Desloovere.
- *
- * For the full copyright and license information, please view the license
- * file that was distributed with this source code.
- */
-
 use JeroenDesloovere\VCard\Model\VCardMedia;
 use PHPUnit\Framework\TestCase;
 
 /**
- * This class will test our VCard PHP Class which can generate VCards.
+ * Class VCardMediaTest
+ *
+ * @package JeroenDesloovere\VCard\Tests\Model
  */
 class VCardMediaTest extends TestCase
 {
@@ -29,7 +24,9 @@ class VCardMediaTest extends TestCase
     }
 
     /**
-     *
+     * @throws \JeroenDesloovere\VCard\Exception\EmptyUrlException
+     * @throws \JeroenDesloovere\VCard\Exception\InvalidImageException
+     * @throws \JeroenDesloovere\VCard\Exception\InvalidUrlException
      */
     public function testAddUrlMediaWithJpgPhoto()
     {
@@ -39,7 +36,9 @@ class VCardMediaTest extends TestCase
     }
 
     /**
-     *
+     * @throws \JeroenDesloovere\VCard\Exception\EmptyUrlException
+     * @throws \JeroenDesloovere\VCard\Exception\InvalidImageException
+     * @throws \JeroenDesloovere\VCard\Exception\InvalidUrlException
      */
     public function testAddUrlMediaWithRemoteJpgPhoto()
     {
@@ -50,7 +49,9 @@ class VCardMediaTest extends TestCase
     }
 
     /**
-     *
+     * @throws \JeroenDesloovere\VCard\Exception\EmptyUrlException
+     * @throws \JeroenDesloovere\VCard\Exception\InvalidImageException
+     * @throws \JeroenDesloovere\VCard\Exception\InvalidUrlException
      */
     public function testAddLogoWithJpgImageNoInclude()
     {
@@ -64,6 +65,10 @@ class VCardMediaTest extends TestCase
      *
      * @expectedException \JeroenDesloovere\VCard\Exception\InvalidImageException
      * @expectedExceptionMessage Returned data is not an image.
+     *
+     * @throws \JeroenDesloovere\VCard\Exception\EmptyUrlException
+     * @throws \JeroenDesloovere\VCard\Exception\InvalidImageException
+     * @throws \JeroenDesloovere\VCard\Exception\InvalidUrlException
      */
     public function testAddUrlMediaWithRemoteEmptyJpgPhoto()
     {
@@ -76,6 +81,10 @@ class VCardMediaTest extends TestCase
      *
      * @expectedException \JeroenDesloovere\VCard\Exception\InvalidImageException
      * @expectedExceptionMessage Returned data is not an image.
+     *
+     * @throws \JeroenDesloovere\VCard\Exception\EmptyUrlException
+     * @throws \JeroenDesloovere\VCard\Exception\InvalidImageException
+     * @throws \JeroenDesloovere\VCard\Exception\InvalidUrlException
      */
     public function testAddUrlMediaWithEmptyFile()
     {
@@ -88,6 +97,10 @@ class VCardMediaTest extends TestCase
      *
      * @expectedException \JeroenDesloovere\VCard\Exception\InvalidImageException
      * @expectedExceptionMessage Returned data is not an image.
+     *
+     * @throws \JeroenDesloovere\VCard\Exception\EmptyUrlException
+     * @throws \JeroenDesloovere\VCard\Exception\InvalidImageException
+     * @throws \JeroenDesloovere\VCard\Exception\InvalidUrlException
      */
     public function testAddUrlMediaWithNoPhoto()
     {
@@ -98,6 +111,10 @@ class VCardMediaTest extends TestCase
     /**
      * @expectedException \JeroenDesloovere\VCard\Exception\InvalidUrlException
      * @expectedExceptionMessage Invalid Url.
+     *
+     * @throws \JeroenDesloovere\VCard\Exception\EmptyUrlException
+     * @throws \JeroenDesloovere\VCard\Exception\InvalidImageException
+     * @throws \JeroenDesloovere\VCard\Exception\InvalidUrlException
      */
     public function testAddUrlMediaWithEmptyStringInput()
     {
@@ -108,6 +125,10 @@ class VCardMediaTest extends TestCase
     /**
      * @expectedException \JeroenDesloovere\VCard\Exception\InvalidUrlException
      * @expectedExceptionMessage Invalid Url.
+     *
+     * @throws \JeroenDesloovere\VCard\Exception\EmptyUrlException
+     * @throws \JeroenDesloovere\VCard\Exception\InvalidImageException
+     * @throws \JeroenDesloovere\VCard\Exception\InvalidUrlException
      */
     public function testAddUrlMediaWithSpaceStringInput()
     {

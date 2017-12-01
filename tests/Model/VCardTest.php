@@ -2,13 +2,6 @@
 
 namespace JeroenDesloovere\VCard\Tests\Model;
 
-/*
- * This file is part of the VCard PHP Class from Jeroen Desloovere.
- *
- * For the full copyright and license information, please view the license
- * file that was distributed with this source code.
- */
-
 use JeroenDesloovere\VCard\Model\VCard;
 use JeroenDesloovere\VCard\Model\VCardAddress;
 use PHPUnit\Framework\TestCase;

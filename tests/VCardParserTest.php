@@ -10,7 +10,9 @@ use JeroenDesloovere\VCard\VCardParser;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Unit tests for our VCard parser.
+ * Class VCardParserTest
+ *
+ * @package JeroenDesloovere\VCard\Tests
  */
 class VCardParserTest extends TestCase
 {
