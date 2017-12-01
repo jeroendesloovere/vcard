@@ -4,6 +4,7 @@ namespace JeroenDesloovere\VCard\Tests;
 
 use JeroenDesloovere\VCard\Model\VCard;
 use JeroenDesloovere\VCard\Model\VCardAddress;
+use JeroenDesloovere\VCard\Model\VCardMedia;
 use JeroenDesloovere\VCard\VCardBuilder;
 use JeroenDesloovere\VCard\VCardParser;
 use PHPUnit\Framework\TestCase;
@@ -32,6 +33,7 @@ class VCardParserTest extends TestCase
         $vcard->setLastName('Desloovere');
         $builder = new VCardBuilder($vcard);
         $parser = new VCardParser($builder->buildVCard());
+        $this->assertEquals(true, $parser->hasCardAtIndex(0));
         $this->assertEquals('Jeroen', $parser->getCardAtIndex(0)->getFirstName());
         $this->assertEquals('Desloovere', $parser->getCardAtIndex(0)->getLastName());
         $this->assertEquals('Jeroen Desloovere', $parser->getCardAtIndex(0)->getFullName());
@@ -246,62 +248,93 @@ class VCardParserTest extends TestCase
         $this->assertEquals('Ninja', $parser->getCardAtIndex(0)->getTitle());
     }
 
-//    /**
-//     * TODO: fix this
-//     */
-//    public function testLogo()
-//    {
-//        $image = __DIR__.'/image.jpg';
-//        $imageUrl = 'https://raw.githubusercontent.com/jeroendesloovere/vcard/master/tests/image.jpg';
-//
-//        $vcard = new VCard();
-//        $vcard->setRawLogo($image);
-//        $builder = new VCardBuilder($vcard);
-//        $parser = new VCardParser($builder->buildVCard());
-//        $this->assertStringEqualsFile($image, $parser->getCardAtIndex(0)->getRawLogo());
-//
-//        $vcard = new VCard();
-//        $vcard->setUrlLogo($image, false);
-//        $builder = new VCardBuilder($vcard);
-//        $parser = new VCardParser($builder->buildVCard());
-//        $this->assertEquals(__DIR__.'/image.jpg', $parser->getCardAtIndex(0)->getUrlLogo());
-//
-//        $vcard = new VCard();
-//        $vcard->setUrlLogo($imageUrl, false);
-//        $builder = new VCardBuilder($vcard);
-//        $parser = new VCardParser($builder->buildVCard());
-//        $this->assertEquals($imageUrl, $parser->getCardAtIndex(0)->getUrlLogo());
-//    }
-//
-//    /**
-//     * TODO: fix this
-//     */
-//    public function testPhoto()
-//    {
-//        $image = __DIR__.'/image.jpg';
-//        $imageUrl = 'https://raw.githubusercontent.com/jeroendesloovere/vcard/master/tests/image.jpg';
-//
-//        $vcard = new VCard();
-//        $vcard->addPhoto($image);
-//        $builder = new VCardBuilder($vcard);
-//        $vcard->addPhoto($image);
-//        $parser = new VCardParser($builder->buildVCard());
-//        $this->assertStringEqualsFile($image, $parser->getCardAtIndex(0)->getRawPhoto());
-//
-//        $vcard = new VCard();
-//        $vcard->addPhoto($image, false);
-//        $builder = new VCardBuilder($vcard);
-//        $vcard->addPhoto($image, false);
-//        $parser = new VCardParser($builder->buildVCard());
-//        $this->assertEquals(__DIR__.'/image.jpg', $parser->getCardAtIndex(0)->getUrlPhoto());
-//
-//        $vcard = new VCard();
-//        $vcard->addPhoto($imageUrl, false);
-//        $builder = new VCardBuilder($vcard);
-//        $vcard->addPhoto($imageUrl, false);
-//        $parser = new VCardParser($builder->buildVCard());
-//        $this->assertEquals($imageUrl, $parser->getCardAtIndex(0)->getUrlPhoto());
-//    }
+    /**
+     * @throws \JeroenDesloovere\VCard\Exception\EmptyUrlException
+     * @throws \JeroenDesloovere\VCard\Exception\InvalidImageException
+     * @throws \JeroenDesloovere\VCard\Exception\InvalidUrlException
+     */
+    public function testLogo()
+    {
+        $image = __DIR__.'/image.jpg';
+        $imageUrl = 'https://raw.githubusercontent.com/jeroendesloovere/vcard/master/tests/image.jpg';
+
+        $vcard = new VCard();
+        $vcardMedia = new VCardMedia();
+        $imageRaw = file_get_contents($image);
+        $vcardMedia->addRawMedia($imageRaw);
+        $vcard->setLogo($vcardMedia);
+        $builder = new VCardBuilder($vcard);
+        $parser = new VCardParser($builder->buildVCard());
+        $this->assertEquals($imageRaw, $parser->getCardAtIndex(0)->getLogo()->getRaw());
+
+        $vcard = new VCard();
+        $vcardMedia = new VCardMedia();
+        $vcardMedia->addUrlMedia($image);
+        $vcard->setLogo($vcardMedia);
+        $builder = new VCardBuilder($vcard);
+        $parser = new VCardParser($builder->buildVCard());
+        $this->assertStringEqualsFile($image, $parser->getCardAtIndex(0)->getLogo()->getRaw());
+
+        $vcard = new VCard();
+        $vcardMedia = new VCardMedia();
+        $vcardMedia->addUrlMedia($image, false);
+        $vcard->setLogo($vcardMedia);
+        $builder = new VCardBuilder($vcard);
+        $parser = new VCardParser($builder->buildVCard());
+        $this->assertEquals(__DIR__.'/image.jpg', $parser->getCardAtIndex(0)->getLogo()->getUrl());
+
+        $vcard = new VCard();
+        $vcardMedia = new VCardMedia();
+        $vcardMedia->addUrlMedia($imageUrl, false);
+        $vcard->setLogo($vcardMedia);
+        $builder = new VCardBuilder($vcard);
+        $parser = new VCardParser($builder->buildVCard());
+        $this->assertEquals($imageUrl, $parser->getCardAtIndex(0)->getLogo()->getUrl());
+    }
+
+    /**
+     * @throws \JeroenDesloovere\VCard\Exception\EmptyUrlException
+     * @throws \JeroenDesloovere\VCard\Exception\InvalidImageException
+     * @throws \JeroenDesloovere\VCard\Exception\InvalidUrlException
+     */
+    public function testPhoto()
+    {
+        $image = __DIR__.'/image.jpg';
+        $imageUrl = 'https://raw.githubusercontent.com/jeroendesloovere/vcard/master/tests/image.jpg';
+
+        $vcard = new VCard();
+        $vcardMedia = new VCardMedia();
+        $imageRaw = file_get_contents($image);
+        $vcardMedia->addRawMedia($imageRaw);
+        $vcard->setPhoto($vcardMedia);
+        $builder = new VCardBuilder($vcard);
+        $parser = new VCardParser($builder->buildVCard());
+        $this->assertEquals($imageRaw, $parser->getCardAtIndex(0)->getPhoto()->getRaw());
+
+        $vcard = new VCard();
+        $vcardMedia = new VCardMedia();
+        $vcardMedia->addUrlMedia($image);
+        $vcard->setPhoto($vcardMedia);
+        $builder = new VCardBuilder($vcard);
+        $parser = new VCardParser($builder->buildVCard());
+        $this->assertStringEqualsFile($image, $parser->getCardAtIndex(0)->getPhoto()->getRaw());
+
+        $vcard = new VCard();
+        $vcardMedia = new VCardMedia();
+        $vcardMedia->addUrlMedia($image, false);
+        $vcard->setPhoto($vcardMedia);
+        $builder = new VCardBuilder($vcard);
+        $parser = new VCardParser($builder->buildVCard());
+        $this->assertEquals(__DIR__.'/image.jpg', $parser->getCardAtIndex(0)->getPhoto()->getUrl());
+
+        $vcard = new VCard();
+        $vcardMedia = new VCardMedia();
+        $vcardMedia->addUrlMedia($imageUrl, false);
+        $vcard->setPhoto($vcardMedia);
+        $builder = new VCardBuilder($vcard);
+        $parser = new VCardParser($builder->buildVCard());
+        $this->assertEquals($imageUrl, $parser->getCardAtIndex(0)->getPhoto()->getUrl());
+    }
 
     /**
      *

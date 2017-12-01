@@ -29,22 +29,6 @@ class VCardMedia
      */
     protected $url;
 
-//    /**
-//     * @return null|string
-//     */
-//    public function getMedia(): ?string
-//    {
-//        return null;
-//    }
-//
-//    /**
-//     * @param null|string $media
-//     */
-//    public function setMedia(?string $media): void
-//    {
-//        // dd
-//    }
-
     /**
      * @return null|string
      */
