@@ -192,8 +192,10 @@ class VCardBuilder
         // remove all spaces
         $value = preg_replace('/\s+/', $separator, $value);
 
+        $pregQuoteSeparator = preg_quote($separator, '/');
+
         // if value is empty, stop here
-        if (empty($value)) {
+        if (empty($value) || !preg_match("/[^\s$pregQuoteSeparator]/", $value)) {
             return;
         }
 

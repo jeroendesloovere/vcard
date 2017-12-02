@@ -509,83 +509,86 @@ class VCard extends \stdClass
         $this->categories = $categories;
     }
 
-    /**
-     * @return null|string
-     */
-    public function getGeo(): ?string
-    {
-        return $this->geo;
-    }
-
-    /**
-     * @param null|string $geo
-     */
-    public function setGeo(?string $geo): void
-    {
-        $this->geo = $geo;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getGender(): ?string
-    {
-        return $this->gender;
-    }
-
-    /**
-     * @param null|string $gender
-     */
-    public function setGender(?string $gender): void
-    {
-        $this->gender = $gender;
-    }
-
-    /**
-     * @return null|string[][]
-     */
-    public function getNickname(): ?array
-    {
-        return $this->nickname;
-    }
-
-    /**
-     * @param null|string[][] $nickname
-     */
-    public function setNickname(?array $nickname): void
-    {
-        $this->nickname = $nickname;
-    }
-
-    /**
-     * @return null|string[][]
-     */
-    public function getSkype(): ?array
-    {
-        return $this->skype;
-    }
-
-    /**
-     * @param null|string[][] $skype
-     */
-    public function setSkype(?array $skype): void
-    {
-        $this->skype = $skype;
-    }
-
-    /**
-     * @return array|null
-     */
-    public function getItem(): ?array
-    {
-        return $this->item;
-    }
-
-    /**
-     * @param array|null $item
-     */
-    public function setItem(?array $item): void
-    {
-        $this->item = $item;
-    }
+//    /**
+//     * TODO: Add functions
+//     */
+//    /**
+//     * @return null|string
+//     */
+//    public function getGeo(): ?string
+//    {
+//        return $this->geo;
+//    }
+//
+//    /**
+//     * @param null|string $geo
+//     */
+//    public function setGeo(?string $geo): void
+//    {
+//        $this->geo = $geo;
+//    }
+//
+//    /**
+//     * @return null|string
+//     */
+//    public function getGender(): ?string
+//    {
+//        return $this->gender;
+//    }
+//
+//    /**
+//     * @param null|string $gender
+//     */
+//    public function setGender(?string $gender): void
+//    {
+//        $this->gender = $gender;
+//    }
+//
+//    /**
+//     * @return null|string[][]
+//     */
+//    public function getNickname(): ?array
+//    {
+//        return $this->nickname;
+//    }
+//
+//    /**
+//     * @param null|string[][] $nickname
+//     */
+//    public function setNickname(?array $nickname): void
+//    {
+//        $this->nickname = $nickname;
+//    }
+//
+//    /**
+//     * @return null|string[][]
+//     */
+//    public function getSkype(): ?array
+//    {
+//        return $this->skype;
+//    }
+//
+//    /**
+//     * @param null|string[][] $skype
+//     */
+//    public function setSkype(?array $skype): void
+//    {
+//        $this->skype = $skype;
+//    }
+//
+//    /**
+//     * @return array|null
+//     */
+//    public function getItem(): ?array
+//    {
+//        return $this->item;
+//    }
+//
+//    /**
+//     * @param array|null $item
+//     */
+//    public function setItem(?array $item): void
+//    {
+//        $this->item = $item;
+//    }
 }

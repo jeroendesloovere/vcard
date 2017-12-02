@@ -354,6 +354,102 @@ class VCardBuilderTest extends TestCase
     }
 
     /**
+     * Test getFilename is unknown if setFilename is a space
+     */
+    public function testSetFilenameSpace()
+    {
+        $vcard = new VCard();
+        $builder = new VCardBuilder($vcard);
+        $builder->setFilename(' ');
+
+        $this->assertEquals('unknown', $builder->getFilename());
+    }
+
+    /**
+     * Test getFilename is unknown if setFilename is array full of empty strings
+     */
+    public function testSetFilenameArrayEmpty()
+    {
+        $vcard = new VCard();
+        $builder = new VCardBuilder($vcard);
+        $builder->setFilename(['', '', '', '', '']);
+
+        $this->assertEquals('unknown', $builder->getFilename());
+    }
+
+    /**
+     * Test getFilename is unknown if setFilename is array full of strings with a space
+     */
+    public function testSetFilenameArraySpaces()
+    {
+        $vcard = new VCard();
+        $builder = new VCardBuilder($vcard);
+        $builder->setFilename([' ', ' ', ' ', ' ', ' ']);
+
+        $this->assertEquals('unknown', $builder->getFilename());
+    }
+
+    /**
+     * Test getFilename is unknown if setFilename is empty
+     */
+    public function testSetFilenameArray()
+    {
+        $vcard = new VCard();
+        $builder = new VCardBuilder($vcard);
+        $builder->setFilename(['Test', 'Filename', 'Array']);
+
+        $this->assertEquals('test-filename-array', $builder->getFilename());
+    }
+
+    /**
+     * Test getFilename is unknown if setFilename is a space
+     */
+    public function testSetFilenameSpaceSeparatorSlash()
+    {
+        $vcard = new VCard();
+        $builder = new VCardBuilder($vcard);
+        $builder->setFilename(' ', true, '/');
+
+        $this->assertEquals('unknown', $builder->getFilename());
+    }
+
+    /**
+     * Test getFilename is unknown if setFilename is array full of empty strings
+     */
+    public function testSetFilenameArrayEmptySeparatorSlash()
+    {
+        $vcard = new VCard();
+        $builder = new VCardBuilder($vcard);
+        $builder->setFilename(['', '', '', '', ''], true, '/');
+
+        $this->assertEquals('unknown', $builder->getFilename());
+    }
+
+    /**
+     * Test getFilename is unknown if setFilename is array full of strings with a space
+     */
+    public function testSetFilenameArraySpacesSeparatorSlash()
+    {
+        $vcard = new VCard();
+        $builder = new VCardBuilder($vcard);
+        $builder->setFilename([' ', ' ', ' ', ' ', ' '], true, '/');
+
+        $this->assertEquals('unknown', $builder->getFilename());
+    }
+
+    /**
+     * Test getFilename is unknown if setFilename is empty
+     */
+    public function testSetFilenameArraySeparatorSlash()
+    {
+        $vcard = new VCard();
+        $builder = new VCardBuilder($vcard);
+        $builder->setFilename(['Test', 'Filename', 'Array'], true, '/');
+
+        $this->assertEquals('test-filename-array', $builder->getFilename());
+    }
+
+    /**
      * Test hasProperty is false
      */
     public function testGetHeadersFalse()
