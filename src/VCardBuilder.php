@@ -23,11 +23,11 @@ use JeroenDesloovere\VCard\Util\UserAgentUtil;
 class VCardBuilder
 {
     /**
-     * Filename
+     * FileName
      *
      * @var string|null
      */
-    private $filename;
+    private $fileName;
 
     /**
      * Properties
@@ -57,7 +57,7 @@ class VCardBuilder
 
         $propertyUtil = new PropertyService($vCard, $charset);
 
-        $this->filename = $propertyUtil->getFilename();
+        $this->fileName = $propertyUtil->getFileName();
         $this->properties = $propertyUtil->getProperties();
     }
 
@@ -108,7 +108,7 @@ class VCardBuilder
         $string .= "SUMMARY:Click attached contact below to save to your contacts\n";
         $string .= 'DTSTAMP:'.$dtstart."Z\n";
         $string .= "ATTACH;VALUE=BINARY;ENCODING=BASE64;FMTTYPE=text/directory;\n";
-        $string .= ' X-APPLE-FILENAME='.$this->getFilename().'.'.$this->getFileExtension().":\n";
+        $string .= ' X-APPLE-FILENAME='.$this->getFullFileName().":\n";
 
         // base64 encode it so that it can be used as an attachment to the "dummy" calendar appointment
         $b64vcard = base64_encode($this->buildVCard());
@@ -179,7 +179,7 @@ class VCardBuilder
      * @param string       $separator [optional] Default separator is an underscore '_'
      * @return void
      */
-    public function setFilename($value, $overwrite = true, $separator = '_'): void
+    public function setFileName($value, $overwrite = true, $separator = '_'): void
     {
         // recast to string if $value is array
         if (\is_array($value)) {
@@ -209,8 +209,8 @@ class VCardBuilder
         $value = Transliterator::urlize($value);
 
         // overwrite filename or add to filename using a prefix in between
-        $this->filename = $overwrite ?
-            $value : $this->filename.$separator.$value;
+        $this->fileName = $overwrite ?
+            $value : $this->fileName.$separator.$value;
     }
 
     /**
@@ -218,13 +218,13 @@ class VCardBuilder
      *
      * @return string
      */
-    public function getFilename(): string
+    public function getFileName(): string
     {
-        if ($this->filename === null) {
+        if ($this->fileName === null) {
             return 'unknown';
         }
 
-        return $this->filename;
+        return $this->fileName;
     }
 
     /**
@@ -250,6 +250,16 @@ class VCardBuilder
     }
 
     /**
+     * Get full filename
+     *
+     * @return string
+     */
+    public function getFullFileName(): string
+    {
+        return $this->getFileName().'.'.$this->getFileExtension();
+    }
+
+    /**
      * Get headers
      *
      * @param bool $asAssociative
@@ -258,7 +268,7 @@ class VCardBuilder
     public function getHeaders(bool $asAssociative): array
     {
         $contentType = $this->getContentType().'; charset='.$this->getCharset();
-        $contentDisposition = 'attachment; filename='.$this->getFilename().'.'.$this->getFileExtension();
+        $contentDisposition = 'attachment; filename='.$this->getFullFileName();
         $contentLength = mb_strlen($this->getOutput(), $this->getCharset());
         $connection = 'close';
 
@@ -333,7 +343,7 @@ class VCardBuilder
      */
     public function save(string $savePath = null): void
     {
-        $file = $this->getFilename().'.'.$this->getFileExtension();
+        $file = $this->getFullFileName();
 
         // Add save path if given
         if (null !== $savePath) {

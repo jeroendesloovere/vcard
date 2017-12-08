@@ -32,7 +32,7 @@ class UserAgentUtilTest extends TestCase
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (iPad; U; CPU OS 3_2_2 like Mac OS X; nl-nl) AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 Mobile/7B500 Safari/531.21.10';
 
         $result = UserAgentUtil::isIOS();
-        $this->assertEquals(true, $result);
+        $this->assertTrue($result);
     }
 
     /**
@@ -43,7 +43,7 @@ class UserAgentUtilTest extends TestCase
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (iPad; U; CPU OS 3_2_2 like Mac OS X; nl-nl) AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 Mobile/7B500 Safari/531.21.10';
 
         $result = UserAgentUtil::shouldAttachmentBeCal();
-        $this->assertEquals(true, $result);
+        $this->assertTrue($result);
     }
 
     /**
@@ -54,7 +54,7 @@ class UserAgentUtilTest extends TestCase
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (iPad; U; CPU OS 3_2_2 like Mac OS X; nl-nl) AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 Mobile/7B500 Safari/531.21.10';
 
         $result = UserAgentUtil::isIOS7();
-        $this->assertEquals(true, $result);
+        $this->assertTrue($result);
     }
 
     // Test for iOS 6
@@ -66,7 +66,7 @@ class UserAgentUtilTest extends TestCase
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (iPhone; CPU iPhone OS 6_1_1 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10B145 Safari/8536.25';
 
         $result = UserAgentUtil::isIOS();
-        $this->assertEquals(true, $result);
+        $this->assertTrue($result);
     }
 
     /**
@@ -77,7 +77,7 @@ class UserAgentUtilTest extends TestCase
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (iPhone; CPU iPhone OS 6_1_1 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10B145 Safari/8536.25';
 
         $result = UserAgentUtil::shouldAttachmentBeCal();
-        $this->assertEquals(true, $result);
+        $this->assertTrue($result);
     }
 
     /**
@@ -88,7 +88,7 @@ class UserAgentUtilTest extends TestCase
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (iPhone; CPU iPhone OS 6_1_1 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10B145 Safari/8536.25';
 
         $result = UserAgentUtil::isIOS7();
-        $this->assertEquals(true, $result);
+        $this->assertTrue($result);
     }
 
     // Test for iOS 7
@@ -100,7 +100,7 @@ class UserAgentUtilTest extends TestCase
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (iPad; CPU OS 7_0_2 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Mobile/11A501';
 
         $result = UserAgentUtil::isIOS();
-        $this->assertEquals(true, $result);
+        $this->assertTrue($result);
     }
 
     /**
@@ -111,7 +111,7 @@ class UserAgentUtilTest extends TestCase
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (iPad; CPU OS 7_0_2 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Mobile/11A501';
 
         $result = UserAgentUtil::shouldAttachmentBeCal();
-        $this->assertEquals(true, $result);
+        $this->assertTrue($result);
     }
 
     /**
@@ -122,7 +122,7 @@ class UserAgentUtilTest extends TestCase
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (iPad; CPU OS 7_0_2 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Mobile/11A501';
 
         $result = UserAgentUtil::isIOS7();
-        $this->assertEquals(true, $result);
+        $this->assertTrue($result);
     }
 
     // Test for iOS 10
@@ -134,7 +134,7 @@ class UserAgentUtilTest extends TestCase
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1';
 
         $result = UserAgentUtil::isIOS();
-        $this->assertEquals(true, $result);
+        $this->assertTrue($result);
     }
 
     /**
@@ -145,7 +145,7 @@ class UserAgentUtilTest extends TestCase
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1';
 
         $result = UserAgentUtil::shouldAttachmentBeCal();
-        $this->assertEquals(false, $result);
+        $this->assertFalse($result);
     }
 
     /**
@@ -156,6 +156,6 @@ class UserAgentUtilTest extends TestCase
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1';
 
         $result = UserAgentUtil::isIOS7();
-        $this->assertEquals(false, $result);
+        $this->assertFalse($result);
     }
 }

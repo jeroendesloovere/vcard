@@ -35,7 +35,7 @@ class VCardParserTest extends TestCase
         $vcard->setLastName('Desloovere');
         $builder = new VCardBuilder($vcard);
         $parser = new VCardParser($builder->buildVCard());
-        $this->assertEquals(true, $parser->hasCardAtIndex(0));
+        $this->assertTrue($parser->hasCardAtIndex(0));
         $this->assertEquals('Jeroen', $parser->getCardAtIndex(0)->getFirstName());
         $this->assertEquals('Desloovere', $parser->getCardAtIndex(0)->getLastName());
         $this->assertEquals('Jeroen Desloovere', $parser->getCardAtIndex(0)->getFullName());

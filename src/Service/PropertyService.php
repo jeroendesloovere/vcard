@@ -23,11 +23,11 @@ class PropertyService
     private $definedElements;
 
     /**
-     * Filename
+     * FileName
      *
      * @var string|null
      */
-    private $filename;
+    private $fileName;
 
     /**
      * Multiple properties for element allowed
@@ -85,9 +85,9 @@ class PropertyService
      *
      * @return string|null
      */
-    public function getFilename(): ?string
+    public function getFileName(): ?string
     {
-        return $this->filename;
+        return $this->fileName;
     }
 
     /**
@@ -124,7 +124,7 @@ class PropertyService
      * @param string       $separator [optional] Default separator is an underscore '_'
      * @return void
      */
-    private function setFilename($value, $overwrite = true, $separator = '_'): void
+    private function setFileName($value, $overwrite = true, $separator = '_'): void
     {
         // recast to string if $value is array
         if (\is_array($value)) {
@@ -152,8 +152,8 @@ class PropertyService
         $value = Transliterator::urlize($value);
 
         // overwrite filename or add to filename using a prefix in between
-        $this->filename = $overwrite ?
-            $value : $this->filename.$separator.$value;
+        $this->fileName = $overwrite ?
+            $value : $this->fileName.$separator.$value;
     }
 
     /**
@@ -263,8 +263,8 @@ class PropertyService
             );
 
             // if filename is empty, add to filename
-            if ($this->filename === null) {
-                $this->setFilename($company);
+            if ($this->fileName === null) {
+                $this->setFileName($company);
             }
         }
     }
@@ -300,7 +300,7 @@ class PropertyService
             );
 
             // define filename
-            $this->setFilename($values);
+            $this->setFileName($values);
 
             // set property
             $property = $lastName.';'.$firstName.';'.$additional.';'.$prefix.';'.$suffix;
