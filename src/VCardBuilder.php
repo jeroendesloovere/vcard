@@ -165,7 +165,7 @@ class VCardBuilder
         $charsetString = '';
 
         if ($this->charset === 'utf-8') {
-            $charsetString = ';CHARSET='.$this->charset;
+            $charsetString = ';CHARSET=UTF-8';
         }
 
         return $charsetString;
