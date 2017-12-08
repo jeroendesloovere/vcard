@@ -217,11 +217,12 @@ class VCardParser
                     unset($types[$i]);
                     $rawValue = true;
                 } elseif (stripos($type, 'charset=') === 0) {
-                    try {
-                        $value = mb_convert_encoding($value, 'UTF-8', substr($type, 8));
-                    } catch (\Exception $e) {
-                        // not empty
+                    $encoding = substr($type, 8);
+
+                    if (\in_array($encoding, mb_list_encodings(), true)) {
+                        $value = mb_convert_encoding($value, 'UTF-8', $encoding);
                     }
+
                     unset($types[$i]);
                 }
             }

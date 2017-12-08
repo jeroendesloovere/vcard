@@ -404,6 +404,66 @@ class VCardParserTest extends TestCase
     }
 
     /**
+     *
+     */
+    public function testEncoding()
+    {
+        $parser = VCardParser::parseFromFile(__DIR__.'/encoding.vcf');
+        // Use this opportunity to test fetching all cards directly.
+        $cards = $parser->getCards();
+
+        // normal input
+        // utf-8
+        $this->assertEquals('Thies-Tillman', $cards[0]->getFirstName());
+        $this->assertEquals('Jacobsen', $cards[0]->getLastName());
+        $this->assertEquals('Thies-Tillman Jacobsen', $cards[0]->getFullName());
+        $this->assertEquals('Lieblingsfarbe: Violett', $cards[0]->getNote());
+
+        // QUOTED-PRINTABLE
+        $this->assertEquals('Thies-Tillman', $cards[1]->getFirstName());
+        $this->assertEquals('Jacobsen', $cards[1]->getLastName());
+        $this->assertEquals('Thies-Tillman Jacobsen', $cards[1]->getFullName());
+        $this->assertEquals('Lieblingsfarbe: Violett', $cards[1]->getNote());
+
+        // BASE64
+        $this->assertEquals('Thies-Tillman', $cards[2]->getFirstName());
+        $this->assertEquals('Jacobsen', $cards[2]->getLastName());
+        $this->assertEquals('Thies-Tillman Jacobsen', $cards[2]->getFullName());
+        $this->assertEquals('Lieblingsfarbe: Violett', $cards[2]->getNote());
+
+        // ENCODING=b
+        $this->assertEquals('Thies-Tillman', $cards[3]->getFirstName());
+        $this->assertEquals('Jacobsen', $cards[3]->getLastName());
+        $this->assertEquals('Thies-Tillman Jacobsen', $cards[3]->getFullName());
+        $this->assertEquals('Lieblingsfarbe: Violett', $cards[3]->getNote());
+
+        // strange input
+        // utf-8
+        $this->assertEquals('Thies-Tillman', $cards[4]->getFirstName());
+        $this->assertEquals('Jacobsen', $cards[4]->getLastName());
+        $this->assertEquals('Thies-Tillman Jacobsen', $cards[4]->getFullName());
+        $this->assertEquals('Ludwig-Götz Graßl', $cards[4]->getNote());
+
+        // QUOTED-PRINTABLE
+        $this->assertEquals('Thies-Tillman', $cards[5]->getFirstName());
+        $this->assertEquals('Jacobsen', $cards[5]->getLastName());
+        $this->assertEquals('Thies-Tillman Jacobsen', $cards[5]->getFullName());
+        $this->assertEquals('Ludwig-Götz Graßl', $cards[5]->getNote());
+
+        // BASE64
+        $this->assertEquals('Thies-Tillman', $cards[6]->getFirstName());
+        $this->assertEquals('Jacobsen', $cards[6]->getLastName());
+        $this->assertEquals('Thies-Tillman Jacobsen', $cards[6]->getFullName());
+        $this->assertEquals('Ludwig-Götz Graßl', $cards[6]->getNote());
+
+        // ENCODING=b
+        $this->assertEquals('Thies-Tillman', $cards[7]->getFirstName());
+        $this->assertEquals('Jacobsen', $cards[7]->getLastName());
+        $this->assertEquals('Thies-Tillman Jacobsen', $cards[7]->getFullName());
+        $this->assertEquals('Ludwig-Götz Graßl', $cards[7]->getNote());
+    }
+
+    /**
      * @expectedException \RuntimeException
      */
     public function testFileNotFound()
