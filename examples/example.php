@@ -4,49 +4,69 @@
  * VCard generator test - can save to file or output as a download
  */
 
-require_once __DIR__ . '/../vendor/autoload.php';
-require_once __DIR__ . '/../src/VCard.php';
+require_once __DIR__.'/../vendor/autoload.php';
 
-use JeroenDesloovere\VCard\VCard;
+use JeroenDesloovere\VCard\Model\VCard;
+use JeroenDesloovere\VCard\Model\VCardAddress;
+use JeroenDesloovere\VCard\Model\VCardMedia;
+use JeroenDesloovere\VCard\VCardBuilder;
 
 // define vcard
 $vcard = new VCard();
 
 // define variables
-$firstname = 'Jeroen';
-$lastname = 'Desloovere';
-$additional = '';
 $prefix = '';
+$firstname = 'Jeroen';
+$additional = '';
+$lastname = 'Desloovere';
 $suffix = '';
 
 // add personal data
-$vcard->addName($lastname, $firstname, $additional, $prefix, $suffix);
+$vcard->setPrefix($prefix);
+$vcard->setFirstName($firstname);
+$vcard->setAdditional($additional);
+$vcard->setLastName($lastname);
+$vcard->setSuffix($suffix);
 
 // add work data
-$vcard->addCompany('Siesqo');
-$vcard->addJobtitle('Web Developer');
+$vcard->setOrganization('Siesqo');
+$vcard->setTitle('Web Developer');
 $vcard->addEmail('info@jeroendesloovere.be');
-$vcard->addPhoneNumber(1234121212, 'PREF;WORK');
-$vcard->addPhoneNumber(123456789, 'WORK');
-$vcard->addAddress(null, null, 'street', 'worktown', null, 'workpostcode', 'Belgium');
-$vcard->addURL('http://www.jeroendesloovere.be');
+$vcard->addPhone(1234121212, 'PREF;WORK');
+$vcard->addPhone(123456789, 'WORK');
 
-$vcard->addPhoto(__DIR__ . '/assets/landscape.jpeg');
-//$vcard->addPhoto('https://raw.githubusercontent.com/jeroendesloovere/vcard/master/tests/image.jpg');
+$vcardAddress = new VCardAddress();
+$vcardAddress->setName(null);
+$vcardAddress->setExtended(null);
+$vcardAddress->setStreet('street');
+$vcardAddress->setLocality('worktown');
+$vcardAddress->setRegion(null);
+$vcardAddress->setPostalCode('workpostcode');
+$vcardAddress->setCountry('Belgium');
+$vcard->addAddress($vcardAddress);
+
+$vcard->addUrl('http://www.jeroendesloovere.be');
+
+$vcardMedia = new VCardMedia();
+$vcardMedia->setUrl(__DIR__.'/assets/landscape.jpeg');
+//$vcardMedia->setUrl('https://raw.githubusercontent.com/jeroendesloovere/vcard/master/tests/image.jpg');
+$vcard->setPhoto($vcardMedia);
+
+$vcardBuilder = new VCardBuilder($vcard);
 
 // return vcard as a string
-//return $vcard->getOutput();
+//return $vcardBuilder->getOutput();
 
 // return vcard as a download
-return $vcard->download();
+$vcardBuilder->download();
 
 // echo message
-echo 'A personal vCard is saved in this folder: ' . __DIR__;
+echo 'A personal vCard is saved in this folder: '.__DIR__;
 
 // or
 
 // save the card in file in the current folder
-// return $vcard->save();
+// return $vcardBuilder->save();
 
 // echo message
 // echo 'A personal vCard is saved in this folder: ' . __DIR__;
