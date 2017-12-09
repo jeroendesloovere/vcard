@@ -506,6 +506,20 @@ class VCardBuilderTest extends TestCase
     }
 
     /**
+     * Test hasProperty is true
+     *
+     * @expectedException \JeroenDesloovere\VCard\Exception\OutputDirectoryNotExistsException
+     * @throws \JeroenDesloovere\VCard\Exception\OutputDirectoryNotExistsException
+     */
+    public function testSaveToNoDir()
+    {
+        $vcard = new VCard();
+        $builder = new VCardBuilder($vcard);
+
+        $builder->save('dit is een url die niet bestaat');
+    }
+
+    /**
      * Test VCalendar
      *
      * @runInSeparateProcess
