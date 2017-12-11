@@ -6,6 +6,13 @@ Documentation about vCard 4.0:
 * [RFC5646](https://tools.ietf.org/html/rfc6350)
 * [vCard 4.0](https://devguide.calconnect.org/vCard/vcard-4/)
 
+### Tests
+
+We have build in tests, type the following to execute them:
+```
+composer test tests
+```
+
 
 ==== OLD documentation below
 
