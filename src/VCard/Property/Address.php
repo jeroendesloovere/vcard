@@ -8,13 +8,13 @@ use JeroenDesloovere\VCard\PropertyParameter\Type;
 
 class Address implements PropertyInterface
 {
-    /** @var null|string - shortcode */
+    /** @var null|string - The country name in your own language, e.g.: belgië */
     private $countryName;
 
-    /** @var null|string - e.g., apartment or suite number */
+    /** @var null|string - e.g.: apartment or suite number */
     private $extendedAddress;
 
-    /** @var null|string - e.g.: city*/
+    /** @var null|string - e.g.: city */
     private $locality;
 
     /** @var null|string */

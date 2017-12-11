@@ -13,8 +13,6 @@ class AddressFormatter extends PropertyFormatter implements PropertyFormatterInt
      */
     public function convertToVcfString(PropertyInterface $address): string
     {
-        // @todo: I'm using "countryName" like "BE", but actually it should be written fullout and in the language the vcard is defined.
-        // so f.e.: "belgië"
         return 'ADR:' . $this->escape(
             $address->getPostOfficeBox()
             . ';' . $address->getExtendedAddress()
