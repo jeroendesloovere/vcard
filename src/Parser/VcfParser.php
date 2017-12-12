@@ -4,6 +4,11 @@ namespace JeroenDesloovere\VCard\Parser;
 
 use JeroenDesloovere\VCard\VCard;
 
+/**
+ * Class VcfParser
+ *
+ * @package JeroenDesloovere\VCard\Parser
+ */
 class VcfParser implements ParserInterface
 {
     /**

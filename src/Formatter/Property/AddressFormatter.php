@@ -5,6 +5,11 @@ namespace JeroenDesloovere\VCard\Formatter\Property;
 use JeroenDesloovere\VCard\Property\Address;
 use JeroenDesloovere\VCard\Property\PropertyInterface;
 
+/**
+ * Class AddressFormatter
+ *
+ * @package JeroenDesloovere\VCard\Formatter\Property
+ */
 class AddressFormatter extends PropertyFormatter implements PropertyFormatterInterface
 {
     /**

@@ -2,6 +2,11 @@
 
 namespace JeroenDesloovere\VCard\Property\Parameter;
 
+/**
+ * Class Type
+ *
+ * @package JeroenDesloovere\VCard\Property\Parameter
+ */
 class Type implements PropertyParameterInterface
 {
     protected const HOME = 'Home';
@@ -59,9 +64,9 @@ class Type implements PropertyParameterInterface
      * @return Type
      * @throws \RuntimeException
      */
-    public static function home(): self
+    public static function home(): Type
     {
-        return new self(self::HOME);
+        return new Type(self::HOME);
     }
 
     /**
@@ -76,9 +81,9 @@ class Type implements PropertyParameterInterface
      * @return Type
      * @throws \RuntimeException
      */
-    public static function work(): self
+    public static function work(): Type
     {
-        return new self(self::WORK);
+        return new Type(self::WORK);
     }
 
     /**

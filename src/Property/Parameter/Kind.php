@@ -2,6 +2,11 @@
 
 namespace JeroenDesloovere\VCard\Property\Parameter;
 
+/**
+ * Class Kind
+ *
+ * @package JeroenDesloovere\VCard\Property\Parameter
+ */
 class Kind implements PropertyParameterInterface
 {
     protected const GROUP = 'Group';
@@ -63,9 +68,9 @@ class Kind implements PropertyParameterInterface
      * @return Kind
      * @throws \RuntimeException
      */
-    public static function group(): self
+    public static function group(): Kind
     {
-        return new self(self::GROUP);
+        return new Kind(self::GROUP);
     }
 
     /**
@@ -80,9 +85,9 @@ class Kind implements PropertyParameterInterface
      * @return Kind
      * @throws \RuntimeException
      */
-    public static function individual(): self
+    public static function individual(): Kind
     {
-        return new self(self::INDIVIDUAL);
+        return new Kind(self::INDIVIDUAL);
     }
 
     /**
@@ -97,9 +102,9 @@ class Kind implements PropertyParameterInterface
      * @return Kind
      * @throws \RuntimeException
      */
-    public static function location(): self
+    public static function location(): Kind
     {
-        return new self(self::LOCATION);
+        return new Kind(self::LOCATION);
     }
 
     /**
@@ -114,11 +119,14 @@ class Kind implements PropertyParameterInterface
      * @return Kind
      * @throws \RuntimeException
      */
-    public static function organization(): self
+    public static function organization(): Kind
     {
-        return new self(self::ORGANIZATION);
+        return new Kind(self::ORGANIZATION);
     }
 
+    /**
+     * @return bool
+     */
     public function isOrganization(): bool
     {
         return $this->value === self::ORGANIZATION;

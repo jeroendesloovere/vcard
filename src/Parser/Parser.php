@@ -2,6 +2,11 @@
 
 namespace JeroenDesloovere\VCard\Parser;
 
+/**
+ * Class Parser
+ *
+ * @package JeroenDesloovere\VCard\Parser
+ */
 class Parser
 {
     /** @var ParserInterface */

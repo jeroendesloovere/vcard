@@ -5,6 +5,11 @@ namespace JeroenDesloovere\VCard;
 use JeroenDesloovere\VCard\Property\Parameter\Kind;
 use JeroenDesloovere\VCard\Property\PropertyInterface;
 
+/**
+ * Class VCard
+ *
+ * @package JeroenDesloovere\VCard
+ */
 class VCard
 {
     /** @var array */

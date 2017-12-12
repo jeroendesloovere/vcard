@@ -2,6 +2,11 @@
 
 namespace JeroenDesloovere\VCard\Formatter\Property;
 
+/**
+ * Class PropertyFormatter
+ *
+ * @package JeroenDesloovere\VCard\Formatter\Property
+ */
 class PropertyFormatter
 {
     /**

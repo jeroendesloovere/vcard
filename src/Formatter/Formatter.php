@@ -4,6 +4,11 @@ namespace JeroenDesloovere\VCard\Formatter;
 
 use JeroenDesloovere\VCard\VCard;
 
+/**
+ * Class Formatter
+ *
+ * @package JeroenDesloovere\VCard\Formatter
+ */
 class Formatter
 {
     /** @var string */

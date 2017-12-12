@@ -6,6 +6,11 @@ use JeroenDesloovere\VCard\Formatter\Property\AddressFormatter;
 use JeroenDesloovere\VCard\Formatter\Property\PropertyFormatterInterface;
 use JeroenDesloovere\VCard\Property\Parameter\Type;
 
+/**
+ * Class Address
+ *
+ * @package JeroenDesloovere\VCard\Property
+ */
 class Address implements PropertyInterface
 {
     /** @var null|string - The country name in your own language, e.g.: belgië */
