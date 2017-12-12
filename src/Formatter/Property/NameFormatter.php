@@ -5,11 +5,6 @@ namespace JeroenDesloovere\VCard\Formatter\Property;
 use JeroenDesloovere\VCard\Property\Name;
 use JeroenDesloovere\VCard\Property\PropertyInterface;
 
-/**
- * Class NameFormatter
- *
- * @package JeroenDesloovere\VCard\Formatter\Property
- */
 class NameFormatter extends PropertyFormatter implements PropertyFormatterInterface
 {
     /**

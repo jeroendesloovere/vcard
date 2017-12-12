@@ -2,11 +2,6 @@
 
 namespace JeroenDesloovere\VCard\Property\Parameter;
 
-/**
- * Class Kind
- *
- * @package JeroenDesloovere\VCard\Property\Parameter
- */
 class Kind implements PropertyParameterInterface
 {
     protected const GROUP = 'Group';
@@ -23,12 +18,6 @@ class Kind implements PropertyParameterInterface
 
     private $value;
 
-    /**
-     * Kind constructor.
-     *
-     * @param string $value
-     * @throws \RuntimeException
-     */
     public function __construct(string $value)
     {
         if (!in_array($value, self::POSSIBLE_VALUES, true)) {
@@ -40,93 +29,56 @@ class Kind implements PropertyParameterInterface
         $this->value = $value;
     }
 
-    /**
-     * @return string
-     */
     public function __toString()
     {
         return $this->value;
     }
 
-    /**
-     * @return string
-     */
     public function getNode(): string
     {
         return 'KIND';
     }
 
-    /**
-     * @return string
-     */
     public function getValue(): string
     {
         return $this->value;
     }
 
-    /**
-     * @return Kind
-     * @throws \RuntimeException
-     */
     public static function group(): Kind
     {
         return new Kind(self::GROUP);
     }
 
-    /**
-     * @return bool
-     */
     public function isGroup(): bool
     {
         return $this->value === self::GROUP;
     }
 
-    /**
-     * @return Kind
-     * @throws \RuntimeException
-     */
     public static function individual(): Kind
     {
         return new Kind(self::INDIVIDUAL);
     }
 
-    /**
-     * @return bool
-     */
     public function isIndividual(): bool
     {
         return $this->value === self::INDIVIDUAL;
     }
 
-    /**
-     * @return Kind
-     * @throws \RuntimeException
-     */
     public static function location(): Kind
     {
         return new Kind(self::LOCATION);
     }
 
-    /**
-     * @return bool
-     */
     public function isLocation(): bool
     {
         return $this->value === self::LOCATION;
     }
 
-    /**
-     * @return Kind
-     * @throws \RuntimeException
-     */
     public static function organization(): Kind
     {
         return new Kind(self::ORGANIZATION);
     }
 
-    /**
-     * @return bool
-     */
     public function isOrganization(): bool
     {
         return $this->value === self::ORGANIZATION;

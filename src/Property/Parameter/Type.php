@@ -2,11 +2,6 @@
 
 namespace JeroenDesloovere\VCard\Property\Parameter;
 
-/**
- * Class Type
- *
- * @package JeroenDesloovere\VCard\Property\Parameter
- */
 class Type implements PropertyParameterInterface
 {
     protected const HOME = 'Home';
@@ -19,12 +14,6 @@ class Type implements PropertyParameterInterface
 
     private $value;
 
-    /**
-     * Type constructor.
-     *
-     * @param string $value
-     * @throws \RuntimeException
-     */
     public function __construct(string $value)
     {
         if (!in_array($value, self::POSSIBLE_VALUES, true)) {
@@ -36,59 +25,36 @@ class Type implements PropertyParameterInterface
         $this->value = $value;
     }
 
-    /**
-     * @return string
-     */
     public function __toString()
     {
         return $this->value;
     }
 
-    /**
-     * @return string
-     */
     public function getNode(): string
     {
         return 'TYPE';
     }
 
-    /**
-     * @return string
-     */
     public function getValue(): string
     {
         return $this->value;
     }
 
-    /**
-     * @return Type
-     * @throws \RuntimeException
-     */
     public static function home(): Type
     {
         return new Type(self::HOME);
     }
 
-    /**
-     * @return bool
-     */
     public function isHome(): bool
     {
         return $this->value === self::HOME;
     }
 
-    /**
-     * @return Type
-     * @throws \RuntimeException
-     */
     public static function work(): Type
     {
         return new Type(self::WORK);
     }
 
-    /**
-     * @return bool
-     */
     public function isWork(): bool
     {
         return $this->value === self::WORK;

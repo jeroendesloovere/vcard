@@ -5,18 +5,8 @@ namespace JeroenDesloovere\VCard\Formatter;
 use JeroenDesloovere\VCard\Property\PropertyInterface;
 use JeroenDesloovere\VCard\VCard;
 
-/**
- * Class VcfFormatter
- *
- * @package JeroenDesloovere\VCard\Formatter
- */
 class VcfFormatter implements FormatterInterface
 {
-    /**
-     * @param array $vCards
-     *
-     * @return string
-     */
     public function getContent(array $vCards): string
     {
         $string = "BEGIN:VCARD\r\n";
@@ -36,17 +26,11 @@ class VcfFormatter implements FormatterInterface
         return $string;
     }
 
-    /**
-     * @return string
-     */
     public function getContentType(): string
     {
         return 'text/x-vcard';
     }
 
-    /**
-     * @return string
-     */
     public function getFileExtension(): string
     {
         return 'vcf';
