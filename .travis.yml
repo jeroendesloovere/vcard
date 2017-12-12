@@ -1,14 +1,8 @@
 language: php
-dist: precise
-matrix:
-  include:
-    - php: 7.1
 
 php:
   - 7.1
   - 7.2
-
-sudo: false
 
 script:
   - bin/phpcs --standard=psr2 --extensions=php --warning-severity=0 --report=full "src"
@@ -24,5 +18,3 @@ after_success:
 
 after_failure:
   - cat var/logs/test.log
-
-sudo: false
