@@ -2,7 +2,7 @@
 
 namespace JeroenDesloovere\VCard\Property\Parameter;
 
-class Kind
+class Kind implements PropertyParameterInterface
 {
     protected const GROUP = 'Group';
     protected const INDIVIDUAL = 'Individual';
@@ -16,22 +16,32 @@ class Kind
         self::ORGANIZATION,
     ];
 
-    private $kind;
+    private $value;
 
-    public function __construct(string $kind)
+    public function __construct(string $value)
     {
-        if (!in_array($kind, self::POSSIBLE_VALUES)) {
+        if (!in_array($value, self::POSSIBLE_VALUES)) {
             throw new \Exception(
-                'The given type "' . $kind . '" is not allowed. Possible values are: ' . implode(', ', self::POSSIBLE_VALUES)
+                'The given type "' . $value . '" is not allowed. Possible values are: ' . implode(', ', self::POSSIBLE_VALUES)
             );
         }
 
-        $this->kind = $kind;
+        $this->value = $value;
     }
 
     public function __toString()
     {
-        return $this->kind;
+        return $this->value;
+    }
+
+    public function getNode(): string
+    {
+        return 'KIND';
+    }
+
+    public function getValue(): string
+    {
+        return $this->value;
     }
 
     public static function group(): self
@@ -41,7 +51,7 @@ class Kind
 
     public function isGroup(): bool
     {
-        return $this->kind === self::GROUP;
+        return $this->value === self::GROUP;
     }
 
     public static function individual(): self
@@ -51,7 +61,7 @@ class Kind
 
     public function isIndividual(): bool
     {
-        return $this->kind === self::INDIVIDUAL;
+        return $this->value === self::INDIVIDUAL;
     }
 
     public static function location(): self
@@ -61,7 +71,7 @@ class Kind
 
     public function isLocation(): bool
     {
-        return $this->kind === self::LOCATION;
+        return $this->value === self::LOCATION;
     }
 
     public static function organization(): self
@@ -71,6 +81,6 @@ class Kind
 
     public function isOrganization(): bool
     {
-        return $this->kind === self::ORGANIZATION;
+        return $this->value === self::ORGANIZATION;
     }
 }

@@ -5,7 +5,7 @@ namespace JeroenDesloovere\VCard\Property;
 use JeroenDesloovere\VCard\Formatter\Property\NameFormatter;
 use JeroenDesloovere\VCard\Formatter\Property\PropertyFormatterInterface;
 
-class Name implements PropertyInterface, NodeInterface
+class Name implements PropertyInterface
 {
     /** @var null|string */
     private $additional;

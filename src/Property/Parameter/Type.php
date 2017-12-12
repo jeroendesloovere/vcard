@@ -2,7 +2,7 @@
 
 namespace JeroenDesloovere\VCard\Property\Parameter;
 
-class Type
+class Type implements PropertyParameterInterface
 {
     protected const HOME = 'Home';
     protected const WORK = 'Work';
@@ -12,22 +12,32 @@ class Type
         self::WORK,
     ];
 
-    private $type;
+    private $value;
 
-    public function __construct(string $type)
+    public function __construct(string $value)
     {
-        if (!in_array($type, self::POSSIBLE_VALUES)) {
+        if (!in_array($value, self::POSSIBLE_VALUES)) {
             throw new \Exception(
-                'The given type "' . $type . '" is not allowed. Possible values are: ' . implode(', ', self::POSSIBLE_VALUES)
+                'The given type "' . $value . '" is not allowed. Possible values are: ' . implode(', ', self::POSSIBLE_VALUES)
             );
         }
 
-        $this->type = $type;
+        $this->value = $value;
     }
 
     public function __toString()
     {
-        return $this->type;
+        return $this->value;
+    }
+
+    public function getNode(): string
+    {
+        return 'TYPE';
+    }
+
+    public function getValue(): string
+    {
+        return $this->value;
     }
 
     public static function home(): self
@@ -37,7 +47,7 @@ class Type
 
     public function isHome(): bool
     {
-        return $this->type === self::HOME;
+        return $this->value === self::HOME;
     }
 
     public static function work(): self
@@ -47,6 +57,6 @@ class Type
 
     public function isWork(): bool
     {
-        return $this->type === self::WORK;
+        return $this->value === self::WORK;
     }
 }
