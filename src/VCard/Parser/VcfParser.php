@@ -12,8 +12,10 @@ class VcfParser implements ParserInterface
      */
     public function getVCards(string $content): array
     {
-
+        // @todo
+        return [];
     }
 
+    // @todo
     // public function unfold()
 }

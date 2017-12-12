@@ -5,18 +5,18 @@ namespace JeroenDesloovere\VCard\Parser;
 class Parser
 {
     /** @var ParserInterface */
-    private $formatter;
+    private $parser;
 
     /** @var array */
     private $vCards = [];
 
-    public function __construct(ParserInterface $formatter, string $content)
+    public function __construct(ParserInterface $parser, string $content)
     {
-        $this->formatter = $formatter;
-        $this->vCards = $this->formatter->getVCards($content);
+        $this->parser = $parser;
+        $this->vCards = $this->parser->getVCards($content);
     }
 
-    public static function getContentFromFile(string $fileName): string
+    public static function getFileContents(string $fileName): string
     {
         if (file_exists($fileName) && is_readable($fileName)) {
             return file_get_contents($fileName);
