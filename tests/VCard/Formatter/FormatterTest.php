@@ -30,12 +30,27 @@ class FormatterTest extends \PHPUnit_Framework_TestCase
             ->add(new Address(null, 'Penthouse', 'Korenmarkt 1', 'Gent', 'Oost-Vlaanderen', '9000', 'België', Type::work()));
     }
 
+    public function testSavingOneVCardToVcfFile()
+    {
+        $formatter = new Formatter(new VcfFormatter(), 'vcards');
+        $formatter->addVCard($this->firstVCard);
+        $formatter->save(__DIR__);
+    }
+
     public function testSavingMultipleVCardsToVcfFile()
     {
         $formatter = new Formatter(new VcfFormatter(), 'vcards');
         $formatter->addVCard($this->firstVCard);
         $formatter->addVCard($this->secondVCard);
         $formatter->save(__DIR__);
+    }
+
+    public function testParsingOneVCardFromVcfFile()
+    {
+        $parser = new Parser(new VcfParser(), Parser::getFileContents(__DIR__ . '/vcards.vcf'));
+
+        // @todo
+        //$this->assertEquals($this->firstVCard, $parser->getVCards()[0]);
     }
 
     public function testParsingMultipleVCardsFromVcfFile()
