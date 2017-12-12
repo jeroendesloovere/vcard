@@ -32,13 +32,15 @@ class FormatterTest extends \PHPUnit_Framework_TestCase
 
     public function testSavingOneVCardToVcfFile()
     {
-        $formatter = new Formatter(new VcfFormatter(), 'vcards');
+        // Saving "vcard.vcf"
+        $formatter = new Formatter(new VcfFormatter(), 'vcard');
         $formatter->addVCard($this->firstVCard);
         $formatter->save(__DIR__);
     }
 
     public function testSavingMultipleVCardsToVcfFile()
     {
+        // Saving "vcards.vcf"
         $formatter = new Formatter(new VcfFormatter(), 'vcards');
         $formatter->addVCard($this->firstVCard);
         $formatter->addVCard($this->secondVCard);
