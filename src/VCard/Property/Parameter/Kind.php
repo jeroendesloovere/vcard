@@ -1,6 +1,6 @@
 <?php
 
-namespace JeroenDesloovere\VCard\PropertyParameter;
+namespace JeroenDesloovere\VCard\Property\Parameter;
 
 class Kind
 {

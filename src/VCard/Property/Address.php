@@ -4,9 +4,9 @@ namespace JeroenDesloovere\VCard\Property;
 
 use JeroenDesloovere\VCard\Formatter\Property\AddressFormatter;
 use JeroenDesloovere\VCard\Formatter\Property\PropertyFormatterInterface;
-use JeroenDesloovere\VCard\PropertyParameter\Type;
+use JeroenDesloovere\VCard\Property\Parameter\Type;
 
-class Address implements PropertyInterface
+class Address implements PropertyInterface, NodeInterface
 {
     /** @var null|string - The country name in your own language, e.g.: belgië */
     private $countryName;
@@ -49,7 +49,7 @@ class Address implements PropertyInterface
         $this->region = $region;
         $this->postalCode = $postalCode;
         $this->countryName = $countryName;
-        $this->type = ($type === null) ? Type::home() : $type;
+        $this->type = $type ?? Type::home();
     }
 
     public function getCountryName(): ?string
@@ -70,6 +70,11 @@ class Address implements PropertyInterface
     public function getLocality(): ?string
     {
         return $this->locality;
+    }
+
+    public function getNode(): string
+    {
+        return 'ADR';
     }
 
     public function getPostalCode(): ?string

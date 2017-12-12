@@ -13,7 +13,7 @@ class NameFormatter extends PropertyFormatter implements PropertyFormatterInterf
      */
     public function convertToVcfString(PropertyInterface $name): string
     {
-        return 'N:' . $this->escape(
+        return $name->getNode() . ':' . $this->escape(
             $name->getFirstName() . ';' . $name->getAdditional() . ';' . $name->getLastName() . ';' . $name->getPrefix() . ';' . $name->getSuffix()
         );
     }

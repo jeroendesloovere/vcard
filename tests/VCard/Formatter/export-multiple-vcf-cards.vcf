@@ -1,6 +1,8 @@
 BEGIN:VCARD
 VERSION:4.0
-REV:2017-11-30T12:18:20Z
+REV:2017-12-12T16:42:27Z
 N:Desloovere;;Jeroen;;
-ADR:;Penthouse;Korenmarkt 1;Gent;Oost-Vlaanderen;9000;BE
+ADR:;;Markt 1;Brugge;West-Vlaanderen;8000;België
+N:Doe;;John;;
+ADR:;Penthouse;Korenmarkt 1;Gent;Oost-Vlaanderen;9000;België
 END:VCARD

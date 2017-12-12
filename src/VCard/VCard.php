@@ -2,7 +2,7 @@
 
 namespace JeroenDesloovere\VCard;
 
-use JeroenDesloovere\VCard\PropertyParameter\Kind;
+use JeroenDesloovere\VCard\Property\Parameter\Kind;
 use JeroenDesloovere\VCard\Property\PropertyInterface;
 
 class VCard

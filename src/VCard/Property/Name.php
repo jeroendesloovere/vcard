@@ -5,7 +5,7 @@ namespace JeroenDesloovere\VCard\Property;
 use JeroenDesloovere\VCard\Formatter\Property\NameFormatter;
 use JeroenDesloovere\VCard\Formatter\Property\PropertyFormatterInterface;
 
-class Name implements PropertyInterface
+class Name implements PropertyInterface, NodeInterface
 {
     /** @var null|string */
     private $additional;
@@ -54,6 +54,11 @@ class Name implements PropertyInterface
     public function getLastName(): ?string
     {
         return $this->lastName;
+    }
+
+    public function getNode(): string
+    {
+        return 'N';
     }
 
     public function getPrefix(): ?string
