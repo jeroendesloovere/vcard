@@ -32,6 +32,18 @@ class Address implements PropertyInterface
     /** @var Type */
     private $type;
 
+    /**
+     * Address constructor.
+     *
+     * @param null|string $postOfficeBox
+     * @param null|string $extendedAddress
+     * @param null|string $streetAddress
+     * @param null|string $locality
+     * @param null|string $region
+     * @param null|string $postalCode
+     * @param null|string $countryName
+     * @param Type|null   $type
+     */
     public function __construct(
         ?string $postOfficeBox = null,
         ?string $extendedAddress = null,
@@ -52,51 +64,81 @@ class Address implements PropertyInterface
         $this->type = $type ?? Type::home();
     }
 
+    /**
+     * @return null|string
+     */
     public function getCountryName(): ?string
     {
         return $this->countryName;
     }
 
+    /**
+     * @return null|string
+     */
     public function getExtendedAddress(): ?string
     {
         return $this->extendedAddress;
     }
 
+    /**
+     * @return PropertyFormatterInterface
+     */
     public function getFormatter(): PropertyFormatterInterface
     {
         return new AddressFormatter();
     }
 
+    /**
+     * @return null|string
+     */
     public function getLocality(): ?string
     {
         return $this->locality;
     }
 
+    /**
+     * @return string
+     */
     public function getNode(): string
     {
         return 'ADR';
     }
 
+    /**
+     * @return null|string
+     */
     public function getPostalCode(): ?string
     {
         return $this->postalCode;
     }
 
+    /**
+     * @return null|string
+     */
     public function getPostOfficeBox(): ?string
     {
         return $this->postOfficeBox;
     }
 
+    /**
+     * @return null|string
+     */
     public function getRegion(): ?string
     {
         return $this->region;
     }
 
+    /**
+     * @return null|string
+     */
     public function getStreetAddress(): ?string
     {
         return $this->streetAddress;
     }
 
+    /**
+     * @return Type
+     */
     public function getType(): Type
     {
         return $this->type;

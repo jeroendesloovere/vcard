@@ -73,4 +73,17 @@ class VCardTest extends TestCase
 
         $this->assertFalse(false);
     }
+
+    public function testEmptyVcards()
+    {
+        (new VCard())
+            ->add(new Name('John', 'Doe'))
+            ->add(new Address(null, null, null, null, null, null, null, null));
+
+        (new VCard())
+            ->add(new Name())
+            ->add(new Address());
+
+        $this->assertFalse(false);
+    }
 }
