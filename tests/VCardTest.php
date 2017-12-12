@@ -77,7 +77,7 @@ class VCardTest extends TestCase
     public function testEmptyVcards()
     {
         (new VCard())
-            ->add(new Name('John', 'Doe'))
+            ->add(new Name(null, null))
             ->add(new Address(null, null, null, null, null, null, null, null));
 
         (new VCard())
