@@ -9,7 +9,7 @@ use JeroenDesloovere\VCard\Property\Name;
 use JeroenDesloovere\VCard\Property\Parameter\Type;
 use JeroenDesloovere\VCard\VCard;
 
-require_once __DIR__ . '/../../../vendor/autoload.php';
+require_once __DIR__ . '/../../vendor/autoload.php';
 
 class FormatterTest extends \PHPUnit_Framework_TestCase
 {
@@ -35,7 +35,7 @@ class FormatterTest extends \PHPUnit_Framework_TestCase
         // Saving "vcard.vcf"
         $formatter = new Formatter(new VcfFormatter(), 'vcard');
         $formatter->addVCard($this->firstVCard);
-        $formatter->save(__DIR__ . '/../../assets/');
+        $formatter->save(__DIR__ . '/../assets/');
     }
 
     public function testSavingMultipleVCardsToVcfFile()
@@ -44,12 +44,12 @@ class FormatterTest extends \PHPUnit_Framework_TestCase
         $formatter = new Formatter(new VcfFormatter(), 'vcards');
         $formatter->addVCard($this->firstVCard);
         $formatter->addVCard($this->secondVCard);
-        $formatter->save(__DIR__ . '/../../assets/');
+        $formatter->save(__DIR__ . '/../assets/');
     }
 
     public function testParsingOneVCardFromVcfFile()
     {
-        $parser = new Parser(new VcfParser(), Parser::getFileContents(__DIR__ . '/../../assets/vcard.vcf'));
+        $parser = new Parser(new VcfParser(), Parser::getFileContents(__DIR__ . '/../assets/vcard.vcf'));
 
         // @todo
         //$this->assertEquals($this->firstVCard, $parser->getVCards()[0]);
@@ -57,7 +57,7 @@ class FormatterTest extends \PHPUnit_Framework_TestCase
 
     public function testParsingMultipleVCardsFromVcfFile()
     {
-        $parser = new Parser(new VcfParser(), Parser::getFileContents(__DIR__ . '/../../assets/vcards.vcf'));
+        $parser = new Parser(new VcfParser(), Parser::getFileContents(__DIR__ . '/../assets/vcards.vcf'));
 
         // @todo
         //$this->assertEquals($this->firstVCard, $parser->getVCards()[0]);

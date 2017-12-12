@@ -27,6 +27,6 @@
         "test": "./bin/simple-phpunit"
     },
     "autoload": {
-        "psr-4": { "JeroenDesloovere\\VCard\\": "src/VCard/" }
+        "psr-4": { "JeroenDesloovere\\VCard\\": "src/" }
     }
 }
