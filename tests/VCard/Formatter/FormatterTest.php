@@ -49,7 +49,7 @@ class FormatterTest extends \PHPUnit_Framework_TestCase
 
     public function testParsingOneVCardFromVcfFile()
     {
-        $parser = new Parser(new VcfParser(), Parser::getFileContents(__DIR__ . '/vcards.vcf'));
+        $parser = new Parser(new VcfParser(), Parser::getFileContents(__DIR__ . '/vcard.vcf'));
 
         // @todo
         //$this->assertEquals($this->firstVCard, $parser->getVCards()[0]);
