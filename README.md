@@ -45,6 +45,60 @@ We have build in tests, type the following to execute them:
 vendor/bin/phpunit tests
 ```
 
+## Properties
+
+> As explained on [W3 vCard RDF](https://www.w3.org/TR/vcard-rdf/).
+
+### Identification Properties:
+* [ ] FN = Full name - The full name of the object (as a single string). This is the only mandatory property.
+* [x] [N = Name](./src/Property/Name.php) - The name of the object represented in structured parts
+* [ ] NICKNAME - A nickname for the object
+* [ ] PHOTO
+* [ ] BDAY - Birth date of the object. Should only apply to Individual
+* [ ] ANNIVERSARY - Should only apply to Individual
+* [ ] GENDER - Should only apply to Individual
+
+### Delivery Addressing Properties:
+* [x] [ADDRESS](./src/Property/Address.php) - The address of the object represented in structured parts
+
+### Communications Properties:
+* [ ] TEL - The telephone number as a tel URI
+* [ ] EMAIL - The email address as a mailto URI
+* [ ] IMPP - The IMPP instant messaging contact information
+* [ ] LANG - The language of the object
+
+### Geographical Properties:
+* [ ] TZ - The timezone of the object
+* [ ] GEO - The geographical coordinates of the object (geo URI)
+
+### Organizational Properties:
+* [ ] TITLE - The title of the object
+* [ ] ROLE - The role of the object
+* [ ] LOGO - The logo of the object (data URI)
+* [ ] ORG - The organisation related to the object
+* [ ] ORGUNIT - The organisational unit related to the object
+* [ ] MEMBER - Can only be used for Group Kind objects. Must point to other Individual or Organization objects.
+* [ ] RELATED - Link to related objects.
+
+### Explanatory Properties:
+* [ ] CATEGORIES - The categories of the object
+* [x] [NOTE](./src/Property/Note.php) - Notes about the object
+* [ ] PRODID - The identifier of the product that created the vCard object
+* [ ] REV - The revision datetime of the vCard object
+* [ ] SOUND - Audio related to the object (data URI)
+* [ ] UID - A unique identifier for the object
+* [ ] CLIENTPIDMAP - Not required
+* [ ] URL - Any URL related to the object
+* [ ] VERSION - Not required (namespace will capture this)
+
+### Security Properties:
+* [ ] KEY - The security key of the object
+
+### Calendar Properties:
+* [ ] FBURL - Calendar Busy Time of the object
+* [ ] CALADURI - Calendar Request of the object
+* [ ] CALURI - Calendar Link of the object
+
 ## Documentation
 
 The class is well documented inline. If you use a decent IDE you'll see that each method is documented with PHPDoc.
