@@ -2,6 +2,7 @@
 
 namespace JeroenDesloovere\VCard\Formatter;
 
+use JeroenDesloovere\VCard\Exception\VCardException;
 use JeroenDesloovere\VCard\VCard;
 
 class Formatter
@@ -83,12 +84,18 @@ class Formatter
         return $this->vCards;
     }
 
-    public function save(string $toPath): void
+    public function save(string $toPath): bool
     {
-        file_put_contents(
-            rtrim($toPath, '/') . '/' . $this->getFullFileName(),
-            $this->getContent()
-        );
+        try {
+            $savedBytes = file_put_contents(
+                rtrim($toPath, '/') . '/' . $this->getFullFileName(),
+                $this->getContent()
+            );
+
+            return (int) $savedBytes > 0;
+        } catch (\Exception $e) {
+            throw new VCardException($e->getMessage());
+        }
     }
 
     public function setCharset(string $charset): void
