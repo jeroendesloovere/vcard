@@ -95,11 +95,11 @@ class VCardTest extends TestCase
 
     public function testVCardGetProperties(): void
     {
-        $this->assertEquals(3, count($this->firstVCard->getProperties()));
-        $this->assertEquals(1, count($this->firstVCard->getProperties(Name::class)));
-        $this->assertEquals(2, count($this->firstVCard->getProperties(Address::class)));
-        $this->assertEquals(2, count($this->secondVCard->getProperties()));
-        $this->assertEquals(1, count($this->secondVCard->getProperties(Name::class)));
-        $this->assertEquals(1, count($this->secondVCard->getProperties(Address::class)));
+        $this->assertCount(3, $this->firstVCard->getProperties());
+        $this->assertCount(1, $this->firstVCard->getProperties(Name::class));
+        $this->assertCount(2, $this->firstVCard->getProperties(Address::class));
+        $this->assertCount(2, $this->secondVCard->getProperties());
+        $this->assertCount(1, $this->secondVCard->getProperties(Name::class));
+        $this->assertCount(1, $this->secondVCard->getProperties(Address::class));
     }
 }

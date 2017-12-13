@@ -2,13 +2,13 @@
 
 [![Latest Stable Version](http://img.shields.io/packagist/v/jeroendesloovere/vcard.svg)](https://packagist.org/packages/jeroendesloovere/vcard)
 [![License](http://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/jeroendesloovere/vcard/blob/master/LICENSE)
-[![Build Status](https://travis-ci.org/jeroendesloovere/vcard.svg?branch=master)](https://travis-ci.org/jeroendesloovere/vcard)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/jeroendesloovere/vcard/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/jeroendesloovere/vcard/?branch=master)
+[![Build Status](https://travis-ci.org/jeroendesloovere/vcard.svg?branch=new-version)](https://travis-ci.org/jeroendesloovere/vcard)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/jeroendesloovere/vcard/badges/quality-score.png?b=new-version)](https://scrutinizer-ci.com/g/jeroendesloovere/vcard/?branch=new-version)
 
 > This VCard PHP class can generate a vCard 4.0.
 
 Documentation about vCard 4.0:
-* [RFC5646](https://tools.ietf.org/html/rfc6350)
+* [RFC6350](https://tools.ietf.org/html/rfc6350)
 * [W3 vCard RDF XML](https://www.w3.org/TR/vcard-rdf/)
 * [vCard 4.0](https://devguide.calconnect.org/vCard/vcard-4/)
 
@@ -29,7 +29,7 @@ composer require jeroendesloovere/vcard
 
 We use [squizlabs/php_codesniffer](https://packagist.org/packages/squizlabs/php_codesniffer) to maintain the code standards.
 Type the following to execute them:
-```
+```bash
 # To view the code errors
 vendor/bin/phpcs --standard=psr2 --extensions=php --warning-severity=0 --report=full "src"
 
@@ -41,7 +41,7 @@ vendor/bin/phpcbf --standard=psr2 --extensions=php --warning-severity=0 --report
 ## Tests
 
 We have build in tests, type the following to execute them:
-```
+```bash
 vendor/bin/phpunit tests
 ```
 
