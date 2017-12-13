@@ -9,11 +9,10 @@ use JeroenDesloovere\VCard\Parser\VcfParser;
 use JeroenDesloovere\VCard\Property\Address;
 use JeroenDesloovere\VCard\Property\Name;
 use JeroenDesloovere\VCard\Property\Parameter\Type;
-use PHPUnit\Framework\TestCase;
 
-require_once __DIR__.'/../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
-class VCardTest extends TestCase
+class VCardTest extends \PHPUnit_Framework_TestCase
 {
     /** @var VCard */
     private $firstVCard;
@@ -37,9 +36,7 @@ class VCardTest extends TestCase
         // Saving "vcard.vcf"
         $formatter = new Formatter(new VcfFormatter(), 'vcard');
         $formatter->addVCard($this->firstVCard);
-        $formatter->save(__DIR__.'/assets/');
-
-        $this->assertFalse(false);
+        $formatter->save(__DIR__ . '/assets/');
     }
 
     public function testSavingMultipleVCardsToVcfFile()
@@ -48,42 +45,23 @@ class VCardTest extends TestCase
         $formatter = new Formatter(new VcfFormatter(), 'vcards');
         $formatter->addVCard($this->firstVCard);
         $formatter->addVCard($this->secondVCard);
-        $formatter->save(__DIR__.'/assets/');
-
-        $this->assertFalse(false);
+        $formatter->save(__DIR__ . '/assets/');
     }
 
     public function testParsingOneVCardFromVcfFile()
     {
-        $parser = new Parser(new VcfParser(), Parser::getFileContents(__DIR__.'/assets/vcard.vcf'));
+        $parser = new Parser(new VcfParser(), Parser::getFileContents(__DIR__ . '/assets/vcard.vcf'));
 
         // @todo
         //$this->assertEquals($this->firstVCard, $parser->getVCards()[0]);
-
-        $this->assertFalse(false);
     }
 
     public function testParsingMultipleVCardsFromVcfFile()
     {
-        $parser = new Parser(new VcfParser(), Parser::getFileContents(__DIR__.'/assets/vcards.vcf'));
+        $parser = new Parser(new VcfParser(), Parser::getFileContents(__DIR__ . '/assets/vcards.vcf'));
 
         // @todo
         //$this->assertEquals($this->firstVCard, $parser->getVCards()[0]);
         //$this->assertEquals($this->secondVCard, $parser->getVCards()[1]);
-
-        $this->assertFalse(false);
-    }
-
-    public function testEmptyVcards()
-    {
-        (new VCard())
-            ->add(new Name(null, null))
-            ->add(new Address(null, null, null, null, null, null, null, null));
-
-        (new VCard())
-            ->add(new Name())
-            ->add(new Address());
-
-        $this->assertFalse(false);
     }
 }

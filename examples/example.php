@@ -5,23 +5,24 @@
  */
 
 declare(strict_types=1);
-require_once __DIR__.'/../vendor/autoload.php';
-require_once __DIR__.'/../src/VCard.php';
-require_once __DIR__.'/../src/Formatter/Formatter.php';
-require_once __DIR__.'/../src/Formatter/FormatterInterface.php';
-require_once __DIR__.'/../src/Formatter/VcfFormatter.php';
-require_once __DIR__.'/../src/Property/PropertyInterface.php';
-require_once __DIR__.'/../src/Property/Name.php';
-require_once __DIR__.'/../src/Property/Address.php';
-require_once __DIR__.'/../src/Property/Parameter/Type.php';
-require_once __DIR__.'/../src/Property/Parameter/Kind.php';
+require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../src/VCard/VCard.php';
+require_once __DIR__ . '/../src/VCard/Formatter/Formatter.php';
+require_once __DIR__ . '/../src/VCard/Formatter/FormatterInterface.php';
+require_once __DIR__ . '/../src/VCard/Formatter/VcfFormatter.php';
+require_once __DIR__ . '/../src/VCard/Formatter/XmlFormatter.php';
+require_once __DIR__ . '/../src/VCard/Property/PropertyInterface.php';
+require_once __DIR__ . '/../src/VCard/Property/Name.php';
+require_once __DIR__ . '/../src/VCard/Property/Address.php';
+require_once __DIR__ . '/../src/VCard/PropertyParameter/Type.php';
+require_once __DIR__ . '/../src/VCard/PropertyParameter/Kind.php';
 
 use JeroenDesloovere\VCard\VCard;
 use JeroenDesloovere\VCard\Formatter\Formatter;
 use JeroenDesloovere\VCard\Formatter\VcfFormatter;
 use JeroenDesloovere\VCard\Property\Name;
 use JeroenDesloovere\VCard\Property\Address;
-use JeroenDesloovere\VCard\Property\Parameter\Type;
+use JeroenDesloovere\VCard\PropertyParameter\Type;
 
 // Step one: build one or more vCards
 $vCard = new VCard();

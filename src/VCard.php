@@ -63,7 +63,7 @@ class VCard
         return false;
     }
 
-    public function setKind(Kind $kind): void
+    public function setKind(Kind $kind)
     {
         $this->kind = $kind;
     }

@@ -15,7 +15,7 @@ class Formatter
     /** @var FormatterInterface */
     private $formatter;
 
-    /** @var VCard[] */
+    /** @var array */
     private $vCards;
 
     public function __construct(FormatterInterface $formatter, string $fileName)
@@ -31,7 +31,7 @@ class Formatter
         return $this;
     }
 
-    public function download(): void
+    public function download()
     {
         foreach ($this->getHeaders() as $header) {
             header($header);
@@ -55,17 +55,12 @@ class Formatter
         return $this->fileName;
     }
 
-    public function getFullFileName(): string
-    {
-        return $this->getFileName().'.'.$this->formatter->getFileExtension();
-    }
-
     public function getHeaders(): array
     {
         return [
-            'Content-type' => $this->formatter->getContentType().'; charset='.$this->getCharset(),
-            'Content-Disposition' => 'attachment; filename='.$this->getFullFileName(),
-            'Content-Length' => mb_strlen($this->getContent(), $this->getCharset()),
+            'Content-type' => $this->formatter->getContentType() . '; charset=' . $this->getCharset(),
+            'Content-Disposition' => 'attachment; filename=' . $this->getFileName() . '.' . $this->formatter->getFileExtension(),
+            'Content-Length' => mb_strlen($this->formatter->getContent(), $this->getCharset()),
             'Connection' => 'close',
         ];
     }
@@ -75,9 +70,9 @@ class Formatter
         return $this->vCards;
     }
 
-    public function save(string $toPath): void
+    public function save(string $toPath)
     {
-        $filePath = rtrim($toPath, '/').'/'.$this->getFullFileName();
+        $filePath = rtrim($toPath, '/') . '/' . $this->getFileName() . '.' . $this->formatter->getFileExtension();
 
         file_put_contents(
             $filePath,
@@ -85,7 +80,7 @@ class Formatter
         );
     }
 
-    public function setCharset(string $charset): void
+    public function setCharset(string $charset)
     {
         $this->charset = $charset;
     }

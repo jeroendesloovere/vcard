@@ -17,13 +17,14 @@
         "php": "^7.1"
     },
     "require-dev": {
-        "m6web/Symfony2-coding-standard": "^3.3",
-        "m6web/coke": "^2.2",
         "phpunit/phpunit": "^6.5",
         "symfony/phpunit-bridge": "^3.2"
     },
+    "config": {
+        "bin-dir": "bin"
+    },
     "scripts": {
-        "test": "./vendor/bin/simple-phpunit"
+        "test": "./bin/simple-phpunit"
     },
     "autoload": {
         "psr-4": { "JeroenDesloovere\\VCard\\": "src/" }
