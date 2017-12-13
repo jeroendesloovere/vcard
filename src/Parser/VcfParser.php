@@ -22,6 +22,7 @@ class VcfParser implements ParserInterface
 
         $content = trim($content);
 
+        // Remove first BEGIN:VCARD and last END:VCARD
         $content = substr($content, 12, -10);
 
         // RFC2425 5.8.1. Line delimiting and folding
@@ -31,6 +32,7 @@ class VcfParser implements ParserInterface
         // and single white space character are removed).
         $content = preg_replace("/\n(?:[ \t])/", '', $content);
 
+        // If multiple vcards split per vcard
         $cardsContent = preg_split('/\nEND:VCARD\s+BEGIN:VCARD\n/', $content);
 
         $vCards = [];
