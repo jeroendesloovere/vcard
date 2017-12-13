@@ -50,7 +50,7 @@ vendor/bin/phpunit tests
 > As explained on [W3 vCard RDF](https://www.w3.org/TR/vcard-rdf/).
 
 ### Identification Properties:
-* [ ] FN = Full name - The full name of the object (as a single string). This is the only mandatory property.
+* [x] [FN = Full name](./src/Property/FullName.php) - The full name of the object (as a single string). This is the only mandatory property.
 * [x] [N = Name](./src/Property/Name.php) - The name of the object represented in structured parts
 * [ ] NICKNAME - A nickname for the object
 * [ ] PHOTO

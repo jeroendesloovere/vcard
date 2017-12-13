@@ -46,6 +46,24 @@ class Name implements PropertyInterface
         $this->suffix = $suffix;
     }
 
+    public static function fromVcfString(string $value): self
+    {
+        @list(
+            $firstName,
+            $additional,
+            $lastName,
+            $prefix,
+            $suffix
+        ) = explode(';', $value);
+        return new self(
+            ($lastName !== '') ? $lastName : null,
+            ($firstName !== '') ? $firstName : null,
+            ($additional !== '') ? $additional : null,
+            ($prefix !== '') ? $prefix : null,
+            ($suffix !== '') ? $suffix : null
+        );
+    }
+
     public function getAdditional(): ?string
     {
         return $this->additional;

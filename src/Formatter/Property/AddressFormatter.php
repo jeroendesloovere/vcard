@@ -18,7 +18,9 @@ class AddressFormatter extends PropertyFormatter implements PropertyFormatterInt
 
     public function getVcfString(): string
     {
-        return $this->address->getNode() . ':' . $this->escape(
+        $string = $this->address->getNode();
+        $string .= ';TYPE=' . $this->address->getType()->__toString();
+        $string .=':' . $this->escape(
             $this->address->getPostOfficeBox()
             . ';' . $this->address->getExtendedAddress()
             . ';' . $this->address->getStreetAddress()
@@ -27,5 +29,7 @@ class AddressFormatter extends PropertyFormatter implements PropertyFormatterInt
             . ';' . $this->address->getPostalCode()
             . ';' . $this->address->getCountryName()
         );
+
+        return $string;
     }
 }

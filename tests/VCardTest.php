@@ -78,9 +78,7 @@ class VCardTest extends TestCase
     {
         $parser = new Parser(new VcfParser(), Parser::getFileContents(__DIR__ . '/assets/vcard.vcf'));
 
-        // @todo
-        //$this->assertEquals($this->firstVCard, $parser->getVCards()[0]);
-
+        $this->assertEquals($this->firstVCard, $parser->getVCards()[0]);
         $this->assertFalse(false);
     }
 
