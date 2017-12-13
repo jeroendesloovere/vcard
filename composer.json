@@ -14,12 +14,11 @@
         }
     ],
     "require": {
-        "php": ">=7.1",
-        "friendsofphp/php-cs-fixer": "^2.9"
+        "php": ">=7.1"
     },
     "require-dev": {
         "phpunit/phpunit": "^6.5",
-        "symfony/phpunit-bridge": "^3.2"
+        "symfony/phpunit-bridge": "^4.0"
     },
     "scripts": {
         "test": "./vendor/bin/simple-phpunit"
