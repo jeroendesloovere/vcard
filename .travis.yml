@@ -1,8 +1,4 @@
 language: php
-dist: precise
-matrix:
-  include:
-    - php: 7.1
 
 php:
   - 7.1
@@ -10,13 +6,15 @@ php:
 
 sudo: false
 
-script:
-  - bin/phpcs --standard=psr2 --extensions=php --warning-severity=0 --report=full "src"
-  - travis_wait 20 bin/simple-phpunit --coverage-clover=coverage.clover
-
 before_script:
   - composer self-update
   - composer install --prefer-source --no-interaction --dev
+
+script:
+  - vendor/bin/phpcs --standard=psr2 --extensions=php --warning-severity=0 --report=full "src"
+  - travis_wait 20 vendor/bin/simple-phpunit --coverage-clover=coverage.clover
+  - phpunit --coverage-text
+#  - vendor/bin/coke
 
 after_success:
   - wget https://scrutinizer-ci.com/ocular.phar
@@ -25,4 +23,5 @@ after_success:
 after_failure:
   - cat var/logs/test.log
 
-sudo: false
+matrix:
+  fast_finish: true

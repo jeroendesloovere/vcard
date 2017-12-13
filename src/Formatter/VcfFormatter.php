@@ -11,13 +11,13 @@ class VcfFormatter implements FormatterInterface
     {
         $string = "BEGIN:VCARD\r\n";
         $string .= "VERSION:4.0\r\n";
-        $string .= "REV:" . date("Y-m-d") . "T" . date("H:i:s") . "Z\r\n";
+        $string .= 'REV:'.date('Y-m-d').'T'.date('H:i:s')."Z\r\n";
 
         /** @var VCard $vCard */
         foreach ($vCards as $vCard) {
             /** @var PropertyInterface $property */
             foreach ($vCard->getProperties() as $property) {
-                $string .= $this->fold($property->getFormatter()->convertToVcfString($property) . "\r\n");
+                $string .= $this->fold($property->getFormatter()->convertToVcfString($property)."\r\n");
             }
         }
 

@@ -13,14 +13,8 @@ class AddressFormatter extends PropertyFormatter implements PropertyFormatterInt
      */
     public function convertToVcfString(PropertyInterface $address): string
     {
-        return $address->getNode() . ':' . $this->escape(
-            $address->getPostOfficeBox()
-            . ';' . $address->getExtendedAddress()
-            . ';' . $address->getStreetAddress()
-            . ';' . $address->getLocality()
-            . ';' . $address->getRegion()
-            . ';' . $address->getPostalCode()
-            . ';' . $address->getCountryName()
+        return $address->getNode().':'.$this->escape(
+            $address->getPostOfficeBox().';'.$address->getExtendedAddress().';'.$address->getStreetAddress().';'.$address->getLocality().';'.$address->getRegion().';'.$address->getPostalCode().';'.$address->getCountryName()
         );
     }
 }

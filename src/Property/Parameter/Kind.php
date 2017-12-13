@@ -20,9 +20,9 @@ class Kind implements PropertyParameterInterface
 
     public function __construct(string $value)
     {
-        if (!in_array($value, self::POSSIBLE_VALUES)) {
-            throw new \Exception(
-                'The given type "' . $value . '" is not allowed. Possible values are: ' . implode(', ', self::POSSIBLE_VALUES)
+        if (!in_array($value, self::POSSIBLE_VALUES, true)) {
+            throw new \RuntimeException(
+                'The given type "'.$value.'" is not allowed. Possible values are: '.implode(', ', self::POSSIBLE_VALUES)
             );
         }
 
@@ -44,9 +44,9 @@ class Kind implements PropertyParameterInterface
         return $this->value;
     }
 
-    public static function group(): self
+    public static function group(): Kind
     {
-        return new self(self::GROUP);
+        return new Kind(self::GROUP);
     }
 
     public function isGroup(): bool
@@ -54,9 +54,9 @@ class Kind implements PropertyParameterInterface
         return $this->value === self::GROUP;
     }
 
-    public static function individual(): self
+    public static function individual(): Kind
     {
-        return new self(self::INDIVIDUAL);
+        return new Kind(self::INDIVIDUAL);
     }
 
     public function isIndividual(): bool
@@ -64,9 +64,9 @@ class Kind implements PropertyParameterInterface
         return $this->value === self::INDIVIDUAL;
     }
 
-    public static function location(): self
+    public static function location(): Kind
     {
-        return new self(self::LOCATION);
+        return new Kind(self::LOCATION);
     }
 
     public function isLocation(): bool
@@ -74,9 +74,9 @@ class Kind implements PropertyParameterInterface
         return $this->value === self::LOCATION;
     }
 
-    public static function organization(): self
+    public static function organization(): Kind
     {
-        return new self(self::ORGANIZATION);
+        return new Kind(self::ORGANIZATION);
     }
 
     public function isOrganization(): bool

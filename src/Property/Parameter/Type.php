@@ -16,9 +16,9 @@ class Type implements PropertyParameterInterface
 
     public function __construct(string $value)
     {
-        if (!in_array($value, self::POSSIBLE_VALUES)) {
-            throw new \Exception(
-                'The given type "' . $value . '" is not allowed. Possible values are: ' . implode(', ', self::POSSIBLE_VALUES)
+        if (!in_array($value, self::POSSIBLE_VALUES, true)) {
+            throw new \RuntimeException(
+                'The given type "'.$value.'" is not allowed. Possible values are: '.implode(', ', self::POSSIBLE_VALUES)
             );
         }
 
@@ -40,9 +40,9 @@ class Type implements PropertyParameterInterface
         return $this->value;
     }
 
-    public static function home(): self
+    public static function home(): Type
     {
-        return new self(self::HOME);
+        return new Type(self::HOME);
     }
 
     public function isHome(): bool
@@ -50,9 +50,9 @@ class Type implements PropertyParameterInterface
         return $this->value === self::HOME;
     }
 
-    public static function work(): self
+    public static function work(): Type
     {
-        return new self(self::WORK);
+        return new Type(self::WORK);
     }
 
     public function isWork(): bool
