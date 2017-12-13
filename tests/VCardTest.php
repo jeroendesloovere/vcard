@@ -9,11 +9,12 @@ use JeroenDesloovere\VCard\Parser\VcfParser;
 use JeroenDesloovere\VCard\Property\Address;
 use JeroenDesloovere\VCard\Property\Name;
 use JeroenDesloovere\VCard\Property\Parameter\Type;
+use PHPUnit\Framework\TestCase;
 
 /**
- * How to execute all tests: `composer test tests`
+ * How to execute all tests: `vendor/bin/phpunit tests`
  */
-class VCardTest extends \PHPUnit_Framework_TestCase
+class VCardTest extends TestCase
 {
     /**
      * @var VCard 
@@ -55,6 +56,8 @@ class VCardTest extends \PHPUnit_Framework_TestCase
         $formatter = new Formatter(new VcfFormatter(), 'vcard');
         $formatter->addVCard($this->firstVCard);
         $formatter->save(__DIR__ . '/assets/');
+
+        $this->assertFalse(false);
     }
 
     public function testSavingMultipleVCardsToVcfFile(): void

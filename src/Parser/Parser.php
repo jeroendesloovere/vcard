@@ -2,6 +2,8 @@
 
 namespace JeroenDesloovere\VCard\Parser;
 
+use JeroenDesloovere\VCard\VCard;
+
 class Parser
 {
     /**
@@ -10,9 +12,9 @@ class Parser
     private $parser;
 
     /**
-     * @var array
+     * @var VCard[]
      */
-    private $vCards = [];
+    private $vCards;
 
     public function __construct(ParserInterface $parser, string $content)
     {
@@ -22,11 +24,11 @@ class Parser
 
     public static function getFileContents(string $fileName): string
     {
-        if (file_exists($fileName) && is_readable($fileName)) {
-            return file_get_contents($fileName);
-        } else {
+        if (!file_exists($fileName) || !is_readable($fileName)) {
             throw new \RuntimeException(sprintf("File %s is not readable, or doesn't exist.", $fileName));
         }
+
+        return file_get_contents($fileName);
     }
 
     public function getVCards(): array

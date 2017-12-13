@@ -20,8 +20,8 @@ class Kind implements PropertyParameterInterface
 
     public function __construct(string $value)
     {
-        if (!in_array($value, self::POSSIBLE_VALUES)) {
-            throw new \Exception(
+        if (!in_array($value, self::POSSIBLE_VALUES, true)) {
+            throw new \RuntimeException(
                 'The given type "' . $value . '" is not allowed. Possible values are: ' . implode(', ', self::POSSIBLE_VALUES)
             );
         }

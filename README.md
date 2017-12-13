@@ -23,7 +23,7 @@ vendor/bin/phpcbf --standard=psr2 --extensions=php --warning-severity=0 --report
 
 We have build in tests, type the following to execute them:
 ```
-composer test tests
+vendor/bin/phpunit tests
 ```
 
 
