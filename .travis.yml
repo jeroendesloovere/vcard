@@ -11,7 +11,7 @@ php:
 sudo: false
 
 script:
-  - vendor/bin/phpcs --standard=psr2 --extensions=php --warning-severity=0 --report=full "src"
+  - vendor/bin/php-cs-fixer fix src --level=psr2
   - travis_wait 20 vendor/bin/simple-phpunit --coverage-clover=coverage.clover
 
 before_script:
