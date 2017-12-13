@@ -29,7 +29,7 @@ class Parser
             throw VCardException::forUnreadableFile($file);
         }
 
-        return file_get_contents($file);
+        return file_get_contents($file) ?? '';
     }
 
     public function getVCards(): array
