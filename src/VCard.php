@@ -7,10 +7,14 @@ use JeroenDesloovere\VCard\Property\PropertyInterface;
 
 class VCard
 {
-    /** @var array */
+    /**
+     * @var array
+     */
     private $properties;
 
-    /** @var Kind */
+    /**
+     * @var Kind
+     */
     private $kind;
 
     public function __construct(Kind $kind = null)

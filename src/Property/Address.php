@@ -8,28 +8,44 @@ use JeroenDesloovere\VCard\Property\Parameter\Type;
 
 class Address implements PropertyInterface
 {
-    /** @var null|string - The country name in your own language, e.g.: belgië */
+    /**
+     * @var null|string - The country name in your own language, e.g.: belgië
+     */
     private $countryName;
 
-    /** @var null|string - e.g.: apartment or suite number */
+    /**
+     * @var null|string - e.g.: apartment or suite number
+     */
     private $extendedAddress;
 
-    /** @var null|string - e.g.: city */
+    /**
+     * @var null|string - e.g.: city
+     */
     private $locality;
 
-    /** @var null|string */
+    /**
+     * @var null|string
+     */
     private $postalCode;
 
-    /** @var null|string */
+    /**
+     * @var null|string
+     */
     private $postOfficeBox;
 
-    /** @var null|string  - e.g.: state or province */
+    /**
+     * @var null|string  - e.g.: state or province
+     */
     private $region;
 
-    /** @var null|string */
+    /**
+     * @var null|string
+     */
     private $streetAddress;
 
-    /** @var Type */
+    /**
+     * @var Type
+     */
     private $type;
 
     public function __construct(

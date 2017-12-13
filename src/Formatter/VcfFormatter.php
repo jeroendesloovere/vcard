@@ -13,9 +13,13 @@ class VcfFormatter implements FormatterInterface
         $string .= "VERSION:4.0\r\n";
         $string .= "REV:" . date("Y-m-d") . "T" . date("H:i:s") . "Z\r\n";
 
-        /** @var VCard $vCard */
+        /**
+         * @var VCard $vCard
+         */
         foreach ($vCards as $vCard) {
-            /** @var PropertyInterface $property */
+            /**
+             * @var PropertyInterface $property
+             */
             foreach ($vCard->getProperties() as $property) {
                 $string .= $this->fold($property->getFormatter()->convertToVcfString($property) . "\r\n");
             }
@@ -39,8 +43,8 @@ class VcfFormatter implements FormatterInterface
     /**
      * Fold a line according to RFC2425 section 5.8.1.
      *
-     * @link http://tools.ietf.org/html/rfc2425#section-5.8.1
-     * @param string $value
+     * @link   http://tools.ietf.org/html/rfc2425#section-5.8.1
+     * @param  string $value
      * @return string
      */
     private function fold(string $value): string

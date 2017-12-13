@@ -4,10 +4,14 @@ namespace JeroenDesloovere\VCard\Parser;
 
 class Parser
 {
-    /** @var ParserInterface */
+    /**
+     * @var ParserInterface
+     */
     private $parser;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     private $vCards = [];
 
     public function __construct(ParserInterface $parser, string $content)

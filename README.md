@@ -6,6 +6,19 @@ Documentation about vCard 4.0:
 * [RFC5646](https://tools.ietf.org/html/rfc6350)
 * [vCard 4.0](https://devguide.calconnect.org/vCard/vcard-4/)
 
+### Code standards
+
+We use [squizlabs/php_codesniffer](https://packagist.org/packages/squizlabs/php_codesniffer) to maintain the code standards.
+Type the following to execute them:
+```
+# To view the code errors
+vendor/bin/phpcs --standard=psr2 --extensions=php --warning-severity=0 --report=full "src"
+
+# OR to fix the code errors
+vendor/bin/phpcbf --standard=psr2 --extensions=php --warning-severity=0 --report=full "src"
+```
+> [Read documentation about the code standards](https://github.com/squizlabs/PHP_CodeSniffer/wiki)
+
 ### Tests
 
 We have build in tests, type the following to execute them:

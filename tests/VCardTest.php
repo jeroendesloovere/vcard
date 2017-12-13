@@ -15,10 +15,14 @@ use JeroenDesloovere\VCard\Property\Parameter\Type;
  */
 class VCardTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var VCard */
+    /**
+     * @var VCard 
+     */
     private $firstVCard;
 
-    /** @var VCard */
+    /**
+     * @var VCard 
+     */
     private $secondVCard;
 
     public function setUp(): void
