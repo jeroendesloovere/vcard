@@ -80,7 +80,7 @@ class Address implements PropertyInterface
 
     public function getFormatter(): PropertyFormatterInterface
     {
-        return new AddressFormatter();
+        return new AddressFormatter($this);
     }
 
     public function getLocality(): ?string

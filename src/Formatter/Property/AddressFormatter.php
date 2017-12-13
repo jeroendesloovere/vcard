@@ -8,19 +8,25 @@ use JeroenDesloovere\VCard\Property\PropertyInterface;
 class AddressFormatter extends PropertyFormatter implements PropertyFormatterInterface
 {
     /**
-     * @param Address|PropertyInterface $address
-     * @return string
+     * @var Address
      */
-    public function convertToVcfString(PropertyInterface $address): string
+    protected $address;
+
+    public function __construct(Address $address)
     {
-        return $address->getNode() . ':' . $this->escape(
-            $address->getPostOfficeBox()
-            . ';' . $address->getExtendedAddress()
-            . ';' . $address->getStreetAddress()
-            . ';' . $address->getLocality()
-            . ';' . $address->getRegion()
-            . ';' . $address->getPostalCode()
-            . ';' . $address->getCountryName()
+        $this->address = $address;
+    }
+
+    public function getVcfString(): string
+    {
+        return $this->address->getNode() . ':' . $this->escape(
+            $this->address->getPostOfficeBox()
+            . ';' . $this->address->getExtendedAddress()
+            . ';' . $this->address->getStreetAddress()
+            . ';' . $this->address->getLocality()
+            . ';' . $this->address->getRegion()
+            . ';' . $this->address->getPostalCode()
+            . ';' . $this->address->getCountryName()
         );
     }
 }

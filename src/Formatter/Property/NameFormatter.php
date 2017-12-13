@@ -4,17 +4,24 @@ namespace JeroenDesloovere\VCard\Formatter\Property;
 
 use JeroenDesloovere\VCard\Property\Name;
 use JeroenDesloovere\VCard\Property\PropertyInterface;
+use PHP_CodeSniffer\Exceptions\RuntimeException;
 
 class NameFormatter extends PropertyFormatter implements PropertyFormatterInterface
 {
     /**
-     * @param Name|PropertyInterface $name
-     * @return string
+     * @var Name
      */
-    public function convertToVcfString(PropertyInterface $name): string
+    protected $name;
+
+    public function __construct(Name $name)
     {
-        return $name->getNode() . ':' . $this->escape(
-            $name->getFirstName() . ';' . $name->getAdditional() . ';' . $name->getLastName() . ';' . $name->getPrefix() . ';' . $name->getSuffix()
+        $this->name = $name;
+    }
+
+    public function getVcfString(): string
+    {
+        return $this->name->getNode() . ':' . $this->escape(
+            $this->name->getFirstName() . ';' . $this->name->getAdditional() . ';' . $this->name->getLastName() . ';' . $this->name->getPrefix() . ';' . $this->name->getSuffix()
         );
     }
 }

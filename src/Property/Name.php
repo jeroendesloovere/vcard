@@ -58,7 +58,7 @@ class Name implements PropertyInterface
 
     public function getFormatter(): PropertyFormatterInterface
     {
-        return new NameFormatter();
+        return new NameFormatter($this);
     }
 
     public function getLastName(): ?string
