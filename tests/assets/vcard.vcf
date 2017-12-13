@@ -1,7 +1,8 @@
 BEGIN:VCARD
 VERSION:4.0
-REV:2017-12-13T11:39:19Z
+REV:2017-12-13T13:53:51Z
 N:Desloovere;;Jeroen;;
 ADR:;;Markt 1;Brugge;West-Vlaanderen;8000;België
 ADR:;Penthouse;Korenmarkt 1;Gent;Oost-Vlaanderen;9000;België
+NOTE:VCard library is amazing.
 END:VCARD

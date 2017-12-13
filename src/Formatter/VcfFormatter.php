@@ -9,23 +9,25 @@ class VcfFormatter implements FormatterInterface
 {
     public function getContent(array $vCards): string
     {
-        $string = "BEGIN:VCARD\r\n";
-        $string .= "VERSION:4.0\r\n";
-        $string .= 'REV:' . date('Y-m-d') . 'T' . date('H:i:s') . "Z\r\n";
+        $string = '';
 
         /**
          * @var VCard $vCard
          */
         foreach ($vCards as $vCard) {
+            $string .= "BEGIN:VCARD\r\n";
+            $string .= "VERSION:4.0\r\n";
+            $string .= 'REV:' . date('Y-m-d') . 'T' . date('H:i:s') . "Z\r\n";
+
             /**
              * @var PropertyInterface $property
              */
             foreach ($vCard->getProperties() as $property) {
                 $string .= $this->fold($property->getFormatter()->getVcfString() . "\r\n");
             }
-        }
 
-        $string .= "END:VCARD\r\n";
+            $string .= "END:VCARD\r\n";
+        }
 
         return $string;
     }

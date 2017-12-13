@@ -3,8 +3,6 @@
 namespace JeroenDesloovere\VCard\Formatter\Property;
 
 use JeroenDesloovere\VCard\Property\Name;
-use JeroenDesloovere\VCard\Property\PropertyInterface;
-use PHP_CodeSniffer\Exceptions\RuntimeException;
 
 class NameFormatter extends PropertyFormatter implements PropertyFormatterInterface
 {

@@ -3,7 +3,6 @@
 namespace JeroenDesloovere\VCard\Formatter\Property;
 
 use JeroenDesloovere\VCard\Property\Address;
-use JeroenDesloovere\VCard\Property\PropertyInterface;
 
 class AddressFormatter extends PropertyFormatter implements PropertyFormatterInterface
 {
