@@ -46,7 +46,7 @@ class VCard
             return $this->properties;
         }
 
-        return array_filter($this->properties, function(PropertyInterface $property) use ($filterByPropertyClass) {
+        return array_filter($this->properties, function (PropertyInterface $property) use ($filterByPropertyClass) {
             if ($property instanceof $filterByPropertyClass) {
                 return true;
             }
