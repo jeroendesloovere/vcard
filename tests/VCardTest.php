@@ -10,8 +10,9 @@ use JeroenDesloovere\VCard\Property\Address;
 use JeroenDesloovere\VCard\Property\Name;
 use JeroenDesloovere\VCard\Property\Parameter\Type;
 
-require_once __DIR__ . '/../vendor/autoload.php';
-
+/**
+ * How to execute all tests: `composer test tests`
+ */
 class VCardTest extends \PHPUnit_Framework_TestCase
 {
     /** @var VCard */

@@ -13,9 +13,6 @@ class PropertyFormatter
      */
     protected function escape(string $value): string
     {
-        $value = str_replace("\r\n", "\\n", $value);
-        $value = str_replace("\n", "\\n", $value);
-
-        return $value;
+        return str_replace(["\r\n", "\n"], "\\n", $value);
     }
 }
