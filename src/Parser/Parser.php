@@ -2,6 +2,7 @@
 
 namespace JeroenDesloovere\VCard\Parser;
 
+use JeroenDesloovere\VCard\Exception\VCardException;
 use JeroenDesloovere\VCard\VCard;
 
 class Parser
@@ -22,13 +23,13 @@ class Parser
         $this->vCards = $this->parser->getVCards($content);
     }
 
-    public static function getFileContents(string $fileName): string
+    public static function getFileContents(string $file): string
     {
-        if (!file_exists($fileName) || !is_readable($fileName)) {
-            throw new \RuntimeException(sprintf("File %s is not readable, or doesn't exist.", $fileName));
+        if (!file_exists($file) || !is_readable($file)) {
+            throw VCardException::forUnreadableFile($file);
         }
 
-        return file_get_contents($fileName);
+        return file_get_contents($file);
     }
 
     public function getVCards(): array

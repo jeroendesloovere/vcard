@@ -2,6 +2,8 @@
 
 namespace JeroenDesloovere\VCard\Property\Parameter;
 
+use JeroenDesloovere\VCard\Exception\VCardException;
+
 class Type implements PropertyParameterInterface
 {
     protected const HOME = 'Home';
@@ -17,9 +19,7 @@ class Type implements PropertyParameterInterface
     public function __construct(string $value)
     {
         if (!in_array($value, self::POSSIBLE_VALUES, true)) {
-            throw new \RuntimeException(
-                'The given type "' . $value . '" is not allowed. Possible values are: ' . implode(', ', self::POSSIBLE_VALUES)
-            );
+            throw VCardException::forWrongValue($value, self::POSSIBLE_VALUES);
         }
 
         $this->value = $value;
