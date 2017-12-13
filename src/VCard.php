@@ -8,26 +8,28 @@ use JeroenDesloovere\VCard\Property\PropertyInterface;
 class VCard
 {
     /**
-     * @var array
-     */
-    private $properties;
-
-    /**
-     * @var Kind
+     * @var Kind - Possible values are: Group, Individual, Location or Organization
      */
     private $kind;
 
+    /**
+     * @var PropertyInterface[]
+     */
+    private $properties = [];
+
     public function __construct(Kind $kind = null)
     {
-        if ($kind === null) {
-            $kind = Kind::individual();
-        }
-
-        $this->kind = $kind;
+        $this->setKind($kind ?? Kind::individual());
     }
 
     public function add(PropertyInterface $property): self
     {
+        if (!$property->isAllowedMultipleTimes() && $this->hasProperty(get_class($property))) {
+            throw new \RuntimeException(
+                'The property "' . get_class($property) . '" you are trying to add can only be added once.'
+            );
+        }
+
         $this->properties[] = $property;
 
         return $this;
@@ -38,33 +40,22 @@ class VCard
         return $this->kind;
     }
 
-    public function getProperties(): array
+    public function getProperties(string $filterByPropertyClass = null): array
     {
-        return $this->properties;
-    }
-
-    public function getPropertiesByProperty(PropertyInterface $propertyClass): array
-    {
-        $properties = [];
-
-        foreach ($this->properties as $property) {
-            if ($property instanceof $propertyClass) {
-                $properties[] = $property;
-            }
+        if ($filterByPropertyClass === null) {
+            return $this->properties;
         }
 
-        return $properties;
-    }
-
-    public function hasProperty(PropertyInterface $propertyClass): bool
-    {
-        foreach ($this->properties as $property) {
-            if ($property instanceof $propertyClass) {
+        return array_filter($this->properties, function(PropertyInterface $property) use ($filterByPropertyClass) {
+            if ($property instanceof $filterByPropertyClass) {
                 return true;
             }
-        }
+        });
+    }
 
-        return false;
+    public function hasProperty(string $filterByPropertyClass): bool
+    {
+        return count($this->getProperties($filterByPropertyClass)) > 0;
     }
 
     public function setKind(Kind $kind): void

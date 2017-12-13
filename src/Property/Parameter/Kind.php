@@ -2,11 +2,29 @@
 
 namespace JeroenDesloovere\VCard\Property\Parameter;
 
+/**
+ * vCard defines "Kinds" to represent the types of objects to be represented by vCard.
+ */
 class Kind implements PropertyParameterInterface
 {
+    /**
+     * Group - To represent groups of vCard objects
+     */
     protected const GROUP = 'Group';
+
+    /**
+     * Individual - To represent people
+     */
     protected const INDIVIDUAL = 'Individual';
+
+    /**
+     * Location - To represent location objects
+     */
     protected const LOCATION = 'Location';
+
+    /**
+     * Organization - To represent organisations
+     */
     protected const ORGANIZATION = 'Organization';
 
     public const POSSIBLE_VALUES = [

@@ -1,41 +1,16 @@
 # VCard PHP class
 
-> This VCard PHP class can generate a vCard 4.0.
-
-Documentation about vCard 4.0:
-* [RFC5646](https://tools.ietf.org/html/rfc6350)
-* [vCard 4.0](https://devguide.calconnect.org/vCard/vcard-4/)
-
-### Code standards
-
-We use [squizlabs/php_codesniffer](https://packagist.org/packages/squizlabs/php_codesniffer) to maintain the code standards.
-Type the following to execute them:
-```
-# To view the code errors
-vendor/bin/phpcs --standard=psr2 --extensions=php --warning-severity=0 --report=full "src"
-
-# OR to fix the code errors
-vendor/bin/phpcbf --standard=psr2 --extensions=php --warning-severity=0 --report=full "src"
-```
-> [Read documentation about the code standards](https://github.com/squizlabs/PHP_CodeSniffer/wiki)
-
-### Tests
-
-We have build in tests, type the following to execute them:
-```
-vendor/bin/phpunit tests
-```
-
-
-==== OLD documentation below
-
-
 [![Latest Stable Version](http://img.shields.io/packagist/v/jeroendesloovere/vcard.svg)](https://packagist.org/packages/jeroendesloovere/vcard)
 [![License](http://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/jeroendesloovere/vcard/blob/master/LICENSE)
 [![Build Status](https://travis-ci.org/jeroendesloovere/vcard.svg?branch=master)](https://travis-ci.org/jeroendesloovere/vcard)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/jeroendesloovere/vcard/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/jeroendesloovere/vcard/?branch=master)
 
-This VCard PHP class can generate a vCard with some data. When using an iOS device < iOS 8 it will export as a .ics file because iOS devices don't support the default .vcf files.
+> This VCard PHP class can generate a vCard 4.0.
+
+Documentation about vCard 4.0:
+* [RFC5646](https://tools.ietf.org/html/rfc6350)
+* [W3 vCard RDF XML](https://www.w3.org/TR/vcard-rdf/)
+* [vCard 4.0](https://devguide.calconnect.org/vCard/vcard-4/)
 
 ## Usage
 
@@ -48,79 +23,26 @@ composer require jeroendesloovere/vcard
 
 ### Example
 
-``` php
-use JeroenDesloovere\VCard\VCard;
+@todo
 
-// define vcard
-$vcard = new VCard();
+## Code standards
 
-// define variables
-$lastname = 'Desloovere';
-$firstname = 'Jeroen';
-$additional = '';
-$prefix = '';
-$suffix = '';
-
-// add personal data
-$vcard->addName($lastname, $firstname, $additional, $prefix, $suffix);
-
-// add work data
-$vcard->addCompany('Siesqo');
-$vcard->addJobtitle('Web Developer');
-$vcard->addRole('Data Protection Officer');
-$vcard->addEmail('info@jeroendesloovere.be');
-$vcard->addPhoneNumber(1234121212, 'PREF;WORK');
-$vcard->addPhoneNumber(123456789, 'WORK');
-$vcard->addAddress(null, null, 'street', 'worktown', null, 'workpostcode', 'Belgium');
-$vcard->addURL('http://www.jeroendesloovere.be');
-
-$vcard->addPhoto(__DIR__ . '/landscape.jpeg');
-
-// return vcard as a string
-//return $vcard->getOutput();
-
-// return vcard as a download
-return $vcard->download();
-
-// save vcard on disk
-//$vcard->setSavePath('/path/to/directory');
-//$vcard->save();
-
+We use [squizlabs/php_codesniffer](https://packagist.org/packages/squizlabs/php_codesniffer) to maintain the code standards.
+Type the following to execute them:
 ```
+# To view the code errors
+vendor/bin/phpcs --standard=psr2 --extensions=php --warning-severity=0 --report=full "src"
 
-> [View all examples](/examples/example.php) or check [the VCard class](/src/VCard.php).
-
-### Parsing examples
-
-The parser can either get passed a VCard string, like so:
-
-```php
-// load VCardParser classes
-use JeroenDesloovere\VCard\VCardParser;
-
-$parser = new VCardParser($vcardString);
-echo $parser->getCardAtIndex(0)->fullname; // Prints the full name.
+# OR to fix the code errors
+vendor/bin/phpcbf --standard=psr2 --extensions=php --warning-severity=0 --report=full "src"
 ```
+> [Read documentation about the code standards](https://github.com/squizlabs/PHP_CodeSniffer/wiki)
 
-Or by using a factory method with a file name:
+## Tests
 
-```php
-$parser = VCardParser::parseFromFile('path/to/file.vcf');
-echo $parser->getCardAtIndex(0)->fullname; // Prints the full name.
+We have build in tests, type the following to execute them:
 ```
-> [View the parsing example](/examples/example_parsing.php) or check the [the VCardParser class](/src/VCardParser.php) class.
-
-**Support for frameworks**
-
-I've created a Symfony Bundle: [VCard Bundle](https://github.com/jeroendesloovere/vcard-bundle)
-
-Usage in for example: Laravel
-```php
-return Response::make(
-    $this->vcard->getOutput(),
-    200,
-    $this->vcard->getHeaders(true)
-);
+vendor/bin/phpunit tests
 ```
 
 ## Documentation

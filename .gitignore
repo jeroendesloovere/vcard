@@ -1,3 +1,5 @@
 composer.lock
+tests/vcard.vcf
+tests/vcards.vcf
 vendor
 .idea/

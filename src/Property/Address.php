@@ -117,4 +117,9 @@ class Address implements PropertyInterface
     {
         return $this->type;
     }
+
+    public function isAllowedMultipleTimes(): bool
+    {
+        return true;
+    }
 }

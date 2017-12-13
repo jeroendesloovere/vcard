@@ -80,4 +80,9 @@ class Name implements PropertyInterface
     {
         return $this->suffix;
     }
+
+    public function isAllowedMultipleTimes(): bool
+    {
+        return false;
+    }
 }
