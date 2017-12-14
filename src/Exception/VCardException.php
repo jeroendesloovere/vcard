@@ -17,4 +17,11 @@ class VCardException extends \Exception
             'The given type "' . $value . '" is not allowed. Possible values are: ' . implode(', ', $possibleValues)
         );
     }
+
+    public static function forNotAVCard(string $input): self
+    {
+        return new self(
+            'The given input "' . $input . '" is not a VCard.'
+        );
+    }
 }
