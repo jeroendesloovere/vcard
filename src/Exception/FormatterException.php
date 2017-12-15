@@ -2,7 +2,7 @@
 
 namespace JeroenDesloovere\VCard\Exception;
 
-class FormatterException extends VCardException
+final class FormatterException extends VCardException
 {
     public static function forUnreadableVCard(string $input): self
     {

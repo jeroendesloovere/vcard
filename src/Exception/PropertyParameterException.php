@@ -2,7 +2,7 @@
 
 namespace JeroenDesloovere\VCard\Exception;
 
-class PropertyParameterException extends VCardException
+final class PropertyParameterException extends VCardException
 {
     public static function forWrongValue(string $value, array $possibleValues): self
     {

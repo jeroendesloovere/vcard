@@ -2,7 +2,7 @@
 
 namespace JeroenDesloovere\VCard\Exception;
 
-class PropertyException extends VCardException
+final class PropertyException extends VCardException
 {
     public static function forEmptyProperty(): self
     {
