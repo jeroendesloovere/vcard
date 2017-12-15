@@ -55,7 +55,7 @@ final class VCard
         return count($this->getProperties($filterByPropertyClass)) > 0;
     }
 
-    public function setKind(Kind $kind)
+    public function setKind(Kind $kind): void
     {
         $this->kind = $kind;
     }
