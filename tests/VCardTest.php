@@ -99,8 +99,6 @@ final class VCardTest extends TestCase
 
         $this->assertEquals($this->firstVCard, $parser->getVCards()[0]);
         $this->assertEquals($this->secondVCard, $parser->getVCards()[1]);
-
-        $this->assertFalse(false);
     }
 
     public function testParserOneVCardFromVcfFile(): void
