@@ -2,10 +2,10 @@
 
 namespace JeroenDesloovere\VCard\Parser;
 
-use JeroenDesloovere\VCard\Exception\VCardException;
+use JeroenDesloovere\VCard\Exception\ParserException;
 use JeroenDesloovere\VCard\VCard;
 
-class Parser
+final class Parser
 {
     /**
      * @var ParserInterface
@@ -26,7 +26,7 @@ class Parser
     public static function getFileContents(string $file): string
     {
         if (!file_exists($file) || !is_readable($file)) {
-            throw VCardException::forUnreadableFile($file);
+            throw ParserException::forUnreadableVCard($file);
         }
 
         $contents = file_get_contents($file);

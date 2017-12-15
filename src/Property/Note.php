@@ -5,7 +5,7 @@ namespace JeroenDesloovere\VCard\Property;
 use JeroenDesloovere\VCard\Formatter\Property\NoteFormatter;
 use JeroenDesloovere\VCard\Formatter\Property\PropertyFormatterInterface;
 
-class Note implements PropertyInterface
+final class Note implements PropertyInterface
 {
     /**
      * @var string

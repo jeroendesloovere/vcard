@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * How to execute all tests: `vendor/bin/phpunit tests`
  */
-class VCardTest extends TestCase
+final class VCardTest extends TestCase
 {
     /**
      * @var VCard 
@@ -40,30 +40,7 @@ class VCardTest extends TestCase
             ->add(new Address(null, 'Penthouse', 'Korenmarkt 1', 'Gent', 'Oost-Vlaanderen', '9000', 'België', Type::work()));
     }
 
-    public function testEmptyVCards(): void
-    {
-        (new VCard())
-            ->add(new Name(null, null))
-            ->add(new Address(null, null, null, null, null, null, null, null));
-
-        (new VCard())
-            ->add(new Name())
-            ->add(new Address());
-
-        $this->assertFalse(false);
-    }
-
-    public function testSavingOneVCardToVcfFile(): void
-    {
-        // Saving "vcard.vcf"
-        $formatter = new Formatter(new VcfFormatter(), 'vcard');
-        $formatter->addVCard($this->firstVCard);
-        $formatter->save(__DIR__);
-
-        $this->assertFalse(false);
-    }
-
-    public function testSavingMultipleVCardsToVcfFile(): void
+    public function testFormatterSavingMultipleVCardsToVcfFile(): void
     {
         // Saving "vcards.vcf"
         $formatter = new Formatter(new VcfFormatter(), 'vcards');
@@ -74,14 +51,33 @@ class VCardTest extends TestCase
         $this->assertFalse(false);
     }
 
-    public function testParsingOneVCardFromVcfFile(): void
+    public function testFormatterSavingOneVCardToVcfFile(): void
     {
-        $parser = new Parser(new VcfParser(), Parser::getFileContents(__DIR__ . '/assets/vcard.vcf'));
+        // Saving "vcard.vcf"
+        $formatter = new Formatter(new VcfFormatter(), 'vcard');
+        $formatter->addVCard($this->firstVCard);
+        $formatter->save(__DIR__);
 
-        $this->assertEquals($this->firstVCard, $parser->getVCards()[0]);
+        $this->assertFalse(false);
     }
 
-    public function testParsingMultipleVCardsFromVcfFile(): void
+    /**
+     * @expectedException \JeroenDesloovere\VCard\Exception\ParserException
+     */
+    public function testParserCorruptVCard(): void
+    {
+        new Parser(new VcfParser(), 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.');
+    }
+
+    /**
+     * @expectedException \JeroenDesloovere\VCard\Exception\ParserException
+     */
+    public function testParserEmptyVCard(): void
+    {
+        new Parser(new VcfParser(), '');
+    }
+
+    public function testParserMultipleVCardsFromVcfFile(): void
     {
         $parser = new Parser(new VcfParser(), Parser::getFileContents(__DIR__ . '/assets/vcards.vcf'));
 
@@ -92,24 +88,11 @@ class VCardTest extends TestCase
         $this->assertFalse(false);
     }
 
-    /**
-     * @expectedException \JeroenDesloovere\VCard\Exception\VCardException
-     * @expectedExceptionMessage The given input "" is not a VCard.
-     *
-     */
-    public function testParsingEmptyVCard(): void
+    public function testParserOneVCardFromVcfFile(): void
     {
-        new Parser(new VcfParser(), '');
-    }
+        $parser = new Parser(new VcfParser(), Parser::getFileContents(__DIR__ . '/assets/vcard.vcf'));
 
-    /**
-     * @expectedException \JeroenDesloovere\VCard\Exception\VCardException
-     * @expectedExceptionMessage The given input "Lorem ipsum dolor sit amet, consectetur adipiscing elit." is not a VCard.
-     *
-     */
-    public function testParsingCorruptVCard(): void
-    {
-        new Parser(new VcfParser(), 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.');
+        $this->assertEquals($this->firstVCard, $parser->getVCards()[0]);
     }
 
     public function testVCardGetProperties(): void

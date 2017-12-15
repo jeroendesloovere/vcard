@@ -2,10 +2,11 @@
 
 namespace JeroenDesloovere\VCard\Property;
 
+use JeroenDesloovere\VCard\Exception\PropertyException;
 use JeroenDesloovere\VCard\Formatter\Property\NameFormatter;
 use JeroenDesloovere\VCard\Formatter\Property\PropertyFormatterInterface;
 
-class Name implements PropertyInterface
+final class Name implements PropertyInterface
 {
     /**
      * @var null|string
@@ -39,6 +40,10 @@ class Name implements PropertyInterface
         ?string $prefix = null,
         ?string $suffix = null
     ) {
+        if ($lastName === null && $firstName === null && $additional === null && $prefix === null && $suffix === null) {
+            throw PropertyException::forEmptyProperty();
+        }
+
         $this->lastName = $lastName;
         $this->firstName = $firstName;
         $this->additional = $additional;

@@ -2,10 +2,11 @@
 
 namespace JeroenDesloovere\VCard;
 
+use JeroenDesloovere\VCard\Exception\VCardException;
 use JeroenDesloovere\VCard\Property\Parameter\Kind;
 use JeroenDesloovere\VCard\Property\PropertyInterface;
 
-class VCard
+final class VCard
 {
     /**
      * @var Kind - Possible values are: Group, Individual, Location or Organization
@@ -25,9 +26,7 @@ class VCard
     public function add(PropertyInterface $property): self
     {
         if (!$property->isAllowedMultipleTimes() && $this->hasProperty(get_class($property))) {
-            throw new \RuntimeException(
-                'The property "' . get_class($property) . '" you are trying to add can only be added once.'
-            );
+            throw VCardException::forExistingProperty($property);
         }
 
         $this->properties[] = $property;
@@ -56,7 +55,7 @@ class VCard
         return count($this->getProperties($filterByPropertyClass)) > 0;
     }
 
-    public function setKind(Kind $kind): void
+    public function setKind(Kind $kind)
     {
         $this->kind = $kind;
     }
