@@ -7,7 +7,7 @@ use JeroenDesloovere\VCard\Exception\PropertyParameterException;
 /**
  * vCard defines "Kinds" to represent the types of objects to be represented by vCard.
  */
-class Kind implements PropertyParameterInterface
+final class Kind implements PropertyParameterInterface
 {
     /**
      * Group - To represent groups of vCard objects

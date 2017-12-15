@@ -2,7 +2,6 @@
 
 namespace JeroenDesloovere\VCard;
 
-use JeroenDesloovere\VCard\Exception\ParserException;
 use JeroenDesloovere\VCard\Formatter\Formatter;
 use JeroenDesloovere\VCard\Formatter\VcfFormatter;
 use JeroenDesloovere\VCard\Parser\Parser;
@@ -16,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * How to execute all tests: `vendor/bin/phpunit tests`
  */
-class VCardTest extends TestCase
+final class VCardTest extends TestCase
 {
     /**
      * @var VCard 

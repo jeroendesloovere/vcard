@@ -5,7 +5,7 @@ namespace JeroenDesloovere\VCard\Formatter;
 use JeroenDesloovere\VCard\Property\PropertyInterface;
 use JeroenDesloovere\VCard\VCard;
 
-class VcfFormatter implements FormatterInterface
+final class VcfFormatter implements FormatterInterface
 {
     public function getContent(array $vCards): string
     {

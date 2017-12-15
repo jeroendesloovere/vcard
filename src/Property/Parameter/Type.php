@@ -4,7 +4,7 @@ namespace JeroenDesloovere\VCard\Property\Parameter;
 
 use JeroenDesloovere\VCard\Exception\PropertyParameterException;
 
-class Type implements PropertyParameterInterface
+final class Type implements PropertyParameterInterface
 {
     protected const HOME = 'Home';
     protected const WORK = 'Work';

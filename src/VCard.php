@@ -6,7 +6,7 @@ use JeroenDesloovere\VCard\Exception\VCardException;
 use JeroenDesloovere\VCard\Property\Parameter\Kind;
 use JeroenDesloovere\VCard\Property\PropertyInterface;
 
-class VCard
+final class VCard
 {
     /**
      * @var Kind - Possible values are: Group, Individual, Location or Organization

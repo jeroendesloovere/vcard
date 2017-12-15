@@ -5,7 +5,7 @@ namespace JeroenDesloovere\VCard\Parser;
 use JeroenDesloovere\VCard\Exception\ParserException;
 use JeroenDesloovere\VCard\VCard;
 
-class Parser
+final class Parser
 {
     /**
      * @var ParserInterface

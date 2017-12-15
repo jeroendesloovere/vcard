@@ -5,7 +5,7 @@ namespace JeroenDesloovere\VCard\Formatter;
 use JeroenDesloovere\VCard\Exception\FormatterException;
 use JeroenDesloovere\VCard\VCard;
 
-class Formatter
+final class Formatter
 {
     /**
      * @var string

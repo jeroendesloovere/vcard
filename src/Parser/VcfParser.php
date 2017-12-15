@@ -10,7 +10,7 @@ use JeroenDesloovere\VCard\Property\Note;
 use JeroenDesloovere\VCard\Property\Parameter\Type;
 use JeroenDesloovere\VCard\VCard;
 
-class VcfParser implements ParserInterface
+final class VcfParser implements ParserInterface
 {
     /**
      * @param string $content

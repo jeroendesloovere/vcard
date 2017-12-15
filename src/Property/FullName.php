@@ -5,7 +5,7 @@ namespace JeroenDesloovere\VCard\Property;
 use JeroenDesloovere\VCard\Formatter\Property\FullNameFormatter;
 use JeroenDesloovere\VCard\Formatter\Property\PropertyFormatterInterface;
 
-class FullName implements PropertyInterface
+final class FullName implements PropertyInterface
 {
     /**
      * @var string
