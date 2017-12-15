@@ -2,7 +2,7 @@
 
 namespace JeroenDesloovere\VCard\Property\Parameter;
 
-use JeroenDesloovere\VCard\Exception\VCardException;
+use JeroenDesloovere\VCard\Exception\PropertyParameterException;
 
 /**
  * vCard defines "Kinds" to represent the types of objects to be represented by vCard.
@@ -41,7 +41,7 @@ class Kind implements PropertyParameterInterface
     public function __construct(string $value)
     {
         if (!in_array($value, self::POSSIBLE_VALUES, true)) {
-            throw VCardException::forWrongValue($value, self::POSSIBLE_VALUES);
+            throw PropertyParameterException::forWrongValue($value, self::POSSIBLE_VALUES);
         }
 
         $this->value = $value;

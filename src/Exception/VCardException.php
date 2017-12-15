@@ -2,26 +2,14 @@
 
 namespace JeroenDesloovere\VCard\Exception;
 
+use JeroenDesloovere\VCard\Property\PropertyInterface;
+
 class VCardException extends \Exception
 {
-    public static function forUnreadableFile(string $file): self
+    public static function forExistingProperty(PropertyInterface $property): self
     {
-        return new self(
-            sprintf("File %s is not readable, or doesn't exist.", $file)
-        );
-    }
-
-    public static function forWrongValue(string $value, array $possibleValues): self
-    {
-        return new self(
-            'The given type "' . $value . '" is not allowed. Possible values are: ' . implode(', ', $possibleValues)
-        );
-    }
-
-    public static function forNotAVCard(string $input): self
-    {
-        return new self(
-            'The given input "' . $input . '" is not a VCard.'
+        throw new self(
+            'The property "' . get_class($property) . '" you are trying to add can only be added once.'
         );
     }
 }

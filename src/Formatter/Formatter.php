@@ -2,7 +2,7 @@
 
 namespace JeroenDesloovere\VCard\Formatter;
 
-use JeroenDesloovere\VCard\Exception\VCardException;
+use JeroenDesloovere\VCard\Exception\FormatterException;
 use JeroenDesloovere\VCard\VCard;
 
 class Formatter
@@ -40,7 +40,7 @@ class Formatter
         return $this;
     }
 
-    public function download(): void
+    public function download()
     {
         foreach ($this->getHeaders() as $header) {
             header($header);
@@ -94,11 +94,11 @@ class Formatter
 
             return (int) $savedBytes > 0;
         } catch (\Exception $e) {
-            throw new VCardException($e->getMessage());
+            throw new FormatterException($e->getMessage());
         }
     }
 
-    public function setCharset(string $charset): void
+    public function setCharset(string $charset)
     {
         $this->charset = $charset;
     }

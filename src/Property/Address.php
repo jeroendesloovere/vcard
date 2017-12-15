@@ -2,6 +2,7 @@
 
 namespace JeroenDesloovere\VCard\Property;
 
+use JeroenDesloovere\VCard\Exception\PropertyException;
 use JeroenDesloovere\VCard\Formatter\Property\AddressFormatter;
 use JeroenDesloovere\VCard\Formatter\Property\PropertyFormatterInterface;
 use JeroenDesloovere\VCard\Property\Parameter\Type;
@@ -58,6 +59,12 @@ class Address implements PropertyInterface
         ?string $countryName = null,
         Type $type = null
     ) {
+        if ($postOfficeBox === null && $extendedAddress === null && $streetAddress === null && $locality === null
+            && $region === null && $postalCode === null && $countryName === null && $type === null
+        ) {
+            throw PropertyException::forEmptyProperty();
+        }
+
         $this->postOfficeBox = $postOfficeBox;
         $this->extendedAddress = $extendedAddress;
         $this->streetAddress = $streetAddress;

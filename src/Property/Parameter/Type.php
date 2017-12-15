@@ -2,7 +2,7 @@
 
 namespace JeroenDesloovere\VCard\Property\Parameter;
 
-use JeroenDesloovere\VCard\Exception\VCardException;
+use JeroenDesloovere\VCard\Exception\PropertyParameterException;
 
 class Type implements PropertyParameterInterface
 {
@@ -19,7 +19,7 @@ class Type implements PropertyParameterInterface
     public function __construct(string $value)
     {
         if (!in_array($value, self::POSSIBLE_VALUES, true)) {
-            throw VCardException::forWrongValue($value, self::POSSIBLE_VALUES);
+            throw PropertyParameterException::forWrongValue($value, self::POSSIBLE_VALUES);
         }
 
         $this->value = $value;

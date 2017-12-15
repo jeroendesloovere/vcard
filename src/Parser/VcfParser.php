@@ -2,7 +2,7 @@
 
 namespace JeroenDesloovere\VCard\Parser;
 
-use JeroenDesloovere\VCard\Exception\VCardException;
+use JeroenDesloovere\VCard\Exception\ParserException;
 use JeroenDesloovere\VCard\Property\Address;
 use JeroenDesloovere\VCard\Property\FullName;
 use JeroenDesloovere\VCard\Property\Name;
@@ -15,7 +15,7 @@ class VcfParser implements ParserInterface
     /**
      * @param string $content
      * @return VCard[]
-     * @throws VCardException
+     * @throws ParserException
      */
     public function getVCards(string $content): array
     {
@@ -25,7 +25,7 @@ class VcfParser implements ParserInterface
         $content = trim($content);
 
         if (!preg_match('/^BEGIN:VCARD[\s\S]+END:VCARD$/', $content)) {
-            throw VCardException::forNotAVCard($content);
+            throw ParserException::forUnreadableVCard($content);
         }
 
         // Remove first BEGIN:VCARD and last END:VCARD
