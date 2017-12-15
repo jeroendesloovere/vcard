@@ -79,7 +79,6 @@ class VCardTest extends TestCase
         $parser = new Parser(new VcfParser(), Parser::getFileContents(__DIR__ . '/assets/vcard.vcf'));
 
         $this->assertEquals($this->firstVCard, $parser->getVCards()[0]);
-        $this->assertFalse(false);
     }
 
     public function testParsingMultipleVCardsFromVcfFile(): void
@@ -91,6 +90,26 @@ class VCardTest extends TestCase
         //$this->assertEquals($this->secondVCard, $parser->getVCards()[1]);
 
         $this->assertFalse(false);
+    }
+
+    /**
+     * @expectedException \JeroenDesloovere\VCard\Exception\VCardException
+     * @expectedExceptionMessage The given input "" is not a VCard.
+     *
+     */
+    public function testParsingEmptyVCard(): void
+    {
+        new Parser(new VcfParser(), '');
+    }
+
+    /**
+     * @expectedException \JeroenDesloovere\VCard\Exception\VCardException
+     * @expectedExceptionMessage The given input "Lorem ipsum dolor sit amet, consectetur adipiscing elit." is not a VCard.
+     *
+     */
+    public function testParsingCorruptVCard(): void
+    {
+        new Parser(new VcfParser(), 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.');
     }
 
     public function testVCardGetProperties(): void
