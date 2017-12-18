@@ -88,24 +88,20 @@ final class VCardTest extends TestCase
     {
         new Parser(new VcfParser(), '');
     }
-/*
+
     public function testParserMultipleVCardsFromVcfFile(): void
     {
         $parser = new Parser(new VcfParser(), Parser::getFileContents(__DIR__ . '/assets/vcards.vcf'));
 
-        $this->assertTrue($this->firstVCard->equalsProperties($parser->getVCards()[0]));
-        $this->assertTrue($this->secondVCard->equalsProperties($parser->getVCards()[1]));
+        $this->assertEquals($this->firstVCard->getProperties(), $parser->getVCards()[0]->getProperties());
+        $this->assertEquals($this->secondVCard->getProperties(), $parser->getVCards()[1]->getProperties());
     }
-*/
+
     public function testParserOneVCardFromVcfFile(): void
     {
         $parser = new Parser(new VcfParser(), Parser::getFileContents(__DIR__ . '/assets/vcard.vcf'));
 
-        /**
-         * @var VCard
-         */
-        $vCard = $parser->getVCards()[0];
-        $this->assertEquals($this->firstVCard->getProperties(), $vCard->getProperties());
+        $this->assertEquals($this->firstVCard->getProperties(), $parser->getVCards()[0]->getProperties());
     }
 
     public function testVCardGetProperties(): void
