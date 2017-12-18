@@ -58,9 +58,7 @@ final class VCardTest extends TestCase
         $formatter->addVCard($this->secondVCard);
 
         $this->assertFalse($this->vfsRoot->hasChild('vcards.vcf'));
-
         $formatter->save($this->vfsRoot->url());
-
         $this->assertTrue($this->vfsRoot->hasChild('vcards.vcf'));
     }
 
@@ -71,9 +69,7 @@ final class VCardTest extends TestCase
         $formatter->addVCard($this->firstVCard);
 
         $this->assertFalse($this->vfsRoot->hasChild('vcard.vcf'));
-
         $formatter->save($this->vfsRoot->url());
-
         $this->assertTrue($this->vfsRoot->hasChild('vcard.vcf'));
     }
 
