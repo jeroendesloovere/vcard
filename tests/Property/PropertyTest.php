@@ -2,7 +2,6 @@
 
 namespace JeroenDesloovere\VCard\Property;
 
-use JeroenDesloovere\VCard\VCard;
 use PHPUnit\Framework\TestCase;
 
 /**
