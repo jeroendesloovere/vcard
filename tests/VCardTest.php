@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 final class VCardTest extends TestCase
 {
     /**
-     * @var  vfsStreamDirectory
+     * @var vfsStreamDirectory
      */
     private $vfsRoot;
 
