@@ -214,6 +214,9 @@ class VCard
 
             if (array_key_exists('Content-Type', $headers)) {
                 $mimeType = $headers['Content-Type'];
+                if (is_array($mimeType)) {
+                    $mimeType = end($mimeType);
+                }
             }
         } else {
             //Local file, so inspect it directly
