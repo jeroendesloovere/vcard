@@ -1,29 +1,20 @@
-# VCard PHP class
+# [WIP] VCard PHP class - Using the latest vCard version 4.0
 
 [![Latest Stable Version](http://img.shields.io/packagist/v/jeroendesloovere/vcard.svg)](https://packagist.org/packages/jeroendesloovere/vcard)
 [![License](http://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/jeroendesloovere/vcard/blob/master/LICENSE)
 [![Build Status](https://travis-ci.org/jeroendesloovere/vcard.svg?branch=new-version)](https://travis-ci.org/jeroendesloovere/vcard)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/jeroendesloovere/vcard/badges/quality-score.png?b=new-version)](https://scrutinizer-ci.com/g/jeroendesloovere/vcard/?branch=new-version)
 
-> This VCard PHP class can generate a vCard 4.0.
+> This VCard PHP class can generate a vCard 4.0. .vcf file with one or more vCards in it. Parsing is also possible.
 
 Documentation about vCard 4.0:
 * [RFC6350](https://tools.ietf.org/html/rfc6350)
 * [W3 vCard RDF XML](https://www.w3.org/TR/vcard-rdf/)
 * [vCard 4.0](https://devguide.calconnect.org/vCard/vcard-4/)
 
-## Usage
+## Examples
 
-### Installation
-
-```bash
-composer require jeroendesloovere/vcard
-```
-> This will install the latest version of vcard with [Composer](https://getcomposer.org)
-
-### Example
-
-@todo
+Since this is a WIP, we refer to the [test class](tests/VCardTest.php) to view multiple examples.
 
 ## Code standards
 
