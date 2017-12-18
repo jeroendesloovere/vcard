@@ -4,7 +4,7 @@ namespace JeroenDesloovere\VCard\Formatter\Property;
 
 use JeroenDesloovere\VCard\Property\Address;
 
-class AddressFormatter extends PropertyFormatter implements PropertyFormatterInterface
+class AddressFormatter extends NodeFormatter implements NodeFormatterInterface
 {
     /**
      * @var Address

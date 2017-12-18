@@ -2,7 +2,7 @@
 
 namespace JeroenDesloovere\VCard\Formatter\Property;
 
-class PropertyFormatter
+class NodeFormatter
 {
     /**
      * Escape newline characters according to RFC2425 section 5.8.4.

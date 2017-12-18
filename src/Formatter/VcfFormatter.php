@@ -2,6 +2,7 @@
 
 namespace JeroenDesloovere\VCard\Formatter;
 
+use JeroenDesloovere\VCard\Property\Parameter\PropertyParameterInterface;
 use JeroenDesloovere\VCard\Property\PropertyInterface;
 use JeroenDesloovere\VCard\VCard;
 
@@ -16,8 +17,13 @@ final class VcfFormatter implements FormatterInterface
          */
         foreach ($vCards as $vCard) {
             $string .= "BEGIN:VCARD\r\n";
-            $string .= "VERSION:4.0\r\n";
-            $string .= 'REV:' . date('Y-m-d') . 'T' . date('H:i:s') . "Z\r\n";
+
+            /**
+             * @var PropertyParameterInterface $parameter
+             */
+            foreach ($vCard->getParameters() as $parameter) {
+                $string .= $this->fold($parameter->getFormatter()->getVcfString() . "\r\n");
+            }
 
             /**
              * @var PropertyInterface $property

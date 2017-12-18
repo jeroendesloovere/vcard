@@ -3,7 +3,7 @@
 namespace JeroenDesloovere\VCard\Property;
 
 use JeroenDesloovere\VCard\Formatter\Property\FullNameFormatter;
-use JeroenDesloovere\VCard\Formatter\Property\PropertyFormatterInterface;
+use JeroenDesloovere\VCard\Formatter\Property\NodeFormatterInterface;
 use JeroenDesloovere\VCard\Parser\Property\FullNameParser;
 use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
 
@@ -29,7 +29,7 @@ final class FullName implements PropertyInterface
         return $this->value;
     }
 
-    public function getFormatter(): PropertyFormatterInterface
+    public function getFormatter(): NodeFormatterInterface
     {
         return new FullNameFormatter($this);
     }

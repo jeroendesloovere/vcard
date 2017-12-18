@@ -4,7 +4,7 @@ namespace JeroenDesloovere\VCard\Property;
 
 use JeroenDesloovere\VCard\Exception\PropertyException;
 use JeroenDesloovere\VCard\Formatter\Property\NameFormatter;
-use JeroenDesloovere\VCard\Formatter\Property\PropertyFormatterInterface;
+use JeroenDesloovere\VCard\Formatter\Property\NodeFormatterInterface;
 use JeroenDesloovere\VCard\Parser\Property\NameParser;
 use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
 
@@ -81,7 +81,7 @@ final class Name implements PropertyInterface
         return $this->firstName;
     }
 
-    public function getFormatter(): PropertyFormatterInterface
+    public function getFormatter(): NodeFormatterInterface
     {
         return new NameFormatter($this);
     }

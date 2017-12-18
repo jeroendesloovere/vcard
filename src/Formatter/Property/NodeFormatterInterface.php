@@ -2,7 +2,7 @@
 
 namespace JeroenDesloovere\VCard\Formatter\Property;
 
-interface PropertyFormatterInterface
+interface NodeFormatterInterface
 {
     public function getVcfString(): string;
 }

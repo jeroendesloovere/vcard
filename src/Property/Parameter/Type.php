@@ -3,6 +3,8 @@
 namespace JeroenDesloovere\VCard\Property\Parameter;
 
 use JeroenDesloovere\VCard\Exception\PropertyParameterException;
+use JeroenDesloovere\VCard\Formatter\Property\NodeFormatterInterface;
+use JeroenDesloovere\VCard\Formatter\Property\Parameter\TypeFormatter;
 use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
 use JeroenDesloovere\VCard\Parser\Property\Parameter\TypeParser;
 
@@ -30,6 +32,11 @@ final class Type implements PropertyParameterInterface
     public function __toString()
     {
         return $this->getValue();
+    }
+
+    public function getFormatter(): NodeFormatterInterface
+    {
+        return new TypeFormatter($this);
     }
 
     public static function getNode(): string

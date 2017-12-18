@@ -31,11 +31,6 @@ final class VCard
     ];
 
     /**
-     * @var Kind - Possible values are: Group, Individual, Location or Organization
-     */
-    private $kind;
-
-    /**
      * @var PropertyParameterInterface[]
      */
     private $parameters = [];
@@ -47,7 +42,7 @@ final class VCard
 
     public function __construct(Kind $kind = null)
     {
-        $this->setKind($kind ?? Kind::individual());
+        $this->add($kind ?? Kind::individual());
     }
 
     public function add(NodeInterface $node): self
@@ -75,7 +70,7 @@ final class VCard
 
     public function getKind(): Kind
     {
-        return $this->kind;
+        return $this->getParameters(Kind::class)[0];
     }
 
     public function getParameters(string $filterByPropertyParameterClass = null): array
@@ -108,10 +103,5 @@ final class VCard
     public function hasPropertyByClassName(string $filterByPropertyClass): bool
     {
         return count($this->getProperties($filterByPropertyClass)) > 0;
-    }
-
-    public function setKind(Kind $kind): void
-    {
-        $this->kind = $kind;
     }
 }

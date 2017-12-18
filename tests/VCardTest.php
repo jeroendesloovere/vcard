@@ -9,6 +9,7 @@ use JeroenDesloovere\VCard\Parser\VcfParser;
 use JeroenDesloovere\VCard\Property\Address;
 use JeroenDesloovere\VCard\Property\Name;
 use JeroenDesloovere\VCard\Property\Note;
+use JeroenDesloovere\VCard\Property\Parameter\Kind;
 use JeroenDesloovere\VCard\Property\Parameter\Type;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
@@ -39,7 +40,7 @@ final class VCardTest extends TestCase
         $this->vfsRoot = vfsStream::setup();
 
         // Building one or multiple vCards
-        $this->firstVCard = (new VCard())
+        $this->firstVCard = (new VCard(Kind::group()))
             ->add(new Name('Desloovere', 'Jeroen'))
             ->add(new Address(null, null, 'Markt 1', 'Brugge', 'West-Vlaanderen', '8000', 'België', Type::work()))
             ->add(new Address(null, 'Penthouse', 'Korenmarkt 1', 'Gent', 'Oost-Vlaanderen', '9000', 'België', Type::home()))
@@ -93,8 +94,9 @@ final class VCardTest extends TestCase
     {
         $parser = new Parser(new VcfParser(), Parser::getFileContents(__DIR__ . '/assets/vcards.vcf'));
 
+        $this->assertEquals(Kind::group(), $parser->getVCards()[0]->getKind());
         $this->assertEquals($this->firstVCard->getProperties(), $parser->getVCards()[0]->getProperties());
-        $this->assertEquals($this->secondVCard->getProperties(), $parser->getVCards()[1]->getProperties());
+        $this->assertEquals($this->firstVCard->getProperties(), $parser->getVCards()[0]->getProperties());
     }
 
     public function testParserOneVCardFromVcfFile(): void
