@@ -1,4 +1,5 @@
 BEGIN:VCARD
+KIND:Individual
 VERSION:4.0
 REV:2017-12-15T10:24:32Z
 N:Jeroen;;Desloovere;;
@@ -7,6 +8,7 @@ ADR;TYPE=Home:;Penthouse;Korenmarkt 1;Gent;Oost-Vlaanderen;9000;België
 NOTE:VCard library is amazing.
 END:VCARD
 BEGIN:VCARD
+KIND:Individual
 VERSION:4.0
 REV:2017-12-15T10:24:32Z
 N:John;;Doe;;
