@@ -160,6 +160,24 @@ class VCardTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testAddPhotoContentWithJpgPhoto()
+    {
+        $return = $this->vcard->addPhotoContent(file_get_contents(__DIR__ . '/image.jpg'));
+
+        $this->assertEquals($this->vcard, $return);
+    }
+
+    /**
+     * Test adding empty photo
+     *
+     * @expectedException Exception
+     * @expectedExceptionMessage Returned data is not an image.
+     */
+    public function testAddPhotoContentWithEmptyContent()
+    {
+        $this->vcard->addPhotoContent('');
+    }
+
     public function testAddLogoWithJpgImage()
     {
         $return = $this->vcard->addLogo(__DIR__ . '/image.jpg', true);
@@ -172,6 +190,24 @@ class VCardTest extends \PHPUnit_Framework_TestCase
         $return = $this->vcard->addLogo(__DIR__ . '/image.jpg', false);
 
         $this->assertEquals($this->vcard, $return);
+    }
+
+    public function testAddLogoContentWithJpgImage()
+    {
+        $return = $this->vcard->addLogoContent(file_get_contents(__DIR__ . '/image.jpg'));
+
+        $this->assertEquals($this->vcard, $return);
+    }
+
+    /**
+     * Test adding empty photo
+     *
+     * @expectedException Exception
+     * @expectedExceptionMessage Returned data is not an image.
+     */
+    public function testAddLogoContentWithEmptyContent()
+    {
+        $this->vcard->addLogoContent('');
     }
 
     public function testAddUrl()
