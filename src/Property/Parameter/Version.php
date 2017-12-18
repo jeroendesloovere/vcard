@@ -4,16 +4,14 @@ namespace JeroenDesloovere\VCard\Property\Parameter;
 
 use JeroenDesloovere\VCard\Exception\PropertyParameterException;
 use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
-use JeroenDesloovere\VCard\Parser\Property\Parameter\TypeParser;
+use JeroenDesloovere\VCard\Parser\Property\Parameter\VersionParser;
 
-final class Type implements PropertyParameterInterface
+final class Version implements PropertyParameterInterface
 {
-    protected const HOME = 'Home';
-    protected const WORK = 'Work';
+    protected const VERSION_4 = '4.0';
 
     public const POSSIBLE_VALUES = [
-        self::HOME,
-        self::WORK,
+        self::VERSION_4,
     ];
 
     private $value;
@@ -34,12 +32,12 @@ final class Type implements PropertyParameterInterface
 
     public static function getNode(): string
     {
-        return 'TYPE';
+        return 'VERSION';
     }
 
     public static function getParser(): NodeParserInterface
     {
-        return new TypeParser();
+        return new VersionParser();
     }
 
     public function getValue(): string
@@ -47,23 +45,13 @@ final class Type implements PropertyParameterInterface
         return $this->value;
     }
 
-    public static function home(): self
+    public static function version4(): self
     {
-        return new self(self::HOME);
+        return new self(self::VERSION_4);
     }
 
-    public function isHome(): bool
+    public function isVersion4(): bool
     {
-        return $this->value === self::HOME;
-    }
-
-    public static function work(): self
-    {
-        return new self(self::WORK);
-    }
-
-    public function isWork(): bool
-    {
-        return $this->value === self::WORK;
+        return $this->value === self::VERSION_4;
     }
 }

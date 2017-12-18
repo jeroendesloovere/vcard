@@ -1,6 +1,6 @@
 BEGIN:VCARD
 VERSION:4.0
-REV:2017-12-13T15:16:52Z
+REV:2017-12-15T10:24:32Z
 N:Desloovere;;Jeroen;;
 ADR;TYPE=Work:;;Markt 1;Brugge;West-Vlaanderen;8000;België
 ADR;TYPE=Home:;Penthouse;Korenmarkt 1;Gent;Oost-Vlaanderen;9000;België
@@ -8,7 +8,7 @@ NOTE:VCard library is amazing.
 END:VCARD
 BEGIN:VCARD
 VERSION:4.0
-REV:2017-12-13T15:16:52Z
+REV:2017-12-15T10:24:32Z
 N:Doe;;John;;
 ADR;TYPE=Work:;Penthouse;Korenmarkt 1;Gent;Oost-Vlaanderen;9000;België
 END:VCARD

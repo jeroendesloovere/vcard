@@ -3,6 +3,8 @@
 namespace JeroenDesloovere\VCard\Property\Parameter;
 
 use JeroenDesloovere\VCard\Exception\PropertyParameterException;
+use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
+use JeroenDesloovere\VCard\Parser\Property\Parameter\KindParser;
 
 /**
  * vCard defines "Kinds" to represent the types of objects to be represented by vCard.
@@ -49,12 +51,17 @@ final class Kind implements PropertyParameterInterface
 
     public function __toString()
     {
-        return $this->value;
+        return $this->getValue();
     }
 
-    public function getNode(): string
+    public static function getNode(): string
     {
         return 'KIND';
+    }
+
+    public static function getParser(): NodeParserInterface
+    {
+        return new KindParser();
     }
 
     public function getValue(): string

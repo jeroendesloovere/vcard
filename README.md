@@ -75,12 +75,12 @@ vendor/bin/phpunit tests
 * [ ] CATEGORIES - The categories of the object
 * [x] [NOTE](./src/Property/Note.php) - Notes about the object
 * [ ] PRODID - The identifier of the product that created the vCard object
-* [ ] REV - The revision datetime of the vCard object
+* [X] [REV](./src/Property/Parameter/Revision.php) - The revision datetime of the vCard object
 * [ ] SOUND - Audio related to the object (data URI)
 * [ ] UID - A unique identifier for the object
 * [ ] CLIENTPIDMAP - Not required
 * [ ] URL - Any URL related to the object
-* [ ] VERSION - Not required (namespace will capture this)
+* [X] [VERSION](./src/Property/Parameter/Version.php) - Not required (namespace will capture this)
 
 ### Security Properties:
 * [ ] KEY - The security key of the object

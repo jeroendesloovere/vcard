@@ -3,21 +3,97 @@
 namespace JeroenDesloovere\VCard\Parser;
 
 use JeroenDesloovere\VCard\Exception\ParserException;
-use JeroenDesloovere\VCard\Property\Address;
-use JeroenDesloovere\VCard\Property\FullName;
-use JeroenDesloovere\VCard\Property\Name;
-use JeroenDesloovere\VCard\Property\Note;
-use JeroenDesloovere\VCard\Property\Parameter\Type;
+use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
 use JeroenDesloovere\VCard\VCard;
 
 final class VcfParser implements ParserInterface
 {
+    /**
+     * @var array - Structure = [node => NodeParserInterface]
+     */
+    private $parsers = [];
+
     /**
      * @param string $content
      * @return VCard[]
      * @throws ParserException
      */
     public function getVCards(string $content): array
+    {
+        // Set possible parsers
+        foreach (VCard::POSSIBLE_VALUES as $propertyClass) {
+            $this->parsers[($propertyClass)::getNode()] = ($propertyClass)::getParser();
+        }
+
+        $vCards = [];
+
+        foreach ($this->splitIntoVCardsContent($content) as $vCardContent) {
+            $vCard = $this->parseVCard($vCardContent);
+
+            if ($vCard instanceof VCard) {
+                $vCards[] = $vCard;
+            }
+        }
+
+        return $vCards;
+    }
+
+    private function parseParameters(?string $parameters): array
+    {
+        if ($parameters === null) {
+            return [];
+        }
+
+        $parsedParameters = [];
+        $parameters = explode(';', $parameters);
+        foreach ($parameters as $parameter) {
+            @list($node, $value) = explode('=', $parameter, 2);
+
+            if (array_key_exists($node, $this->parsers)) {
+                $parsedParameters[$node] = $this->parsers[$node]->parseLine($value);
+            }
+        }
+
+        return $parsedParameters;
+    }
+
+    protected function parseVCard(string $content): VCard
+    {
+        $vCard = new VCard();
+        $lines = explode("\n", $content);
+
+        foreach ($lines as $line) {
+            // Strip grouping information. We don't use the group names. We
+            // simply use a list for entries that have multiple values.
+            // As per RFC, group names are alphanumerical, and end with a
+            // period (.).
+            $line = preg_replace('/^\w+\./', '', trim($line));
+
+            @list($node, $value) = explode(':', $line, 2);
+            @list($node, $parameters) = explode(';', $node, 2);
+
+            if (!array_key_exists($node, $this->parsers)) {
+                // @todo: add this line to "not converted" errors. Can be useful to improve the parser.
+
+                continue;
+            }
+
+            $parameters = $this->parseParameters($parameters);
+
+            try {
+                /**
+                 * @var NodeParserInterface $this->parsers[$node]
+                 */
+                $vCard->add($this->parsers[$node]->parseLine($value, $parameters));
+            } catch (\Exception $e) {
+                // @todo: fetch errors when setting properties that are already set.
+            }
+        }
+
+        return $vCard;
+    }
+
+    protected function splitIntoVCardsContent(string $content): array
     {
         // Normalize new lines.
         $content = str_replace(["\r\n", "\r"], "\n", $content);
@@ -39,187 +115,6 @@ final class VcfParser implements ParserInterface
         $content = preg_replace("/\n(?:[ \t])/", '', $content);
 
         // If multiple vcards split per vcard
-        $cardsContent = preg_split('/\nEND:VCARD\s+BEGIN:VCARD\n/', $content);
-
-        $vCards = [];
-
-        foreach ($cardsContent as $cardContent) {
-            $vCards[] = $this->parseCard($cardContent);
-        }
-
-        return $vCards;
-    }
-
-    protected function parseCard(string $cardContent): VCard
-    {
-        $vCard = new VCard();
-
-        $lines = explode("\n", $cardContent);
-
-        // Parse the VCard, line by line.
-        foreach ($lines as $line) {
-            $vCard = $this->parseLine($vCard, $line);
-        }
-
-        return $vCard;
-    }
-
-    protected function parseLine(VCard $vCard, string $line): VCard
-    {
-        $line = trim($line);
-
-        if (!empty($line)) {
-            // Strip grouping information. We don't use the group names. We
-            // simply use a list for entries that have multiple values.
-            // As per RFC, group names are alphanumerical, and end with a
-            // period (.).
-            $line = preg_replace('/^\w+\./', '', $line);
-
-            @list($type, $value) = explode(':', $line, 2);
-
-            $types = explode(';', $type);
-            $element = strtoupper($types[0]);
-
-            array_shift($types);
-
-            // Normalize types. A type can either be a type-param directly,
-            // or can be prefixed with "type=". E.g.: "INTERNET" or
-            // "type=INTERNET".
-            if (!empty($types)) {
-                $types = array_map(function ($type) {
-                    return preg_replace('/^TYPE=/i', '', $type);
-                }, $types);
-            }
-
-            $rawValue = false;
-            foreach ($types as $i => $type) {
-                if (false !== stripos($type, 'base64')) {
-                    $value = base64_decode($value);
-                    unset($types[$i]);
-                    $rawValue = true;
-                } elseif (false !== stripos($type, 'encoding=b')) {
-                    $value = base64_decode($value);
-                    unset($types[$i]);
-                    $rawValue = true;
-                } elseif (false !== stripos($type, 'quoted-printable')) {
-                    $value = quoted_printable_decode($value);
-                    unset($types[$i]);
-                    $rawValue = true;
-                } elseif (stripos($type, 'charset=') === 0) {
-                    $encoding = substr($type, 8);
-
-                    if (\in_array($encoding, mb_list_encodings(), true)) {
-                        $value = mb_convert_encoding($value, 'UTF-8', $encoding);
-                    }
-
-                    unset($types[$i]);
-                }
-            }
-
-            $vCard = $this->parseOutput($vCard, $element, $value, $types, $rawValue);
-        }
-
-        return $vCard;
-    }
-
-    protected function parseOutput(VCard $vCard, string $element, string $value, array $types, bool $rawValue): VCard
-    {
-        switch (strtoupper($element)) {
-            case 'FN':
-                $vCard->add(FullName::fromVcfString($value));
-
-                break;
-            case 'N':
-                $vCard->add(Name::fromVcfString($value));
-
-                break;
-            /*
-            case 'BDAY':
-                $vCard->birthday = $this->parseBirthday($value);
-                break;
-            */
-            case 'ADR':
-                $address = Address::fromVcfString($value);
-                $address->setType(new Type($types[0]));
-                $vCard->add($address);
-
-                break;
-            /*
-            case 'TEL':
-                if (!isset($vCard->phone)) {
-                    $vCard->phone = [];
-                }
-                $key = !empty($types) ? implode(';', $types) : 'default';
-                $vCard->phone[$key][] = $value;
-                break;
-            case 'EMAIL':
-                if (!isset($vCard->email)) {
-                    $vCard->email = [];
-                }
-                $key = !empty($types) ? implode(';', $types) : 'default';
-                $vCard->email[$key][] = $value;
-                break;
-            case 'REV':
-                $vCard->revision = $value;
-                break;
-            case 'VERSION':
-                $vCard->version = $value;
-                break;
-            case 'ORG':
-                $vCard->organization = $value;
-                break;
-            case 'URL':
-                if (!isset($vCard->url)) {
-                    $vCard->url = [];
-                }
-                $key = !empty($types) ? implode(';', $types) : 'default';
-                $vCard->url[$key][] = $value;
-                break;
-            case 'TITLE':
-                $vCard->title = $value;
-                break;
-            case 'PHOTO':
-                if ($rawValue) {
-                    $vCard->rawPhoto = $value;
-                } else {
-                    $vCard->photo = $value;
-                }
-                break;
-            case 'LOGO':
-                if ($rawValue) {
-                    $vCard->rawLogo = $value;
-                } else {
-                    $vCard->logo = $value;
-                }
-                break;
-            */
-            case 'NOTE':
-                $vCard->add(Note::fromVcfString($this->unescape($value)));
-
-                break;
-            /*
-            case 'CATEGORIES':
-                $vCard->categories = array_map('trim', explode(',', $value));
-                break;
-            */
-        }
-
-        return $vCard;
-    }
-
-    // @todo
-    // public function unfold()
-
-    /**
-     * Unescape newline characters according to RFC2425 section 5.8.4.
-     * This function will replace escaped line breaks with PHP_EOL.
-     *
-     * @link http://tools.ietf.org/html/rfc2425#section-5.8.4
-     * @param  string $text
-     * @return string
-     */
-    protected function unescape($text): string
-    {
-        return str_replace("\\n", PHP_EOL, $text);
+        return preg_split('/\nEND:VCARD\s+BEGIN:VCARD\n/', $content);
     }
 }

@@ -3,15 +3,42 @@
 namespace JeroenDesloovere\VCard;
 
 use JeroenDesloovere\VCard\Exception\VCardException;
+use JeroenDesloovere\VCard\Property\Address;
+use JeroenDesloovere\VCard\Property\FullName;
+use JeroenDesloovere\VCard\Property\Name;
+use JeroenDesloovere\VCard\Property\NodeInterface;
+use JeroenDesloovere\VCard\Property\Note;
 use JeroenDesloovere\VCard\Property\Parameter\Kind;
+use JeroenDesloovere\VCard\Property\Parameter\PropertyParameterInterface;
+use JeroenDesloovere\VCard\Property\Parameter\Revision;
+use JeroenDesloovere\VCard\Property\Parameter\Type;
+use JeroenDesloovere\VCard\Property\Parameter\Version;
 use JeroenDesloovere\VCard\Property\PropertyInterface;
 
 final class VCard
 {
+    public const POSSIBLE_VALUES = [
+        // All possible property parameters
+        Version::class,
+        Revision::class,
+        Kind::class,
+        Type::class,
+        // All possible properties
+        Name::class,
+        FullName::class,
+        Address::class,
+        Note::class
+    ];
+
     /**
      * @var Kind - Possible values are: Group, Individual, Location or Organization
      */
     private $kind;
+
+    /**
+     * @var PropertyParameterInterface[]
+     */
+    private $parameters = [];
 
     /**
      * @var PropertyInterface[]
@@ -23,13 +50,25 @@ final class VCard
         $this->setKind($kind ?? Kind::individual());
     }
 
-    public function add(PropertyInterface $property): self
+    public function add(NodeInterface $node): self
     {
-        if (!$property->isAllowedMultipleTimes() && $this->hasProperty(get_class($property))) {
-            throw VCardException::forExistingProperty($property);
+        if (array_key_exists(get_class($node), self::POSSIBLE_VALUES)) {
+            throw VCardException::forNotAllowedNode($node);
         }
 
-        $this->properties[] = $property;
+        if ($node instanceof PropertyInterface) {
+            if (!$node->isAllowedMultipleTimes() && $this->hasPropertyByClassName(get_class($node))) {
+                throw VCardException::forExistingProperty($node);
+            }
+
+            $this->properties[] = $node;
+        } elseif ($node instanceof PropertyParameterInterface) {
+            if ($this->hasPropertyByClassName(get_class($node))) {
+                throw VCardException::forExistingPropertyParameter($node);
+            }
+
+            $this->parameters[] = $node;
+        }
 
         return $this;
     }
@@ -37,6 +76,17 @@ final class VCard
     public function getKind(): Kind
     {
         return $this->kind;
+    }
+
+    public function getParameters(string $filterByPropertyParameterClass = null): array
+    {
+        if ($filterByPropertyParameterClass === null) {
+            return $this->parameters;
+        }
+
+        return array_filter($this->parameters, function (PropertyParameterInterface $parameter) use ($filterByPropertyParameterClass) {
+            return $parameter instanceof $filterByPropertyParameterClass;
+        });
     }
 
     public function getProperties(string $filterByPropertyClass = null): array
@@ -50,7 +100,12 @@ final class VCard
         });
     }
 
-    public function hasProperty(string $filterByPropertyClass): bool
+    public function hasParameterByClassName(string $filterByParameterClass): bool
+    {
+        return count($this->getParameters($filterByParameterClass)) > 0;
+    }
+
+    public function hasPropertyByClassName(string $filterByPropertyClass): bool
     {
         return count($this->getProperties($filterByPropertyClass)) > 0;
     }

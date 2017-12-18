@@ -5,6 +5,8 @@ namespace JeroenDesloovere\VCard\Property;
 use JeroenDesloovere\VCard\Exception\PropertyException;
 use JeroenDesloovere\VCard\Formatter\Property\AddressFormatter;
 use JeroenDesloovere\VCard\Formatter\Property\PropertyFormatterInterface;
+use JeroenDesloovere\VCard\Parser\Property\AddressParser;
+use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
 use JeroenDesloovere\VCard\Property\Parameter\Type;
 
 final class Address implements PropertyInterface
@@ -117,9 +119,14 @@ final class Address implements PropertyInterface
         return $this->locality;
     }
 
-    public function getNode(): string
+    public static function getNode(): string
     {
         return 'ADR';
+    }
+
+    public static function getParser(): NodeParserInterface
+    {
+        return new AddressParser();
     }
 
     public function getPostalCode(): ?string

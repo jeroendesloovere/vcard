@@ -4,6 +4,8 @@ namespace JeroenDesloovere\VCard\Property;
 
 use JeroenDesloovere\VCard\Formatter\Property\FullNameFormatter;
 use JeroenDesloovere\VCard\Formatter\Property\PropertyFormatterInterface;
+use JeroenDesloovere\VCard\Parser\Property\FullNameParser;
+use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
 
 final class FullName implements PropertyInterface
 {
@@ -32,9 +34,14 @@ final class FullName implements PropertyInterface
         return new FullNameFormatter($this);
     }
 
-    public function getNode(): string
+    public static function getNode(): string
     {
         return 'FN';
+    }
+
+    public static function getParser(): NodeParserInterface
+    {
+        return new FullNameParser();
     }
 
     public function isAllowedMultipleTimes(): bool

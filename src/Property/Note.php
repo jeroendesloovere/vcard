@@ -4,6 +4,8 @@ namespace JeroenDesloovere\VCard\Property;
 
 use JeroenDesloovere\VCard\Formatter\Property\NoteFormatter;
 use JeroenDesloovere\VCard\Formatter\Property\PropertyFormatterInterface;
+use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
+use JeroenDesloovere\VCard\Parser\Property\NoteParser;
 
 final class Note implements PropertyInterface
 {
@@ -32,9 +34,14 @@ final class Note implements PropertyInterface
         return new NoteFormatter($this);
     }
 
-    public function getNode(): string
+    public static function getNode(): string
     {
         return 'NOTE';
+    }
+
+    public static function getParser(): NodeParserInterface
+    {
+        return new NoteParser();
     }
 
     public function isAllowedMultipleTimes(): bool
