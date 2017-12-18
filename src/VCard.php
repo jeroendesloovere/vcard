@@ -608,7 +608,27 @@ class VCard
         }
 
         // split, wrap and trim trailing separator
-        return substr(chunk_split($text, 73, "\r\n "), 0, -3);
+        return substr($this->chunk_split_unicode($text, 73, "\r\n "), 0, -3);
+    }
+
+    /**
+     * multibyte word chunk split
+     * @link http://php.net/manual/en/function.chunk-split.php#107711
+     * 
+     * @param  string  $body     The string to be chunked.
+     * @param  integer $chunklen The chunk length.
+     * @param  string  $end      The line ending sequence.
+     * @return string            Chunked string
+     */
+    protected function chunk_split_unicode($body, $chunklen = 76, $end = "\r\n")
+    {
+        $array = array_chunk(
+            preg_split("//u", $body, -1, PREG_SPLIT_NO_EMPTY), $chunklen);
+        $body = "";
+        foreach ($array as $item) {
+            $body .= join("", $item) . $end;
+        }
+        return $body;
     }
 
     /**
