@@ -8,7 +8,7 @@ class VCardException extends \Exception
 {
     public static function forExistingProperty(PropertyInterface $property): self
     {
-        throw new self(
+        return new self(
             'The property "' . get_class($property) . '" you are trying to add can only be added once.'
         );
     }

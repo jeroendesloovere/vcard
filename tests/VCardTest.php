@@ -10,6 +10,8 @@ use JeroenDesloovere\VCard\Property\Address;
 use JeroenDesloovere\VCard\Property\Name;
 use JeroenDesloovere\VCard\Property\Note;
 use JeroenDesloovere\VCard\Property\Parameter\Type;
+use org\bovigo\vfs\vfsStream;
+use org\bovigo\vfs\vfsStreamDirectory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -17,6 +19,11 @@ use PHPUnit\Framework\TestCase;
  */
 final class VCardTest extends TestCase
 {
+    /**
+     * @var  vfsStreamDirectory
+     */
+    private $vfsRoot;
+
     /**
      * @var VCard 
      */
@@ -29,12 +36,15 @@ final class VCardTest extends TestCase
 
     public function setUp(): void
     {
+        $this->vfsRoot = vfsStream::setup();
+
         // Building one or multiple vCards
         $this->firstVCard = (new VCard())
             ->add(new Name('Jeroen', 'Desloovere'))
             ->add(new Address(null, null, 'Markt 1', 'Brugge', 'West-Vlaanderen', '8000', 'België', Type::work()))
             ->add(new Address(null, 'Penthouse', 'Korenmarkt 1', 'Gent', 'Oost-Vlaanderen', '9000', 'België', Type::home()))
             ->add(new Note('VCard library is amazing.'));
+
         $this->secondVCard = (new VCard())
             ->add(new Name('John', 'Doe'))
             ->add(new Address(null, 'Penthouse', 'Korenmarkt 1', 'Gent', 'Oost-Vlaanderen', '9000', 'België', Type::work()));
@@ -46,9 +56,12 @@ final class VCardTest extends TestCase
         $formatter = new Formatter(new VcfFormatter(), 'vcards');
         $formatter->addVCard($this->firstVCard);
         $formatter->addVCard($this->secondVCard);
-        $formatter->save(__DIR__);
 
-        $this->assertFalse(false);
+        $this->assertFalse($this->vfsRoot->hasChild('vcards.vcf'));
+
+        $formatter->save($this->vfsRoot->url());
+
+        $this->assertTrue($this->vfsRoot->hasChild('vcards.vcf'));
     }
 
     public function testFormatterSavingOneVCardToVcfFile(): void
@@ -56,9 +69,12 @@ final class VCardTest extends TestCase
         // Saving "vcard.vcf"
         $formatter = new Formatter(new VcfFormatter(), 'vcard');
         $formatter->addVCard($this->firstVCard);
-        $formatter->save(__DIR__);
 
-        $this->assertFalse(false);
+        $this->assertFalse($this->vfsRoot->hasChild('vcard.vcf'));
+
+        $formatter->save($this->vfsRoot->url());
+
+        $this->assertTrue($this->vfsRoot->hasChild('vcard.vcf'));
     }
 
     /**
@@ -81,11 +97,8 @@ final class VCardTest extends TestCase
     {
         $parser = new Parser(new VcfParser(), Parser::getFileContents(__DIR__ . '/assets/vcards.vcf'));
 
-        // @todo
-        //$this->assertEquals($this->firstVCard, $parser->getVCards()[0]);
-        //$this->assertEquals($this->secondVCard, $parser->getVCards()[1]);
-
-        $this->assertFalse(false);
+        $this->assertEquals($this->firstVCard, $parser->getVCards()[0]);
+        $this->assertEquals($this->secondVCard, $parser->getVCards()[1]);
     }
 
     public function testParserOneVCardFromVcfFile(): void

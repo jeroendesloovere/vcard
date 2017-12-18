@@ -15,7 +15,7 @@ final class PropertyTest extends TestCase
      */
     public function testEmptyName(): void
     {
-        (new VCard())->add(new Name());
+        new Name();
     }
 
     /**
@@ -23,6 +23,6 @@ final class PropertyTest extends TestCase
      */
     public function testEmptyAddress(): void
     {
-        (new VCard())->add(new Address());
+        new Address();
     }
 }

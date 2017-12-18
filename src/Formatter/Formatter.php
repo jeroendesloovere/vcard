@@ -40,7 +40,7 @@ final class Formatter
         return $this;
     }
 
-    public function download()
+    public function download(): void
     {
         foreach ($this->getHeaders() as $header) {
             header($header);
@@ -94,11 +94,11 @@ final class Formatter
 
             return (int) $savedBytes > 0;
         } catch (\Exception $e) {
-            throw new FormatterException($e->getMessage());
+            throw FormatterException::forUnreadableVCard($e->getMessage());
         }
     }
 
-    public function setCharset(string $charset)
+    public function setCharset(string $charset): void
     {
         $this->charset = $charset;
     }
