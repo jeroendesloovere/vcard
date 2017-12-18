@@ -708,7 +708,7 @@ class VCard
     {
         $contentType = $this->getContentType() . '; charset=' . $this->getCharset();
         $contentDisposition = 'attachment; filename=' . $this->getFilename() . '.' . $this->getFileExtension();
-        $contentLength = mb_strlen($this->getOutput(), $this->getCharset());
+        $contentLength = strlen($this->getOutput());
         $connection = 'close';
 
         if ((bool)$asAssociative) {
