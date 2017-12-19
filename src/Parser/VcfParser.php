@@ -73,7 +73,7 @@ final class VcfParser implements ParserInterface
             $line = preg_replace('/^\w+\./', '', trim($line));
 
             @list($node, $value) = explode(':', $line, 2);
-            @list($node, $parameters) = explode(';', $node, 2);
+            @list($node, $parameterContent) = explode(';', $node, 2);
 
             if (!array_key_exists($node, $this->parsers)) {
                 // @todo: add this line to "not converted" errors. Can be useful to improve the parser.
@@ -81,7 +81,7 @@ final class VcfParser implements ParserInterface
                 continue;
             }
 
-            $parameters = $this->parseParameters($parameters);
+            $parameters = $this->parseParameters($parameterContent);
 
             try {
                 /**
