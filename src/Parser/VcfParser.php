@@ -60,7 +60,7 @@ final class VcfParser implements ParserInterface
         return $parsedParameters;
     }
 
-    protected function parseVCard(string $content): VCard
+    private function parseVCard(string $content): VCard
     {
         $vCard = new VCard();
         $lines = explode("\n", $content);
@@ -96,7 +96,7 @@ final class VcfParser implements ParserInterface
         return $vCard;
     }
 
-    protected function splitIntoVCardsContent(string $content): array
+    private function splitIntoVCardsContent(string $content): array
     {
         // Normalize new lines.
         $content = str_replace(["\r\n", "\r"], "\n", $content);
