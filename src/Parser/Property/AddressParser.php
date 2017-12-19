@@ -10,6 +10,17 @@ class AddressParser implements NodeParserInterface
 {
     public function parseLine(string $value, array $parameters = []): NodeInterface
     {
+        $address = $this->parseAddress($value);
+
+        if (array_key_exists(Type::getNode(), $parameters)) {
+            $address->setType($parameters[Type::getNode()]);
+        }
+
+        return $address;
+    }
+
+    private function parseAddress(string $value): Address
+    {
         @list(
             $postOfficeBox,
             $extendedAddress,
@@ -20,7 +31,7 @@ class AddressParser implements NodeParserInterface
             $countryName
         ) = explode(';', $value);
 
-        $address = new Address(
+        return new Address(
             ($postOfficeBox !== '') ? $postOfficeBox : null,
             ($extendedAddress !== '') ? $extendedAddress : null,
             ($streetAddress !== '') ? $streetAddress : null,
@@ -29,11 +40,5 @@ class AddressParser implements NodeParserInterface
             ($postalCode !== '') ? $postalCode : null,
             ($countryName !== '') ? $countryName : null
         );
-
-        if (array_key_exists(Type::getNode(), $parameters)) {
-            $address->setType($parameters[Type::getNode()]);
-        }
-
-        return $address;
     }
 }
