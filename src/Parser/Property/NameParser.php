@@ -5,7 +5,7 @@ namespace JeroenDesloovere\VCard\Parser\Property;
 use JeroenDesloovere\VCard\Property\Name;
 use JeroenDesloovere\VCard\Property\NodeInterface;
 
-class NameParser implements NodeParserInterface
+final class NameParser implements NodeParserInterface
 {
     public function parseLine(string $value, array $parameters = []): NodeInterface
     {
