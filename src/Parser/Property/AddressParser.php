@@ -31,14 +31,25 @@ final class AddressParser implements NodeParserInterface
             $countryName
         ) = explode(';', $value);
 
-        return new Address(
-            ($postOfficeBox !== '') ? $postOfficeBox : null,
-            ($extendedAddress !== '') ? $extendedAddress : null,
-            ($streetAddress !== '') ? $streetAddress : null,
-            ($locality !== '') ? $locality : null,
-            ($region !== '') ? $region : null,
-            ($postalCode !== '') ? $postalCode : null,
-            ($countryName !== '') ? $countryName : null
-        );
+        $this->convertEmptyStringToNull([
+            $postOfficeBox,
+            $extendedAddress,
+            $streetAddress,
+            $locality,
+            $region,
+            $postalCode,
+            $countryName
+        ]);
+
+        return new Address($postOfficeBox, $extendedAddress, $streetAddress, $locality, $region, $postalCode, $countryName);
+    }
+
+    private function convertEmptyStringToNull(array $values): void
+    {
+        foreach ($values as &$value) {
+            if ($value === '') {
+                $value = null;
+            }
+        }
     }
 }
