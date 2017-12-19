@@ -57,7 +57,11 @@ final class VCard
             }
 
             $this->properties[] = $node;
-        } elseif ($node instanceof PropertyParameterInterface) {
+
+            return $this;
+        }
+
+        if ($node instanceof PropertyParameterInterface) {
             if ($this->hasPropertyByClassName(get_class($node))) {
                 throw VCardException::forExistingPropertyParameter($node);
             }
