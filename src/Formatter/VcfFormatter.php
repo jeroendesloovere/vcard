@@ -2,8 +2,7 @@
 
 namespace JeroenDesloovere\VCard\Formatter;
 
-use JeroenDesloovere\VCard\Property\Parameter\PropertyParameterInterface;
-use JeroenDesloovere\VCard\Property\PropertyInterface;
+use JeroenDesloovere\VCard\Property\NodeInterface;
 use JeroenDesloovere\VCard\VCard;
 
 final class VcfFormatter implements FormatterInterface
@@ -17,21 +16,8 @@ final class VcfFormatter implements FormatterInterface
          */
         foreach ($vCards as $vCard) {
             $string .= "BEGIN:VCARD\r\n";
-
-            /**
-             * @var PropertyParameterInterface $parameter
-             */
-            foreach ($vCard->getParameters() as $parameter) {
-                $string .= $this->fold($parameter->getFormatter()->getVcfString() . "\r\n");
-            }
-
-            /**
-             * @var PropertyInterface $property
-             */
-            foreach ($vCard->getProperties() as $property) {
-                $string .= $this->fold($property->getFormatter()->getVcfString() . "\r\n");
-            }
-
+            $this->setNodesToString($vCard->getParameters(), $string);
+            $this->setNodesToString($vCard->getProperties(), $string);
             $string .= "END:VCARD\r\n";
         }
 
@@ -63,5 +49,19 @@ final class VcfFormatter implements FormatterInterface
 
         // split, wrap and trim trailing separator
         return substr(chunk_split($value, 73, "\r\n "), 0, -3);
+    }
+
+    /**
+     * @param NodeInterface[] $nodes
+     * @param string $string
+     */
+    private function setNodesToString(array $nodes, string &$string): void
+    {
+        /**
+         * @var NodeInterface $parameter
+         */
+        foreach ($nodes as $parameter) {
+            $string .= $this->fold($parameter->getFormatter()->getVcfString() . "\r\n");
+        }
     }
 }
