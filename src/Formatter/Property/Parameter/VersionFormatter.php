@@ -6,7 +6,7 @@ use JeroenDesloovere\VCard\Formatter\Property\NodeFormatterInterface;
 use JeroenDesloovere\VCard\Formatter\Property\NodeFormatter;
 use JeroenDesloovere\VCard\Property\Parameter\Version;
 
-class VersionFormatter extends NodeFormatter implements NodeFormatterInterface
+final class VersionFormatter extends NodeFormatter implements NodeFormatterInterface
 {
     /**
      * @var Version

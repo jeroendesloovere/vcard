@@ -4,7 +4,7 @@ namespace JeroenDesloovere\VCard\Formatter\Property;
 
 use JeroenDesloovere\VCard\Property\Note;
 
-class NoteFormatter extends NodeFormatter implements NodeFormatterInterface
+final class NoteFormatter extends NodeFormatter implements NodeFormatterInterface
 {
     /**
      * @var Note
