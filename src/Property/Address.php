@@ -77,28 +77,6 @@ final class Address implements PropertyInterface
         $this->type = $type ?? Type::home();
     }
 
-    public static function fromVcfString(string $value): self
-    {
-        @list(
-            $postOfficeBox,
-            $extendedAddress,
-            $streetAddress,
-            $locality,
-            $region,
-            $postalCode,
-            $countryName
-        ) = explode(';', $value);
-        return new self(
-            ($postOfficeBox !== '') ? $postOfficeBox : null,
-            ($extendedAddress !== '') ? $extendedAddress : null,
-            ($streetAddress !== '') ? $streetAddress : null,
-            ($locality !== '') ? $locality : null,
-            ($region !== '') ? $region : null,
-            ($postalCode !== '') ? $postalCode : null,
-            ($countryName !== '') ? $countryName : null
-        );
-    }
-
     public function getCountryName(): ?string
     {
         return $this->countryName;

@@ -5,7 +5,7 @@ namespace JeroenDesloovere\VCard\Parser\Property;
 use JeroenDesloovere\VCard\Property\FullName;
 use JeroenDesloovere\VCard\Property\NodeInterface;
 
-class FullNameParser extends PropertyParser implements NodeParserInterface
+class FullNameParser implements NodeParserInterface
 {
     public function parseLine(string $value, array $parameters = []): NodeInterface
     {

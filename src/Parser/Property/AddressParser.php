@@ -6,11 +6,29 @@ use JeroenDesloovere\VCard\Property\Address;
 use JeroenDesloovere\VCard\Property\NodeInterface;
 use JeroenDesloovere\VCard\Property\Parameter\Type;
 
-class AddressParser extends PropertyParser implements NodeParserInterface
+class AddressParser implements NodeParserInterface
 {
     public function parseLine(string $value, array $parameters = []): NodeInterface
     {
-        $address = Address::fromVcfString($value);
+        @list(
+            $postOfficeBox,
+            $extendedAddress,
+            $streetAddress,
+            $locality,
+            $region,
+            $postalCode,
+            $countryName
+        ) = explode(';', $value);
+
+        $address = new Address(
+            ($postOfficeBox !== '') ? $postOfficeBox : null,
+            ($extendedAddress !== '') ? $extendedAddress : null,
+            ($streetAddress !== '') ? $streetAddress : null,
+            ($locality !== '') ? $locality : null,
+            ($region !== '') ? $region : null,
+            ($postalCode !== '') ? $postalCode : null,
+            ($countryName !== '') ? $countryName : null
+        );
 
         if (array_key_exists(Type::getNode(), $parameters)) {
             $address->setType($parameters[Type::getNode()]);
