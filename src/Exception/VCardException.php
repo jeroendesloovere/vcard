@@ -30,20 +30,4 @@ class VCardException extends \Exception
             . implode(', ', VCard::POSSIBLE_VALUES)
         );
     }
-
-    public static function forNotAllowedProperty(PropertyInterface $property): self
-    {
-        return new self(
-            'The property "' . get_class($property) . '" you are trying to add is not allowed. Possible values are: '
-            . implode(', ', VCard::POSSIBLE_PROPERTIES)
-        );
-    }
-
-    public static function forNotAllowedPropertyParameter(PropertyParameterInterface $parameter): self
-    {
-        return new self(
-            'The property parameter "' . get_class($parameter) . '" you are trying to add is not allowed. Possible values are: '
-            . implode(', ', VCard::POSSIBLE_PARAMETERS)
-        );
-    }
 }
