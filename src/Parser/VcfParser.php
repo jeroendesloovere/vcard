@@ -96,6 +96,11 @@ final class VcfParser implements ParserInterface
         return $vCard;
     }
 
+    /**
+     * @param string $content - The full content from the .vcf file.
+     * @return array - Is an array with the content for all possible vCards.
+     * @throws ParserException
+     */
     private function splitIntoVCardsContent(string $content): array
     {
         // Normalize new lines.
