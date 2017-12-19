@@ -6,7 +6,7 @@ use JeroenDesloovere\VCard\Property\Address;
 use JeroenDesloovere\VCard\Property\NodeInterface;
 use JeroenDesloovere\VCard\Property\Parameter\Type;
 
-final class AddressParser implements NodeParserInterface
+final class AddressParser extends PropertyParser implements NodeParserInterface
 {
     public function parseLine(string $value, array $parameters = []): NodeInterface
     {
@@ -42,14 +42,5 @@ final class AddressParser implements NodeParserInterface
         ]);
 
         return new Address($postOfficeBox, $extendedAddress, $streetAddress, $locality, $region, $postalCode, $countryName);
-    }
-
-    private function convertEmptyStringToNull(array $values): void
-    {
-        foreach ($values as &$value) {
-            if ($value === '') {
-                $value = null;
-            }
-        }
     }
 }

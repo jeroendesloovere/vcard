@@ -4,6 +4,15 @@ namespace JeroenDesloovere\VCard\Parser\Property;
 
 class PropertyParser
 {
+    protected function convertEmptyStringToNull(array $values): void
+    {
+        foreach ($values as &$value) {
+            if ($value === '') {
+                $value = null;
+            }
+        }
+    }
+
     /**
      * Unescape newline characters according to RFC2425 section 5.8.4.
      * This function will replace escaped line breaks with PHP_EOL.
