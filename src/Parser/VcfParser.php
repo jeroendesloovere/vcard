@@ -4,12 +4,13 @@ namespace JeroenDesloovere\VCard\Parser;
 
 use JeroenDesloovere\VCard\Exception\ParserException;
 use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
+use JeroenDesloovere\VCard\Property\NodeInterface;
 use JeroenDesloovere\VCard\VCard;
 
 final class VcfParser implements ParserInterface
 {
     /**
-     * @var array - Structure = [node => NodeParserInterface]
+     * @var array - f.e. ['ADR' => JeroenDesloovere\VCard\Parser\Property\AddressParser]
      */
     private $parsers = [];
 
@@ -20,7 +21,9 @@ final class VcfParser implements ParserInterface
      */
     public function getVCards(string $content): array
     {
-        // Set possible parsers
+        /**
+         * @var NodeInterface $propertyClass
+         */
         foreach (VCard::POSSIBLE_VALUES as $propertyClass) {
             $this->parsers[($propertyClass)::getNode()] = ($propertyClass)::getParser();
         }
