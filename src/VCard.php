@@ -57,8 +57,6 @@ final class VCard
             }
 
             $this->properties[] = $node;
-
-            return $this;
         }
 
         if ($node instanceof PropertyParameterInterface) {
