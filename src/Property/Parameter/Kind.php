@@ -7,11 +7,12 @@ use JeroenDesloovere\VCard\Formatter\Property\NodeFormatterInterface;
 use JeroenDesloovere\VCard\Formatter\Property\Parameter\KindFormatter;
 use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
 use JeroenDesloovere\VCard\Parser\Property\Parameter\KindParser;
+use JeroenDesloovere\VCard\Property\SimpleNodeInterface;
 
 /**
  * vCard defines "Kinds" to represent the types of objects to be represented by vCard.
  */
-final class Kind implements PropertyParameterInterface
+final class Kind implements PropertyParameterInterface, SimpleNodeInterface
 {
     /**
      * Group - To represent groups of vCard objects
@@ -51,9 +52,9 @@ final class Kind implements PropertyParameterInterface
         $this->value = $value;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->getValue();
+        return $this->value;
     }
 
     public function getFormatter(): NodeFormatterInterface
@@ -69,11 +70,6 @@ final class Kind implements PropertyParameterInterface
     public static function getParser(): NodeParserInterface
     {
         return new KindParser();
-    }
-
-    public function getValue(): string
-    {
-        return $this->value;
     }
 
     public static function group(): self

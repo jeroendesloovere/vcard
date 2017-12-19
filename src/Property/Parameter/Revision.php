@@ -6,8 +6,9 @@ use JeroenDesloovere\VCard\Formatter\Property\NodeFormatterInterface;
 use JeroenDesloovere\VCard\Formatter\Property\Parameter\RevisionFormatter;
 use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
 use JeroenDesloovere\VCard\Parser\Property\RevisionParser;
+use JeroenDesloovere\VCard\Property\SimpleNodeInterface;
 
-final class Revision implements PropertyParameterInterface
+final class Revision implements PropertyParameterInterface, SimpleNodeInterface
 {
     /**
      * @var \DateTime
@@ -19,9 +20,9 @@ final class Revision implements PropertyParameterInterface
         $this->value = $dateTime;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->getValue();
+        return $this->value->format('u');
     }
 
     public function getFormatter(): NodeFormatterInterface
@@ -37,10 +38,5 @@ final class Revision implements PropertyParameterInterface
     public static function getParser(): NodeParserInterface
     {
         return new RevisionParser();
-    }
-
-    public function getValue(): string
-    {
-        return $this->value->format('u');
     }
 }

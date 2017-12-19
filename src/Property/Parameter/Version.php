@@ -7,8 +7,9 @@ use JeroenDesloovere\VCard\Formatter\Property\NodeFormatterInterface;
 use JeroenDesloovere\VCard\Formatter\Property\Parameter\VersionFormatter;
 use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
 use JeroenDesloovere\VCard\Parser\Property\Parameter\VersionParser;
+use JeroenDesloovere\VCard\Property\SimpleNodeInterface;
 
-final class Version implements PropertyParameterInterface
+final class Version implements PropertyParameterInterface, SimpleNodeInterface
 {
     protected const VERSION_4 = '4.0';
 
@@ -27,9 +28,9 @@ final class Version implements PropertyParameterInterface
         $this->value = $value;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->getValue();
+        return $this->value;
     }
 
     public function getFormatter(): NodeFormatterInterface
@@ -45,11 +46,6 @@ final class Version implements PropertyParameterInterface
     public static function getParser(): NodeParserInterface
     {
         return new VersionParser();
-    }
-
-    public function getValue(): string
-    {
-        return $this->value;
     }
 
     public static function version4(): self

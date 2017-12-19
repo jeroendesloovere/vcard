@@ -2,9 +2,7 @@
 
 namespace JeroenDesloovere\VCard\Property\Parameter;
 
-use JeroenDesloovere\VCard\Property\NodeInterface;
-
-interface PropertyParameterInterface extends NodeInterface
+interface PropertyParameterInterface
 {
-    public function getValue(): string;
+
 }

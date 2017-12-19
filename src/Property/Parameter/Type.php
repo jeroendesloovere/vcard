@@ -7,8 +7,9 @@ use JeroenDesloovere\VCard\Formatter\Property\NodeFormatterInterface;
 use JeroenDesloovere\VCard\Formatter\Property\Parameter\TypeFormatter;
 use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
 use JeroenDesloovere\VCard\Parser\Property\Parameter\TypeParser;
+use JeroenDesloovere\VCard\Property\SimpleNodeInterface;
 
-final class Type implements PropertyParameterInterface
+final class Type implements PropertyParameterInterface, SimpleNodeInterface
 {
     protected const HOME = 'Home';
     protected const WORK = 'Work';
@@ -29,9 +30,9 @@ final class Type implements PropertyParameterInterface
         $this->value = $value;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->getValue();
+        return $this->value;
     }
 
     public function getFormatter(): NodeFormatterInterface
@@ -47,11 +48,6 @@ final class Type implements PropertyParameterInterface
     public static function getParser(): NodeParserInterface
     {
         return new TypeParser();
-    }
-
-    public function getValue(): string
-    {
-        return $this->value;
     }
 
     public static function home(): self

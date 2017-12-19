@@ -9,7 +9,7 @@ use JeroenDesloovere\VCard\Parser\Property\AddressParser;
 use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
 use JeroenDesloovere\VCard\Property\Parameter\Type;
 
-final class Address implements PropertyInterface
+final class Address implements PropertyInterface, NodeInterface
 {
     /**
      * @var null|string - The country name in your own language, e.g.: belgië

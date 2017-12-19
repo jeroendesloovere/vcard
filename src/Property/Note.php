@@ -7,7 +7,7 @@ use JeroenDesloovere\VCard\Formatter\Property\NodeFormatterInterface;
 use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
 use JeroenDesloovere\VCard\Parser\Property\NoteParser;
 
-final class Note implements PropertyInterface
+final class Note implements PropertyInterface, SimpleNodeInterface
 {
     /**
      * @var string
@@ -19,12 +19,7 @@ final class Note implements PropertyInterface
         $this->value = $value;
     }
 
-    public static function fromVcfString(string $value): self
-    {
-        return new self($value);
-    }
-
-    public function getValue(): string
+    public function __toString(): string
     {
         return $this->value;
     }

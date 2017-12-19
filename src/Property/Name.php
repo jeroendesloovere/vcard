@@ -8,7 +8,7 @@ use JeroenDesloovere\VCard\Formatter\Property\NodeFormatterInterface;
 use JeroenDesloovere\VCard\Parser\Property\NameParser;
 use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
 
-final class Name implements PropertyInterface
+final class Name implements PropertyInterface, NodeInterface
 {
     /**
      * @var null|string

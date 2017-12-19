@@ -2,7 +2,7 @@
 
 namespace JeroenDesloovere\VCard\Property;
 
-interface PropertyInterface extends NodeInterface
+interface PropertyInterface
 {
     public function isAllowedMultipleTimes(): bool;
 }
