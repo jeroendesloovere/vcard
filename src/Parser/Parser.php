@@ -34,6 +34,9 @@ final class Parser
         return ($contents !== false) ? $contents : '';
     }
 
+    /**
+     * @return VCard[]
+     */
     public function getVCards(): array
     {
         return $this->vCards;
