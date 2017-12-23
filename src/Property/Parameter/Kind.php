@@ -17,22 +17,22 @@ final class Kind implements PropertyParameterInterface, SimpleNodeInterface
     /**
      * Group - To represent groups of vCard objects
      */
-    protected const GROUP = 'Group';
+    private const GROUP = 'Group';
 
     /**
      * Individual - To represent people
      */
-    protected const INDIVIDUAL = 'Individual';
+    private const INDIVIDUAL = 'Individual';
 
     /**
      * Location - To represent location objects
      */
-    protected const LOCATION = 'Location';
+    private const LOCATION = 'Location';
 
     /**
      * Organization - To represent organisations
      */
-    protected const ORGANIZATION = 'Organization';
+    private const ORGANIZATION = 'Organization';
 
     public const POSSIBLE_VALUES = [
         self::GROUP,

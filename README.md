@@ -47,7 +47,7 @@ vendor/bin/phpunit tests
 * [ ] PHOTO
 * [ ] BDAY - Birth date of the object. Should only apply to Individual
 * [ ] ANNIVERSARY - Should only apply to Individual
-* [ ] GENDER - Should only apply to Individual
+* [x] [GENDER](./src/Property/Gender.php) - Should only apply to Individual
 
 ### Delivery Addressing Properties:
 * [x] [ADDRESS](./src/Property/Address.php) - The address of the object represented in structured parts
