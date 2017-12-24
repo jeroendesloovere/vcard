@@ -29,7 +29,7 @@ final class VCard
         FullName::class,
         Address::class,
         Note::class,
-        Gender::class
+        Gender::class,
     ];
 
     /**
