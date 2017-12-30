@@ -20,7 +20,7 @@ final class AddressFormatter extends NodeFormatter implements NodeFormatterInter
     {
         $string = Address::getNode();
         $string .= ';TYPE=' . $this->address->getType()->__toString();
-        $string .=':' . $this->escape(
+        $string .= ':' . $this->escape(
             $this->address->getPostOfficeBox()
             . ';' . $this->address->getExtendedAddress()
             . ';' . $this->address->getStreetAddress()
