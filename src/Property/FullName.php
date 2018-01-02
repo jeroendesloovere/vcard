@@ -7,23 +7,8 @@ use JeroenDesloovere\VCard\Formatter\Property\NodeFormatterInterface;
 use JeroenDesloovere\VCard\Parser\Property\FullNameParser;
 use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
 
-final class FullName implements PropertyInterface, SimpleNodeInterface
+final class FullName extends SingleStringValue implements PropertyInterface, SimpleNodeInterface
 {
-    /**
-     * @var string
-     */
-    private $value;
-
-    public function __construct(string $value)
-    {
-        $this->value = $value;
-    }
-
-    public function __toString(): string
-    {
-        return $this->value;
-    }
-
     public function getFormatter(): NodeFormatterInterface
     {
         return new FullNameFormatter($this);

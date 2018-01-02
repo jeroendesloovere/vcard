@@ -11,8 +11,8 @@ use JeroenDesloovere\VCard\Property\SimpleNodeInterface;
 
 final class Type implements PropertyParameterInterface, SimpleNodeInterface
 {
-    protected const HOME = 'Home';
-    protected const WORK = 'Work';
+    private const HOME = 'Home';
+    private const WORK = 'Work';
 
     public const POSSIBLE_VALUES = [
         self::HOME,

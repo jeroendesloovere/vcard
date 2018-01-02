@@ -10,7 +10,7 @@ use JeroenDesloovere\VCard\VCard;
 final class VcfParser implements ParserInterface
 {
     /**
-     * @var array - f.e. ['ADR' => JeroenDesloovere\VCard\Parser\Property\AddressParser]
+     * @var NodeParserInterface[] - f.e. ['ADR' => JeroenDesloovere\VCard\Parser\Property\AddressParser]
      */
     private $parsers = [];
 
@@ -25,7 +25,7 @@ final class VcfParser implements ParserInterface
          * @var NodeInterface $propertyClass
          */
         foreach (VCard::POSSIBLE_VALUES as $propertyClass) {
-            $this->parsers[($propertyClass)::getNode()] = ($propertyClass)::getParser();
+            $this->parsers[$propertyClass::getNode()] = $propertyClass::getParser();
         }
 
         $vCards = [];
@@ -48,8 +48,11 @@ final class VcfParser implements ParserInterface
         }
 
         $parsedParameters = [];
-        $parameters = explode(';', $parameters);
-        foreach ($parameters as $parameter) {
+        /** @var string[] $parametersArray */
+        $parametersArray = explode(';', $parameters);
+        foreach ($parametersArray as $parameter) {
+            /** @var string $node */
+            /** @var string $value */
             @list($node, $value) = explode('=', $parameter, 2);
 
             if (array_key_exists($node, $this->parsers)) {
@@ -72,7 +75,10 @@ final class VcfParser implements ParserInterface
             // period (.).
             $line = preg_replace('/^\w+\./', '', trim($line));
 
+            /** @var string $node */
+            /** @var string $value */
             @list($node, $value) = explode(':', $line, 2);
+            /** @var string|null $parameterContent */
             @list($node, $parameterContent) = explode(';', $node, 2);
 
             if (!array_key_exists($node, $this->parsers)) {
@@ -84,9 +90,6 @@ final class VcfParser implements ParserInterface
             $parameters = $this->parseParameters($parameterContent);
 
             try {
-                /**
-                 * @var NodeParserInterface $this->parsers[$node]
-                 */
                 $vCard->add($this->parsers[$node]->parseLine($value, $parameters));
             } catch (\Exception $e) {
                 // @todo: fetch errors when setting properties that are already set.

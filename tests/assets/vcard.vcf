@@ -6,4 +6,5 @@ N:Jeroen;;Desloovere;;
 ADR;TYPE=Work:;;Markt 1;Brugge;West-Vlaanderen;8000;België
 ADR;TYPE=Home:;Penthouse;Korenmarkt 1;Gent;Oost-Vlaanderen;9000;België
 NOTE:VCard library is amazing.
+GENDER:M;test comment gender
 END:VCARD

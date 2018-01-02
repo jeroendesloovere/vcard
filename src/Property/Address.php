@@ -12,9 +12,9 @@ use JeroenDesloovere\VCard\Property\Parameter\Type;
 final class Address implements PropertyInterface, NodeInterface
 {
     /**
-     * @var null|string - The country name in your own language, e.g.: belgië
+     * @var null|string
      */
-    private $countryName;
+    private $postOfficeBox;
 
     /**
      * @var null|string - e.g.: apartment or suite number
@@ -22,19 +22,14 @@ final class Address implements PropertyInterface, NodeInterface
     private $extendedAddress;
 
     /**
+     * @var null|string
+     */
+    private $streetAddress;
+
+    /**
      * @var null|string - e.g.: city
      */
     private $locality;
-
-    /**
-     * @var null|string
-     */
-    private $postalCode;
-
-    /**
-     * @var null|string
-     */
-    private $postOfficeBox;
 
     /**
      * @var null|string  - e.g.: state or province
@@ -44,7 +39,12 @@ final class Address implements PropertyInterface, NodeInterface
     /**
      * @var null|string
      */
-    private $streetAddress;
+    private $postalCode;
+
+    /**
+     * @var null|string - The country name in your own language, e.g.: belgië
+     */
+    private $countryName;
 
     /**
      * @var Type
@@ -77,24 +77,9 @@ final class Address implements PropertyInterface, NodeInterface
         $this->type = $type ?? Type::home();
     }
 
-    public function getCountryName(): ?string
-    {
-        return $this->countryName;
-    }
-
-    public function getExtendedAddress(): ?string
-    {
-        return $this->extendedAddress;
-    }
-
     public function getFormatter(): NodeFormatterInterface
     {
         return new AddressFormatter($this);
-    }
-
-    public function getLocality(): ?string
-    {
-        return $this->locality;
     }
 
     public static function getNode(): string
@@ -107,9 +92,9 @@ final class Address implements PropertyInterface, NodeInterface
         return new AddressParser();
     }
 
-    public function getPostalCode(): ?string
+    public function isAllowedMultipleTimes(): bool
     {
-        return $this->postalCode;
+        return true;
     }
 
     public function getPostOfficeBox(): ?string
@@ -117,9 +102,9 @@ final class Address implements PropertyInterface, NodeInterface
         return $this->postOfficeBox;
     }
 
-    public function getRegion(): ?string
+    public function getExtendedAddress(): ?string
     {
-        return $this->region;
+        return $this->extendedAddress;
     }
 
     public function getStreetAddress(): ?string
@@ -127,14 +112,29 @@ final class Address implements PropertyInterface, NodeInterface
         return $this->streetAddress;
     }
 
+    public function getLocality(): ?string
+    {
+        return $this->locality;
+    }
+
+    public function getRegion(): ?string
+    {
+        return $this->region;
+    }
+
+    public function getPostalCode(): ?string
+    {
+        return $this->postalCode;
+    }
+
+    public function getCountryName(): ?string
+    {
+        return $this->countryName;
+    }
+
     public function getType(): Type
     {
         return $this->type;
-    }
-
-    public function isAllowedMultipleTimes(): bool
-    {
-        return true;
     }
 
     public function setType(Type $type)

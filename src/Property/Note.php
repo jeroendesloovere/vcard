@@ -7,23 +7,8 @@ use JeroenDesloovere\VCard\Formatter\Property\NodeFormatterInterface;
 use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
 use JeroenDesloovere\VCard\Parser\Property\NoteParser;
 
-final class Note implements PropertyInterface, SimpleNodeInterface
+final class Note extends SingleStringValue implements PropertyInterface, SimpleNodeInterface
 {
-    /**
-     * @var string
-     */
-    private $value;
-
-    public function __construct(string $value)
-    {
-        $this->value = $value;
-    }
-
-    public function __toString(): string
-    {
-        return $this->value;
-    }
-
     public function getFormatter(): NodeFormatterInterface
     {
         return new NoteFormatter($this);
