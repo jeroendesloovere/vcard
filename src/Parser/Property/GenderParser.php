@@ -10,15 +10,8 @@ final class GenderParser extends PropertyParser implements NodeParserInterface
 {
     public function parseLine(string $value, array $parameters = []): NodeInterface
     {
-        @list(
-            $gender,
-            $note
-        ) = explode(';', $value);
+        @list($gender) = explode(';', $value);
 
-        $this->convertEmptyStringToNull([
-            $note
-        ]);
-
-        return new Gender(new GenderType($gender), $note);
+        return new Gender($gender);
     }
 }

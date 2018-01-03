@@ -18,4 +18,9 @@ class SingleStringValue
     {
         return $this->value;
     }
+
+    public function getValue(): string
+    {
+        return $this->value;
+    }
 }

@@ -9,26 +9,87 @@ use JeroenDesloovere\VCard\Parser\Property\GenderParser;
 use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
 use JeroenDesloovere\VCard\Property\Parameter\GenderType;
 
-final class Gender implements PropertyInterface, NodeInterface
+final class Gender extends SingleStringValue implements PropertyInterface, NodeInterface
 {
-    /**
-     * @var GenderType
-     */
-    private $gender;
+    protected const FEMALE = 'Female';
+    protected const MALE = 'Male';
+    protected const NONE = 'None';
+    protected const OTHER = 'Other';
+    protected const UNKNOWN = 'Unknown';
 
-    /**
-     * @var null|string
-     */
-    private $note;
+    public const POSSIBLE_VALUES = [
+        self::FEMALE,
+        self::MALE,
+        self::NONE,
+        self::OTHER,
+        self::UNKNOWN,
+    ];
 
-    public function __construct(?GenderType $gender = null, ?string $note = null)
+    public function __construct(string $value = null)
     {
-        if ($gender === null && $note === null) {
+        if ($value === null) {
             throw PropertyException::forEmptyProperty();
         }
 
-        $this->gender = $gender ?? GenderType::empty();
-        $this->note = $note;
+        if ($value === '') {
+            $value = self::NONE;
+        }
+
+        if (!in_array($value, self::POSSIBLE_VALUES, true)) {
+            throw PropertyException::forWrongValue($value, self::POSSIBLE_VALUES);
+        }
+
+        parent::__construct($value);
+    }
+
+    public static function female(): self
+    {
+        return new self(self::FEMALE);
+    }
+
+    public function isFemale(): bool
+    {
+        return $this->value === self::FEMALE;
+    }
+
+    public static function male(): self
+    {
+        return new self(self::MALE);
+    }
+
+    public function isMale(): bool
+    {
+        return $this->value === self::MALE;
+    }
+
+    public static function none(): self
+    {
+        return new self(self::NONE);
+    }
+
+    public function isNone(): bool
+    {
+        return $this->value === self::NONE;
+    }
+
+    public static function other(): self
+    {
+        return new self(self::OTHER);
+    }
+
+    public function isOther(): bool
+    {
+        return $this->value === self::OTHER;
+    }
+
+    public static function unknown(): self
+    {
+        return new self(self::UNKNOWN);
+    }
+
+    public function isUnknown(): bool
+    {
+        return $this->value === self::UNKNOWN;
     }
 
     public function getFormatter(): NodeFormatterInterface
@@ -49,15 +110,5 @@ final class Gender implements PropertyInterface, NodeInterface
     public function isAllowedMultipleTimes(): bool
     {
         return false;
-    }
-
-    public function getGender(): GenderType
-    {
-        return $this->gender;
-    }
-
-    public function getNote(): ?string
-    {
-        return $this->note;
     }
 }

@@ -10,7 +10,6 @@ use JeroenDesloovere\VCard\Property\Address;
 use JeroenDesloovere\VCard\Property\Gender;
 use JeroenDesloovere\VCard\Property\Name;
 use JeroenDesloovere\VCard\Property\Note;
-use JeroenDesloovere\VCard\Property\Parameter\GenderType;
 use JeroenDesloovere\VCard\Property\Parameter\Type;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
@@ -46,7 +45,7 @@ final class VCardTest extends TestCase
             ->add(new Address(null, null, 'Markt 1', 'Brugge', 'West-Vlaanderen', '8000', 'België', Type::work()))
             ->add(new Address(null, 'Penthouse', 'Korenmarkt 1', 'Gent', 'Oost-Vlaanderen', '9000', 'België', Type::home()))
             ->add(new Note('VCard library is amazing.'))
-            ->add(new Gender(GenderType::male(), 'test comment gender'));
+            ->add(Gender::male());
 
         $this->secondVCard = (new VCard())
             ->add(new Name('Doe', 'John'))
