@@ -7,10 +7,10 @@ use JeroenDesloovere\VCard\Formatter\Property\GenderFormatter;
 use JeroenDesloovere\VCard\Formatter\Property\NodeFormatterInterface;
 use JeroenDesloovere\VCard\Parser\Property\GenderParser;
 use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
-use JeroenDesloovere\VCard\Property\Value\StringValue;
 
-final class Gender extends StringValue implements PropertyInterface, NodeInterface
+final class Gender implements PropertyInterface, NodeInterface
 {
+    protected const EMPTY = '';
     protected const FEMALE = 'F';
     protected const MALE = 'M';
     protected const NONE = 'N';
@@ -18,6 +18,7 @@ final class Gender extends StringValue implements PropertyInterface, NodeInterfa
     protected const UNKNOWN = 'U';
 
     public const POSSIBLE_VALUES = [
+        self::EMPTY,
         self::FEMALE,
         self::MALE,
         self::NONE,
@@ -25,26 +26,58 @@ final class Gender extends StringValue implements PropertyInterface, NodeInterfa
         self::UNKNOWN,
     ];
 
-    public function __construct(string $value = null)
+    /**
+     * @var string
+     */
+    private $value;
+
+    /**
+     * @var null|string
+     */
+    private $note;
+
+    public function __construct(?string $value = '', ?string $note = null)
     {
-        if ($value === null) {
-            throw PropertyException::forEmptyProperty();
-        }
-
-        if ($value === '') {
-            $value = self::NONE;
-        }
-
         if (!in_array($value, self::POSSIBLE_VALUES, true)) {
             throw PropertyException::forWrongValue($value, self::POSSIBLE_VALUES);
         }
 
-        parent::__construct($value);
+        if ($value === self::EMPTY && $note === null) {
+            throw PropertyException::forEmptyProperty();
+        }
+
+        $this->value = $value;
+        $this->note = $note;
     }
 
-    public static function female(): self
+    public function __toString(): string
     {
-        return new self(self::FEMALE);
+        return $this->value;
+    }
+
+    public function getValue(): string
+    {
+        return $this->value;
+    }
+
+    public function getNote(): string
+    {
+        return $this->note;
+    }
+
+    public static function empty(string $note = null): self
+    {
+        return new self(self::EMPTY, $note);
+    }
+
+    public function isEmpty(): bool
+    {
+        return $this->value === self::EMPTY;
+    }
+
+    public static function female(string $note = null): self
+    {
+        return new self(self::FEMALE, $note);
     }
 
     public function isFemale(): bool
@@ -52,9 +85,9 @@ final class Gender extends StringValue implements PropertyInterface, NodeInterfa
         return $this->value === self::FEMALE;
     }
 
-    public static function male(): self
+    public static function male(string $note = null): self
     {
-        return new self(self::MALE);
+        return new self(self::MALE, $note);
     }
 
     public function isMale(): bool
@@ -62,9 +95,9 @@ final class Gender extends StringValue implements PropertyInterface, NodeInterfa
         return $this->value === self::MALE;
     }
 
-    public static function none(): self
+    public static function none(string $note = null): self
     {
-        return new self(self::NONE);
+        return new self(self::NONE, $note);
     }
 
     public function isNone(): bool
@@ -72,9 +105,9 @@ final class Gender extends StringValue implements PropertyInterface, NodeInterfa
         return $this->value === self::NONE;
     }
 
-    public static function other(): self
+    public static function other(string $note = null): self
     {
-        return new self(self::OTHER);
+        return new self(self::OTHER, $note);
     }
 
     public function isOther(): bool
@@ -82,9 +115,9 @@ final class Gender extends StringValue implements PropertyInterface, NodeInterfa
         return $this->value === self::OTHER;
     }
 
-    public static function unknown(): self
+    public static function unknown(string $note = null): self
     {
-        return new self(self::UNKNOWN);
+        return new self(self::UNKNOWN, $note);
     }
 
     public function isUnknown(): bool

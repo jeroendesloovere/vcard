@@ -11,19 +11,11 @@ final class GenderTest extends TestCase
 {
     /**
      * @expectedException \JeroenDesloovere\VCard\Exception\PropertyException
-     * @expectedExceptionMessage The given value 'False Gender' is not allowed. Possible values are: 'F', 'M', 'N', 'O', 'U'
+     * @expectedExceptionMessage The given value 'False Gender' is not allowed. Possible values are: '', 'F', 'M', 'N', 'O', 'U'
      */
     public function testGenderFalseGender(): void
     {
         new Gender('False Gender');
-    }
-
-    public function testGenderEmpty(): void
-    {
-        $gender = new Gender('');
-
-        $this->assertTrue($gender->isNone());
-        $this->assertEquals('N', $gender->__toString());
     }
 
     public function testGenderFemale(): void
@@ -44,7 +36,7 @@ final class GenderTest extends TestCase
 
     public function testGenderNone(): void
     {
-        $gender = new Gender('');
+        $gender = new Gender('N');
 
         $this->assertTrue($gender->isNone());
         $this->assertEquals('N', $gender->__toString());
@@ -64,6 +56,14 @@ final class GenderTest extends TestCase
 
         $this->assertTrue($gender->isUnknown());
         $this->assertEquals('U', $gender->__toString());
+    }
+
+    public function testGenderEmptyFunction(): void
+    {
+        $gender = Gender::empty('It\'s complicated');
+
+        $this->assertTrue($gender->isEmpty());
+        $this->assertEquals('', $gender->getValue());
     }
 
     public function testGenderFemaleFunction(): void
