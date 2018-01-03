@@ -17,6 +17,7 @@ use JeroenDesloovere\VCard\Property\Parameter\Revision;
 use JeroenDesloovere\VCard\Property\Parameter\Type;
 use JeroenDesloovere\VCard\Property\Parameter\Version;
 use JeroenDesloovere\VCard\Property\PropertyInterface;
+use JeroenDesloovere\VCard\Property\Title;
 
 final class VCard
 {
@@ -33,6 +34,7 @@ final class VCard
         Note::class,
         Gender::class,
         Nickname::class,
+        Title::class,
         Anniversary::class,
     ];
 
