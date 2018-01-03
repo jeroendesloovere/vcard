@@ -26,7 +26,7 @@ Since this is a WIP, we refer to the [test class](tests/VCardTest.php) to view m
 * [x] [NICKNAME](./src/Property/Nickname.php) - A nickname for the object
 * [ ] PHOTO
 * [ ] BDAY - Birth date of the object. Should only apply to Individual
-* [ ] ANNIVERSARY - Should only apply to Individual
+* [x] [ANNIVERSARY](./src/Property/Anniversary.php) - Should only apply to Individual
 * [x] [GENDER](./src/Property/Gender.php) - Should only apply to Individual
 
 ### Delivery Addressing Properties:
