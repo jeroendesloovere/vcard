@@ -49,12 +49,12 @@ final class VCardTest extends TestCase
 
         // Building one or multiple vCards
         $this->firstVCard = (new VCard())
+            ->add(Gender::male())
             ->add(new Nickname('Web developer'))
             ->add(new Name('Desloovere', 'Jeroen'))
             ->add(new Address(null, null, 'Markt 1', 'Brugge', 'West-Vlaanderen', '8000', 'België', Type::work()))
             ->add(new Address(null, 'Penthouse', 'Korenmarkt 1', 'Gent', 'Oost-Vlaanderen', '9000', 'België', Type::home()))
-            ->add(new Note('VCard library is amazing.'))
-            ->add(Gender::male());
+            ->add(new Note('VCard library is amazing.'));
 
         $this->secondVCard = (new VCard())
             ->add(new Name('Doe', 'John'))
@@ -123,11 +123,11 @@ final class VCardTest extends TestCase
     public function testVCardGetProperties(): void
     {
         $this->assertCount(6, $this->firstVCard->getProperties());
+        $this->assertCount(1, $this->firstVCard->getProperties(Gender::class));
         $this->assertCount(1, $this->firstVCard->getProperties(Nickname::class));
         $this->assertCount(1, $this->firstVCard->getProperties(Name::class));
         $this->assertCount(2, $this->firstVCard->getProperties(Address::class));
         $this->assertCount(1, $this->firstVCard->getProperties(Note::class));
-        $this->assertCount(1, $this->firstVCard->getProperties(Gender::class));
 
         $this->assertCount(2, $this->secondVCard->getProperties());
         $this->assertCount(1, $this->secondVCard->getProperties(Name::class));
