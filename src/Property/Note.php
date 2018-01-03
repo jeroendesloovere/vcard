@@ -7,7 +7,7 @@ use JeroenDesloovere\VCard\Formatter\Property\NodeFormatterInterface;
 use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
 use JeroenDesloovere\VCard\Parser\Property\NoteParser;
 
-final class Note extends SingleStringValue implements PropertyInterface, SimpleNodeInterface
+final class Note extends StringValue implements PropertyInterface, SimpleNodeInterface
 {
     public function getFormatter(): NodeFormatterInterface
     {

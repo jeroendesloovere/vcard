@@ -9,7 +9,7 @@ use JeroenDesloovere\VCard\Parser\Property\GenderParser;
 use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
 use JeroenDesloovere\VCard\Property\Parameter\GenderType;
 
-final class Gender extends SingleStringValue implements PropertyInterface, NodeInterface
+final class Gender extends StringValue implements PropertyInterface, NodeInterface
 {
     protected const FEMALE = 'Female';
     protected const MALE = 'Male';

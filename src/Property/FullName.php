@@ -7,7 +7,7 @@ use JeroenDesloovere\VCard\Formatter\Property\NodeFormatterInterface;
 use JeroenDesloovere\VCard\Parser\Property\FullNameParser;
 use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
 
-final class FullName extends SingleStringValue implements PropertyInterface, SimpleNodeInterface
+final class FullName extends StringValue implements PropertyInterface, SimpleNodeInterface
 {
     public function getFormatter(): NodeFormatterInterface
     {

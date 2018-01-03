@@ -2,7 +2,7 @@
 
 namespace JeroenDesloovere\VCard\Property;
 
-class SingleStringValue
+class StringValue
 {
     /**
      * @var string

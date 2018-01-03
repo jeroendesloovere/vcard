@@ -7,7 +7,7 @@ use JeroenDesloovere\VCard\Formatter\Property\NodeFormatterInterface;
 use JeroenDesloovere\VCard\Parser\Property\TitleParser;
 use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
 
-final class Title extends SingleStringValue implements PropertyInterface, SimpleNodeInterface
+final class Title extends StringValue implements PropertyInterface, SimpleNodeInterface
 {
     public function getFormatter(): NodeFormatterInterface
     {
