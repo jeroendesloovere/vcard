@@ -27,7 +27,8 @@ class VCardException extends \Exception
     public static function forNotAllowedPropertyOnVCardKind(PropertyInterface $property, Kind $kind): self
     {
         return new self(
-            'The property "' . get_class($property) . '" you are trying to add can only be added to vCard\'s of the ' . $kind->__toString() . ' kind.'
+            'The property "' . get_class($property) . '" you are trying to add can only be added
+             to vCard\'s of the ' . $kind->__toString() . ' kind.'
         );
     }
 
