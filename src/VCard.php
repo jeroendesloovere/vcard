@@ -36,6 +36,11 @@ final class VCard
         Anniversary::class,
     ];
 
+    protected const ONLY_APPLY_TO_INDIVIDUAL_KIND = [
+        Anniversary::class,
+        Gender::class,
+    ];
+
     /**
      * @var PropertyParameterInterface[]
      */
@@ -53,7 +58,7 @@ final class VCard
 
     public function add(NodeInterface $node): self
     {
-        if (array_key_exists(get_class($node), self::POSSIBLE_VALUES)) {
+        if (!in_array(get_class($node), self::POSSIBLE_VALUES)) {
             throw VCardException::forNotAllowedNode($node);
         }
 
@@ -71,8 +76,14 @@ final class VCard
 
     private function addProperty(PropertyInterface $property): void
     {
+        // Property is not allowed multiple times
         if (!$property->isAllowedMultipleTimes() && $this->hasPropertyByClassName(get_class($property))) {
             throw VCardException::forExistingProperty($property);
+        }
+
+        // Property must only be applied to "individual" kind
+        if (!$this->getKind()->isIndividual() && in_array(get_class($property), self::ONLY_APPLY_TO_INDIVIDUAL_KIND)) {
+            throw VCardException::forNotAllowedPropertyOnVCardKind($property, Kind::individual());
         }
 
         $this->properties[] = $property;
@@ -80,6 +91,7 @@ final class VCard
 
     private function addPropertyParameter(PropertyParameterInterface $propertyParameter): void
     {
+        // Property is not allowed multiple times
         if ($this->hasPropertyByClassName(get_class($propertyParameter))) {
             throw VCardException::forExistingPropertyParameter($propertyParameter);
         }
