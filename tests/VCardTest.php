@@ -47,8 +47,6 @@ final class VCardTest extends TestCase
 
     public function setUp(): void
     {
-        $this->vfsRoot = vfsStream::setup();
-
         // Building one or multiple vCards
         $this->firstVCard = (new VCard())
             ->add(Gender::male('Dude'))
@@ -66,6 +64,8 @@ final class VCardTest extends TestCase
 
         $this->thirdVCard = (new VCard(Kind::organization()))
             ->add(new Title('Apple'));
+
+        $this->vfsRoot = vfsStream::setup();
     }
 
     public function testFormatterSavingMultipleVCardsToVcfFile(): void
