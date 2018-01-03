@@ -6,8 +6,8 @@ use JeroenDesloovere\VCard\Formatter\Property\NodeFormatterInterface;
 use JeroenDesloovere\VCard\Formatter\Property\Parameter\RevisionFormatter;
 use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
 use JeroenDesloovere\VCard\Parser\Property\RevisionParser;
-use JeroenDesloovere\VCard\Property\DateTimeValue;
 use JeroenDesloovere\VCard\Property\SimpleNodeInterface;
+use JeroenDesloovere\VCard\Property\Value\DateTimeValue;
 
 final class Revision extends DateTimeValue implements PropertyParameterInterface, SimpleNodeInterface
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace JeroenDesloovere\VCard\Property;
+namespace JeroenDesloovere\VCard\Property\Value;
 
 class StringValue
 {

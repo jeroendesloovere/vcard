@@ -6,6 +6,7 @@ use JeroenDesloovere\VCard\Formatter\Property\NoteFormatter;
 use JeroenDesloovere\VCard\Formatter\Property\NodeFormatterInterface;
 use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
 use JeroenDesloovere\VCard\Parser\Property\NoteParser;
+use JeroenDesloovere\VCard\Property\Value\StringValue;
 
 final class Note extends StringValue implements PropertyInterface, SimpleNodeInterface
 {

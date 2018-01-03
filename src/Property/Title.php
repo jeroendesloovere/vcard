@@ -6,6 +6,7 @@ use JeroenDesloovere\VCard\Formatter\Property\TitleFormatter;
 use JeroenDesloovere\VCard\Formatter\Property\NodeFormatterInterface;
 use JeroenDesloovere\VCard\Parser\Property\TitleParser;
 use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
+use JeroenDesloovere\VCard\Property\Value\StringValue;
 
 final class Title extends StringValue implements PropertyInterface, SimpleNodeInterface
 {

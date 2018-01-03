@@ -6,6 +6,7 @@ use JeroenDesloovere\VCard\Formatter\Property\FullNameFormatter;
 use JeroenDesloovere\VCard\Formatter\Property\NodeFormatterInterface;
 use JeroenDesloovere\VCard\Parser\Property\FullNameParser;
 use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
+use JeroenDesloovere\VCard\Property\Value\StringValue;
 
 final class FullName extends StringValue implements PropertyInterface, SimpleNodeInterface
 {

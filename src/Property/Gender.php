@@ -7,7 +7,7 @@ use JeroenDesloovere\VCard\Formatter\Property\GenderFormatter;
 use JeroenDesloovere\VCard\Formatter\Property\NodeFormatterInterface;
 use JeroenDesloovere\VCard\Parser\Property\GenderParser;
 use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
-use JeroenDesloovere\VCard\Property\Parameter\GenderType;
+use JeroenDesloovere\VCard\Property\Value\StringValue;
 
 final class Gender extends StringValue implements PropertyInterface, NodeInterface
 {
