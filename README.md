@@ -16,26 +16,6 @@ Documentation about vCard 4.0:
 
 Since this is a WIP, we refer to the [test class](tests/VCardTest.php) to view multiple examples.
 
-## Code standards
-
-We use [squizlabs/php_codesniffer](https://packagist.org/packages/squizlabs/php_codesniffer) to maintain the code standards.
-Type the following to execute them:
-```bash
-# To view the code errors
-vendor/bin/phpcs --standard=psr2 --extensions=php --warning-severity=0 --report=full "src"
-
-# OR to fix the code errors
-vendor/bin/phpcbf --standard=psr2 --extensions=php --warning-severity=0 --report=full "src"
-```
-> [Read documentation about the code standards](https://github.com/squizlabs/PHP_CodeSniffer/wiki)
-
-## Tests
-
-We have build in tests, type the following to execute them:
-```bash
-vendor/bin/phpunit tests
-```
-
 ## Properties
 
 > As explained on [W3 vCard RDF](https://www.w3.org/TR/vcard-rdf/).
@@ -115,6 +95,26 @@ Contributions are **welcome** and will be fully **credited**.
 > For bug reporting or code discussions.
 
 More info on how to work with GitHub on help.github.com.
+
+### Coding Syntax
+
+We use [squizlabs/php_codesniffer](https://packagist.org/packages/squizlabs/php_codesniffer) to maintain the code standards.
+Type the following to execute them:
+```bash
+# To view the code errors
+vendor/bin/phpcs --standard=psr2 --extensions=php --warning-severity=0 --report=full "src"
+
+# OR to fix the code errors
+vendor/bin/phpcbf --standard=psr2 --extensions=php --warning-severity=0 --report=full "src"
+```
+> [Read documentation about the code standards](https://github.com/squizlabs/PHP_CodeSniffer/wiki)
+
+### Unit Tests
+
+We have build in tests, type the following to execute them:
+```bash
+vendor/bin/phpunit tests
+```
 
 ## Credits
 
