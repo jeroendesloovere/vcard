@@ -51,8 +51,10 @@ final class VcfParser implements ParserInterface
         /** @var string[] $parametersArray */
         $parametersArray = explode(';', $parameters);
         foreach ($parametersArray as $parameter) {
-            /** @var string $node */
-            /** @var string $value */
+            /**
+             * @var string $node
+             * @var string $value
+             */
             @list($node, $value) = explode('=', $parameter, 2);
 
             if (array_key_exists($node, $this->parsers)) {
@@ -75,10 +77,15 @@ final class VcfParser implements ParserInterface
             // period (.).
             $line = preg_replace('/^\w+\./', '', trim($line));
 
-            /** @var string $node */
-            /** @var string $value */
+            /**
+             * @var string $node
+             * @var string $value
+             */
             @list($node, $value) = explode(':', $line, 2);
-            /** @var string|null $parameterContent */
+
+            /**
+             * @var string|null $parameterContent
+             */
             @list($node, $parameterContent) = explode(';', $node, 2);
 
             if (!array_key_exists($node, $this->parsers)) {
