@@ -5,6 +5,7 @@ namespace JeroenDesloovere\VCard;
 use JeroenDesloovere\VCard\Exception\VCardException;
 use JeroenDesloovere\VCard\Property\Address;
 use JeroenDesloovere\VCard\Property\Anniversary;
+use JeroenDesloovere\VCard\Property\Birthdate;
 use JeroenDesloovere\VCard\Property\FullName;
 use JeroenDesloovere\VCard\Property\Gender;
 use JeroenDesloovere\VCard\Property\Name;
@@ -35,10 +36,12 @@ final class VCard
         Gender::class,
         Nickname::class,
         Title::class,
+        Birthdate::class,
         Anniversary::class,
     ];
 
     protected const ONLY_APPLY_TO_INDIVIDUAL_KIND = [
+        Birthdate::class,
         Anniversary::class,
         Gender::class,
     ];
@@ -61,7 +64,7 @@ final class VCard
     public function add(NodeInterface $node): self
     {
         if (!in_array(get_class($node), self::POSSIBLE_VALUES)) {
-            throw VCardException::forNotAllowedNode($node);
+            throw VCardException::forNotSupportedNode($node);
         }
 
         switch (true) {
