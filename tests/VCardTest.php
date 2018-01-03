@@ -11,7 +11,9 @@ use JeroenDesloovere\VCard\Property\Gender;
 use JeroenDesloovere\VCard\Property\Name;
 use JeroenDesloovere\VCard\Property\Nickname;
 use JeroenDesloovere\VCard\Property\Note;
+use JeroenDesloovere\VCard\Property\Parameter\Kind;
 use JeroenDesloovere\VCard\Property\Parameter\Type;
+use JeroenDesloovere\VCard\Property\Title;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use PHPUnit\Framework\TestCase;
@@ -36,6 +38,11 @@ final class VCardTest extends TestCase
      */
     private $secondVCard;
 
+    /**
+     * @var VCard
+     */
+    private $thirdVCard;
+
     public function setUp(): void
     {
         $this->vfsRoot = vfsStream::setup();
@@ -52,6 +59,9 @@ final class VCardTest extends TestCase
         $this->secondVCard = (new VCard())
             ->add(new Name('Doe', 'John'))
             ->add(new Address(null, 'Penthouse', 'Korenmarkt 1', 'Gent', 'Oost-Vlaanderen', '9000', 'België', Type::work()));
+
+        $this->thirdVCard = (new VCard(Kind::organization()))
+            ->add(new Title('Apple'));
     }
 
     public function testFormatterSavingMultipleVCardsToVcfFile(): void
@@ -118,8 +128,11 @@ final class VCardTest extends TestCase
         $this->assertCount(2, $this->firstVCard->getProperties(Address::class));
         $this->assertCount(1, $this->firstVCard->getProperties(Note::class));
         $this->assertCount(1, $this->firstVCard->getProperties(Gender::class));
+
         $this->assertCount(2, $this->secondVCard->getProperties());
         $this->assertCount(1, $this->secondVCard->getProperties(Name::class));
         $this->assertCount(1, $this->secondVCard->getProperties(Address::class));
+
+        $this->assertCount(1, $this->thirdVCard->getProperties());
     }
 }

@@ -16,3 +16,9 @@ REV:2017-12-15T10:24:32Z
 N:John;;Doe;;
 ADR;TYPE=Work:;Penthouse;Korenmarkt 1;Gent;Oost-Vlaanderen;9000;België
 END:VCARD
+BEGIN:VCARD
+KIND:Organization
+VERSION:4.0
+REV:2017-12-15T10:24:32Z
+TITLE:Apple
+END:VCARD
