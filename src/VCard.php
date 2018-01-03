@@ -54,22 +54,30 @@ final class VCard
         }
 
         if ($node instanceof PropertyInterface) {
-            if (!$node->isAllowedMultipleTimes() && $this->hasPropertyByClassName(get_class($node))) {
-                throw VCardException::forExistingProperty($node);
-            }
-
-            $this->properties[] = $node;
-        }
-
-        if ($node instanceof PropertyParameterInterface) {
-            if ($this->hasPropertyByClassName(get_class($node))) {
-                throw VCardException::forExistingPropertyParameter($node);
-            }
-
-            $this->parameters[] = $node;
+            $this->addProperty($node);
+        } elseif($node instanceof PropertyParameterInterface) {
+            $this->addPropertyParameter($node);
         }
 
         return $this;
+    }
+
+    private function addProperty(PropertyInterface $property): void
+    {
+        if (!$property->isAllowedMultipleTimes() && $this->hasPropertyByClassName(get_class($property))) {
+            throw VCardException::forExistingProperty($property);
+        }
+
+        $this->properties[] = $property;
+    }
+
+    private function addPropertyParameter(PropertyParameterInterface $propertyParameter): void
+    {
+        if ($this->hasPropertyByClassName(get_class($propertyParameter))) {
+            throw VCardException::forExistingPropertyParameter($propertyParameter);
+        }
+
+        $this->parameters[] = $propertyParameter;
     }
 
     public function getKind(): Kind
