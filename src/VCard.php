@@ -53,10 +53,13 @@ final class VCard
             throw VCardException::forNotAllowedNode($node);
         }
 
-        if ($node instanceof PropertyInterface) {
-            $this->addProperty($node);
-        } elseif($node instanceof PropertyParameterInterface) {
-            $this->addPropertyParameter($node);
+        switch (true) {
+            case $node instanceof PropertyInterface:
+                $this->addProperty($node);
+                break;
+            case $node instanceof PropertyParameterInterface:
+                $this->addPropertyParameter($node);
+                break;
         }
 
         return $this;
