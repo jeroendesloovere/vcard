@@ -60,7 +60,7 @@ final class Gender implements PropertyInterface, NodeInterface
         return $this->value;
     }
 
-    public function getNote(): string
+    public function getNote(): ?string
     {
         return $this->note;
     }
