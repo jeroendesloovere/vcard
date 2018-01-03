@@ -4,6 +4,7 @@ namespace JeroenDesloovere\VCard;
 
 use JeroenDesloovere\VCard\Exception\VCardException;
 use JeroenDesloovere\VCard\Property\Address;
+use JeroenDesloovere\VCard\Property\Anniversary;
 use JeroenDesloovere\VCard\Property\FullName;
 use JeroenDesloovere\VCard\Property\Gender;
 use JeroenDesloovere\VCard\Property\Name;
@@ -32,6 +33,7 @@ final class VCard
         Note::class,
         Gender::class,
         Nickname::class,
+        Anniversary::class,
     ];
 
     /**
