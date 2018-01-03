@@ -43,7 +43,7 @@ Since this is a WIP, we refer to the [test class](tests/VCardTest.php) to view m
 * [ ] GEO - The geographical coordinates of the object (geo URI)
 
 ### Organizational Properties:
-* [ ] TITLE - The title of the object
+* [x] [TITLE](./src/Property/Title.php) - The title of the object
 * [ ] ROLE - The role of the object
 * [ ] LOGO - The logo of the object (data URI)
 * [ ] ORG - The organisation related to the object
