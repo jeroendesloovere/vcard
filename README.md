@@ -8,9 +8,8 @@
 > This VCard PHP class can generate a vCard version 4.0. .vcf file with one or more vCards in it. Parsing is also possible. OOP is our goal-focus, so every property has its own class.
 
 Documentation about vCard 4.0:
-* [RFC6350](https://tools.ietf.org/html/rfc6350)
-* [W3 vCard RDF XML](https://www.w3.org/TR/vcard-rdf/)
-* [vCard 4.0](https://devguide.calconnect.org/vCard/vcard-4/)
+* [vCard 4.0 specification: RFC6350](https://tools.ietf.org/html/rfc6350)
+* [vCard 4.0 versus vCard 3.0](https://devguide.calconnect.org/vCard/vcard-4/)
 
 ## Examples
 
