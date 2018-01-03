@@ -11,11 +11,11 @@ use JeroenDesloovere\VCard\Property\Value\StringValue;
 
 final class Gender extends StringValue implements PropertyInterface, NodeInterface
 {
-    protected const FEMALE = 'Female';
-    protected const MALE = 'Male';
-    protected const NONE = 'None';
-    protected const OTHER = 'Other';
-    protected const UNKNOWN = 'Unknown';
+    protected const FEMALE = 'F';
+    protected const MALE = 'M';
+    protected const NONE = 'N';
+    protected const OTHER = 'O';
+    protected const UNKNOWN = 'U';
 
     public const POSSIBLE_VALUES = [
         self::FEMALE,

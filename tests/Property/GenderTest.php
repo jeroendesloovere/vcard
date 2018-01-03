@@ -11,7 +11,7 @@ final class GenderTest extends TestCase
 {
     /**
      * @expectedException \JeroenDesloovere\VCard\Exception\PropertyException
-     * @expectedExceptionMessage The given value 'False Gender' is not allowed. Possible values are: 'Female', 'Male', 'None', 'Other', 'Unknown'
+     * @expectedExceptionMessage The given value 'False Gender' is not allowed. Possible values are: 'F', 'M', 'N', 'O', 'U'
      */
     public function testGenderFalseGender(): void
     {
@@ -23,23 +23,23 @@ final class GenderTest extends TestCase
         $gender = new Gender('');
 
         $this->assertTrue($gender->isNone());
-        $this->assertEquals('None', $gender->__toString());
+        $this->assertEquals('N', $gender->__toString());
     }
 
     public function testGenderFemale(): void
     {
-        $gender = new Gender('Female');
+        $gender = new Gender('F');
 
         $this->assertTrue($gender->isFemale());
-        $this->assertEquals('Female', $gender->__toString());
+        $this->assertEquals('F', $gender->__toString());
     }
 
     public function testGenderMale(): void
     {
-        $gender = new Gender('Male');
+        $gender = new Gender('M');
 
         $this->assertTrue($gender->isMale());
-        $this->assertEquals('Male', $gender->__toString());
+        $this->assertEquals('M', $gender->__toString());
     }
 
     public function testGenderNone(): void
@@ -47,23 +47,23 @@ final class GenderTest extends TestCase
         $gender = new Gender('');
 
         $this->assertTrue($gender->isNone());
-        $this->assertEquals('None', $gender->__toString());
+        $this->assertEquals('N', $gender->__toString());
     }
 
     public function testGenderOther(): void
     {
-        $gender = new Gender('Other');
+        $gender = new Gender('O');
 
         $this->assertTrue($gender->isOther());
-        $this->assertEquals('Other', $gender->__toString());
+        $this->assertEquals('O', $gender->__toString());
     }
 
     public function testGenderUnknown(): void
     {
-        $gender = new Gender('Unknown');
+        $gender = new Gender('U');
 
         $this->assertTrue($gender->isUnknown());
-        $this->assertEquals('Unknown', $gender->__toString());
+        $this->assertEquals('U', $gender->__toString());
     }
 
     public function testGenderFemaleFunction(): void
@@ -71,7 +71,7 @@ final class GenderTest extends TestCase
         $gender = Gender::female();
 
         $this->assertTrue($gender->isFemale());
-        $this->assertEquals('Female', $gender->__toString());
+        $this->assertEquals('F', $gender->__toString());
     }
 
     public function testGenderMaleFunction(): void
@@ -79,7 +79,7 @@ final class GenderTest extends TestCase
         $gender = Gender::male();
 
         $this->assertTrue($gender->isMale());
-        $this->assertEquals('Male', $gender->__toString());
+        $this->assertEquals('M', $gender->__toString());
     }
 
     public function testGenderNoneFunction(): void
@@ -87,7 +87,7 @@ final class GenderTest extends TestCase
         $gender = Gender::none();
 
         $this->assertTrue($gender->isNone());
-        $this->assertEquals('None', $gender->__toString());
+        $this->assertEquals('N', $gender->__toString());
     }
 
     public function testGenderOtherFunction(): void
@@ -95,7 +95,7 @@ final class GenderTest extends TestCase
         $gender = Gender::other();
 
         $this->assertTrue($gender->isOther());
-        $this->assertEquals('Other', $gender->__toString());
+        $this->assertEquals('O', $gender->__toString());
     }
 
     public function testGenderUnknownFunction(): void
@@ -103,6 +103,6 @@ final class GenderTest extends TestCase
         $gender = Gender::unknown();
 
         $this->assertTrue($gender->isUnknown());
-        $this->assertEquals('Unknown', $gender->__toString());
+        $this->assertEquals('U', $gender->__toString());
     }
 }
