@@ -6,9 +6,9 @@ use JeroenDesloovere\VCard\Formatter\Property\AnniversaryFormatter;
 use JeroenDesloovere\VCard\Formatter\Property\NodeFormatterInterface;
 use JeroenDesloovere\VCard\Parser\Property\AnniversaryParser;
 use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
-use JeroenDesloovere\VCard\Property\Value\DateTimeValue;
+use JeroenDesloovere\VCard\Property\Value\DateTimeOrStringValue;
 
-final class Anniversary extends DateTimeValue implements PropertyInterface, SimpleNodeInterface
+final class Anniversary extends DateTimeOrStringValue implements PropertyInterface, SimpleNodeInterface
 {
     public function getFormatter(): NodeFormatterInterface
     {

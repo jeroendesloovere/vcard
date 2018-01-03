@@ -6,9 +6,9 @@ use JeroenDesloovere\VCard\Formatter\Property\BirthdateFormatter;
 use JeroenDesloovere\VCard\Formatter\Property\NodeFormatterInterface;
 use JeroenDesloovere\VCard\Parser\Property\BirthdateParser;
 use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
-use JeroenDesloovere\VCard\Property\Value\DateTimeValue;
+use JeroenDesloovere\VCard\Property\Value\DateTimeOrStringValue;
 
-final class Birthdate extends DateTimeValue implements PropertyInterface, SimpleNodeInterface
+final class Birthdate extends DateTimeOrStringValue implements PropertyInterface, SimpleNodeInterface
 {
     public function getFormatter(): NodeFormatterInterface
     {
