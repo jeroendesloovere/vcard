@@ -11,7 +11,8 @@ final class GenderTest extends TestCase
 {
     /**
      * @expectedException \JeroenDesloovere\VCard\Exception\PropertyException
-     * @expectedExceptionMessage The given value 'False Gender' is not allowed. Possible values are: '', 'F', 'M', 'N', 'O', 'U'
+     * @expectedExceptionMessage The given value "False Gender" is not allowed.
+     * Possible values are: "", "F", "M", "N", "O", "U"
      */
     public function testGenderFalseGender(): void
     {
