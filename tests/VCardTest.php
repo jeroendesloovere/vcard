@@ -51,7 +51,7 @@ final class VCardTest extends TestCase
 
         // Building one or multiple vCards
         $this->firstVCard = (new VCard())
-            ->add(Gender::male())
+            ->add(Gender::male('Dude'))
             ->add(new Nickname('Web developer'))
             ->add(new Name('Desloovere', 'Jeroen'))
             ->add(new Address(null, null, 'Markt 1', 'Brugge', 'West-Vlaanderen', '8000', 'België', Type::work()))

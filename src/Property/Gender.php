@@ -65,6 +65,11 @@ final class Gender implements PropertyInterface, NodeInterface
         return $this->note;
     }
 
+    public function hasNote(): bool
+    {
+        return $this->note !== null;
+    }
+
     public static function empty(string $note = null): self
     {
         return new self(self::EMPTY, $note);

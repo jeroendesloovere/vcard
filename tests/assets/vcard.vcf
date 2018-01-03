@@ -2,7 +2,7 @@ BEGIN:VCARD
 KIND:Individual
 VERSION:4.0
 REV:2017-12-15T10:24:32Z
-GENDER:M
+GENDER:M;Dude
 NICKNAME:Web developer
 N:Jeroen;;Desloovere;;
 ADR;TYPE=Work:;;Markt 1;Brugge;West-Vlaanderen;8000;België
