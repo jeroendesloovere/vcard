@@ -7,6 +7,7 @@ use JeroenDesloovere\VCard\Property\Address;
 use JeroenDesloovere\VCard\Property\FullName;
 use JeroenDesloovere\VCard\Property\Gender;
 use JeroenDesloovere\VCard\Property\Name;
+use JeroenDesloovere\VCard\Property\Nickname;
 use JeroenDesloovere\VCard\Property\NodeInterface;
 use JeroenDesloovere\VCard\Property\Note;
 use JeroenDesloovere\VCard\Property\Parameter\Kind;
@@ -30,6 +31,7 @@ final class VCard
         Address::class,
         Note::class,
         Gender::class,
+        Nickname::class,
     ];
 
     /**

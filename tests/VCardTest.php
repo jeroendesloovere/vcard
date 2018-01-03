@@ -9,6 +9,7 @@ use JeroenDesloovere\VCard\Parser\VcfParser;
 use JeroenDesloovere\VCard\Property\Address;
 use JeroenDesloovere\VCard\Property\Gender;
 use JeroenDesloovere\VCard\Property\Name;
+use JeroenDesloovere\VCard\Property\Nickname;
 use JeroenDesloovere\VCard\Property\Note;
 use JeroenDesloovere\VCard\Property\Parameter\Type;
 use org\bovigo\vfs\vfsStream;
@@ -41,6 +42,7 @@ final class VCardTest extends TestCase
 
         // Building one or multiple vCards
         $this->firstVCard = (new VCard())
+            ->add(new Nickname('Web developer'))
             ->add(new Name('Desloovere', 'Jeroen'))
             ->add(new Address(null, null, 'Markt 1', 'Brugge', 'West-Vlaanderen', '8000', 'België', Type::work()))
             ->add(new Address(null, 'Penthouse', 'Korenmarkt 1', 'Gent', 'Oost-Vlaanderen', '9000', 'België', Type::home()))
@@ -110,7 +112,8 @@ final class VCardTest extends TestCase
 
     public function testVCardGetProperties(): void
     {
-        $this->assertCount(5, $this->firstVCard->getProperties());
+        $this->assertCount(6, $this->firstVCard->getProperties());
+        $this->assertCount(1, $this->firstVCard->getProperties(Nickname::class));
         $this->assertCount(1, $this->firstVCard->getProperties(Name::class));
         $this->assertCount(2, $this->firstVCard->getProperties(Address::class));
         $this->assertCount(1, $this->firstVCard->getProperties(Note::class));
