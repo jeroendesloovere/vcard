@@ -29,13 +29,8 @@ final class VcfParser implements ParserInterface
         }
 
         $vCards = [];
-
         foreach ($this->splitIntoVCardsContent($content) as $vCardContent) {
-            $vCard = $this->parseVCard($vCardContent);
-
-            if ($vCard instanceof VCard) {
-                $vCards[] = $vCard;
-            }
+            $vCards[] = $this->parseVCard($vCardContent);
         }
 
         return $vCards;
