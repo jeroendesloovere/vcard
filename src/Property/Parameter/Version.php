@@ -11,9 +11,11 @@ use JeroenDesloovere\VCard\Property\SimpleNodeInterface;
 
 final class Version implements PropertyParameterInterface, SimpleNodeInterface
 {
+    protected const VERSION_3 = '3.0';
     protected const VERSION_4 = '4.0';
 
     public const POSSIBLE_VALUES = [
+        self::VERSION_3,
         self::VERSION_4,
     ];
 
@@ -46,6 +48,16 @@ final class Version implements PropertyParameterInterface, SimpleNodeInterface
     public static function getParser(): NodeParserInterface
     {
         return new VersionParser();
+    }
+
+    public static function version3(): self
+    {
+        return new self(self::VERSION_3);
+    }
+
+    public function isVersion3(): bool
+    {
+        return $this->value === self::VERSION_3;
     }
 
     public static function version4(): self
