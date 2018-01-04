@@ -26,11 +26,6 @@ use PHPUnit\Framework\TestCase;
 final class VCardTest extends TestCase
 {
     /**
-     * @var vfsStreamDirectory
-     */
-    private $vfsRoot;
-
-    /**
      * @var VCard 
      */
     private $firstVCard;
@@ -44,6 +39,11 @@ final class VCardTest extends TestCase
      * @var VCard
      */
     private $thirdVCard;
+
+    /**
+     * @var vfsStreamDirectory - We save the generated vCard to a virtual location
+     */
+    private $vfsRoot;
 
     public function setUp(): void
     {
