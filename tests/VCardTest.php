@@ -93,7 +93,7 @@ final class VCardTest extends TestCase
 
     /**
      * @expectedException \JeroenDesloovere\VCard\Exception\ParserException
-     * @expectedExceptionMessage File 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' is not readable, or doesn't exist.
+     * @expectedExceptionMessage File "Lorem ipsum dolor sit amet, consectetur adipiscing elit." is not readable, or doesn't exist.
      */
     public function testParserCorruptVCard(): void
     {
@@ -102,7 +102,7 @@ final class VCardTest extends TestCase
 
     /**
      * @expectedException \JeroenDesloovere\VCard\Exception\ParserException
-     * @expectedExceptionMessage File '' is not readable, or doesn't exist.
+     * @expectedExceptionMessage File "" is not readable, or doesn't exist.
      */
     public function testParserEmptyVCard(): void
     {

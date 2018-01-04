@@ -4,7 +4,6 @@ namespace JeroenDesloovere\VCard\Parser\Property;
 
 use JeroenDesloovere\VCard\Property\Gender;
 use JeroenDesloovere\VCard\Property\NodeInterface;
-use JeroenDesloovere\VCard\Property\Parameter\GenderType;
 
 final class GenderParser extends PropertyParser implements NodeParserInterface
 {
