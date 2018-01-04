@@ -140,5 +140,6 @@ final class VCardTest extends TestCase
         $this->assertCount(1, $this->secondVCard->getProperties(Address::class));
 
         $this->assertCount(1, $this->thirdVCard->getProperties());
+        $this->assertCount(1, $this->thirdVCard->getProperties(Title::class));
     }
 }
