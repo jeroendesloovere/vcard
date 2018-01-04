@@ -6,6 +6,8 @@
 
 This VCard PHP class can generate a vCard with some data. When using an iOS device < iOS 8 it will export as a .ics file because iOS devices don't support the default .vcf files.
 
+**NOTE**: We are working on a complete new version to work with vCard version 4.0, with extreme good code quality. [Check out the new version](https://github.com/jeroendesloovere/vcard/tree/new-version)
+
 ## Usage
 
 ### Installation
