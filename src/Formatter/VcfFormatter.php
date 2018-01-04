@@ -26,7 +26,7 @@ final class VcfFormatter implements FormatterInterface
 
     public function getContentType(): string
     {
-        return 'text/x-vcard';
+        return 'text/vcard';
     }
 
     public function getFileExtension(): string
