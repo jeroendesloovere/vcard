@@ -57,11 +57,22 @@ class VCard
     private $properties;
 
     /**
+     * Index
+     *
+     * @var integer
+     */
+    private $index = 0;
+
+    /**
      * Default Charset
      *
      * @var string
      */
     public $charset = 'utf-8';
+
+    public function new() {
+        $this->index++;
+    }
 
     /**
      * Add address
@@ -490,20 +501,25 @@ class VCard
      */
     public function buildVCard()
     {
-        // init string
-        $string = "BEGIN:VCARD\r\n";
-        $string .= "VERSION:3.0\r\n";
-        $string .= "REV:" . date("Y-m-d") . "T" . date("H:i:s") . "Z\r\n";
-
-        // loop all properties
         $properties = $this->getProperties();
-        foreach ($properties as $property) {
-            // add to string
-            $string .= $this->fold($property['key'] . ':' . $this->escape($property['value']) . "\r\n");
-        }
 
-        // add to string
-        $string .= "END:VCARD\r\n";
+        for($i = 0;$i < count($properties);$i++) {
+            // init string
+            (empty($string)) ? $string = "BEGIN:VCARD\r\n" : $string .= "BEGIN:VCARD\r\n";
+            
+            $string .= "VERSION:3.0\r\n";
+            $string .= "REV:" . date("Y-m-d") . "T" . date("H:i:s") . "Z\r\n";
+
+            // loop all properties
+            $property = $this->getProperty($i);
+            foreach ($property as $data) {
+                // add to string
+                $string .= $this->fold($data['key'] . ':' . $this->escape($data['value']) . "\r\n");
+            }
+
+            // add to string
+            $string .= "END:VCARD\r\n";   
+        }
 
         // return
         return $string;
@@ -764,6 +780,18 @@ class VCard
     }
 
     /**
+     * Get propertie
+     *
+     * @return array
+     */
+    public function getProperty($index = -1)
+    {
+        $index = ($index == -1) ? $this->index : $index;
+
+        return $this->properties[$index];
+    }
+
+    /**
      * Get properties
      *
      * @return array
@@ -781,10 +809,10 @@ class VCard
      */
     public function hasProperty($key)
     {
-        $properties = $this->getProperties();
+        $property = $this->getProperty();
 
-        foreach ($properties as $property) {
-            if ($property['key'] === $key && $property['value'] !== '') {
+        foreach ($property as $data) {
+            if ($data['key'] === $key && $data['value'] !== '') {
                 return true;
             }
         }
@@ -914,16 +942,16 @@ class VCard
     private function setProperty($element, $key, $value)
     {
         if (!in_array($element, $this->multiplePropertiesForElementAllowed)
-            && isset($this->definedElements[$element])
+            && isset($this->definedElements[$this->index][$element])
         ) {
             throw VCardException::elementAlreadyExists($element);
         }
 
         // we define that we set this element
-        $this->definedElements[$element] = true;
+        $this->definedElements[$this->index][$element] = true;
 
         // adding property
-        $this->properties[] = [
+        $this->properties[$this->index][] = [
             'key' => $key,
             'value' => $value
         ];
