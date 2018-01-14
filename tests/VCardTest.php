@@ -9,6 +9,7 @@ use JeroenDesloovere\VCard\Parser\VcfParser;
 use JeroenDesloovere\VCard\Property\Address;
 use JeroenDesloovere\VCard\Property\Anniversary;
 use JeroenDesloovere\VCard\Property\Birthdate;
+use JeroenDesloovere\VCard\Property\Email;
 use JeroenDesloovere\VCard\Property\Gender;
 use JeroenDesloovere\VCard\Property\Name;
 use JeroenDesloovere\VCard\Property\Nickname;
@@ -54,6 +55,8 @@ final class VCardTest extends TestCase
             ->add(new Name('Desloovere', 'Jeroen'))
             ->add(new Address(null, null, 'Markt 1', 'Brugge', 'West-Vlaanderen', '8000', 'België', Type::work()))
             ->add(new Address(null, 'Penthouse', 'Korenmarkt 1', 'Gent', 'Oost-Vlaanderen', '9000', 'België', Type::home()))
+            ->add(new Email('test@test.nl', Type::work()))
+            ->add(new Email('example@example.nl', Type::home()))
             ->add(new Note('VCard library is amazing.'))
             ->add(new Birthdate(new \DateTime('2015-12-05')))
             ->add(new Anniversary(new \DateTime('2017-12-05')));
@@ -126,11 +129,12 @@ final class VCardTest extends TestCase
 
     public function testVCardGetProperties(): void
     {
-        $this->assertCount(8, $this->firstVCard->getProperties());
+        $this->assertCount(10, $this->firstVCard->getProperties());
         $this->assertCount(1, $this->firstVCard->getProperties(Gender::class));
         $this->assertCount(1, $this->firstVCard->getProperties(Nickname::class));
         $this->assertCount(1, $this->firstVCard->getProperties(Name::class));
         $this->assertCount(2, $this->firstVCard->getProperties(Address::class));
+        $this->assertCount(2, $this->firstVCard->getProperties(Email::class));
         $this->assertCount(1, $this->firstVCard->getProperties(Note::class));
         $this->assertCount(1, $this->firstVCard->getProperties(Birthdate::class));
         $this->assertCount(1, $this->firstVCard->getProperties(Anniversary::class));

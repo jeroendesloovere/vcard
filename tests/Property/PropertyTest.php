@@ -31,6 +31,15 @@ final class PropertyTest extends TestCase
      * @expectedException \JeroenDesloovere\VCard\Exception\PropertyException
      * @expectedExceptionMessage The property you are trying to add is empty.
      */
+    public function testEmptyEmail(): void
+    {
+        new Email();
+    }
+
+    /**
+     * @expectedException \JeroenDesloovere\VCard\Exception\PropertyException
+     * @expectedExceptionMessage The property you are trying to add is empty.
+     */
     public function testEmptyGender(): void
     {
         new Gender();
