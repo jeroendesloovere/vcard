@@ -90,10 +90,10 @@ final class VCard
 
         // Property must only be applied to "individual" kind
         if (!$this->getKind()->isIndividual() && in_array(
-                get_class($property),
-                self::ONLY_APPLY_TO_INDIVIDUAL_KIND,
-                true
-            )) {
+            get_class($property),
+            self::ONLY_APPLY_TO_INDIVIDUAL_KIND,
+            true
+        )) {
             throw VCardException::forNotAllowedPropertyOnVCardKind($property, Kind::individual());
         }
 
