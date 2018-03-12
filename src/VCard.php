@@ -674,12 +674,7 @@ class VCard
      */
     public function getCharsetString()
     {
-        $charsetString = '';
-        if ($this->charset == 'utf-8') {
-            $charsetString = ';CHARSET=' . $this->charset;
-        }
-
-        return $charsetString;
+        return ';CHARSET=' . $this->charset;
     }
 
     /**
