@@ -4,9 +4,7 @@ namespace JeroenDesloovere\VCard\Property\Value;
 
 class DateTimeOrStringValue
 {
-    /**
-     * @var string|\DateTime
-     */
+    /** @var string|\DateTime */
     protected $value;
 
     public function __construct($value)

@@ -48,14 +48,10 @@ final class VCard
         Gender::class,
     ];
 
-    /**
-     * @var PropertyParameterInterface[]
-     */
+    /** @var PropertyParameterInterface[] */
     private $parameters = [];
 
-    /**
-     * @var PropertyInterface[]
-     */
+    /** @var PropertyInterface[] */
     private $properties = [];
 
     public function __construct(Kind $kind = null)

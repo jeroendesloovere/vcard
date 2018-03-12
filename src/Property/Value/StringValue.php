@@ -4,9 +4,7 @@ namespace JeroenDesloovere\VCard\Property\Value;
 
 class StringValue
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $value;
 
     public function __construct(string $value)

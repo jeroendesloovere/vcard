@@ -10,29 +10,19 @@ use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
 
 final class Name implements PropertyInterface, NodeInterface
 {
-    /**
-     * @var null|string
-     */
+    /** @var null|string */
     private $additional;
 
-    /**
-     * @var null|string
-     */
+    /** @var null|string */
     private $firstName;
 
-    /**
-     * @var null|string
-     */
+    /** @var null|string */
     private $lastName;
 
-    /**
-     * @var null|string
-     */
+    /** @var null|string */
     private $prefix;
 
-    /**
-     * @var null|string
-     */
+    /** @var null|string */
     private $suffix;
 
     public function __construct(

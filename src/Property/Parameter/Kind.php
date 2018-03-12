@@ -14,24 +14,16 @@ use JeroenDesloovere\VCard\Property\SimpleNodeInterface;
  */
 final class Kind implements PropertyParameterInterface, SimpleNodeInterface
 {
-    /**
-     * Group - To represent groups of vCard objects
-     */
+    // Group - To represent groups of vCard objects
     protected const GROUP = 'Group';
 
-    /**
-     * Individual - To represent people
-     */
+    // Individual - To represent people
     protected const INDIVIDUAL = 'Individual';
 
-    /**
-     * Location - To represent location objects
-     */
+    // Location - To represent location objects
     protected const LOCATION = 'Location';
 
-    /**
-     * Organization - To represent organisations
-     */
+    // Organization - To represent organisations
     protected const ORGANIZATION = 'Organization';
 
     public const POSSIBLE_VALUES = [

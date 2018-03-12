@@ -11,14 +11,10 @@ use JeroenDesloovere\VCard\Property\Parameter\Type;
 
 final class Email implements PropertyInterface, NodeInterface
 {
-    /**
-     * @var null|string
-     */
+    /** @var null|string */
     private $email;
 
-    /**
-     * @var Type
-     */
+    /** @var Type */
     private $type;
 
     public function __construct(

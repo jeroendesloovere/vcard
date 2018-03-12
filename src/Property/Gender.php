@@ -26,14 +26,10 @@ final class Gender implements PropertyInterface, NodeInterface
         self::UNKNOWN,
     ];
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $value;
 
-    /**
-     * @var null|string
-     */
+    /** @var null|string */
     private $note;
 
     public function __construct(string $value = '', ?string $note = null)
