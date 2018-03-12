@@ -6,9 +6,7 @@ use JeroenDesloovere\VCard\Property\Email;
 
 final class EmailFormatter extends NodeFormatter implements NodeFormatterInterface
 {
-    /**
-     * @var Email
-     */
+    /** @var Email */
     protected $email;
 
     public function __construct(Email $email)
