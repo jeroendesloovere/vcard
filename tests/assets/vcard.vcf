@@ -5,8 +5,10 @@ REV:2017-12-15T10:24:32Z
 GENDER:M;Dude
 NICKNAME:Web developer
 N:Jeroen;;Desloovere;;
-ADR;TYPE=Work:;;Markt 1;Brugge;West-Vlaanderen;8000;België
-ADR;TYPE=Home:;Penthouse;Korenmarkt 1;Gent;Oost-Vlaanderen;9000;België
+ADR;TYPE=work:;;Markt 1;Brugge;West-Vlaanderen;8000;België
+ADR;TYPE=home:;Penthouse;Korenmarkt 1;Gent;Oost-Vlaanderen;9000;België
+EMAIL;TYPE=work:test@test.nl
+EMAIL;TYPE=home:example@example.nl
 NOTE:VCard library is amazing.
 BDAY:2015-12-05T00:00:00.00
 ANNIVERSARY:2017-12-05T00:00:00.00

@@ -6,6 +6,7 @@ use JeroenDesloovere\VCard\Exception\VCardException;
 use JeroenDesloovere\VCard\Property\Address;
 use JeroenDesloovere\VCard\Property\Anniversary;
 use JeroenDesloovere\VCard\Property\Birthdate;
+use JeroenDesloovere\VCard\Property\Email;
 use JeroenDesloovere\VCard\Property\FullName;
 use JeroenDesloovere\VCard\Property\Gender;
 use JeroenDesloovere\VCard\Property\Name;
@@ -38,9 +39,10 @@ final class VCard
         Title::class,
         Birthdate::class,
         Anniversary::class,
+        Email::class,
     ];
 
-    protected const ONLY_APPLY_TO_INDIVIDUAL_KIND = [
+    private const ONLY_APPLY_TO_INDIVIDUAL_KIND = [
         Birthdate::class,
         Anniversary::class,
         Gender::class,
@@ -63,7 +65,7 @@ final class VCard
 
     public function add(NodeInterface $node): self
     {
-        if (!in_array(get_class($node), self::POSSIBLE_VALUES)) {
+        if (!in_array(get_class($node), self::POSSIBLE_VALUES, true)) {
             throw VCardException::forNotSupportedNode($node);
         }
 
@@ -87,7 +89,11 @@ final class VCard
         }
 
         // Property must only be applied to "individual" kind
-        if (!$this->getKind()->isIndividual() && in_array(get_class($property), self::ONLY_APPLY_TO_INDIVIDUAL_KIND)) {
+        if (!$this->getKind()->isIndividual() && in_array(
+            get_class($property),
+            self::ONLY_APPLY_TO_INDIVIDUAL_KIND,
+            true
+        )) {
             throw VCardException::forNotAllowedPropertyOnVCardKind($property, Kind::individual());
         }
 
