@@ -427,6 +427,18 @@ class VCardTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('garcon-jeroen', $this->vcard->getFilename());
     }
 
+    /**
+     * Test multiple labels
+     */
+    public function testMultipleLabels()
+    {
+        $this->assertSame($this->vcard, $this->vcard->addLabel('My label'));
+        $this->assertSame($this->vcard, $this->vcard->addLabel('My work label', 'WORK'));
+        $this->assertSame(2, count($this->vcard->getProperties()));
+        $this->assertContains('LABEL:My label', $this->vcard->getOutput());
+        $this->assertContains('LABEL;WORK:My work label', $this->vcard->getOutput());
+    }
+
     public function testChunkSplitUnicode()
     {
         $class_handler  = new \ReflectionClass('JeroenDesloovere\VCard\VCard');
