@@ -17,6 +17,8 @@ Since this is a WIP, we refer to the [test class](tests/VCardTest.php) to view m
 
 ## Properties
 
+-> As explained on [W3 vCard RDF](https://www.w3.org/TR/vcard-rdf/).
+
 ### Identification Properties:
 * [x] [FN = Full name](./src/Property/FullName.php) - The full name of the object (as a single string). This is the only mandatory property.
 * [x] [N = Name](./src/Property/Name.php) - The name of the object represented in structured parts
