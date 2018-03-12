@@ -9,9 +9,7 @@ use JeroenDesloovere\VCard\VCard;
 
 final class VcfParser implements ParserInterface
 {
-    /**
-     * @var NodeParserInterface[] - f.e. ['ADR' => JeroenDesloovere\VCard\Parser\Property\AddressParser]
-     */
+    /** @var NodeParserInterface[] - f.e. ['ADR' => JeroenDesloovere\VCard\Parser\Property\AddressParser] */
     private $parsers = [];
 
     /**
@@ -21,9 +19,7 @@ final class VcfParser implements ParserInterface
      */
     public function getVCards(string $content): array
     {
-        /**
-         * @var NodeInterface $propertyClass
-         */
+        /** @var NodeInterface $propertyClass */
         foreach (VCard::POSSIBLE_VALUES as $propertyClass) {
             $this->parsers[$propertyClass::getNode()] = $propertyClass::getParser();
         }

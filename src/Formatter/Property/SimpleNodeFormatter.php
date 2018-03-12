@@ -6,9 +6,7 @@ use JeroenDesloovere\VCard\Property\SimpleNodeInterface;
 
 class SimpleNodeFormatter extends NodeFormatter implements NodeFormatterInterface
 {
-    /**
-     * @var SimpleNodeInterface
-     */
+    /** @var SimpleNodeInterface */
     protected $node;
 
     public function __construct(SimpleNodeInterface $node)

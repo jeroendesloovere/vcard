@@ -25,24 +25,16 @@ use PHPUnit\Framework\TestCase;
  */
 final class VCardTest extends TestCase
 {
-    /**
-     * @var VCard 
-     */
+    /** @var VCard */
     private $firstVCard;
 
-    /**
-     * @var VCard 
-     */
+    /** @var VCard */
     private $secondVCard;
 
-    /**
-     * @var VCard
-     */
+    /** @var VCard */
     private $thirdVCard;
 
-    /**
-     * @var vfsStreamDirectory - We save the generated vCard to a virtual location
-     */
+    /** @var vfsStreamDirectory - We save the generated vCard to a virtual location */
     private $vfsRoot;
 
     public function setUp(): void

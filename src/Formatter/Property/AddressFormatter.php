@@ -6,9 +6,7 @@ use JeroenDesloovere\VCard\Property\Address;
 
 final class AddressFormatter extends NodeFormatter implements NodeFormatterInterface
 {
-    /**
-     * @var Address
-     */
+    /** @var Address */
     protected $address;
 
     public function __construct(Address $address)

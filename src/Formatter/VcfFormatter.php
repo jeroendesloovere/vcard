@@ -11,9 +11,7 @@ final class VcfFormatter implements FormatterInterface
     {
         $string = '';
 
-        /**
-         * @var VCard $vCard
-         */
+        /** @var VCard $vCard */
         foreach ($vCards as $vCard) {
             $string .= "BEGIN:VCARD\r\n";
             $this->setNodesToString($vCard->getParameters(), $string);
@@ -57,9 +55,7 @@ final class VcfFormatter implements FormatterInterface
      */
     private function setNodesToString(array $nodes, string &$string): void
     {
-        /**
-         * @var NodeInterface $parameter
-         */
+        /** @var NodeInterface $parameter */
         foreach ($nodes as $parameter) {
             $string .= $this->fold($parameter->getFormatter()->getVcfString() . "\r\n");
         }

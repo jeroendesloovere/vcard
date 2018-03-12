@@ -7,24 +7,16 @@ use JeroenDesloovere\VCard\VCard;
 
 final class Formatter
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $charset = 'utf-8';
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $fileName;
 
-    /**
-     * @var FormatterInterface
-     */
+    /** @var FormatterInterface */
     private $formatter;
 
-    /**
-     * @var VCard[]
-     */
+    /** @var VCard[] */
     private $vCards;
 
     public function __construct(FormatterInterface $formatter, string $fileName)

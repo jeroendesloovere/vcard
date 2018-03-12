@@ -6,9 +6,7 @@ use JeroenDesloovere\VCard\Property\Gender;
 
 final class GenderFormatter extends NodeFormatter implements NodeFormatterInterface
 {
-    /**
-     * @var Gender
-     */
+    /** @var Gender */
     protected $gender;
 
     public function __construct(Gender $gender)

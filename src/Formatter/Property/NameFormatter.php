@@ -6,9 +6,7 @@ use JeroenDesloovere\VCard\Property\Name;
 
 final class NameFormatter extends NodeFormatter implements NodeFormatterInterface
 {
-    /**
-     * @var Name
-     */
+    /** @var Name */
     protected $name;
 
     public function __construct(Name $name)

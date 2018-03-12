@@ -7,14 +7,10 @@ use JeroenDesloovere\VCard\VCard;
 
 final class Parser
 {
-    /**
-     * @var ParserInterface
-     */
+    /** @var ParserInterface */
     private $parser;
 
-    /**
-     * @var VCard[]
-     */
+    /** @var VCard[] */
     private $vCards;
 
     public function __construct(ParserInterface $parser, string $content)
