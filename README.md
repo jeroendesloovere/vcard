@@ -4,21 +4,18 @@
 [![Build Status](https://travis-ci.org/jeroendesloovere/vcard.svg?branch=master)](https://travis-ci.org/jeroendesloovere/vcard)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/jeroendesloovere/vcard/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/jeroendesloovere/vcard/?branch=master)
 
-This VCard PHP class can generate a vCard with some data. When using an iOS device (< iOS 8) it will export as a .ics file because iOS devices don't support the default .vcf files.
+This VCard PHP class can generate a vCard with some data. When using an iOS device < iOS 8 it will export as a .ics file because iOS devices don't support the default .vcf files.
+
+**NOTE**: We are working on a complete new version to work with vCard version 4.0, with extreme good code quality. [Check out the new version](https://github.com/jeroendesloovere/vcard/tree/new-version)
 
 ## Usage
 
 ### Installation
 
-``` json
-{
-    "require": {
-        "jeroendesloovere/vcard": "1.2.*"
-    }
-}
+```bash
+composer require jeroendesloovere/vcard
 ```
-
-> Add the above in your `composer.json` file when using [Composer](https://getcomposer.org).
+> This will install the latest version of vcard with [Composer](https://getcomposer.org)
 
 ### Example
 
@@ -41,10 +38,12 @@ $vcard->addName($lastname, $firstname, $additional, $prefix, $suffix);
 // add work data
 $vcard->addCompany('Siesqo');
 $vcard->addJobtitle('Web Developer');
+$vcard->addRole('Data Protection Officer');
 $vcard->addEmail('info@jeroendesloovere.be');
 $vcard->addPhoneNumber(1234121212, 'PREF;WORK');
 $vcard->addPhoneNumber(123456789, 'WORK');
 $vcard->addAddress(null, null, 'street', 'worktown', null, 'workpostcode', 'Belgium');
+$vcard->addLabel('street, worktown, workpostcode Belgium');
 $vcard->addURL('http://www.jeroendesloovere.be');
 
 $vcard->addPhoto(__DIR__ . '/landscape.jpeg');
@@ -54,9 +53,34 @@ $vcard->addPhoto(__DIR__ . '/landscape.jpeg');
 
 // return vcard as a download
 return $vcard->download();
+
+// save vcard on disk
+//$vcard->setSavePath('/path/to/directory');
+//$vcard->save();
+
 ```
 
 > [View all examples](/examples/example.php) or check [the VCard class](/src/VCard.php).
+
+### Parsing examples
+
+The parser can either get passed a VCard string, like so:
+
+```php
+// load VCardParser classes
+use JeroenDesloovere\VCard\VCardParser;
+
+$parser = new VCardParser($vcardString);
+echo $parser->getCardAtIndex(0)->fullname; // Prints the full name.
+```
+
+Or by using a factory method with a file name:
+
+```php
+$parser = VCardParser::parseFromFile('path/to/file.vcf');
+echo $parser->getCardAtIndex(0)->fullname; // Prints the full name.
+```
+> [View the parsing example](/examples/example_parsing.php) or check the [the VCardParser class](/src/VCardParser.php) class.
 
 **Support for frameworks**
 

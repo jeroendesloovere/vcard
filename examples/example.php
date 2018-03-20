@@ -2,8 +2,6 @@
 
 /**
  * VCard generator test - can save to file or output as a download
- *
- * @author Jeroen Desloovere <info@jeroendesloovere.be>
  */
 
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -34,6 +32,7 @@ $vcard->addAddress(null, null, 'street', 'worktown', null, 'workpostcode', 'Belg
 $vcard->addURL('http://www.jeroendesloovere.be');
 
 $vcard->addPhoto(__DIR__ . '/assets/landscape.jpeg');
+//$vcard->addPhoto('https://raw.githubusercontent.com/jeroendesloovere/vcard/master/tests/image.jpg');
 
 // return vcard as a string
 //return $vcard->getOutput();

@@ -1,3 +1,13 @@
+1.2.2 (2015-11-30)
+--
+Improvements:
+* Probably a fix for UTF-8 in outlook 2010
+
+1.2.1 (2015-07-23)
+--
+Improvements:
+* You can now set the charset by using $vcard->setCharset('ISO-8859-1');
+
 1.2.0 (2015-06-01)
 --
 Improvements:

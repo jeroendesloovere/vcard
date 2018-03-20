@@ -13,8 +13,6 @@ use Behat\Transliterator\Transliterator;
 
 /**
  * VCard PHP Class to generate .vcard files and save them to a file or output as a download.
- *
- * @author Jeroen Desloovere <info@jeroendesloovere.be>
  */
 class VCard
 {
@@ -33,16 +31,24 @@ class VCard
     private $filename;
 
     /**
+     * Save Path
+     *
+     * @var string
+     */
+    private $savePath = null;
+
+    /**
      * Multiple properties for element allowed
      *
      * @var array
      */
-    private $multiplePropertiesForElementAllowed = array(
+    private $multiplePropertiesForElementAllowed = [
         'email',
         'address',
         'phoneNumber',
-        'url'
-    );
+        'url',
+        'label'
+    ];
 
     /**
      * Properties
@@ -89,7 +95,7 @@ class VCard
         // set property
         $this->setProperty(
             'address',
-            'ADR' . (($type != '') ? ';' . $type : ''),
+            'ADR' . (($type != '') ? ';' . $type : '') . $this->getCharsetString(),
             $value
         );
 
@@ -116,19 +122,21 @@ class VCard
     /**
      * Add company
      *
-     * @param  string $company
+     * @param string $company
+     * @param string $department
      * @return $this
      */
-    public function addCompany($company)
+    public function addCompany($company, $department = '')
     {
         $this->setProperty(
             'company',
-            'ORG',
+            'ORG' . $this->getCharsetString(),
             $company
+            . ($department != '' ? ';' . $department : '')
         );
 
         // if filename is empty, add to filename
-        if ($this->getFilename() === null) {
+        if ($this->filename === null) {
             $this->setFilename($company);
         }
 
@@ -138,7 +146,7 @@ class VCard
     /**
      * Add email
      *
-     * @param  string            $address The e-mail address
+     * @param  string $address The e-mail address
      * @param  string [optional] $type    The type of the email address
      *                                    $type may be  PREF | WORK | HOME
      *                                    or any combination of these: e.g. "PREF;WORK"
@@ -166,8 +174,44 @@ class VCard
     {
         $this->setProperty(
             'jobtitle',
-            'TITLE',
+            'TITLE' . $this->getCharsetString(),
             $jobtitle
+        );
+
+        return $this;
+    }
+
+    /**
+     * Add a label
+     *
+     * @param string $label
+     * @param string $type
+     *
+     * @return $this
+     */
+    public function addLabel($label, $type = '')
+    {
+        $this->setProperty(
+            'label',
+            'LABEL' . ($type !== '' ? ';' . $type : ''),
+            $label
+        );
+
+        return $this;
+    }
+
+    /**
+     * Add role
+     *
+     * @param  string $role The role for the person.
+     * @return $this
+     */
+    public function addRole($role)
+    {
+        $this->setProperty(
+            'role',
+            'ROLE' . $this->getCharsetString(),
+            $role
         );
 
         return $this;
@@ -176,41 +220,92 @@ class VCard
     /**
      * Add a photo or logo (depending on property name)
      *
-     * @param  string              $property LOGO|PHOTO
-     * @param  string              $url      image url or filename
-     * @param  bool                $include  Do we include the image in our vcard or not?
-     * @throws VCardMediaException if file is empty or not an image file
+     * @param string $property LOGO|PHOTO
+     * @param string $url image url or filename
+     * @param bool $include Do we include the image in our vcard or not?
+     * @param string $element The name of the element to set
      */
     private function addMedia($property, $url, $include = true, $element)
     {
+        $mimeType = null;
+
+        //Is this URL for a remote resource?
+        if (filter_var($url, FILTER_VALIDATE_URL) !== false) {
+            $headers = get_headers($url, 1);
+
+            if (array_key_exists('Content-Type', $headers)) {
+                $mimeType = $headers['Content-Type'];
+                if (is_array($mimeType)) {
+                    $mimeType = end($mimeType);
+                }
+            }
+        } else {
+            //Local file, so inspect it directly
+            $mimeType = mime_content_type($url);
+        }
+        if (strpos($mimeType, ';') !== false) {
+            $mimeType = strstr($mimeType, ';', true);
+        }
+        if (!is_string($mimeType) || substr($mimeType, 0, 6) !== 'image/') {
+            throw VCardException::invalidImage();
+        }
+        $fileType = strtoupper(substr($mimeType, 6));
+
         if ($include) {
             $value = file_get_contents($url);
 
             if (!$value) {
-                throw new VCardMediaException('Nothing returned from URL.');
+                throw VCardException::emptyURL();
             }
 
             $value = base64_encode($value);
-
-            $finfo = finfo_open(FILEINFO_MIME_TYPE);
-            $mimetype = finfo_file($finfo, 'data://application/octet-stream;base64,' . $value);
-            finfo_close($finfo);
-
-            if (preg_match('/^image\//', $mimetype) !== 1) {
-                throw new VCardMediaException('Returned data aren\'t an image.');
-            }
-
-            $type = strtoupper(str_replace('image/', '', $mimetype));
-
-            $property .= ";ENCODING=b;TYPE=" . $type;
+            $property .= ";ENCODING=b;TYPE=" . $fileType;
         } else {
-            $value = $url;
+            if (filter_var($url, FILTER_VALIDATE_URL) !== false) {
+                $propertySuffix = ';VALUE=URL';
+                $propertySuffix .= ';TYPE=' . strtoupper($fileType);
+
+                $property = $property . $propertySuffix;
+                $value = $url;
+            } else {
+                $value = $url;
+            }
         }
 
         $this->setProperty(
             $element,
             $property,
             $value
+        );
+    }
+
+    /**
+     * Add a photo or logo (depending on property name)
+     *
+     * @param string $property LOGO|PHOTO
+     * @param string $content image content
+     * @param string $element The name of the element to set
+     */
+    private function addMediaContent($property, $content, $element)
+    {
+        $finfo = new \finfo();
+        $mimeType = $finfo->buffer($content, FILEINFO_MIME_TYPE);
+
+        if (strpos($mimeType, ';') !== false) {
+            $mimeType = strstr($mimeType, ';', true);
+        }
+        if (!is_string($mimeType) || substr($mimeType, 0, 6) !== 'image/') {
+            throw VCardException::invalidImage();
+        }
+        $fileType = strtoupper(substr($mimeType, 6));
+
+        $content = base64_encode($content);
+        $property .= ";ENCODING=b;TYPE=" . $fileType;
+
+        $this->setProperty(
+            $element,
+            $property,
+            $content
         );
     }
 
@@ -232,13 +327,13 @@ class VCard
         $suffix = ''
     ) {
         // define values with non-empty values
-        $values = array_filter(array(
+        $values = array_filter([
             $prefix,
             $firstName,
             $additional,
             $lastName,
             $suffix,
-        ));
+        ]);
 
         // define filename
         $this->setFilename($values);
@@ -247,7 +342,7 @@ class VCard
         $property = $lastName . ';' . $firstName . ';' . $additional . ';' . $prefix . ';' . $suffix;
         $this->setProperty(
             'name',
-            'N',
+            'N' . $this->getCharsetString(),
             $property
         );
 
@@ -256,7 +351,7 @@ class VCard
             // set property
             $this->setProperty(
                 'fullname',
-                'FN',
+                'FN' . $this->getCharsetString(),
                 trim(implode(' ', $values))
             );
         }
@@ -274,8 +369,25 @@ class VCard
     {
         $this->setProperty(
             'note',
-            'NOTE',
+            'NOTE' . $this->getCharsetString(),
             $note
+        );
+
+        return $this;
+    }
+
+    /**
+     * Add categories
+     *
+     * @param array $categories
+     * @return $this
+     */
+    public function addCategories($categories)
+    {
+        $this->setProperty(
+            'categories',
+            'CATEGORIES' . $this->getCharsetString(),
+            trim(implode(',', $categories))
         );
 
         return $this;
@@ -284,7 +396,7 @@ class VCard
     /**
      * Add phone number
      *
-     * @param  string            $number
+     * @param  string $number
      * @param  string [optional] $type
      *                                   Type may be PREF | WORK | HOME | VOICE | FAX | MSG |
      *                                   CELL | PAGER | BBS | CAR | MODEM | ISDN | VIDEO
@@ -304,10 +416,46 @@ class VCard
     }
 
     /**
+     * Add Logo
+     *
+     * @param  string $url image url or filename
+     * @param  bool $include Include the image in our vcard?
+     * @return $this
+     */
+    public function addLogo($url, $include = true)
+    {
+        $this->addMedia(
+            'LOGO',
+            $url,
+            $include,
+            'logo'
+        );
+
+        return $this;
+    }
+
+    /**
+     * Add Logo content
+     *
+     * @param  string $content image content
+     * @return $this
+     */
+    public function addLogoContent($content)
+    {
+        $this->addMediaContent(
+            'LOGO',
+            $content,
+            'logo'
+        );
+
+        return $this;
+    }
+
+    /**
      * Add Photo
      *
-     * @param  string $url     image url or filename
-     * @param  bool   $include Include the image in our vcard?
+     * @param  string $url image url or filename
+     * @param  bool $include Include the image in our vcard?
      * @return $this
      */
     public function addPhoto($url, $include = true)
@@ -323,9 +471,26 @@ class VCard
     }
 
     /**
+     * Add Photo content
+     *
+     * @param  string $content image content
+     * @return $this
+     */
+    public function addPhotoContent($content)
+    {
+        $this->addMediaContent(
+            'PHOTO',
+            $content,
+            'photo'
+        );
+
+        return $this;
+    }
+
+    /**
      * Add URL
      *
-     * @param  string            $url
+     * @param  string $url
      * @param  string [optional] $type Type may be WORK | HOME
      * @return $this
      */
@@ -357,7 +522,7 @@ class VCard
         $properties = $this->getProperties();
         foreach ($properties as $property) {
             // add to string
-            $string .= $this->fold($property['key'] . ':' . $property['value'] . "\r\n");
+            $string .= $this->fold($property['key'] . ':' . $this->escape($property['value']) . "\r\n");
         }
 
         // add to string
@@ -466,7 +631,42 @@ class VCard
         }
 
         // split, wrap and trim trailing separator
-        return substr(chunk_split($text, 73, "\r\n "), 0, -3);
+        return substr($this->chunk_split_unicode($text, 73, "\r\n "), 0, -3);
+    }
+
+    /**
+     * multibyte word chunk split
+     * @link http://php.net/manual/en/function.chunk-split.php#107711
+     * 
+     * @param  string  $body     The string to be chunked.
+     * @param  integer $chunklen The chunk length.
+     * @param  string  $end      The line ending sequence.
+     * @return string            Chunked string
+     */
+    protected function chunk_split_unicode($body, $chunklen = 76, $end = "\r\n")
+    {
+        $array = array_chunk(
+            preg_split("//u", $body, -1, PREG_SPLIT_NO_EMPTY), $chunklen);
+        $body = "";
+        foreach ($array as $item) {
+            $body .= join("", $item) . $end;
+        }
+        return $body;
+    }
+
+    /**
+     * Escape newline characters according to RFC2425 section 5.8.4.
+     *
+     * @link http://tools.ietf.org/html/rfc2425#section-5.8.4
+     * @param  string $text
+     * @return string
+     */
+    protected function escape($text)
+    {
+        $text = str_replace("\r\n", "\\n", $text);
+        $text = str_replace("\n", "\\n", $text);
+
+        return $text;
     }
 
     /**
@@ -478,6 +678,26 @@ class VCard
     public function get()
     {
         return $this->getOutput();
+    }
+
+    /**
+     * Get charset
+     *
+     * @return string
+     */
+    public function getCharset()
+    {
+        return $this->charset;
+    }
+
+    /**
+     * Get charset string
+     *
+     * @return string
+     */
+    public function getCharsetString()
+    {
+        return ';CHARSET=' . $this->charset;
     }
 
     /**
@@ -498,6 +718,10 @@ class VCard
      */
     public function getFilename()
     {
+        if (!$this->filename) {
+            return 'unknown';
+        }
+
         return $this->filename;
     }
 
@@ -515,31 +739,31 @@ class VCard
     /**
      * Get headers
      *
-     * @param  bool  $asAssociative
+     * @param  bool $asAssociative
      * @return array
      */
     public function getHeaders($asAssociative)
     {
-        $contentType        = $this->getContentType() . '; charset=' . $this->charset;
+        $contentType = $this->getContentType() . '; charset=' . $this->getCharset();
         $contentDisposition = 'attachment; filename=' . $this->getFilename() . '.' . $this->getFileExtension();
-        $contentLength      = strlen($this->getOutput());
-        $connection         = 'close';
+        $contentLength = mb_strlen($this->getOutput(), $this->getCharset());
+        $connection = 'close';
 
-        if ((bool) $asAssociative) {
-            return array(
-                'Content-type'        => $contentType,
+        if ((bool)$asAssociative) {
+            return [
+                'Content-type' => $contentType,
                 'Content-Disposition' => $contentDisposition,
-                'Content-Length'      => $contentLength,
-                'Connection'          => $connection,
-            );
+                'Content-Length' => $contentLength,
+                'Connection' => $connection,
+            ];
         }
 
-        return array(
+        return [
             'Content-type: ' . $contentType,
             'Content-Disposition: ' . $contentDisposition,
             'Content-Length: ' . $contentLength,
             'Connection: ' . $connection,
-        );
+        ];
     }
 
     /**
@@ -551,8 +775,10 @@ class VCard
      */
     public function getOutput()
     {
-        return ($this->isIOS7()) ?
+        $output = ($this->isIOS7()) ?
             $this->buildVCalendar() : $this->buildVCard();
+
+        return $output;
     }
 
     /**
@@ -616,6 +842,11 @@ class VCard
     {
         $file = $this->getFilename() . '.' . $this->getFileExtension();
 
+        // Add save path if given
+        if (null !== $this->savePath) {
+            $file = $this->savePath . $file;
+        }
+
         file_put_contents(
             $file,
             $this->getOutput()
@@ -623,10 +854,21 @@ class VCard
     }
 
     /**
+     * Set charset
+     *
+     * @param  mixed $charset
+     * @return void
+     */
+    public function setCharset($charset)
+    {
+        $this->charset = $charset;
+    }
+
+    /**
      * Set filename
      *
-     * @param  mixed  $value
-     * @param  bool   $overwrite [optional] Default overwrite is true
+     * @param  mixed $value
+     * @param  bool $overwrite [optional] Default overwrite is true
      * @param  string $separator [optional] Default separator is an underscore '_'
      * @return void
      */
@@ -660,30 +902,49 @@ class VCard
     }
 
     /**
+     * Set the save path directory
+     *
+     * @param  string $savePath Save Path
+     * @throws VCardException
+     */
+    public function setSavePath($savePath)
+    {
+        if (!is_dir($savePath)) {
+            throw VCardException::outputDirectoryNotExists();
+        }
+
+        // Add trailing directory separator the save path
+        if (substr($savePath, -1) != DIRECTORY_SEPARATOR) {
+            $savePath .= DIRECTORY_SEPARATOR;
+        }
+
+        $this->savePath = $savePath;
+    }
+
+    /**
      * Set property
      *
      * @param  string $element The element name you want to set, f.e.: name, email, phoneNumber, ...
      * @param  string $key
      * @param  string $value
-     *
-     * @throws Exception
+     * @throws VCardException
      */
     private function setProperty($element, $key, $value)
     {
         if (!in_array($element, $this->multiplePropertiesForElementAllowed)
             && isset($this->definedElements[$element])
         ) {
-            throw new Exception('You can only set "' . $element . '" once.');
+            throw VCardException::elementAlreadyExists($element);
         }
 
         // we define that we set this element
         $this->definedElements[$element] = true;
 
         // adding property
-        $this->properties[] = array(
+        $this->properties[] = [
             'key' => $key,
             'value' => $value
-        );
+        ];
     }
 
     /**
@@ -695,9 +956,9 @@ class VCard
     {
         $browser = $this->getUserAgent();
 
-        $matches = array();
+        $matches = [];
         preg_match('/os (\d+)_(\d+)\s+/', $browser, $matches);
-        $version = isset($matches[1]) ? ((int) $matches[1]) : 999;
+        $version = isset($matches[1]) ? ((int)$matches[1]) : 999;
 
         return ($version < 8);
     }
