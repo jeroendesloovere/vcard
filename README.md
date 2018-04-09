@@ -2,8 +2,8 @@
 
 <!--[![Latest Stable Version](http://img.shields.io/packagist/v/jeroendesloovere/vcard.svg)](https://packagist.org/packages/jeroendesloovere/vcard)-->
 [![License](http://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/jeroendesloovere/vcard/blob/master/LICENSE)
-[![Build Status](https://travis-ci.org/jeroendesloovere/vcard.svg?branch=new-version)](https://travis-ci.org/jeroendesloovere/vcard)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/jeroendesloovere/vcard/badges/quality-score.png?b=new-version)](https://scrutinizer-ci.com/g/jeroendesloovere/vcard/?branch=new-version)
+[![Build Status](https://travis-ci.org/jeroendesloovere/vcard.svg?branch=2.0.0-dev)](https://travis-ci.org/jeroendesloovere/vcard)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/jeroendesloovere/vcard/badges/quality-score.png?b=2.0.0-dev)](https://scrutinizer-ci.com/g/jeroendesloovere/vcard/?branch=2.0.0-dev)
 
 > This VCard PHP class can generate a vCard version 4.0. .vcf file with one or more vCards in it. Parsing is also possible. OOP is our goal-focus, so every property has its own class.
 
