@@ -36,8 +36,8 @@ final class VCardTest extends TestCase
     /** @var VCard */
     private $thirdVCard;
 
-    /** @var vfsStreamDirectory - We save the generated vCard to a virtual location */
-    private $vfsRoot;
+    /** @var vfsStreamDirectory - We save the generated vCard to a virtual storage */
+    private $virtualStorage;
 
     public function setUp(): void
     {
@@ -61,7 +61,7 @@ final class VCardTest extends TestCase
         $this->thirdVCard = (new VCard(Kind::organization()))
             ->add(new Title('Apple'));
 
-        $this->vfsRoot = vfsStream::setup();
+        $this->virtualStorage = vfsStream::setup();
     }
 
     public function testFormatterSavingMultipleVCardsToVcfFile(): void
@@ -71,9 +71,9 @@ final class VCardTest extends TestCase
         $formatter->addVCard($this->firstVCard);
         $formatter->addVCard($this->secondVCard);
 
-        $this->assertFalse($this->vfsRoot->hasChild('vcards.vcf'));
-        $formatter->save($this->vfsRoot->url());
-        $this->assertTrue($this->vfsRoot->hasChild('vcards.vcf'));
+        $this->assertFalse($this->virtualStorage->hasChild('vcards.vcf'));
+        $formatter->save($this->virtualStorage->url());
+        $this->assertTrue($this->virtualStorage->hasChild('vcards.vcf'));
     }
 
     public function testFormatterSavingOneVCardToVcfFile(): void
@@ -82,9 +82,9 @@ final class VCardTest extends TestCase
         $formatter = new Formatter(new VcfFormatter(), 'vcard');
         $formatter->addVCard($this->firstVCard);
 
-        $this->assertFalse($this->vfsRoot->hasChild('vcard.vcf'));
-        $formatter->save($this->vfsRoot->url());
-        $this->assertTrue($this->vfsRoot->hasChild('vcard.vcf'));
+        $this->assertFalse($this->virtualStorage->hasChild('vcard.vcf'));
+        $formatter->save($this->virtualStorage->url());
+        $this->assertTrue($this->virtualStorage->hasChild('vcard.vcf'));
     }
 
     /**
