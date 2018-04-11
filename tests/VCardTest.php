@@ -1,6 +1,6 @@
 <?php
 
-namespace JeroenDesloovere\VCard;
+namespace JeroenDesloovere\Tests\VCard;
 
 use JeroenDesloovere\VCard\Formatter\Formatter;
 use JeroenDesloovere\VCard\Formatter\VcfFormatter;
@@ -17,6 +17,7 @@ use JeroenDesloovere\VCard\Property\Note;
 use JeroenDesloovere\VCard\Property\Parameter\Kind;
 use JeroenDesloovere\VCard\Property\Parameter\Type;
 use JeroenDesloovere\VCard\Property\Title;
+use JeroenDesloovere\VCard\VCard;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use PHPUnit\Framework\TestCase;

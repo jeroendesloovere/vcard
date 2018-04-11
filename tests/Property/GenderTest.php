@@ -1,7 +1,8 @@
 <?php
 
-namespace JeroenDesloovere\VCard\Property;
+namespace JeroenDesloovere\Tests\VCard\Property;
 
+use JeroenDesloovere\VCard\Property\Gender;
 use PHPUnit\Framework\TestCase;
 
 /**

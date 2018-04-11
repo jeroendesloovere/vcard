@@ -1,7 +1,11 @@
 <?php
 
-namespace JeroenDesloovere\VCard\Property;
+namespace JeroenDesloovere\Tests\VCard\Property;
 
+use JeroenDesloovere\VCard\Property\Address;
+use JeroenDesloovere\VCard\Property\Email;
+use JeroenDesloovere\VCard\Property\Gender;
+use JeroenDesloovere\VCard\Property\Name;
 use PHPUnit\Framework\TestCase;
 
 /**
