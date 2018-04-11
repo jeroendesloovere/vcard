@@ -105,6 +105,14 @@ final class VCardTest extends TestCase
         new Parser(new VcfParser(), '');
     }
 
+    /**
+     * @expectedException \JeroenDesloovere\VCard\Exception\ParserException
+     */
+    public function testParserGetFileContentsException(): void
+    {
+        Parser::getFileContents(__DIR__ . '/not-existing');
+    }
+
     public function testParserMultipleVCardsFromVcfFile(): void
     {
         $parser = new Parser(new VcfParser(), Parser::getFileContents(__DIR__ . '/assets/vcards.vcf'));
