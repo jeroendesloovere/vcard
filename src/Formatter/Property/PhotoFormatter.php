@@ -16,27 +16,6 @@ final class PhotoFormatter extends NodeFormatter implements NodeFormatterInterfa
 
     public function getVcfString(): string
     {
-        $string = Photo::getNode();
-
-        if ($this->photo->isExternalUrl()) {
-            $string .= ';VALUE=uri';
-        }
-
-        if ($this->photo->isInclude()) {
-            $string .= ';ENCODING=b';
-        }
-
-        $string .= ':' . $this->getContent();
-
-        return $string;
-    }
-
-    private function getContent(): string
-    {
-        if ($this->photo->isInclude()) {
-            return base64_encode($this->photo->getContent());
-        }
-
-        return $this->photo->getContent();
+        return Photo::getNode() . ':' . $this->photo->getValue();
     }
 }
