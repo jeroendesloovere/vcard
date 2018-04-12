@@ -9,6 +9,7 @@ use JeroenDesloovere\VCard\Property\Birthdate;
 use JeroenDesloovere\VCard\Property\Email;
 use JeroenDesloovere\VCard\Property\FullName;
 use JeroenDesloovere\VCard\Property\Gender;
+use JeroenDesloovere\VCard\Property\Logo;
 use JeroenDesloovere\VCard\Property\Name;
 use JeroenDesloovere\VCard\Property\Nickname;
 use JeroenDesloovere\VCard\Property\NodeInterface;
@@ -42,6 +43,7 @@ final class VCard
         Anniversary::class,
         Email::class,
         Photo::class,
+        Logo::class,
     ];
 
     private const ONLY_APPLY_TO_INDIVIDUAL_KIND = [
