@@ -21,7 +21,7 @@ Since this is a WIP, we refer to the [test class](tests/VCardTest.php) to view m
 * [x] [FN = Full name](./src/Property/FullName.php) - The full name of the object (as a single string). This is the only mandatory property.
 * [x] [N = Name](./src/Property/Name.php) - The name of the object represented in structured parts
 * [x] [NICKNAME](./src/Property/Nickname.php) - A nickname for the object
-* [ ] PHOTO
+* [x] [PHOTO](./src/Property/Photo.php)
 * [x] [BDAY](./src/Property/Birthdate.php) - Birth date of the object. Should only apply to Individual
 * [x] [ANNIVERSARY](./src/Property/Anniversary.php) - Should only apply to Individual
 * [x] [GENDER](./src/Property/Gender.php) - Should only apply to Individual

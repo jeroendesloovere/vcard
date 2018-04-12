@@ -18,6 +18,7 @@ use JeroenDesloovere\VCard\Property\Parameter\PropertyParameterInterface;
 use JeroenDesloovere\VCard\Property\Parameter\Revision;
 use JeroenDesloovere\VCard\Property\Parameter\Type;
 use JeroenDesloovere\VCard\Property\Parameter\Version;
+use JeroenDesloovere\VCard\Property\Photo;
 use JeroenDesloovere\VCard\Property\PropertyInterface;
 use JeroenDesloovere\VCard\Property\Title;
 
@@ -40,6 +41,7 @@ final class VCard
         Birthdate::class,
         Anniversary::class,
         Email::class,
+        Photo::class,
     ];
 
     private const ONLY_APPLY_TO_INDIVIDUAL_KIND = [

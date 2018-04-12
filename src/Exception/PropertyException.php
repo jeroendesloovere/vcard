@@ -16,4 +16,9 @@ final class PropertyException extends VCardException
              Possible values are: "' . implode('", "', $possibleValues) . '"'
         );
     }
+
+    public static function forInvalidImage(): self
+    {
+        return new self('The image you have provided is invalid.');
+    }
 }
