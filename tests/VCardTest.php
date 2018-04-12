@@ -61,7 +61,7 @@ final class VCardTest extends TestCase
 
         $this->thirdVCard = (new VCard(Kind::organization()))
             ->add(new Title('Apple'))
-            ->add(new Photo(__DIR__ . '/assets/landscape.jpeg', false));
+            ->add(new Photo(__DIR__ . '/assets/landscape.jpeg'));
 
         $this->virtualStorage = vfsStream::setup();
     }
