@@ -2,30 +2,30 @@
 
 namespace JeroenDesloovere\Tests\VCard\Property\Value;
 
-use JeroenDesloovere\VCard\Property\Photo;
+use JeroenDesloovere\VCard\Property\Value\ImageValue;
 use PHPUnit\Framework\TestCase;
 
 /**
  * How to execute all tests: `vendor/bin/phpunit tests`
  */
-final class PhotoTest extends TestCase
+final class ImageValueTest extends TestCase
 {
     public function testValidLocalImageUrl(): void
     {
-        $image = new Photo(__DIR__ . '/../assets/landscape.jpeg');
-        $this->assertTrue($image instanceof Photo);
+        $image = new ImageValue(__DIR__ . '/../../assets/landscape.jpeg');
+        $this->assertTrue($image instanceof ImageValue);
     }
 
     public function testValidImageContent(): void
     {
-        $image = new Photo(file_get_contents(__DIR__ . '/../assets/landscape.jpeg'));
-        $this->assertTrue($image instanceof Photo);
+        $image = new ImageValue(file_get_contents(__DIR__ . '/../../assets/landscape.jpeg'));
+        $this->assertTrue($image instanceof ImageValue);
     }
 
     public function testValidImageUrl(): void
     {
-        $image = new Photo('http://www.jeroendesloovere.be/images/my_head.jpg');
-        $this->assertTrue($image instanceof Photo);
+        $image = new ImageValue('http://www.jeroendesloovere.be/images/my_head.jpg');
+        $this->assertTrue($image instanceof ImageValue);
     }
 
     /**
@@ -34,7 +34,7 @@ final class PhotoTest extends TestCase
      */
     public function testEmptyFile(): void
     {
-        new Photo(__DIR__ . '/../assets/emptyfile');
+        new ImageValue(__DIR__ . '/../../assets/emptyfile');
     }
 
     /**
@@ -43,7 +43,7 @@ final class PhotoTest extends TestCase
      */
     public function testEmptyImage(): void
     {
-        new Photo(__DIR__ . '/../assets/empty.jpg');
+        new ImageValue(__DIR__ . '/../../assets/empty.jpg');
     }
 
     /**
@@ -52,6 +52,6 @@ final class PhotoTest extends TestCase
      */
     public function testWrongFile(): void
     {
-        new Photo(__DIR__ . '/../assets/wrongfile');
+        new ImageValue(__DIR__ . '/../../assets/wrongfile');
     }
 }
