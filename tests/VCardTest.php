@@ -11,6 +11,7 @@ use JeroenDesloovere\VCard\Property\Anniversary;
 use JeroenDesloovere\VCard\Property\Birthdate;
 use JeroenDesloovere\VCard\Property\Email;
 use JeroenDesloovere\VCard\Property\Gender;
+use JeroenDesloovere\VCard\Property\Logo;
 use JeroenDesloovere\VCard\Property\Name;
 use JeroenDesloovere\VCard\Property\Nickname;
 use JeroenDesloovere\VCard\Property\Note;
@@ -61,7 +62,8 @@ final class VCardTest extends TestCase
 
         $this->thirdVCard = (new VCard(Kind::organization()))
             ->add(new Title('Apple'))
-            ->add(new Photo(__DIR__ . '/assets/landscape.jpeg'));
+            ->add(new Photo(__DIR__ . '/assets/landscape.jpeg'))
+            ->add(new Logo(__DIR__ . '/assets/landscape.jpeg'));
 
         $this->virtualStorage = vfsStream::setup();
     }
@@ -146,8 +148,9 @@ final class VCardTest extends TestCase
         $this->assertCount(1, $this->secondVCard->getProperties(Name::class));
         $this->assertCount(1, $this->secondVCard->getProperties(Address::class));
 
-        $this->assertCount(2, $this->thirdVCard->getProperties());
+        $this->assertCount(3, $this->thirdVCard->getProperties());
         $this->assertCount(1, $this->thirdVCard->getProperties(Title::class));
         $this->assertCount(1, $this->thirdVCard->getProperties(Photo::class));
+        $this->assertCount(1, $this->thirdVCard->getProperties(Logo::class));
     }
 }
