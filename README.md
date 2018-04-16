@@ -30,7 +30,7 @@ Since this is a WIP, we refer to the [test class](tests/VCardTest.php) to view m
 * [x] [ADDRESS](./src/Property/Address.php) - The address of the object represented in structured parts
 
 ### Communications Properties:
-* [ ] TEL - The telephone number as a tel URI
+* [x] [TEL](./src/Property/Telephone.php) - The telephone number as a tel URI
 * [x] [EMAIL](./src/Property/Email.php) - The email address as a mailto URI
 * [ ] IMPP - The IMPP instant messaging contact information
 * [ ] LANG - The language of the object
