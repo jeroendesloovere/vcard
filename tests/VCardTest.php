@@ -70,25 +70,25 @@ final class VCardTest extends TestCase
 
     public function testFormatterSavingMultipleVCardsToVcfFile(): void
     {
-        // Saving "vcards.vcf"
-        $formatter = new Formatter(new VcfFormatter(), 'vcards');
+        // Saving "vcards-export.vcf"
+        $formatter = new Formatter(new VcfFormatter(), 'vcards-export');
         $formatter->addVCard($this->firstVCard);
         $formatter->addVCard($this->secondVCard);
 
-        $this->assertFalse($this->virtualStorage->hasChild('vcards.vcf'));
+        $this->assertFalse($this->virtualStorage->hasChild('vcards-export.vcf'));
         $formatter->save($this->virtualStorage->url());
-        $this->assertTrue($this->virtualStorage->hasChild('vcards.vcf'));
+        $this->assertTrue($this->virtualStorage->hasChild('vcards-export.vcf'));
     }
 
     public function testFormatterSavingOneVCardToVcfFile(): void
     {
-        // Saving "vcard.vcf"
-        $formatter = new Formatter(new VcfFormatter(), 'vcard');
+        // Saving "vcard-export.vcf"
+        $formatter = new Formatter(new VcfFormatter(), 'vcard-export');
         $formatter->addVCard($this->firstVCard);
 
-        $this->assertFalse($this->virtualStorage->hasChild('vcard.vcf'));
+        $this->assertFalse($this->virtualStorage->hasChild('vcard-export.vcf'));
         $formatter->save($this->virtualStorage->url());
-        $this->assertTrue($this->virtualStorage->hasChild('vcard.vcf'));
+        $this->assertTrue($this->virtualStorage->hasChild('vcard-export.vcf'));
     }
 
     /**
