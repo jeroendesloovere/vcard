@@ -16,7 +16,25 @@ class ImageValue
 
     public function __construct(string $value)
     {
-        $this->setValue($value);
+        $valueType = $this->getValueType($value);
+
+        switch ($valueType) {
+            case self::BASE_64_DECODED:
+                $this->setValueImageContent($value);
+                break;
+            case self::BASE_64_ENCODED:
+                $this->value = $value;
+                break;
+            case self::LOCAL_IMAGE_PATH:
+                $this->setValueLocalImage($value);
+                break;
+            case self::URL:
+                $this->setValueImageURL($value);
+                break;
+            default:
+                throw PropertyException::forInvalidImage();
+                break;
+        }
     }
 
     public function __toString(): string
@@ -27,6 +45,37 @@ class ImageValue
     public function getValue(): string
     {
         return $this->value;
+    }
+
+    private function setValueLocalImage(string $value): void
+    {
+        if (!$this->isValidLocalImage($value)) {
+            throw PropertyException::forInvalidImage();
+        }
+
+        try {
+            $this->value = file_get_contents(realpath($value));
+        } catch (\Exception $e) {
+            throw PropertyException::forInvalidImage();
+        }
+    }
+
+    private function setValueImageContent(string $value): void
+    {
+        if (!$this->isValidImageContent($value)) {
+            throw PropertyException::forInvalidImage();
+        }
+
+        $this->value = base64_encode($value);
+    }
+
+    private function setValueImageURL(string $value): void
+    {
+        if (!$this->isValidImageURL($value)) {
+            throw PropertyException::forInvalidImage();
+        }
+
+        $this->value = $value;
     }
 
     private function getValueType(string $value): string
@@ -105,55 +154,13 @@ class ImageValue
 
     private function isValidMimeType(string $mimeType): bool
     {
-        if (!is_string($mimeType) || substr($mimeType, 0, 6) !== 'image/') {
-            return false;
-        }
-        ;
-        return true;
+        return is_string($mimeType) && strpos($mimeType, 'image/') === 0;
     }
 
-    private function sanitizeMimeType(string &$mimeType)
+    private function sanitizeMimeType(string &$mimeType): void
     {
         if (strpos($mimeType, ';') !== false) {
             $mimeType = strstr($mimeType, ';', true);
         }
-    }
-
-    private function setValue(string $value): void
-    {
-        $valueType = $this->getValueType($value);
-
-        switch ($valueType) {
-            case self::LOCAL_IMAGE_PATH:
-                if (!$this->isValidLocalImage($value)) {
-                    throw PropertyException::forInvalidImage();
-                }
-
-                try {
-                    $value = file_get_contents(realpath($value));
-                } catch (\Exception $e) {
-                    throw PropertyException::forInvalidImage();
-                }
-
-                break;
-            case self::BASE_64_DECODED:
-                if (!$this->isValidImageContent($value)) {
-                    throw PropertyException::forInvalidImage();
-                }
-
-                $value = base64_encode($value);
-
-                break;
-            case self::URL:
-                if (!$this->isValidImageURL($value)) {
-                    throw PropertyException::forInvalidImage();
-                }
-
-                break;
-            default:
-                break;
-        }
-
-        $this->value = $value;
     }
 }
