@@ -21,6 +21,7 @@ use JeroenDesloovere\VCard\Property\Parameter\Type;
 use JeroenDesloovere\VCard\Property\Parameter\Version;
 use JeroenDesloovere\VCard\Property\Photo;
 use JeroenDesloovere\VCard\Property\PropertyInterface;
+use JeroenDesloovere\VCard\Property\Telephone;
 use JeroenDesloovere\VCard\Property\Title;
 
 final class VCard
@@ -44,6 +45,7 @@ final class VCard
         Email::class,
         Photo::class,
         Logo::class,
+        Telephone::class,
     ];
 
     private const ONLY_APPLY_TO_INDIVIDUAL_KIND = [

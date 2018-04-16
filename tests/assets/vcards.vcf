@@ -12,6 +12,7 @@ EMAIL;TYPE=home:example@example.nl
 NOTE:VCard library is amazing.
 BDAY:2015-12-05T00:00:00.00
 ANNIVERSARY:2017-12-05T00:00:00.00
+TEL;VALUE=uri;TYPE=home:tel:+33-01-23-45-67
 END:VCARD
 BEGIN:VCARD
 KIND:Individual

@@ -18,6 +18,7 @@ use JeroenDesloovere\VCard\Property\Note;
 use JeroenDesloovere\VCard\Property\Parameter\Kind;
 use JeroenDesloovere\VCard\Property\Parameter\Type;
 use JeroenDesloovere\VCard\Property\Photo;
+use JeroenDesloovere\VCard\Property\Telephone;
 use JeroenDesloovere\VCard\Property\Title;
 use JeroenDesloovere\VCard\VCard;
 use org\bovigo\vfs\vfsStream;
@@ -54,7 +55,8 @@ final class VCardTest extends TestCase
             ->add(new Email('example@example.nl', Type::home()))
             ->add(new Note('VCard library is amazing.'))
             ->add(new Birthdate(new \DateTime('2015-12-05')))
-            ->add(new Anniversary(new \DateTime('2017-12-05')));
+            ->add(new Anniversary(new \DateTime('2017-12-05')))
+            ->add(new Telephone('+33 01 23 45 67'));
 
         $this->secondVCard = (new VCard())
             ->add(new Name('Doe', 'John'))
@@ -63,7 +65,8 @@ final class VCardTest extends TestCase
         $this->thirdVCard = (new VCard(Kind::organization()))
             ->add(new Title('Apple'))
             ->add(new Photo(__DIR__ . '/assets/landscape.jpeg'))
-            ->add(new Logo(__DIR__ . '/assets/landscape.jpeg'));
+            ->add(new Logo(__DIR__ . '/assets/landscape.jpeg'))
+            ->add(new Telephone('+32 486 00 00 00'));
 
         $this->virtualStorage = vfsStream::setup();
     }
@@ -134,7 +137,7 @@ final class VCardTest extends TestCase
 
     public function testVCardGetProperties(): void
     {
-        $this->assertCount(10, $this->firstVCard->getProperties());
+        $this->assertCount(11, $this->firstVCard->getProperties());
         $this->assertCount(1, $this->firstVCard->getProperties(Gender::class));
         $this->assertCount(1, $this->firstVCard->getProperties(Nickname::class));
         $this->assertCount(1, $this->firstVCard->getProperties(Name::class));
@@ -143,14 +146,16 @@ final class VCardTest extends TestCase
         $this->assertCount(1, $this->firstVCard->getProperties(Note::class));
         $this->assertCount(1, $this->firstVCard->getProperties(Birthdate::class));
         $this->assertCount(1, $this->firstVCard->getProperties(Anniversary::class));
+        $this->assertCount(1, $this->firstVCard->getProperties(Telephone::class));
 
         $this->assertCount(2, $this->secondVCard->getProperties());
         $this->assertCount(1, $this->secondVCard->getProperties(Name::class));
         $this->assertCount(1, $this->secondVCard->getProperties(Address::class));
 
-        $this->assertCount(3, $this->thirdVCard->getProperties());
+        $this->assertCount(4, $this->thirdVCard->getProperties());
         $this->assertCount(1, $this->thirdVCard->getProperties(Title::class));
         $this->assertCount(1, $this->thirdVCard->getProperties(Photo::class));
         $this->assertCount(1, $this->thirdVCard->getProperties(Logo::class));
+        $this->assertCount(1, $this->thirdVCard->getProperties(Telephone::class));
     }
 }
