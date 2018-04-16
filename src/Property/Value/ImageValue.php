@@ -103,14 +103,10 @@ class ImageValue
     private function isLocalImagePath(string $localImagePath): bool
     {
         try {
-            if (is_file($localImagePath)) {
-                return true;
-            }
+            return is_file($localImagePath);
         } catch (\Exception $e) {
             return false;
         }
-
-        return false;
     }
 
     private function isURL(string $value): bool
