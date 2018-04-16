@@ -42,7 +42,7 @@ Since this is a WIP, we refer to the [test class](tests/VCardTest.php) to view m
 ### Organizational Properties:
 * [x] [TITLE](./src/Property/Title.php) - The title of the object
 * [ ] ROLE - The role of the object
-* [ ] LOGO - The logo of the object (data URI)
+* [x] [LOGO](./src/Property/Logo.php) - The logo of the object (data URI)
 * [ ] ORG - The organisation related to the object
 * [ ] ORGUNIT - The organisational unit related to the object
 * [ ] MEMBER - Can only be used for Group Kind objects. Must point to other Individual or Organization objects.
