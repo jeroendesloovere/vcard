@@ -92,10 +92,8 @@ final class VcfParser implements ParserInterface
                 continue;
             }
 
-            $parameters = $this->parseParameters($parameterContent);
-
             try {
-                $vCard->add($this->parsers[$node]->parseLine($value, $parameters));
+                $vCard->add($this->parsers[$node]->parseLine($value, $this->parseParameters($parameterContent)));
             } catch (\Exception $e) {
                 // Ignoring properties that are already set.
             }
