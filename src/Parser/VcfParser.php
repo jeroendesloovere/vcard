@@ -87,7 +87,7 @@ final class VcfParser implements ParserInterface
             @list($node, $parameterContent) = explode(';', $node, 2);
 
             // Skip parameters that we can not parse yet, because the property/parser does not exist yet.
-            // Feel free to create a PR for this.
+            // Feel free to create a PR to add a new Property Parser
             if (!array_key_exists($node, $this->parsers)) {
                 continue;
             }
