@@ -62,11 +62,20 @@ final class VCard
     /** @var PropertyInterface[] */
     private $properties = [];
 
+    /**
+     * @param Kind|null $kind
+     * @throws VCardException
+     */
     public function __construct(Kind $kind = null)
     {
         $this->add($kind ?? Kind::individual());
     }
 
+    /**
+     * @param NodeInterface $node
+     * @return VCard
+     * @throws VCardException
+     */
     public function add(NodeInterface $node): self
     {
         if (!in_array(get_class($node), self::POSSIBLE_VALUES, true)) {
@@ -85,6 +94,10 @@ final class VCard
         return $this;
     }
 
+    /**
+     * @param PropertyInterface $property
+     * @throws VCardException
+     */
     private function addProperty(PropertyInterface $property): void
     {
         // Property is not allowed multiple times
@@ -104,6 +117,10 @@ final class VCard
         $this->properties[] = $property;
     }
 
+    /**
+     * @param PropertyParameterInterface $propertyParameter
+     * @throws VCardException
+     */
     private function addPropertyParameter(PropertyParameterInterface $propertyParameter): void
     {
         // Property is not allowed multiple times

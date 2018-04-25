@@ -37,6 +37,17 @@ final class Address implements PropertyInterface, NodeInterface
     /** @var Type */
     private $type;
 
+    /**
+     * @param null|string $postOfficeBox
+     * @param null|string $extendedAddress
+     * @param null|string $streetAddress
+     * @param null|string $locality
+     * @param null|string $region
+     * @param null|string $postalCode
+     * @param null|string $countryName
+     * @param Type|null $type
+     * @throws PropertyException
+     */
     public function __construct(
         ?string $postOfficeBox = null,
         ?string $extendedAddress = null,

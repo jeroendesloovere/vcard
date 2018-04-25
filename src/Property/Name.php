@@ -27,6 +27,14 @@ final class Name implements PropertyInterface, NodeInterface
     /** @var null|string */
     private $suffix;
 
+    /**
+     * @param null|string $lastName
+     * @param null|string $firstName
+     * @param null|string $additional
+     * @param null|string $prefix
+     * @param null|string $suffix
+     * @throws PropertyException
+     */
     public function __construct(
         ?string $lastName = null,
         ?string $firstName = null,

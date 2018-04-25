@@ -16,6 +16,10 @@ class ImageValue
     private const LOCAL_IMAGE_PATH = 'local_image_path';
     private const URL = 'url';
 
+    /**
+     * @param string $value
+     * @throws PropertyException
+     */
     public function __construct(string $value)
     {
         $valueType = $this->getValueType($value);
@@ -49,6 +53,10 @@ class ImageValue
         return $this->value;
     }
 
+    /**
+     * @param string $value
+     * @throws PropertyException
+     */
     private function setValueLocalImage(string $value): void
     {
         if (!$this->isValidLocalImage($value)) {
@@ -62,6 +70,10 @@ class ImageValue
         }
     }
 
+    /**
+     * @param string $value
+     * @throws PropertyException
+     */
     private function setValueImageContent(string $value): void
     {
         if (!$this->isValidImageContent($value)) {
@@ -71,6 +83,10 @@ class ImageValue
         $this->value = base64_encode($value);
     }
 
+    /**
+     * @param string $value
+     * @throws PropertyException
+     */
     private function setValueImageURL(string $value): void
     {
         if (!$this->isValidImageURL($value)) {

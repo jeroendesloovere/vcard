@@ -37,6 +37,10 @@ final class Kind implements PropertyParameterInterface, SimpleNodeInterface
 
     private $value;
 
+    /**
+     * @param string $value
+     * @throws PropertyParameterException
+     */
     public function __construct(string $value)
     {
         if (!in_array($value, self::POSSIBLE_VALUES, true)) {

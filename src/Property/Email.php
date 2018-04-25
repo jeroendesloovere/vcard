@@ -19,10 +19,13 @@ final class Email implements PropertyInterface, NodeInterface
     /** @var Type */
     private $type;
 
-    public function __construct(
-        ?string $email = null,
-        Type $type = null
-    ) {
+    /**
+     * @param null|string $email
+     * @param Type|null $type
+     * @throws PropertyException
+     */
+    public function __construct(?string $email = null, Type $type = null)
+    {
         if ($email === null && $type === null) {
             throw PropertyException::forEmptyProperty();
         }

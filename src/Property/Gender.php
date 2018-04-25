@@ -34,6 +34,11 @@ final class Gender implements PropertyInterface, NodeInterface
     /** @var null|string */
     private $note;
 
+    /**
+     * @param string $value
+     * @param null|string $note
+     * @throws PropertyException
+     */
     public function __construct(string $value = '', ?string $note = null)
     {
         if (!in_array($value, self::POSSIBLE_VALUES, true)) {
