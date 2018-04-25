@@ -19,17 +19,19 @@ final class VcfParser implements ParserInterface
      */
     public function getVCards(string $content): array
     {
-        /** @var NodeInterface $propertyClass */
+        /**
+         * We fetch all possible parsers
+         *
+         * @var NodeInterface $propertyClass
+         */
         foreach (VCard::POSSIBLE_VALUES as $propertyClass) {
             $this->parsers[$propertyClass::getNode()] = $propertyClass::getParser();
         }
 
-        $vCards = [];
-        foreach ($this->splitIntoVCardsContent($content) as $vCardContent) {
-            $vCards[] = $this->parseVCard($vCardContent);
-        }
-
-        return $vCards;
+        // We return all parsed vCards
+        return array_map(function($vCardContent) {
+            return $this->parseVCard($vCardContent);
+        }, $this->splitIntoVCards($content));
     }
 
     private function parseParameters(?string $parameters): array
@@ -102,12 +104,10 @@ final class VcfParser implements ParserInterface
      * @return array - Is an array with the content for all possible vCards.
      * @throws ParserException
      */
-    private function splitIntoVCardsContent(string $content): array
+    private function splitIntoVCards(string $content): array
     {
         // Normalize new lines.
-        $content = str_replace(["\r\n", "\r"], "\n", $content);
-
-        $content = trim($content);
+        $content = trim(str_replace(["\r\n", "\r"], "\n", $content));
 
         if (!preg_match('/^BEGIN:VCARD[\s\S]+END:VCARD$/', $content)) {
             throw ParserException::forUnreadableVCard($content);
