@@ -19,6 +19,11 @@ final class Parser
         $this->vCards = $this->parser->getVCards($content);
     }
 
+    /**
+     * @param string $file
+     * @return string
+     * @throws ParserException
+     */
     public static function getFileContents(string $file): string
     {
         if (!file_exists($file) || !is_readable($file)) {
