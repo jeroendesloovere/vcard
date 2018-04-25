@@ -12,23 +12,27 @@ final class VcfParser implements ParserInterface
     /** @var NodeParserInterface[] - f.e. ['ADR' => JeroenDesloovere\VCard\Parser\Property\AddressParser] */
     private $parsers = [];
 
+    public function __construct()
+    {
+        /**
+         * We define all possible node parsers
+         *
+         * @var NodeInterface $node
+         */
+        foreach (VCard::POSSIBLE_VALUES as $node) {
+            $this->parsers[$node::getNode()] = $node::getParser();
+        }
+    }
+
     /**
+     * Returns all found vCard objects
+     *
      * @param string $content
      * @return VCard[]
      * @throws ParserException
      */
     public function getVCards(string $content): array
     {
-        /**
-         * We fetch all possible parsers
-         *
-         * @var NodeInterface $propertyClass
-         */
-        foreach (VCard::POSSIBLE_VALUES as $propertyClass) {
-            $this->parsers[$propertyClass::getNode()] = $propertyClass::getParser();
-        }
-
-        // We return all parsed vCards
         return array_map(function($vCardContent) {
             return $this->parseVCard($vCardContent);
         }, $this->splitIntoVCards($content));
