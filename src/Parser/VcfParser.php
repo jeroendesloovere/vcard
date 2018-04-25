@@ -33,7 +33,7 @@ final class VcfParser implements ParserInterface
      */
     public function getVCards(string $content): array
     {
-        return array_map(function ($vCardContent) {
+        return array_map(function($vCardContent) {
             return $this->parseVCard($vCardContent);
         }, $this->splitIntoVCards($content));
     }
