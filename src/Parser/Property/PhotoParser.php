@@ -2,9 +2,7 @@
 
 namespace JeroenDesloovere\VCard\Parser\Property;
 
-use JeroenDesloovere\VCard\Property\Address;
 use JeroenDesloovere\VCard\Property\NodeInterface;
-use JeroenDesloovere\VCard\Property\Parameter\Type;
 use JeroenDesloovere\VCard\Property\Photo;
 
 final class PhotoParser extends PropertyParser implements NodeParserInterface
