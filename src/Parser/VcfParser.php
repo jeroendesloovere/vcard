@@ -81,13 +81,14 @@ final class VcfParser implements ParserInterface
             @list($node, $value) = explode(':', $line, 2);
 
             /**
+             * @var string $node
              * @var string|null $parameterContent
              */
             @list($node, $parameterContent) = explode(';', $node, 2);
 
+            // Skip parameters that we can not parse yet, because the property/parser does not exist yet.
+            // Feel free to create a PR for this.
             if (!array_key_exists($node, $this->parsers)) {
-                // @todo: add this line to "not converted" errors. Can be useful to improve the parser.
-
                 continue;
             }
 
@@ -96,7 +97,7 @@ final class VcfParser implements ParserInterface
             try {
                 $vCard->add($this->parsers[$node]->parseLine($value, $parameters));
             } catch (\Exception $e) {
-                // @todo: fetch errors when setting properties that are already set.
+                // Ignoring properties that are already set.
             }
         }
 
@@ -104,6 +105,8 @@ final class VcfParser implements ParserInterface
     }
 
     /**
+     * Split string into array, each array item contains vCard content.
+     *
      * @param string $content - The full content from the .vcf file.
      * @return array - Is an array with the content for all possible vCards.
      * @throws ParserException
