@@ -16,8 +16,8 @@ final class AddressFormatter extends NodeFormatter implements NodeFormatterInter
 
     public function getVcfString(): string
     {
-        $string =
-            Address::getNode()
+        return
+            $this->address::getNode()
             . ';TYPE=' . $this->address->getType()->__toString()
             . ':' . $this->escape(implode(';', array(
                 $this->address->getPostOfficeBox(),
@@ -29,7 +29,5 @@ final class AddressFormatter extends NodeFormatter implements NodeFormatterInter
                 $this->address->getCountryName()
             )
         ));
-
-        return $string;
     }
 }

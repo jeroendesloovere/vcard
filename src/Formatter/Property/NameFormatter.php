@@ -16,8 +16,12 @@ final class NameFormatter extends NodeFormatter implements NodeFormatterInterfac
 
     public function getVcfString(): string
     {
-        return $this->name->getNode() . ':' . $this->escape(
-            $this->name->getFirstName() . ';' . $this->name->getAdditional() . ';' . $this->name->getLastName() . ';' . $this->name->getPrefix() . ';' . $this->name->getSuffix()
-        );
+        return $this->name::getNode() . ':' . $this->escape(implode(';', array(
+            $this->name->getFirstName(),
+            $this->name->getAdditional(),
+            $this->name->getLastName(),
+            $this->name->getPrefix(),
+            $this->name->getSuffix()
+        )));
     }
 }

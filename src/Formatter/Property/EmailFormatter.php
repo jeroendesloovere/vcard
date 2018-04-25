@@ -16,10 +16,6 @@ final class EmailFormatter extends NodeFormatter implements NodeFormatterInterfa
 
     public function getVcfString(): string
     {
-        $string = Email::getNode();
-        $string .= ';TYPE=' . $this->email->getType()->__toString();
-        $string .= ':' . $this->email->getEmail();
-
-        return $string;
+        return $this->email::getNode() . ';TYPE=' . $this->email->getType()->__toString() . ':' . $this->email->getEmail();
     }
 }

@@ -16,6 +16,6 @@ final class LogoFormatter extends NodeFormatter implements NodeFormatterInterfac
 
     public function getVcfString(): string
     {
-        return Logo::getNode() . ':' . $this->logo->getValue();
+        return $this->logo::getNode() . ':' . $this->logo->getValue();
     }
 }

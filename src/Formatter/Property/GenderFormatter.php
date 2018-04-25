@@ -16,7 +16,7 @@ final class GenderFormatter extends NodeFormatter implements NodeFormatterInterf
 
     public function getVcfString(): string
     {
-        $string = Gender::getNode() . ':' . $this->gender->getValue();
+        $string = $this->gender::getNode() . ':' . $this->gender->getValue();
 
         if ($this->gender->hasNote()) {
             $string .= ';' . $this->gender->getNote();

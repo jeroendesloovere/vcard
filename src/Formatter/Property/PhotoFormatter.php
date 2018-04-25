@@ -16,6 +16,6 @@ final class PhotoFormatter extends NodeFormatter implements NodeFormatterInterfa
 
     public function getVcfString(): string
     {
-        return Photo::getNode() . ':' . $this->photo->getValue();
+        return $this->photo::getNode() . ':' . $this->photo->getValue();
     }
 }
