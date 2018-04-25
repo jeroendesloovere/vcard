@@ -16,17 +16,19 @@ final class AddressFormatter extends NodeFormatter implements NodeFormatterInter
 
     public function getVcfString(): string
     {
-        $string = Address::getNode();
-        $string .= ';TYPE=' . $this->address->getType()->__toString();
-        $string .= ':' . $this->escape(
-            $this->address->getPostOfficeBox()
-            . ';' . $this->address->getExtendedAddress()
-            . ';' . $this->address->getStreetAddress()
-            . ';' . $this->address->getLocality()
-            . ';' . $this->address->getRegion()
-            . ';' . $this->address->getPostalCode()
-            . ';' . $this->address->getCountryName()
-        );
+        $string =
+            Address::getNode()
+            . ';TYPE=' . $this->address->getType()->__toString()
+            . ':' . $this->escape(implode(';', array(
+                $this->address->getPostOfficeBox(),
+                $this->address->getExtendedAddress(),
+                $this->address->getStreetAddress(),
+                $this->address->getLocality(),
+                $this->address->getRegion(),
+                $this->address->getPostalCode(),
+                $this->address->getCountryName()
+            )
+        ));
 
         return $string;
     }
