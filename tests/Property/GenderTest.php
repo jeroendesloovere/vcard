@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace JeroenDesloovere\Tests\VCard\Property;
 
 use JeroenDesloovere\VCard\Property\Gender;

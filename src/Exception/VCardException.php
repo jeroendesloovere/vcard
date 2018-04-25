@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace JeroenDesloovere\VCard\Exception;
 
 use JeroenDesloovere\VCard\Property\NodeInterface;

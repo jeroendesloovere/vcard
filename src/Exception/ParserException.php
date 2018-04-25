@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace JeroenDesloovere\VCard\Exception;
 
 final class ParserException extends VCardException

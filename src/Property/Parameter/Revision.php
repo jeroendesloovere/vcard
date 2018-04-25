@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace JeroenDesloovere\VCard\Property\Parameter;
 
 use JeroenDesloovere\VCard\Formatter\Property\NodeFormatterInterface;

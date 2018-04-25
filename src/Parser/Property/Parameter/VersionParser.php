@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace JeroenDesloovere\VCard\Parser\Property\Parameter;
 
 use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;

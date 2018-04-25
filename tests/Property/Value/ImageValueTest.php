@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace JeroenDesloovere\Tests\VCard\Property\Value;
 
 use JeroenDesloovere\VCard\Property\Value\ImageValue;
