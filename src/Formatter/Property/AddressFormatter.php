@@ -27,7 +27,6 @@ final class AddressFormatter extends NodeFormatter implements NodeFormatterInter
                 $this->address->getRegion(),
                 $this->address->getPostalCode(),
                 $this->address->getCountryName()
-            )
-        ));
+            )));
     }
 }
