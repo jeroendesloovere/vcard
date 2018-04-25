@@ -7,16 +7,21 @@ use JeroenDesloovere\VCard\VCard;
 
 final class VcfFormatter implements FormatterInterface
 {
+    public const CONTENT_TYPE = 'text/vcard';
+    public const FILE_EXTENSION = 'vcf';
+    public const VCARD_BEGIN = 'BEGIN:VCARD';
+    public const VCARD_END = 'END:VCARD';
+
     public function getContent(array $vCards): string
     {
         $string = '';
 
         /** @var VCard $vCard */
         foreach ($vCards as $vCard) {
-            $string .= "BEGIN:VCARD\r\n";
+            $string .= self::VCARD_BEGIN . "\r\n";
             $this->setNodesToString($vCard->getParameters(), $string);
             $this->setNodesToString($vCard->getProperties(), $string);
-            $string .= "END:VCARD\r\n";
+            $string .= self::VCARD_END . "\r\n";
         }
 
         return $string;
@@ -24,12 +29,12 @@ final class VcfFormatter implements FormatterInterface
 
     public function getContentType(): string
     {
-        return 'text/vcard';
+        return self::CONTENT_TYPE;
     }
 
     public function getFileExtension(): string
     {
-        return 'vcf';
+        return self::FILE_EXTENSION;
     }
 
     /**
