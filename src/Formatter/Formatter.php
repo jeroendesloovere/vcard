@@ -76,6 +76,11 @@ final class Formatter
         return $this->vCards;
     }
 
+    /**
+     * @param string $toPath
+     * @return bool
+     * @throws FormatterException
+     */
     public function save(string $toPath): bool
     {
         try {
