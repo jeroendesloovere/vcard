@@ -44,9 +44,9 @@ final class VcfParser implements ParserInterface
             return [];
         }
 
-        $parsedParameters = [];
         /** @var string[] $parametersArray */
         $parametersArray = explode(';', $parameters);
+        $parsedParameters = [];
         foreach ($parametersArray as $parameter) {
             /**
              * @var string $node
@@ -66,7 +66,6 @@ final class VcfParser implements ParserInterface
     {
         $vCard = new VCard();
         $lines = explode("\n", $content);
-
         foreach ($lines as $line) {
             // Strip grouping information. We don't use the group names. We
             // simply use a list for entries that have multiple values.
