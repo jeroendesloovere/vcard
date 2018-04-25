@@ -105,7 +105,7 @@ class ImageValue
     private function isLocalImagePath(string $localImagePath): bool
     {
         try {
-            return is_file($localImagePath);
+            return is_file(strval(str_replace("\0", "", $localImagePath)));
         } catch (\Exception $e) {
             return false;
         }
