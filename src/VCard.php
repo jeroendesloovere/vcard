@@ -101,7 +101,7 @@ final class VCard
     private function addProperty(PropertyInterface $property): void
     {
         // Property is not allowed multiple times
-        if (!$property->isAllowedMultipleTimes() && $this->hasPropertyByClassName(get_class($property))) {
+        if (!$property->isAllowedMultipleTimes() && $this->hasProperty(get_class($property))) {
             throw VCardException::forExistingProperty($property);
         }
 
@@ -124,7 +124,7 @@ final class VCard
     private function addPropertyParameter(PropertyParameterInterface $propertyParameter): void
     {
         // Property is not allowed multiple times
-        if ($this->hasPropertyByClassName(get_class($propertyParameter))) {
+        if ($this->hasProperty(get_class($propertyParameter))) {
             throw VCardException::forExistingPropertyParameter($propertyParameter);
         }
 
@@ -147,24 +147,24 @@ final class VCard
         });
     }
 
-    public function getProperties(string $filterByPropertyClass = null): array
+    public function getProperties(string $forPropertyClass = null): array
     {
-        if ($filterByPropertyClass === null) {
+        if ($forPropertyClass === null) {
             return $this->properties;
         }
 
-        return array_filter($this->properties, function (PropertyInterface $property) use ($filterByPropertyClass) {
-            return $property instanceof $filterByPropertyClass;
+        return array_filter($this->properties, function (PropertyInterface $property) use ($forPropertyClass) {
+            return $property instanceof $forPropertyClass;
         });
     }
 
-    public function hasParameterByClassName(string $filterByParameterClass): bool
+    public function hasParameter(string $forParameterClass): bool
     {
-        return count($this->getParameters($filterByParameterClass)) > 0;
+        return count($this->getParameters($forParameterClass)) > 0;
     }
 
-    public function hasPropertyByClassName(string $filterByPropertyClass): bool
+    public function hasProperty(string $forPropertyClass): bool
     {
-        return count($this->getProperties($filterByPropertyClass)) > 0;
+        return count($this->getProperties($forPropertyClass)) > 0;
     }
 }
