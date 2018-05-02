@@ -18,6 +18,7 @@ use JeroenDesloovere\VCard\Property\Name;
 use JeroenDesloovere\VCard\Property\Nickname;
 use JeroenDesloovere\VCard\Property\Note;
 use JeroenDesloovere\VCard\Property\Parameter\Kind;
+use JeroenDesloovere\VCard\Property\Parameter\Revision;
 use JeroenDesloovere\VCard\Property\Parameter\Type;
 use JeroenDesloovere\VCard\Property\Photo;
 use JeroenDesloovere\VCard\Property\Telephone;
@@ -105,6 +106,16 @@ final class VCardTest extends TestCase
         $this->assertFalse($this->virtualStorage->hasChild('vcard-export.vcf'));
         $formatter->save($this->virtualStorage->url());
         $this->assertTrue($this->virtualStorage->hasChild('vcard-export.vcf'));
+    }
+
+    /**
+     * @expectedException \JeroenDesloovere\VCard\Exception\VCardException
+     */
+    public function testMultipleNotAllowedProperties(): void
+    {
+        (new VCard())
+            ->add(new Nickname('Jeroen'))
+            ->add(new Nickname('Jeroen2'));
     }
 
     /**
