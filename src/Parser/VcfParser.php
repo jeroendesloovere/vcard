@@ -69,38 +69,43 @@ final class VcfParser implements ParserInterface
         $vCard = new VCard();
         $lines = explode("\n", $content);
         foreach ($lines as $line) {
-            // Strip grouping information. We don't use the group names. We
-            // simply use a list for entries that have multiple values.
-            // As per RFC, group names are alphanumerical, and end with a
-            // period (.).
-            $line = preg_replace('/^\w+\./', '', trim($line));
-
-            /**
-             * @var string $node
-             * @var string $value
-             */
-            @list($node, $value) = explode(':', $line, 2);
-
-            /**
-             * @var string $node
-             * @var string|null $parameterContent
-             */
-            @list($node, $parameterContent) = explode(';', $node, 2);
-
-            // Skip parameters that we can not parse yet, because the property/parser does not exist yet.
-            // Feel free to create a PR to add a new Property Parser
-            if (!array_key_exists($node, $this->parsers)) {
-                continue;
-            }
-
-            try {
-                $vCard->add($this->parsers[$node]->parseLine($value, $this->parseParameters($parameterContent)));
-            } catch (\Exception $e) {
-                // Ignoring properties that are already set.
-            }
+            $this->parseVCardLine($line, $vCard);
         }
 
         return $vCard;
+    }
+
+    private function parseVCardLine(string $line, VCard &$vCard): void
+    {
+        // Strip grouping information. We don't use the group names. We
+        // simply use a list for entries that have multiple values.
+        // As per RFC, group names are alphanumerical, and end with a
+        // period (.).
+        $line = preg_replace('/^\w+\./', '', trim($line));
+
+        /**
+         * @var string $node
+         * @var string $value
+         */
+        @list($node, $value) = explode(':', $line, 2);
+
+        /**
+         * @var string $node
+         * @var string|null $parameterContent
+         */
+        @list($node, $parameterContent) = explode(';', $node, 2);
+
+        // Skip parameters that we can not parse yet, because the property/parser does not exist yet.
+        // Feel free to create a PR to add a new Property Parser
+        if (!array_key_exists($node, $this->parsers)) {
+            return;
+        }
+
+        try {
+            $vCard->add($this->parsers[$node]->parseLine($value, $this->parseParameters($parameterContent)));
+        } catch (\Exception $e) {
+            // Ignoring properties that throw error. F.e. if they are allowed only once.
+        }
     }
 
     /**
