@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace JeroenDesloovere\VCard\Parser;
 
 use JeroenDesloovere\VCard\Exception\ParserException;
+use JeroenDesloovere\VCard\Formatter\VcfFormatter;
 use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
 use JeroenDesloovere\VCard\Property\NodeInterface;
 use JeroenDesloovere\VCard\VCard;
@@ -135,6 +136,6 @@ final class VcfParser implements ParserInterface
         $content = preg_replace("/\n(?:[ \t])/", '', $content);
 
         // If multiple vcards split per vcard
-        return preg_split('/\nEND:VCARD\s+BEGIN:VCARD\n/', $content);
+        return preg_split('/\n' . VcfFormatter::VCARD_END . '\s+' . VcfFormatter::VCARD_BEGIN . '\n/', $content);
     }
 }
