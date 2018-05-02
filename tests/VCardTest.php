@@ -46,7 +46,14 @@ final class VCardTest extends TestCase
 
     public function setUp(): void
     {
-        // Building one or multiple vCards
+        $this->setUpFirstVCard();
+        $this->setUpSecondVCard();
+        $this->setUpThirdVCard();
+        $this->virtualStorage = vfsStream::setup();
+    }
+
+    private function setUpFirstVCard(): void
+    {
         $this->firstVCard = (new VCard())
             ->add(Gender::male('Dude'))
             ->add(new Nickname('Web developer'))
@@ -59,18 +66,22 @@ final class VCardTest extends TestCase
             ->add(new Birthdate(new \DateTime('2015-12-05')))
             ->add(new Anniversary(new \DateTime('2017-12-05')))
             ->add(new Telephone('+33 01 23 45 67'));
+    }
 
+    private function setUpSecondVCard(): void
+    {
         $this->secondVCard = (new VCard())
             ->add(new Name('Doe', 'John'))
             ->add(new Address(null, 'Penthouse', 'Korenmarkt 1', 'Gent', 'Oost-Vlaanderen', '9000', 'België', Type::work()));
+    }
 
+    private function setUpThirdVCard(): void
+    {
         $this->thirdVCard = (new VCard(Kind::organization()))
             ->add(new Title('Apple'))
             ->add(new Photo(__DIR__ . '/assets/landscape.jpeg'))
             ->add(new Logo(__DIR__ . '/assets/landscape.jpeg'))
             ->add(new Telephone('+32 486 00 00 00'));
-
-        $this->virtualStorage = vfsStream::setup();
     }
 
     public function testFormatterSavingMultipleVCardsToVcfFile(): void
