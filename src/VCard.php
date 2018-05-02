@@ -105,12 +105,7 @@ final class VCard
             throw VCardException::forExistingProperty($property);
         }
 
-        // Property must only be applied to "individual" kind
-        if (!$this->getKind()->isIndividual() && in_array(
-            get_class($property),
-            self::ONLY_APPLY_TO_INDIVIDUAL_KIND,
-            true
-        )) {
+        if (!$this->getKind()->isIndividual() && $this->isAllowedIndividualKindProperty(get_class($property))) {
             throw VCardException::forNotAllowedPropertyOnVCardKind($property, Kind::individual());
         }
 
@@ -166,5 +161,10 @@ final class VCard
     public function hasProperty(string $forPropertyClass): bool
     {
         return count($this->getProperties($forPropertyClass)) > 0;
+    }
+
+    private function isAllowedIndividualKindProperty(string $propertyClass): bool
+    {
+        return in_array($propertyClass, self::ONLY_APPLY_TO_INDIVIDUAL_KIND, true);
     }
 }
