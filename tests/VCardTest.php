@@ -108,6 +108,16 @@ final class VCardTest extends TestCase
     }
 
     /**
+     * @expectedException \JeroenDesloovere\VCard\Exception\VCardException
+     */
+    public function testMultipleNotAllowedPropertyParameters(): void
+    {
+        (new VCard())
+            ->add(new Revision(new \DateTime))
+            ->add(new Revision(new \DateTime));
+    }
+
+    /**
      * @expectedException \JeroenDesloovere\VCard\Exception\ParserException
      * @expectedExceptionMessage File "Lorem ipsum dolor sit amet, consectetur adipiscing elit." is not readable, or doesn't exist.
      */

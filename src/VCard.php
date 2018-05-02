@@ -118,8 +118,8 @@ final class VCard
      */
     private function addPropertyParameter(PropertyParameterInterface $propertyParameter): void
     {
-        // Property is not allowed multiple times
-        if ($this->hasProperty(get_class($propertyParameter))) {
+        // Parameter is not allowed multiple times
+        if ($this->hasParameter(get_class($propertyParameter))) {
             throw VCardException::forExistingPropertyParameter($propertyParameter);
         }
 
