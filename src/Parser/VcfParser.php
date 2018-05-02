@@ -136,6 +136,11 @@ final class VcfParser implements ParserInterface
         $content = preg_replace("/\n(?:[ \t])/", '', $content);
 
         // If multiple vcards split per vcard
-        return preg_split('/\n' . VcfFormatter::VCARD_END . '\s+' . VcfFormatter::VCARD_BEGIN . '\n/', $content);
+        $contentPerVCard = preg_split(
+            '/\n' . VcfFormatter::VCARD_END . '\s+' . VcfFormatter::VCARD_BEGIN . '\n/',
+            $content
+        );
+
+        return is_array($contentPerVCard) ? $contentPerVCard : [];
     }
 }
