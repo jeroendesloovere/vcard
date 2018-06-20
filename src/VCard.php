@@ -25,6 +25,7 @@ use JeroenDesloovere\VCard\Property\Photo;
 use JeroenDesloovere\VCard\Property\PropertyInterface;
 use JeroenDesloovere\VCard\Property\Telephone;
 use JeroenDesloovere\VCard\Property\Title;
+use JeroenDesloovere\VCard\Property\Role;
 
 final class VCard
 {
@@ -42,6 +43,7 @@ final class VCard
         Gender::class,
         Nickname::class,
         Title::class,
+        Role::class,
         Birthdate::class,
         Anniversary::class,
         Email::class,
