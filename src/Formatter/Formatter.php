@@ -36,8 +36,8 @@ final class Formatter
 
     public function download(): void
     {
-        foreach ($this->getHeaders() as $header) {
-            header($header);
+        foreach ($this->getHeaders() as $key => $value) {
+            header(sprintf("%s: %s", $key, $value));
         }
 
         echo $this->getContent();
