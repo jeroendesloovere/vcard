@@ -23,6 +23,7 @@ use JeroenDesloovere\VCard\Property\Parameter\Type;
 use JeroenDesloovere\VCard\Property\Photo;
 use JeroenDesloovere\VCard\Property\Telephone;
 use JeroenDesloovere\VCard\Property\Title;
+use JeroenDesloovere\VCard\Property\Role;
 use JeroenDesloovere\VCard\VCard;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
@@ -80,6 +81,7 @@ final class VCardTest extends TestCase
     {
         $this->thirdVCard = (new VCard(Kind::organization()))
             ->add(new Title('Apple'))
+            ->add(new Role('Fruit'))
             ->add(new Photo(__DIR__ . '/assets/landscape.jpeg'))
             ->add(new Logo(__DIR__ . '/assets/landscape.jpeg'))
             ->add(new Telephone('+32 486 00 00 00'));
@@ -186,8 +188,9 @@ final class VCardTest extends TestCase
         $this->assertCount(1, $this->secondVCard->getProperties(Name::class));
         $this->assertCount(1, $this->secondVCard->getProperties(Address::class));
 
-        $this->assertCount(4, $this->thirdVCard->getProperties());
+        $this->assertCount(5, $this->thirdVCard->getProperties());
         $this->assertCount(1, $this->thirdVCard->getProperties(Title::class));
+        $this->assertCount(1, $this->thirdVCard->getProperties(Role::class));
         $this->assertCount(1, $this->thirdVCard->getProperties(Photo::class));
         $this->assertCount(1, $this->thirdVCard->getProperties(Logo::class));
         $this->assertCount(1, $this->thirdVCard->getProperties(Telephone::class));
