@@ -23,9 +23,9 @@ use JeroenDesloovere\VCard\Property\Parameter\Type;
 use JeroenDesloovere\VCard\Property\Parameter\Version;
 use JeroenDesloovere\VCard\Property\Photo;
 use JeroenDesloovere\VCard\Property\PropertyInterface;
+use JeroenDesloovere\VCard\Property\Role;
 use JeroenDesloovere\VCard\Property\Telephone;
 use JeroenDesloovere\VCard\Property\Title;
-use JeroenDesloovere\VCard\Property\Role;
 
 final class VCard
 {
@@ -139,7 +139,6 @@ final class VCard
     public function getParameters(string $filterByPropertyParameterClass = null): array
     {
         if ($filterByPropertyParameterClass === null) {
-
             $array = $this->parameters;
             $found = $others = [];
             foreach ($array as $value) {
@@ -149,10 +148,8 @@ final class VCard
                     $others[] = $value;
                 }
             }
-
             $array = array_merge($found, $others);
             $this->parameters = $array;
-
             return $this->parameters;
         }
 
