@@ -10,7 +10,7 @@ use JeroenDesloovere\VCard\Property\Parameter\Type;
 
 final class EmailParser extends PropertyParser implements NodeParserInterface
 {
-    public function parseLine(string $value, array $parameters = []): NodeInterface
+    public function parseVcfString(string $value, array $parameters = []): NodeInterface
     {
         $email = new Email($value);
 

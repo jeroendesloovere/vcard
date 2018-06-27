@@ -58,7 +58,7 @@ final class VcfParser implements ParserInterface
             @list($node, $value) = explode('=', $parameter, 2);
 
             if (array_key_exists($node, $this->parsers)) {
-                $parsedParameters[$node] = $this->parsers[$node]->parseLine($value);
+                $parsedParameters[$node] = $this->parsers[$node]->parseVcfString($value);
             }
         }
 
@@ -103,7 +103,7 @@ final class VcfParser implements ParserInterface
         }
 
         try {
-            $vCard->add($this->parsers[$node]->parseLine($value, $this->parseParameters($parameterContent)));
+            $vCard->add($this->parsers[$node]->parseVcfString($value, $this->parseParameters($parameterContent)));
         } catch (\Exception $e) {
             // Ignoring properties that throw error. F.e. if they are allowed only once.
         }

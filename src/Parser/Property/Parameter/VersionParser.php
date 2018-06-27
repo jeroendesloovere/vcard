@@ -10,7 +10,7 @@ use JeroenDesloovere\VCard\Property\Parameter\Version;
 
 final class VersionParser implements NodeParserInterface
 {
-    public function parseLine(string $value, array $parameters = []): NodeInterface
+    public function parseVcfString(string $value, array $parameters = []): NodeInterface
     {
         return new Version($value);
     }

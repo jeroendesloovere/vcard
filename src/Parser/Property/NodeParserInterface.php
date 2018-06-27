@@ -8,5 +8,5 @@ use JeroenDesloovere\VCard\Property\NodeInterface;
 
 interface NodeParserInterface
 {
-    public function parseLine(string $value, array $parameters = []): NodeInterface;
+    public function parseVcfString(string $value, array $parameters = []): NodeInterface;
 }
