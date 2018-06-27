@@ -10,7 +10,7 @@ use JeroenDesloovere\VCard\Property\Parameter\Type;
 
 final class AddressParser extends PropertyParser implements NodeParserInterface
 {
-    public function parseLine(string $value, array $parameters = []): NodeInterface
+    public function parseVcfString(string $value, array $parameters = []): NodeInterface
     {
         $address = $this->parseAddress($value);
 

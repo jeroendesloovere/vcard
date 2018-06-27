@@ -10,7 +10,7 @@ use JeroenDesloovere\VCard\Property\Parameter\Type;
 
 final class TypeParser implements NodeParserInterface
 {
-    public function parseLine(string $value, array $parameters = []): NodeInterface
+    public function parseVcfString(string $value, array $parameters = []): NodeInterface
     {
         return new Type($value);
     }

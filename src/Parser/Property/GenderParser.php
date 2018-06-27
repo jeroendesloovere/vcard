@@ -9,7 +9,7 @@ use JeroenDesloovere\VCard\Property\NodeInterface;
 
 final class GenderParser extends PropertyParser implements NodeParserInterface
 {
-    public function parseLine(string $value, array $parameters = []): NodeInterface
+    public function parseVcfString(string $value, array $parameters = []): NodeInterface
     {
         @list($gender, $note) = explode(';', $value, 2);
 

@@ -9,7 +9,7 @@ use JeroenDesloovere\VCard\Property\NodeInterface;
 
 final class NicknameParser implements NodeParserInterface
 {
-    public function parseLine(string $value, array $parameters = []): NodeInterface
+    public function parseVcfString(string $value, array $parameters = []): NodeInterface
     {
         return new Nickname($value);
     }

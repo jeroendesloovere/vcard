@@ -9,7 +9,7 @@ use JeroenDesloovere\VCard\Property\NodeInterface;
 
 final class NameParser extends PropertyParser implements NodeParserInterface
 {
-    public function parseLine(string $value, array $parameters = []): NodeInterface
+    public function parseVcfString(string $value, array $parameters = []): NodeInterface
     {
         @list($firstName, $additional, $lastName, $prefix, $suffix) = explode(';', $value);
 
