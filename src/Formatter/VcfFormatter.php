@@ -12,7 +12,6 @@ final class VcfFormatter implements FormatterInterface
     public const CONTENT_TYPE = 'text/vcard';
     public const FILE_EXTENSION = 'vcf';
     public const VCARD_BEGIN = 'BEGIN:VCARD';
-    //public const VCARD_VERSION = 'VERSION:4.0';
     public const VCARD_END = 'END:VCARD';
 
     public function getContent(array $vCards): string
@@ -22,7 +21,6 @@ final class VcfFormatter implements FormatterInterface
         /** @var VCard $vCard */
         foreach ($vCards as $vCard) {
             $string .= self::VCARD_BEGIN . "\r\n";
-            //$string .= self::VCARD_VERSION . "\r\n";
             $this->setNodesToString($vCard->getParameters(), $string);
             $this->setNodesToString($vCard->getProperties(), $string);
             $string .= self::VCARD_END . "\r\n";

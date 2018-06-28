@@ -133,6 +133,7 @@ final class VCard
     public function getKind(): Kind
     {
         $kind = $this->getParameters(Kind::class);
+
         return reset($kind);
     }
 
@@ -150,6 +151,7 @@ final class VCard
             }
             $array = array_merge($found, $others);
             $this->parameters = $array;
+
             return $this->parameters;
         }
 
