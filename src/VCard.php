@@ -223,6 +223,7 @@ class VCard
      * @param string $url image url or filename
      * @param bool $include Do we include the image in our vcard or not?
      * @param string $element The name of the element to set
+     * @throws VCardException
      */
     private function addMedia($property, $url, $include = true, $element)
     {
@@ -251,7 +252,15 @@ class VCard
         $fileType = strtoupper(substr($mimeType, 6));
 
         if ($include) {
-            $value = file_get_contents($url);
+            if ((bool) ini_get('allow_url_fopen') === true) {
+                $value = file_get_contents($url);
+            } else {
+                $curl = curl_init();
+                curl_setopt($curl, CURLOPT_URL, $url);
+                curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+                $value = curl_exec($curl);
+                curl_close($curl);
+            }
 
             if (!$value) {
                 throw VCardException::emptyURL();
