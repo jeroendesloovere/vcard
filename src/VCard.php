@@ -637,7 +637,7 @@ class VCard
         }
 
         // split, wrap and trim trailing separator
-        return substr($this->chunk_split_unicode($text, 73, "\r\n "), 0, -3);
+        return substr($this->chunk_split_unicode($text, 75, "\r\n "), 0, -3);
     }
 
     /**

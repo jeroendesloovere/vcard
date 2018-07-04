@@ -77,7 +77,18 @@ class VCardTest extends \PHPUnit_Framework_TestCase
 
     public function testAddAddress()
     {
-        $this->assertEquals($this->vcard, $this->vcard->addAddress());
+        $this->assertEquals($this->vcard, $this->vcard->addAddress(
+          '',
+          '88th Floor',
+          '555 East Flours Street',
+          'Los Angeles',
+          'CA',
+          '55555',
+          'USA'
+        ));
+      $this->assertContains('ADR;WORK;POSTAL;CHARSET=utf-8:;88th Floor;555 East Flours Street;Los Angele', $this->vcard->getOutput());
+      // Should fold on row 75, so we should not see the full address.
+      $this->assertNotContains('ADR;WORK;POSTAL;CHARSET=utf-8:;88th Floor;555 East Flours Street;Los Angeles;CA;55555;', $this->vcard->getOutput());
     }
 
     public function testAddBirthday()
