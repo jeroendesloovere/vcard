@@ -16,7 +16,7 @@ Documentation about vCard 4.0:
 ```bash
 composer require jeroendesloovere/vcard:dev-2.0.0-dev
 ```
-> This will install the latest version of vcard with [Composer](https://getcomposer.org)
+> This will install the 2.0 WIP development version of vcard with [Composer](https://getcomposer.org)
 
 
 ## Examples
