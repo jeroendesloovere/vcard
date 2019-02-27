@@ -11,6 +11,14 @@ Documentation about vCard 4.0:
 * [vCard 4.0 specification: RFC6350](https://tools.ietf.org/html/rfc6350)
 * [vCard 4.0 versus vCard 3.0](https://devguide.calconnect.org/vCard/vcard-4/)
 
+## Installation
+
+```bash
+composer require jeroendesloovere/vcard:dev-2.0.0-dev
+```
+> This will install the latest version of vcard with [Composer](https://getcomposer.org)
+
+
 ## Examples
 
 Since this is a WIP, we refer to the [test class](tests/VCardTest.php) to view multiple examples.
