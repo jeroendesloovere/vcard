@@ -8,20 +8,25 @@ use JeroenDesloovere\VCard\Formatter\Property\NodeFormatterInterface;
 use JeroenDesloovere\VCard\Formatter\Property\TelephoneFormatter;
 use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
 use JeroenDesloovere\VCard\Parser\Property\TelephoneParser;
+use JeroenDesloovere\VCard\Property\Parameter\Type;
 
 final class Telephone implements PropertyInterface, NodeInterface
 {
     /** @var string */
-    protected $value;
+    protected $telephone_number;
 
-    public function __construct(string $value)
+    /** @var Type */
+    private $type;
+
+    public function __construct(string $telephone_number, Type $type = null)
     {
-        $this->value = str_replace(' ', '-', $value);
+        $this->telephone_number = str_replace(' ', '-', $telephone_number);        
+        $this->type = $type ?? Type::home();
     }
 
     public function __toString(): string
     {
-        return $this->value;
+        return $this->telephone_number;
     }
 
     public function getFormatter(): NodeFormatterInterface
@@ -34,9 +39,9 @@ final class Telephone implements PropertyInterface, NodeInterface
         return 'TEL';
     }
 
-    public function getValue(): string
+    public function gettelephone_number(): string
     {
-        return $this->value;
+        return $this->telephone_number;
     }
 
     public static function getParser(): NodeParserInterface
@@ -46,6 +51,16 @@ final class Telephone implements PropertyInterface, NodeInterface
 
     public function isAllowedMultipleTimes(): bool
     {
-        return false;
+        return false; // TODO: true I think?
+    }
+    
+    public function getType(): Type
+    {
+        return $this->type;
+    }
+
+    public function setType(Type $type)
+    {
+        $this->type = $type;
     }
 }
