@@ -157,6 +157,21 @@ final class VCardTest extends TestCase
         Parser::getFileContents(__DIR__ . '/not-existing');
     }
 
+    /**
+     * Test the Telephone parser independent
+     */
+    public function testTelephoneParser(): void
+    {
+        // Given
+        $vcard = (new Vcard())->add(new Telephone('+33-01-23-45-67'));
+
+        // When
+        $parser = new Parser(new VcfParser(), "BEGIN:VCARD\r\nTEL;VALUE=uri;TYPE=home:tel:+33-01-23-45-67\r\nEND:VCARD");
+
+        // Then
+        $this->assertEquals($vcard->getProperties(Telephone::class), $parser->getVCards()[0]->getProperties(Telephone::class));
+    }
+
     public function testParserMultipleVCardsFromVcfFile(): void
     {
         $parser = new Parser(new VcfParser(), Parser::getFileContents(__DIR__ . '/assets/vcards.vcf'));
