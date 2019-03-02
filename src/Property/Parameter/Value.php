@@ -96,12 +96,12 @@ final class Value implements PropertyParameterInterface, SimpleNodeInterface
         return new self(self::TIME);
     }
 
-    public static function date_time(): self
+    public static function dateTime(): self
     {
         return new self(self::DATE_TIME);
     }
 
-    public static function date_and_or_time(): self
+    public static function dateAndOrTime(): self
     {
         return new self(self::DATE_AND_OR_TIME);
     }
@@ -126,12 +126,12 @@ final class Value implements PropertyParameterInterface, SimpleNodeInterface
         return new self(self::FLOAT);
     }
 
-    public static function utc_offset(): self
+    public static function utcOffset(): self
     {
         return new self(self::UTC_OFFSET);
     }
 
-    public static function language_tag(): self
+    public static function languageTag(): self
     {
         return new self(self::LANGUAGE_TAG);
     }
