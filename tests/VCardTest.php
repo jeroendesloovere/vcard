@@ -67,7 +67,8 @@ final class VCardTest extends TestCase
             ->add(new Note('VCard library is amazing.'))
             ->add(new Birthdate(new \DateTime('2015-12-05')))
             ->add(new Anniversary(new \DateTime('2017-12-05')))
-            ->add(new Telephone('+33 01 23 45 67'));
+            ->add(new Telephone('+33 01 23 45 67'))
+            ->add(new Telephone('+33-05-42-41-96', Type::work()));
     }
 
     private function setUpSecondVCard(): void
@@ -171,9 +172,12 @@ final class VCardTest extends TestCase
         $this->assertEquals($this->firstVCard->getProperties(), $parser->getVCards()[0]->getProperties());
     }
 
+    /**
+     * Validate the number of properties from the created vCards in the Setup.
+     */
     public function testVCardGetProperties(): void
     {
-        $this->assertCount(11, $this->firstVCard->getProperties());
+        $this->assertCount(12, $this->firstVCard->getProperties());
         $this->assertCount(1, $this->firstVCard->getProperties(Gender::class));
         $this->assertCount(1, $this->firstVCard->getProperties(Nickname::class));
         $this->assertCount(1, $this->firstVCard->getProperties(Name::class));
@@ -182,7 +186,7 @@ final class VCardTest extends TestCase
         $this->assertCount(1, $this->firstVCard->getProperties(Note::class));
         $this->assertCount(1, $this->firstVCard->getProperties(Birthdate::class));
         $this->assertCount(1, $this->firstVCard->getProperties(Anniversary::class));
-        $this->assertCount(1, $this->firstVCard->getProperties(Telephone::class));
+        $this->assertCount(2, $this->firstVCard->getProperties(Telephone::class));
 
         $this->assertCount(2, $this->secondVCard->getProperties());
         $this->assertCount(1, $this->secondVCard->getProperties(Name::class));
@@ -194,5 +198,73 @@ final class VCardTest extends TestCase
         $this->assertCount(1, $this->thirdVCard->getProperties(Photo::class));
         $this->assertCount(1, $this->thirdVCard->getProperties(Logo::class));
         $this->assertCount(1, $this->thirdVCard->getProperties(Telephone::class));
+    }
+
+    /**
+     * Verify if multiple telephone numbers are correctly formatted
+     */
+    public function testTelephonePropertyContent(): void
+    {
+      // Given
+      $expectedContent = "BEGIN:VCARD\r\n" .
+        "KIND:Individual\r\n" .
+        "TEL;TYPE=home;VALUE=uri:tel:+33-01-23-45-67\r\n" .
+        "TEL;TYPE=work;VALUE=uri:tel:+33-05-42-41-96\r\n" .
+        "END:VCARD\r\n";
+
+      $formatter = new Formatter(new VcfFormatter(), '');
+      $vcard = (new VCard())
+        ->add(new Telephone('+33 01 23 45 67'))
+        ->add(new Telephone('+33-05-42-41-96', Type::work()));
+
+      // When
+      $formatter->addVCard($vcard);
+
+      // Then
+      $this->assertEquals($expectedContent, $formatter->getContent());
+    }
+
+    /**
+     * Verify if a full name gets correctly formatted
+     */
+    public function testNamePropertyContent(): void
+    {
+      // Given
+      $expectedContent = "BEGIN:VCARD\r\n" .
+        "KIND:Individual\r\n" .
+        "N:Berg;Melroy;van den;Mr.;\r\n" .
+        "END:VCARD\r\n";
+
+      $formatter = new Formatter(new VcfFormatter(), '');
+      $vcard = (new VCard())->add(new Name('Berg', 'Melroy', 'van den', 'Mr.'));
+
+      // When
+      $formatter->addVCard($vcard);
+
+      // Then
+      $this->assertEquals($expectedContent, $formatter->getContent());
+    }
+
+    /**
+     * Verify if an address gets correctly formatted,
+     * even with a long text over the 75 chars limit (excl. line breaks)
+     */
+    public function testAddressPropertyContentWithLineBreak() : void
+    {
+      // Given
+      $expectedContent = "BEGIN:VCARD\r\n" .
+        "KIND:Individual\r\n" .
+        "ADR;TYPE=home:42;Villa;Main Street 500;London;Barnet;EN4 0AG;United Kingd\r\n" .
+        // Line break because of 75 octets width limit, immediately followed by a single white space.
+        " om\r\n" .
+        "END:VCARD\r\n";
+      $formatter = new Formatter(new VcfFormatter(), '');
+      $vcard = (new VCard())->add(new Address('42', 'Villa', 'Main Street 500', 'London', 'Barnet', 'EN4 0AG', 'United Kingdom'));
+
+      // When
+      $formatter->addVCard($vcard);
+
+      // Then
+      $this->assertEquals($expectedContent, $formatter->getContent());
     }
 }

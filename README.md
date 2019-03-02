@@ -15,6 +15,28 @@ Documentation about vCard 4.0:
 
 Since this is a WIP, we refer to the [test class](tests/VCardTest.php) to view multiple examples.
 
+### Basic example
+
+```php
+use JeroenDesloovere\VCard\VCard;
+use JeroenDesloovere\VCard\Property\Name;
+use JeroenDesloovere\VCard\Formatter\Formatter;
+use JeroenDesloovere\VCard\Formatter\VcfFormatter;
+
+$lastname = "Berg";
+$firstname = "Melroy";
+$additional = "van den";
+$prefix = "Mr.";
+$suffix = "";
+
+$vcard = new VCard();
+$vcard->add(new Name($lastname, $firstname, $additional, $prefix, suffix));
+
+$formatter = new Formatter(new VcfFormatter(), 'vcard-export');
+$formatter->addVCard($vcard);
+$formatter->download();
+```
+
 ## Properties
 
 ### Identification Properties:

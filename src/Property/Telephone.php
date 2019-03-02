@@ -9,24 +9,29 @@ use JeroenDesloovere\VCard\Formatter\Property\TelephoneFormatter;
 use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
 use JeroenDesloovere\VCard\Parser\Property\TelephoneParser;
 use JeroenDesloovere\VCard\Property\Parameter\Type;
+use JeroenDesloovere\VCard\Property\Parameter\Value;
 
 final class Telephone implements PropertyInterface, NodeInterface
 {
     /** @var string */
-    protected $telephone_number;
+    protected $telephoneNumber;
 
     /** @var Type */
     private $type;
 
-    public function __construct(string $telephone_number, Type $type = null)
+    /** @var Value */
+    private $value;
+
+    public function __construct(string $telephoneNumber, Type $type = null, Value $value = null)
     {
-        $this->telephone_number = str_replace(' ', '-', $telephone_number);        
+        $this->telephoneNumber = str_replace(' ', '-', $telephoneNumber);
         $this->type = $type ?? Type::home();
+        $this->value = $value ?? Value::uri();
     }
 
     public function __toString(): string
     {
-        return $this->telephone_number;
+        return $this->telephoneNumber;
     }
 
     public function getFormatter(): NodeFormatterInterface
@@ -39,9 +44,9 @@ final class Telephone implements PropertyInterface, NodeInterface
         return 'TEL';
     }
 
-    public function gettelephone_number(): string
+    public function getTelephoneNumber(): string
     {
-        return $this->telephone_number;
+        return $this->telephoneNumber;
     }
 
     public static function getParser(): NodeParserInterface
@@ -51,9 +56,9 @@ final class Telephone implements PropertyInterface, NodeInterface
 
     public function isAllowedMultipleTimes(): bool
     {
-        return false; // TODO: true I think?
+        return true;
     }
-    
+
     public function getType(): Type
     {
         return $this->type;
@@ -62,5 +67,15 @@ final class Telephone implements PropertyInterface, NodeInterface
     public function setType(Type $type)
     {
         $this->type = $type;
+    }
+
+    public function getValue(): Value
+    {
+        return $this->value;
+    }
+
+    public function setValue(Value $value)
+    {
+        $this->value = $value;
     }
 }
