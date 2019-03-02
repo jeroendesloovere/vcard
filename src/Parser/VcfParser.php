@@ -93,10 +93,10 @@ final class VcfParser implements ParserInterface
              */
             @list($node, $value) = explode(':', $line, 2);
             if (array_key_exists($node, $this->parsers)) {
-              // Only check on either Kind or Version node
-              if ($node == Kind::getNode() || $node == Version::getNode()) {
-                $vcardProperties[$node] = $this->parsers[$node]->parseVcfString($value);
-              }
+                // Only check on either Kind or Version node
+                if ($node == Kind::getNode() || $node == Version::getNode()) {
+                    $vcardProperties[$node] = $this->parsers[$node]->parseVcfString($value);
+                }
             }
         }
 
