@@ -9,6 +9,7 @@ use JeroenDesloovere\VCard\Formatter\VcfFormatter;
 use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
 use JeroenDesloovere\VCard\Property\NodeInterface;
 use JeroenDesloovere\VCard\VCard;
+use JeroenDesloovere\VCard\Property\Parameter\Version;
 
 final class VcfParser implements ParserInterface
 {
@@ -67,16 +68,35 @@ final class VcfParser implements ParserInterface
 
     private function parseVCard(string $content): VCard
     {
-        $vCard = new VCard();
+        $vCard = $this->createVcardWithGeneralProperties($content);
+
         $lines = explode("\n", $content);
         foreach ($lines as $line) {
-            $this->parseVCardLine($line, $vCard);
+            $this->parseVCardContentLine($line, $vCard);
         }
 
         return $vCard;
     }
 
-    private function parseVCardLine(string $line, VCard &$vCard): void
+    private function createVcardWithGeneralProperties(string $content): VCard
+    { 
+        $kind = null;
+        $version = null;
+        $lines = explode("\n", $content);
+        foreach ($lines as $line) {
+            /**
+             * @var string $node
+             * @var string $value
+             */
+            @list($node, $value) = explode(':', $line, 2);
+            echo "\r\nNode: " . $node;
+            echo "\r\nValue: " . $value;
+        }
+
+        return new VCard(null, Version::version3());
+    }
+
+    private function parseVCardContentLine(string $line, VCard &$vCard): void
     {
         // Strip grouping information. We don't use the group names. We
         // simply use a list for entries that have multiple values.

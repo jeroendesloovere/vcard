@@ -20,6 +20,7 @@ use JeroenDesloovere\VCard\Property\Note;
 use JeroenDesloovere\VCard\Property\Parameter\Kind;
 use JeroenDesloovere\VCard\Property\Parameter\Revision;
 use JeroenDesloovere\VCard\Property\Parameter\Type;
+use JeroenDesloovere\VCard\Property\Parameter\Version;
 use JeroenDesloovere\VCard\Property\Photo;
 use JeroenDesloovere\VCard\Property\Telephone;
 use JeroenDesloovere\VCard\Property\Title;
@@ -164,12 +165,33 @@ final class VCardTest extends TestCase
     {
         // Given
         $vcard = (new Vcard())->add(new Telephone('+33-01-23-45-67'));
+        $content = "BEGIN:VCARD\r\nVERSION:4.0\r\nTEL;VALUE=uri;TYPE=home:tel:+33-01-23-45-67\r\nEND:VCARD";
 
         // When
-        $parser = new Parser(new VcfParser(), "BEGIN:VCARD\r\nTEL;VALUE=uri;TYPE=home:tel:+33-01-23-45-67\r\nEND:VCARD");
+        $parser = new Parser(new VcfParser(), $content);
 
         // Then
         $this->assertEquals($vcard->getProperties(Telephone::class), $parser->getVCards()[0]->getProperties(Telephone::class));
+    }
+
+
+    /**
+     * Test the Version parameter parser independent
+     */
+    public function testVersionParameterParser(): void
+    {
+        // Given
+        // Version 4
+        $vcard = new Vcard(null, Version::version4());
+        // Version 3
+        $content = "BEGIN:VCARD\r\nVERSION:3.0\r\nEND:VCARD";
+
+        // When
+        $parser = new Parser(new VcfParser(), $content);
+
+        // Then
+        $this->assertEquals($vcard->getParameters(), $parser->getVCards()[0]->getParameters());
+        // THIS SHOULD FAIL! 4 != 3
     }
 
     public function testParserMultipleVCardsFromVcfFile(): void
@@ -188,6 +210,7 @@ final class VCardTest extends TestCase
     }
 
     /**
+     * Integration test: 
      * Validate the number of properties from the created vCards in the Setup.
      */
     public function testVCardGetProperties(): void
@@ -222,6 +245,7 @@ final class VCardTest extends TestCase
     {
       // Given
       $expectedContent = "BEGIN:VCARD\r\n" .
+        "VERSION:4.0\r\n" .
         "KIND:Individual\r\n" .
         "TEL;TYPE=home;VALUE=uri:tel:+33-01-23-45-67\r\n" .
         "TEL;TYPE=work;VALUE=uri:tel:+33-05-42-41-96\r\n" .
@@ -246,6 +270,7 @@ final class VCardTest extends TestCase
     {
       // Given
       $expectedContent = "BEGIN:VCARD\r\n" .
+        "VERSION:4.0\r\n" .
         "KIND:Individual\r\n" .
         "N:Berg;Melroy;van den;Mr.;\r\n" .
         "END:VCARD\r\n";
@@ -268,6 +293,7 @@ final class VCardTest extends TestCase
     {
       // Given
       $expectedContent = "BEGIN:VCARD\r\n" .
+        "VERSION:4.0\r\n" .
         "KIND:Individual\r\n" .
         "ADR;TYPE=home:42;Villa;Main Street 500;London;Barnet;EN4 0AG;United Kingd\r\n" .
         // Line break because of 75 octets width limit, immediately followed by a single white space.
