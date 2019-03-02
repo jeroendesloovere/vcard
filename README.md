@@ -38,7 +38,7 @@ $prefix = "Mr.";
 $suffix = "";
 
 $vcard = new VCard();
-$vcard->add(new Name($lastname, $firstname, $additional, $prefix, suffix));
+$vcard->add(new Name($lastname, $firstname, $additional, $prefix, $suffix));
 
 $formatter = new Formatter(new VcfFormatter(), 'vcard-export');
 $formatter->addVCard($vcard);
