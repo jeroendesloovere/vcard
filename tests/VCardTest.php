@@ -174,11 +174,11 @@ final class VCardTest extends TestCase
         $this->assertEquals($vcard->getProperties(Telephone::class), $parser->getVCards()[0]->getProperties(Telephone::class));
     }
 
-
     /**
-     * Test the Version parameter parser independent
+     * Test the Version parameter parser independent.
+     * With version 4 and version 3, should result in not equal (bad weather)
      */
-    public function testVersionParameterParser(): void
+    public function testVersionParameterParserBadWeather(): void
     {
         // Given
         // Version 4
@@ -190,8 +190,41 @@ final class VCardTest extends TestCase
         $parser = new Parser(new VcfParser(), $content);
 
         // Then
+        $this->assertNotEquals($vcard->getParameters(), $parser->getVCards()[0]->getParameters());
+    }
+
+    /**
+     * Test the Version parameter parser independent.
+     * Both version 4 (good weather)
+     */
+    public function testVersionParameterParserGoodWeather(): void
+    {
+        // Given
+        $vcard = new Vcard(null, Version::version4());
+        $content = "BEGIN:VCARD\r\nVERSION:4.0\r\nEND:VCARD";
+
+        // When
+        $parser = new Parser(new VcfParser(), $content);
+
+        // Then
         $this->assertEquals($vcard->getParameters(), $parser->getVCards()[0]->getParameters());
-        // THIS SHOULD FAIL! 4 != 3
+    }
+
+    /**
+     * Test the Version parameter parser independent.
+     * Without any version specified, should use the default Version value (4.0)
+     */
+    public function testVersionParameterParserWithoutVersion(): void
+    {
+        // Given
+        $vcard = new Vcard();
+        $content = "BEGIN:VCARD\r\nEND:VCARD";
+
+        // When
+        $parser = new Parser(new VcfParser(), $content);
+
+        // Then
+        $this->assertEquals($vcard->getParameters(), $parser->getVCards()[0]->getParameters());
     }
 
     public function testParserMultipleVCardsFromVcfFile(): void
@@ -210,7 +243,7 @@ final class VCardTest extends TestCase
     }
 
     /**
-     * Integration test: 
+     * Integration test:
      * Validate the number of properties from the created vCards in the Setup.
      */
     public function testVCardGetProperties(): void

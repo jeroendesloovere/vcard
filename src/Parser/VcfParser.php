@@ -10,6 +10,7 @@ use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
 use JeroenDesloovere\VCard\Property\NodeInterface;
 use JeroenDesloovere\VCard\VCard;
 use JeroenDesloovere\VCard\Property\Parameter\Version;
+use JeroenDesloovere\VCard\Property\Parameter\Kind;
 
 final class VcfParser implements ParserInterface
 {
@@ -68,7 +69,7 @@ final class VcfParser implements ParserInterface
 
     private function parseVCard(string $content): VCard
     {
-        $vCard = $this->createVcardWithGeneralProperties($content);
+        $vCard = $this->createVcardObjectWithProperties($content);
 
         $lines = explode("\n", $content);
         foreach ($lines as $line) {
@@ -78,10 +79,12 @@ final class VcfParser implements ParserInterface
         return $vCard;
     }
 
-    private function createVcardWithGeneralProperties(string $content): VCard
-    { 
-        $kind = null;
-        $version = null;
+    private function createVcardObjectWithProperties(string $content): VCard
+    {
+        $vcardProperties = array(
+          Kind::getNode() => null,
+          Version::getNode() => null);
+
         $lines = explode("\n", $content);
         foreach ($lines as $line) {
             /**
@@ -89,11 +92,15 @@ final class VcfParser implements ParserInterface
              * @var string $value
              */
             @list($node, $value) = explode(':', $line, 2);
-            echo "\r\nNode: " . $node;
-            echo "\r\nValue: " . $value;
+            if (array_key_exists($node, $this->parsers)) {
+              // Only check on either Kind or Version node
+              if ($node == Kind::getNode() || $node == Version::getNode()) {
+                $vcardProperties[$node] = $this->parsers[$node]->parseVcfString($value);
+              }
+            }
         }
 
-        return new VCard(null, Version::version3());
+        return new VCard($vcardProperties[Kind::getNode()], $vcardProperties[Version::getNode()]);
     }
 
     private function parseVCardContentLine(string $line, VCard &$vCard): void
