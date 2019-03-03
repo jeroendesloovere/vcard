@@ -159,7 +159,7 @@ final class VCardTest extends TestCase
     }
 
     /**
-     * Test the Telephone parser independent
+     * Test the Telephone parser independently.
      */
     public function testTelephoneParser(): void
     {
@@ -175,7 +175,7 @@ final class VCardTest extends TestCase
     }
 
     /**
-     * Test the Version parameter parser independent.
+     * Test the Version parameter parser independently.
      * With version 4 and version 3, should result in not equal (bad weather)
      */
     public function testVersionParameterParserBadWeather(): void
@@ -194,7 +194,7 @@ final class VCardTest extends TestCase
     }
 
     /**
-     * Test the Version parameter parser independent.
+     * Test the Version parameter parser independently.
      * Both version 4 (good weather)
      */
     public function testVersionParameterParserGoodWeather(): void
@@ -211,7 +211,7 @@ final class VCardTest extends TestCase
     }
 
     /**
-     * Test the Version parameter parser independent.
+     * Test the Version parameter parser independently.
      * Without any version specified, should use the default Version value (4.0)
      */
     public function testVersionParameterParserWithoutVersion(): void
@@ -219,6 +219,57 @@ final class VCardTest extends TestCase
         // Given
         $vcard = new Vcard();
         $content = "BEGIN:VCARD\r\nEND:VCARD";
+
+        // When
+        $parser = new Parser(new VcfParser(), $content);
+
+        // Then
+        $this->assertEquals($vcard->getParameters(), $parser->getVCards()[0]->getParameters());
+    }
+
+    /**
+     * Test the Kind parameter parser independently.
+     * Test vcard with individual person (is default kind)
+     */
+    public function testKindIndividual(): void
+    {
+        // Given
+        $vcard = new Vcard();
+        $content = "BEGIN:VCARD\r\nVERSION:4.0\r\nKIND:individual\r\nEND:VCARD";
+
+        // When
+        $parser = new Parser(new VcfParser(), $content);
+
+        // Then
+        $this->assertEquals($vcard->getParameters(), $parser->getVCards()[0]->getParameters());
+    }
+
+    /**
+     * Test the Kind parameter parser independently.
+     * Test vcard with department/organization
+     */
+    public function testKindOrganization(): void
+    {
+        // Given
+        $vcard = new Vcard(Kind::organization());
+        $content = "BEGIN:VCARD\r\nVERSION:4.0\r\nKIND:org\r\nEND:VCARD";
+
+        // When
+        $parser = new Parser(new VcfParser(), $content);
+
+        // Then
+        $this->assertEquals($vcard->getParameters(), $parser->getVCards()[0]->getParameters());
+    }
+
+    /**
+     * Test the Kind parameter parser independently.
+     * Test vcard with group
+     */
+    public function testKindGroup(): void
+    {
+        // Given
+        $vcard = new Vcard(Kind::group());
+        $content = "BEGIN:VCARD\r\nVERSION:4.0\r\nKIND:group\r\nEND:VCARD";
 
         // When
         $parser = new Parser(new VcfParser(), $content);
@@ -279,7 +330,7 @@ final class VCardTest extends TestCase
       // Given
       $expectedContent = "BEGIN:VCARD\r\n" .
         "VERSION:4.0\r\n" .
-        "KIND:Individual\r\n" .
+        "KIND:individual\r\n" .
         "TEL;TYPE=home;VALUE=uri:tel:+33-01-23-45-67\r\n" .
         "TEL;TYPE=work;VALUE=uri:tel:+33-05-42-41-96\r\n" .
         "END:VCARD\r\n";
@@ -304,7 +355,7 @@ final class VCardTest extends TestCase
       // Given
       $expectedContent = "BEGIN:VCARD\r\n" .
         "VERSION:4.0\r\n" .
-        "KIND:Individual\r\n" .
+        "KIND:individual\r\n" .
         "N:Berg;Melroy;van den;Mr.;\r\n" .
         "END:VCARD\r\n";
 
@@ -327,7 +378,7 @@ final class VCardTest extends TestCase
       // Given
       $expectedContent = "BEGIN:VCARD\r\n" .
         "VERSION:4.0\r\n" .
-        "KIND:Individual\r\n" .
+        "KIND:individual\r\n" .
         "ADR;TYPE=home:42;Villa;Main Street 500;London;Barnet;EN4 0AG;United Kingd\r\n" .
         // Line break because of 75 octets width limit, immediately followed by a single white space.
         " om\r\n" .

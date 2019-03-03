@@ -16,17 +16,17 @@ use JeroenDesloovere\VCard\Property\SimpleNodeInterface;
  */
 final class Kind implements PropertyParameterInterface, SimpleNodeInterface
 {
-    // Group - To represent groups of vCard objects
-    protected const GROUP = 'Group';
+    // group - To represent groups of vCard objects
+    protected const GROUP = 'group';
 
-    // Individual - To represent people
-    protected const INDIVIDUAL = 'Individual';
+    // individual - To represent people
+    protected const INDIVIDUAL = 'individual';
 
-    // Location - To represent location objects
-    protected const LOCATION = 'Location';
+    // location - To represent location objects
+    protected const LOCATION = 'location';
 
-    // Organization - To represent organisations
-    protected const ORGANIZATION = 'Organization';
+    // org - To represent organisations
+    protected const ORGANIZATION = 'org';
 
     public const POSSIBLE_VALUES = [
         self::GROUP,
@@ -43,8 +43,11 @@ final class Kind implements PropertyParameterInterface, SimpleNodeInterface
      */
     public function __construct(string $value)
     {
+        $value = strtolower($value);
         if (!in_array($value, self::POSSIBLE_VALUES, true)) {
-            throw PropertyParameterException::forWrongValue($value, self::POSSIBLE_VALUES);
+            // If value is absent or not understood 'individual' must be used,
+            // as stated in RFC 6350
+            $this->value = self::INDIVIDUAL;
         }
 
         $this->value = $value;
