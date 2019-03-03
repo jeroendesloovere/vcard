@@ -60,8 +60,8 @@ $formatter->download();
 * [x] [ADDRESS](./src/Property/Address.php) - The address of the object represented in structured parts
 
 ### Communications Properties:
-* [x] [TEL](./src/Property/Telephone.php) - The telephone number as a tel URI
-* [x] [EMAIL](./src/Property/Email.php) - The email address as a mailto URI
+* [x] [TEL](./src/Property/Telephone.php) - The telephone number(s) as a tel URI
+* [x] [EMAIL](./src/Property/Email.php) - The email address(es) as a mailto URI
 * [ ] IMPP - The IMPP instant messaging contact information
 * [ ] LANG - The language of the object
 
@@ -87,7 +87,7 @@ $formatter->download();
 * [ ] UID - A unique identifier for the object
 * [ ] CLIENTPIDMAP - Not required
 * [ ] URL - Any URL related to the object
-* [X] [VERSION](./src/Property/Parameter/Version.php) - Not required (namespace will capture this)
+* [X] [VERSION](./src/Property/Parameter/Version.php) - Is mandatory for 4.0
 
 ### Security Properties:
 * [ ] KEY - The security key of the object

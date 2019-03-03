@@ -9,6 +9,8 @@ use JeroenDesloovere\VCard\Formatter\VcfFormatter;
 use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
 use JeroenDesloovere\VCard\Property\NodeInterface;
 use JeroenDesloovere\VCard\VCard;
+use JeroenDesloovere\VCard\Property\Parameter\Version;
+use JeroenDesloovere\VCard\Property\Parameter\Kind;
 
 final class VcfParser implements ParserInterface
 {
@@ -67,16 +69,41 @@ final class VcfParser implements ParserInterface
 
     private function parseVCard(string $content): VCard
     {
-        $vCard = new VCard();
+        $vCard = $this->createVcardObjectWithProperties($content);
+
         $lines = explode("\n", $content);
         foreach ($lines as $line) {
-            $this->parseVCardLine($line, $vCard);
+            $this->parseVCardContentLine($line, $vCard);
         }
 
         return $vCard;
     }
 
-    private function parseVCardLine(string $line, VCard &$vCard): void
+    private function createVcardObjectWithProperties(string $content): VCard
+    {
+        $vcardProperties = array(
+          Kind::getNode() => null,
+          Version::getNode() => null);
+
+        $lines = explode("\n", $content);
+        foreach ($lines as $line) {
+            /**
+             * @var string $node
+             * @var string $value
+             */
+            @list($node, $value) = explode(':', $line, 2);
+            if (array_key_exists($node, $this->parsers)) {
+                // Only check on either Kind or Version node
+                if ($node == Kind::getNode() || $node == Version::getNode()) {
+                    $vcardProperties[$node] = $this->parsers[$node]->parseVcfString($value);
+                }
+            }
+        }
+
+        return new VCard($vcardProperties[Kind::getNode()], $vcardProperties[Version::getNode()]);
+    }
+
+    private function parseVCardContentLine(string $line, VCard &$vCard): void
     {
         // Strip grouping information. We don't use the group names. We
         // simply use a list for entries that have multiple values.
