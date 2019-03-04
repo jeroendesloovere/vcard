@@ -11,9 +11,39 @@ Documentation about vCard 4.0:
 * [vCard 4.0 specification: RFC6350](https://tools.ietf.org/html/rfc6350)
 * [vCard 4.0 versus vCard 3.0](https://devguide.calconnect.org/vCard/vcard-4/)
 
+## Installation
+
+```bash
+composer require jeroendesloovere/vcard:dev-2.0.0-dev
+```
+> This will install the 2.0 WIP development version of vcard with [Composer](https://getcomposer.org)
+
+
 ## Examples
 
 Since this is a WIP, we refer to the [test class](tests/VCardTest.php) to view multiple examples.
+
+### Basic example
+
+```php
+use JeroenDesloovere\VCard\VCard;
+use JeroenDesloovere\VCard\Property\Name;
+use JeroenDesloovere\VCard\Formatter\Formatter;
+use JeroenDesloovere\VCard\Formatter\VcfFormatter;
+
+$lastname = "Berg";
+$firstname = "Melroy";
+$additional = "van den";
+$prefix = "Mr.";
+$suffix = "";
+
+$vcard = new VCard();
+$vcard->add(new Name($lastname, $firstname, $additional, $prefix, $suffix));
+
+$formatter = new Formatter(new VcfFormatter(), 'vcard-export');
+$formatter->addVCard($vcard);
+$formatter->download();
+```
 
 ## Properties
 
@@ -30,8 +60,8 @@ Since this is a WIP, we refer to the [test class](tests/VCardTest.php) to view m
 * [x] [ADDRESS](./src/Property/Address.php) - The address of the object represented in structured parts
 
 ### Communications Properties:
-* [x] [TEL](./src/Property/Telephone.php) - The telephone number as a tel URI
-* [x] [EMAIL](./src/Property/Email.php) - The email address as a mailto URI
+* [x] [TEL](./src/Property/Telephone.php) - The telephone number(s) as a tel URI
+* [x] [EMAIL](./src/Property/Email.php) - The email address(es) as a mailto URI
 * [ ] IMPP - The IMPP instant messaging contact information
 * [ ] LANG - The language of the object
 
@@ -57,7 +87,7 @@ Since this is a WIP, we refer to the [test class](tests/VCardTest.php) to view m
 * [ ] UID - A unique identifier for the object
 * [ ] CLIENTPIDMAP - Not required
 * [ ] URL - Any URL related to the object
-* [X] [VERSION](./src/Property/Parameter/Version.php) - Not required (namespace will capture this)
+* [X] [VERSION](./src/Property/Parameter/Version.php) - Is mandatory for 4.0
 
 ### Security Properties:
 * [ ] KEY - The security key of the object

@@ -23,9 +23,9 @@ use JeroenDesloovere\VCard\Property\Parameter\Type;
 use JeroenDesloovere\VCard\Property\Parameter\Version;
 use JeroenDesloovere\VCard\Property\Photo;
 use JeroenDesloovere\VCard\Property\PropertyInterface;
+use JeroenDesloovere\VCard\Property\Role;
 use JeroenDesloovere\VCard\Property\Telephone;
 use JeroenDesloovere\VCard\Property\Title;
-use JeroenDesloovere\VCard\Property\Role;
 
 final class VCard
 {
@@ -66,10 +66,12 @@ final class VCard
 
     /**
      * @param Kind|null $kind
+     * @param Version|null $version
      * @throws VCardException
      */
-    public function __construct(Kind $kind = null)
+    public function __construct(Kind $kind = null, Version $version = null)
     {
+        $this->add($version ?? Version::version4());
         $this->add($kind ?? Kind::individual());
     }
 
@@ -130,12 +132,26 @@ final class VCard
 
     public function getKind(): Kind
     {
-        return $this->getParameters(Kind::class)[0];
+        $kind = $this->getParameters(Kind::class);
+
+        return reset($kind);
     }
 
     public function getParameters(string $filterByPropertyParameterClass = null): array
     {
         if ($filterByPropertyParameterClass === null) {
+            $array = $this->parameters;
+            $found = $others = [];
+            foreach ($array as $value) {
+                if ($value instanceof Version) {
+                    $found[] = $value;
+                } else {
+                    $others[] = $value;
+                }
+            }
+            $array = array_merge($found, $others);
+            $this->parameters = $array;
+
             return $this->parameters;
         }
 
