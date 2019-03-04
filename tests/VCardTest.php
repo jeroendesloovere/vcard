@@ -356,11 +356,11 @@ final class VCardTest extends TestCase
       $expectedContent = "BEGIN:VCARD\r\n" .
         "VERSION:4.0\r\n" .
         "KIND:individual\r\n" .
-        "N:Berg;Melroy;van den;Mr.;\r\n" .
+        "N:van den Berg;Melroy;Antoine;Mr.;\r\n" .
         "END:VCARD\r\n";
 
       $formatter = new Formatter(new VcfFormatter(), '');
-      $vcard = (new VCard())->add(new Name('Berg', 'Melroy', 'van den', 'Mr.'));
+      $vcard = (new VCard())->add(new Name('van den Berg', 'Melroy', 'Antoine', 'Mr.'));
 
       // When
       $formatter->addVCard($vcard);
