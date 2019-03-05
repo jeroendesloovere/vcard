@@ -4,7 +4,7 @@ VERSION:4.0
 REV:2017-12-15T10:24:32Z
 GENDER:M;Dude
 NICKNAME:Web developer
-N:Jeroen;;Desloovere;;
+N:Desloovere;Jeroen;;;
 ADR;TYPE=work:;;Markt 1;Brugge;West-Vlaanderen;8000;België
 ADR;TYPE=home:;Penthouse;Korenmarkt 1;Gent;Oost-Vlaanderen;9000;België
 EMAIL;TYPE=work:test@test.nl
@@ -19,7 +19,7 @@ BEGIN:VCARD
 KIND:individual
 VERSION:4.0
 REV:2017-12-15T10:24:32Z
-N:John;;Doe;;
+N:Doe;John;;;
 ADR;TYPE=work:;Penthouse;Korenmarkt 1;Gent;Oost-Vlaanderen;9000;België
 END:VCARD
 BEGIN:VCARD
