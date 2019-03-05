@@ -186,7 +186,7 @@ final class VCard
                 if (count($found_name) == 0) {
                     throw VCardException::forRequiredProperty(new FullName('NoName'));
                 } else {
-                    $found_fullname[] = new FullName(implode(' ', array_filter(array($found_name[0]->getPrefix(), $found_name[0]->getLastName(), $found_name[0]->getAdditional(), $found_name[0]->getFirstName(), $found_name[0]->getSuffix()))));
+                    $found_fullname[] = new FullName(implode(' ', array_filter(array($found_name[0]->getPrefix(), $found_name[0]->getFirstName(), $found_name[0]->getAdditional(), $found_name[0]->getLastName(), $found_name[0]->getSuffix()))));
                 }
             }
             $array = array_merge($found_fullname, $found_name, $others);
