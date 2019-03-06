@@ -43,7 +43,7 @@ final class VCardTest extends TestCase
     /** @var VCard */
     protected static $secondVCard;
 
-    /** @var VCards: containing both first & second vcard together */
+    /** @var VCard */
     protected static $thirdVCard;
 
     /** @var VCard */
@@ -259,7 +259,7 @@ final class VCardTest extends TestCase
         $this->assertCount(1, self::$secondVCard->getProperties(Address::class));
 
         $this->assertCount(6, self::$thirdVCard->getProperties());
-        $this->assertCount(1, self::$secondVCard->getProperties(FullName::class));
+        $this->assertCount(1, self::$thirdVCard->getProperties(FullName::class));
         $this->assertCount(1, self::$thirdVCard->getProperties(Title::class));
         $this->assertCount(1, self::$thirdVCard->getProperties(Role::class));
         $this->assertCount(1, self::$thirdVCard->getProperties(Photo::class));
