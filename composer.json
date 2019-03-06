@@ -26,7 +26,7 @@
     },
     "scripts": {
         "test": "phpunit tests",
-	"standard": "phpcs --standard=psr2 --extensions=php --warning-severity=0 --report=full 'src'",
-	"fix-standard": "phpcbf --standard=psr2 --extensions=php --warning-severity=0 --report=full 'src'"
+        "standard": "phpcs --standard=psr2 --extensions=php --warning-severity=0 --report=full 'src'",
+        "fix-standard": "phpcbf --standard=psr2 --extensions=php --warning-severity=0 --report=full 'src'"
     }
 }
