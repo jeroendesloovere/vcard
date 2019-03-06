@@ -110,7 +110,7 @@ final class VcfParser implements ParserInterface
         // As per RFC, group names are alphanumerical, and end with a
         // period (.).
         $line = preg_replace('/^\w+\./', '', trim($line));
-
+        
         /**
          * @var string $node
          * @var string $value

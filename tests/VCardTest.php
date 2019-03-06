@@ -33,6 +33,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * How to execute all tests: `vendor/bin/phpunit tests`
+ * Test a single test: `vendor/bin/phpunit tests --filter testMultipleNotAllowedProperties`
  */
 final class VCardTest extends TestCase
 {
@@ -44,7 +45,7 @@ final class VCardTest extends TestCase
 
     /** @var VCards: containing both first & second vcard together */
     protected static $thirdVCard;
-    
+
     /** @var VCard */
     protected static $fourthVCard;
 
@@ -59,7 +60,7 @@ final class VCardTest extends TestCase
         self::setUpThirdVCard();
         self::setUpFourthCard();
     }
-    
+
     /* Setup, called for each test case */
     protected function setUp(): void
     {
@@ -68,7 +69,7 @@ final class VCardTest extends TestCase
 
     /******************************************************
      *                                                    *
-     *   Helper methods during first setup                *    
+     *   Helper methods during first setup                *
      *                                                    *
      *****************************************************/
     private static function setUpFirstVCard(): void
@@ -98,13 +99,14 @@ final class VCardTest extends TestCase
     private static function setUpThirdVCard(): void
     {
         self::$thirdVCard = (new VCard(Kind::organization()))
+            ->add(new FullName('Apple'))
             ->add(new Title('Apple'))
             ->add(new Role('Fruit'))
             ->add(new Photo(__DIR__ . '/assets/landscape.jpeg'))
             ->add(new Logo(__DIR__ . '/assets/landscape.jpeg'))
             ->add(new Telephone('+32 486 00 00 00'));
     }
-   
+
     private static function setUpFourthCard(): void
     {
         // Order of creation should match vCard vcf file?
@@ -118,10 +120,10 @@ final class VCardTest extends TestCase
             ->add(new Birthdate(new \DateTime('1989-12-07')))
             ->add(new Telephone('+31603857291'));
     }
-    
+
     /******************************************************
      *                                                    *
-     *   Intergration test cases                          *    
+     *   Intergration test cases                          *
      *                                                    *
      *****************************************************/
     public function testFormatterSavingMultipleVCardsToVcfFile(): void
@@ -193,8 +195,8 @@ final class VCardTest extends TestCase
         Parser::getFileContents(__DIR__ . '/not-existing');
     }
 
-     
-    /* 
+
+    /*
      * Integration test:
      * Test the parser with multiple vcard objects from single vcf file
      * Input file from assets: vcards.vcf
@@ -218,12 +220,12 @@ final class VCardTest extends TestCase
 
         $this->assertEquals(self::$firstVCard->getProperties(), $parser->getVCards()[0]->getProperties());
     }
-    
+
     /**
      * Integration test:
      * Test the parser with a single vcard object from vcf file
      * Input file from assets: vcard2.vcf
-     */   
+     */
     public function testParserOneVCardFromVcfFile2(): void
     {
         $parser = new Parser(new VcfParser(), Parser::getFileContents(__DIR__ . '/assets/vcard2.vcf'));
@@ -256,13 +258,14 @@ final class VCardTest extends TestCase
         $this->assertCount(1, self::$secondVCard->getProperties(Name::class));
         $this->assertCount(1, self::$secondVCard->getProperties(Address::class));
 
-        $this->assertCount(5, self::$thirdVCard->getProperties());
+        $this->assertCount(6, self::$thirdVCard->getProperties());
+        $this->assertCount(1, self::$secondVCard->getProperties(FullName::class));
         $this->assertCount(1, self::$thirdVCard->getProperties(Title::class));
         $this->assertCount(1, self::$thirdVCard->getProperties(Role::class));
         $this->assertCount(1, self::$thirdVCard->getProperties(Photo::class));
         $this->assertCount(1, self::$thirdVCard->getProperties(Logo::class));
         $this->assertCount(1, self::$thirdVCard->getProperties(Telephone::class));
-        
+
         $this->assertCount(8, self::$fourthVCard->getProperties());
         $this->assertCount(1, self::$fourthVCard->getProperties(Gender::class));
         $this->assertCount(1, self::$fourthVCard->getProperties(Nickname::class));
@@ -276,14 +279,14 @@ final class VCardTest extends TestCase
 
     /******************************************************
      *                                                    *
-     *   Unit test cases                                  *    
+     *   Unit test cases                                  *
      *    (only test a single unit ('methode') at a time) *
      *****************************************************/
 
     /**
      * Validate the vcard2.vcf (fourthVcard) content
      */
-    public function testVcardObjectContent(): void
+    public function testVcard2ObjectContent(): void
     {
       // Given
       $expectedContent = "BEGIN:VCARD\r\n" .
@@ -295,7 +298,7 @@ final class VCardTest extends TestCase
         "ADR;TYPE=home:;;Poort 35;Tiel;Gelderland;7530DA;Nederland\r\n" .
         "EMAIL;TYPE=home:test@melroy.org\r\n" .
         "NOTE:This is me.\r\n" .
-        "BDAY:19891207\r\n" .
+        "BDAY:19891207T000000\r\n" .
         "TEL;TYPE=home;VALUE=uri:tel:+31603857291\r\n" .
         "END:VCARD\r\n";
 

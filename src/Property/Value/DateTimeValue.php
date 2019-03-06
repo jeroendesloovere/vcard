@@ -16,6 +16,7 @@ class DateTimeValue
 
     public function __toString(): string
     {
+        // TODO: possibly not in line with rfc6350
         return $this->value->format('u');
     }
 
