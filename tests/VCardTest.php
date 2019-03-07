@@ -432,30 +432,55 @@ final class VCardTest extends TestCase
     }
 
     /**
+     * Test the Revision Parameter.
+     */
+    public function testRevisionParameter(): void
+    {
+        // Given
+        $expectedContent = "BEGIN:VCARD\r\n" .
+          "VERSION:4.0\r\n" .
+          "KIND:individual\r\n" .
+          "REV:19951031T222710Z\r\n" .
+          "FN:Test\r\n" .
+          "END:VCARD\r\n";
+
+        $formatter = new Formatter(new VcfFormatter(), '');
+        $vcard = (new Vcard())
+          ->add(new FullName("Test"))
+          ->add(new Revision(new \DateTime('19951031T222710Z')));
+
+        // When
+        $formatter->addVCard($vcard);
+
+        // Then
+        $this->assertEquals($expectedContent, $formatter->getContent());
+    }
+
+    /**
      * Verify if multiple telephone numbers are correctly formatted
      */
     public function testTelephonePropertyContent(): void
     {
-      // Given
-      $expectedContent = "BEGIN:VCARD\r\n" .
-        "VERSION:4.0\r\n" .
-        "KIND:individual\r\n" .
-        "FN:Bob\r\n" .
-        "TEL;TYPE=home;VALUE=uri:tel:+33-01-23-45-67\r\n" .
-        "TEL;TYPE=work;VALUE=uri:tel:+33-05-42-41-96\r\n" .
-        "END:VCARD\r\n";
+        // Given
+        $expectedContent = "BEGIN:VCARD\r\n" .
+          "VERSION:4.0\r\n" .
+          "KIND:individual\r\n" .
+          "FN:Bob\r\n" .
+          "TEL;TYPE=home;VALUE=uri:tel:+33-01-23-45-67\r\n" .
+          "TEL;TYPE=work;VALUE=uri:tel:+33-05-42-41-96\r\n" .
+          "END:VCARD\r\n";
 
-      $formatter = new Formatter(new VcfFormatter(), '');
-      $vcard = (new VCard())
-        ->add(new FullName('Bob'))
-        ->add(new Telephone('+33 01 23 45 67'))
-        ->add(new Telephone('+33-05-42-41-96', Type::work()));
+        $formatter = new Formatter(new VcfFormatter(), '');
+        $vcard = (new VCard())
+          ->add(new FullName('Bob'))
+          ->add(new Telephone('+33 01 23 45 67'))
+          ->add(new Telephone('+33-05-42-41-96', Type::work()));
 
-      // When
-      $formatter->addVCard($vcard);
+        // When
+        $formatter->addVCard($vcard);
 
-      // Then
-      $this->assertEquals($expectedContent, $formatter->getContent());
+        // Then
+        $this->assertEquals($expectedContent, $formatter->getContent());
     }
 
     /**
@@ -463,22 +488,22 @@ final class VCardTest extends TestCase
      */
     public function testNamePropertyContent(): void
     {
-      // Given
-      $expectedContent = "BEGIN:VCARD\r\n" .
-        "VERSION:4.0\r\n" .
-        "KIND:individual\r\n" .
-        "FN:Mr. Melroy Antoine van den Berg\r\n" .
-        "N:van den Berg;Melroy;Antoine;Mr.;\r\n" .
-        "END:VCARD\r\n";
+        // Given
+        $expectedContent = "BEGIN:VCARD\r\n" .
+          "VERSION:4.0\r\n" .
+          "KIND:individual\r\n" .
+          "FN:Mr. Melroy Antoine van den Berg\r\n" .
+          "N:van den Berg;Melroy;Antoine;Mr.;\r\n" .
+          "END:VCARD\r\n";
 
-      $formatter = new Formatter(new VcfFormatter(), '');
-      $vcard = (new VCard())->add(new Name('van den Berg', 'Melroy', 'Antoine', 'Mr.'));
+        $formatter = new Formatter(new VcfFormatter(), '');
+        $vcard = (new VCard())->add(new Name('van den Berg', 'Melroy', 'Antoine', 'Mr.'));
 
-      // When
-      $formatter->addVCard($vcard);
+        // When
+        $formatter->addVCard($vcard);
 
-      // Then
-      $this->assertEquals($expectedContent, $formatter->getContent());
+        // Then
+        $this->assertEquals($expectedContent, $formatter->getContent());
     }
 
     /**
@@ -487,24 +512,24 @@ final class VCardTest extends TestCase
      */
     public function testAddressPropertyContentWithLineBreak() : void
     {
-      // Given
-      $expectedContent = "BEGIN:VCARD\r\n" .
-        "VERSION:4.0\r\n" .
-        "KIND:individual\r\n" .
-        "FN:Bob\r\n" .
-        "ADR;TYPE=home:42;Villa;Main Street 500;London;Barnet;EN4 0AG;United Kingd\r\n" .
-        // Line break because of 75 octets width limit, immediately followed by a single white space.
-        " om\r\n" .
-        "END:VCARD\r\n";
-      $formatter = new Formatter(new VcfFormatter(), '');
-      $vcard = (new VCard())
-        ->add(new FullName('Bob'))
-        ->add(new Address('42', 'Villa', 'Main Street 500', 'London', 'Barnet', 'EN4 0AG', 'United Kingdom'));
+        // Given
+        $expectedContent = "BEGIN:VCARD\r\n" .
+          "VERSION:4.0\r\n" .
+          "KIND:individual\r\n" .
+          "FN:Bob\r\n" .
+          "ADR;TYPE=home:42;Villa;Main Street 500;London;Barnet;EN4 0AG;United Kingd\r\n" .
+          // Line break because of 75 octets width limit, immediately followed by a single white space.
+          " om\r\n" .
+          "END:VCARD\r\n";
+        $formatter = new Formatter(new VcfFormatter(), '');
+        $vcard = (new VCard())
+          ->add(new FullName('Bob'))
+          ->add(new Address('42', 'Villa', 'Main Street 500', 'London', 'Barnet', 'EN4 0AG', 'United Kingdom'));
 
-      // When
-      $formatter->addVCard($vcard);
+        // When
+        $formatter->addVCard($vcard);
 
-      // Then
-      $this->assertEquals($expectedContent, $formatter->getContent());
+        // Then
+        $this->assertEquals($expectedContent, $formatter->getContent());
     }
 }

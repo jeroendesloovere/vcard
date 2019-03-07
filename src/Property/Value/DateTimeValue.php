@@ -16,8 +16,8 @@ class DateTimeValue
 
     public function __toString(): string
     {
-        // TODO: possibly not in line with rfc6350
-        return $this->value->format('u');
+        // According to the Timestamp rfc6350 standard in Zulu zone (UTC)
+        return $this->value->format('Ymd\THis\Z');
     }
 
     public function getValue(): \DateTime
