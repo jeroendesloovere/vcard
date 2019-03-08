@@ -12,6 +12,13 @@ use JeroenDesloovere\VCard\VCard;
 
 class VCardException extends \Exception
 {
+    public static function forRequiredProperty(PropertyInterface $property): self
+    {
+        return new self(
+            'The property "' . get_class($property) . '" is mandatory, and you need to add it once.'
+        );
+    }
+
     public static function forExistingProperty(PropertyInterface $property): self
     {
         return new self(

@@ -17,7 +17,8 @@ class DateTimeOrStringValue
     public function __toString(): string
     {
         if ($this->value instanceof \DateTime) {
-            return $this->value->format('u');
+            // According to DATE-AND-OR-TIME rfc6350 standard
+            return $this->value->format('Ymd\THis');
         }
 
         return $this->value;

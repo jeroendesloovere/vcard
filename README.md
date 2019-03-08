@@ -128,19 +128,19 @@ More info on how to work with GitHub on help.github.com.
 We use [squizlabs/php_codesniffer](https://packagist.org/packages/squizlabs/php_codesniffer) to maintain the code standards.
 Type the following to execute them:
 ```bash
-# To view the code errors
-vendor/bin/phpcs --standard=psr2 --extensions=php --warning-severity=0 --report=full "src"
+# To view the code violation errors
+composer standard
 
-# OR to fix the code errors
-vendor/bin/phpcbf --standard=psr2 --extensions=php --warning-severity=0 --report=full "src"
+# OR to fix the code violation errors
+composer fix-standard
 ```
 > [Read documentation about the code standards](https://github.com/squizlabs/PHP_CodeSniffer/wiki)
 
 ### Unit Tests
 
-We have build in tests, type the following to execute them:
+We have build-in tests using [PHPUnit](https://phpunit.readthedocs.io/en/8.0/writing-tests-for-phpunit.html), type the following to execute them:
 ```bash
-vendor/bin/phpunit tests
+composer test
 ```
 
 ## Credits

@@ -1,0 +1,12 @@
+BEGIN:VCARD
+KIND:individual
+VERSION:4.0
+FN:Melroy Antoine van den Berg
+GENDER:M
+NICKNAME:danger89
+ADR;TYPE=home:;;Poort 35;Tiel;Gelderland;7530DA;Nederland
+EMAIL;TYPE=home:test@melroy.org
+NOTE:This is me.
+BDAY:19891207
+TEL;TYPE=home;VALUE=uri:tel:+31603857291
+END:VCARD

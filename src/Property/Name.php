@@ -13,13 +13,13 @@ use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
 final class Name implements PropertyInterface, NodeInterface
 {
     /** @var null|string */
-    private $additional;
+    private $lastName;
 
     /** @var null|string */
     private $firstName;
 
     /** @var null|string */
-    private $lastName;
+    private $additional;
 
     /** @var null|string */
     private $prefix;
