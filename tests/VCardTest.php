@@ -195,6 +195,18 @@ final class VCardTest extends TestCase
         Parser::getFileContents(__DIR__ . '/not-existing');
     }
 
+    /**
+     * @expectedException \JeroenDesloovere\VCard\Exception\VCardException
+     * @expectedExceptionMessage The property "JeroenDesloovere\VCard\Property\FullName" is mandatory, and you need to add it once.
+     */
+    public function testFullNameForgotten(): void
+    {
+        // Given: Empty Vcard
+        $vcard = new Vcard();
+        
+        // When
+        $vcard->getProperties();
+    }
 
     /*
      * Integration test:
