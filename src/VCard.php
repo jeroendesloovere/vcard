@@ -636,8 +636,33 @@ class VCard
             return $text;
         }
 
+        // The chunk_split_unicode creates a huge memory footprint when used on long strings (EG photos are base64 10MB results in > 1GB memory usage)
+        // So check if the string is ASCII (7 bit) and if it is use the built in way RE: https://github.com/jeroendesloovere/vcard/issues/153
+        if ($this->is_ascii($text)) {
+           return substr(chunk_split($text, 75, "\r\n "), 0, -3);
+        }
+
         // split, wrap and trim trailing separator
         return substr($this->chunk_split_unicode($text, 75, "\r\n "), 0, -3);
+    }
+
+
+    /**
+     * Determine if string is pure 7bit ascii
+     * @link https://pageconfig.com/post/how-to-validate-ascii-text-in-php
+     *
+     * @param string $string
+     * @return bool
+     */
+    protected function is_ascii($string = '' ) {
+        $num = 0;
+        while( isset( $string[$num] ) ) {
+            if( ord( $string[$num] ) & 0x80 ) {
+                return false;
+            }
+        $num++;
+        }
+        return true;
     }
 
     /**
