@@ -2,9 +2,6 @@
 
 namespace JeroenDesloovere\VCard\tests;
 
-// required to load
-require_once __DIR__ . '/../vendor/autoload.php';
-
 /*
  * This file is part of the VCard PHP Class from Jeroen Desloovere.
  *
@@ -13,11 +10,12 @@ require_once __DIR__ . '/../vendor/autoload.php';
  */
 
 use JeroenDesloovere\VCard\VCard;
+use PHPUnit\Framework\TestCase;
 
 /**
  * This class will test our VCard PHP Class which can generate VCards.
  */
-class VCardTest extends \PHPUnit_Framework_TestCase
+class VCardTest extends TestCase
 {
     /**
      * @var VCard
@@ -44,7 +42,7 @@ class VCardTest extends \PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function setUp()
     {
         // set timezone
         date_default_timezone_set('Europe/Brussels');
@@ -56,7 +54,7 @@ class VCardTest extends \PHPUnit_Framework_TestCase
         $this->additional = '&';
         $this->prefix = 'Mister';
         $this->suffix = 'Junior';
-        
+
         $this->emailAddress1 = '';
         $this->emailAddress2 = '';
 
@@ -70,7 +68,7 @@ class VCardTest extends \PHPUnit_Framework_TestCase
     /**
      * Tear down after class
      */
-    public function tearDown()
+    protected function tearDown()
     {
         $this->vcard = null;
     }
@@ -137,7 +135,7 @@ class VCardTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals($this->vcard, $this->vcard->addPhoneNumber(''));
         $this->assertEquals($this->vcard, $this->vcard->addPhoneNumber(''));
-        $this->assertEquals(2, count($this->vcard->getProperties()));
+        $this->assertCount(2, $this->vcard->getProperties());
     }
 
     public function testAddPhotoWithJpgPhoto()
@@ -225,7 +223,7 @@ class VCardTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals($this->vcard, $this->vcard->addUrl('1'));
         $this->assertEquals($this->vcard, $this->vcard->addUrl('2'));
-        $this->assertEquals(2, count($this->vcard->getProperties()));
+        $this->assertCount(2, $this->vcard->getProperties());
     }
 
     /**
@@ -445,7 +443,7 @@ class VCardTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertSame($this->vcard, $this->vcard->addLabel('My label'));
         $this->assertSame($this->vcard, $this->vcard->addLabel('My work label', 'WORK'));
-        $this->assertSame(2, count($this->vcard->getProperties()));
+        $this->assertCount(2, $this->vcard->getProperties());
         $this->assertContains('LABEL:My label', $this->vcard->getOutput());
         $this->assertContains('LABEL;WORK:My work label', $this->vcard->getOutput());
     }
