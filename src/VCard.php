@@ -3,6 +3,8 @@
 namespace JeroenDesloovere\VCard;
 
 /*
+ * Modified version by HTMLgraphic
+ *
  * This file is part of the VCard PHP Class from Jeroen Desloovere.
  *
  * For the full copyright and license information, please view the license
