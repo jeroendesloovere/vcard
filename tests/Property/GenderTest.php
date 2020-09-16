@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace JeroenDesloovere\Tests\VCard\Property;
+namespace Dilone\Tests\VCard\Property;
 
-use JeroenDesloovere\VCard\Property\Gender;
+use Dilone\VCard\Property\Gender;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 final class GenderTest extends TestCase
 {
     /**
-     * @expectedException \JeroenDesloovere\VCard\Exception\PropertyException
+     * @expectedException \Dilone\VCard\Exception\PropertyException
      * @expectedExceptionMessage The given value "False Gender" is not allowed.
      * Possible values are: "", "F", "M", "N", "O", "U"
      */

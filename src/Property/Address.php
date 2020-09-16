@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace JeroenDesloovere\VCard\Property;
+namespace Dilone\VCard\Property;
 
-use JeroenDesloovere\VCard\Exception\PropertyException;
-use JeroenDesloovere\VCard\Formatter\Property\AddressFormatter;
-use JeroenDesloovere\VCard\Formatter\Property\NodeFormatterInterface;
-use JeroenDesloovere\VCard\Parser\Property\AddressParser;
-use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
-use JeroenDesloovere\VCard\Property\Parameter\Type;
+use Dilone\VCard\Exception\PropertyException;
+use Dilone\VCard\Formatter\Property\AddressFormatter;
+use Dilone\VCard\Formatter\Property\NodeFormatterInterface;
+use Dilone\VCard\Parser\Property\AddressParser;
+use Dilone\VCard\Parser\Property\NodeParserInterface;
+use Dilone\VCard\Property\Parameter\Type;
 
 final class Address implements PropertyInterface, NodeInterface
 {
@@ -58,7 +58,8 @@ final class Address implements PropertyInterface, NodeInterface
         ?string $countryName = null,
         Type $type = null
     ) {
-        if ($postOfficeBox === null && $extendedAddress === null && $streetAddress === null && $locality === null
+        if (
+            $postOfficeBox === null && $extendedAddress === null && $streetAddress === null && $locality === null
             && $region === null && $postalCode === null && $countryName === null && $type === null
         ) {
             throw PropertyException::forEmptyProperty();

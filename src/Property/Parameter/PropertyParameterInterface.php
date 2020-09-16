@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-namespace JeroenDesloovere\VCard\Property\Parameter;
+namespace Dilone\VCard\Property\Parameter;
 
 interface PropertyParameterInterface
 {
-
 }

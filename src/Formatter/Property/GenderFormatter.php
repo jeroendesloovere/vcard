@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace JeroenDesloovere\VCard\Formatter\Property;
+namespace Dilone\VCard\Formatter\Property;
 
-use JeroenDesloovere\VCard\Property\Gender;
+use Dilone\VCard\Property\Gender;
 
 final class GenderFormatter extends NodeFormatter implements NodeFormatterInterface
 {

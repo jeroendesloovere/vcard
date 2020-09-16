@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace JeroenDesloovere\VCard\Formatter\Property;
+namespace Dilone\VCard\Formatter\Property;
 
-use JeroenDesloovere\VCard\Property\Logo;
+use Dilone\VCard\Property\Logo;
 
 final class LogoFormatter extends NodeFormatter implements NodeFormatterInterface
 {

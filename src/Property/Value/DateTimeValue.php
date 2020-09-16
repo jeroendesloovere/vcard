@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace JeroenDesloovere\VCard\Property\Value;
+namespace Dilone\VCard\Property\Value;
 
 class DateTimeValue
 {

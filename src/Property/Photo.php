@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace JeroenDesloovere\VCard\Property;
+namespace Dilone\VCard\Property;
 
-use JeroenDesloovere\VCard\Formatter\Property\NodeFormatterInterface;
-use JeroenDesloovere\VCard\Formatter\Property\PhotoFormatter;
-use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
-use JeroenDesloovere\VCard\Parser\Property\PhotoParser;
-use JeroenDesloovere\VCard\Property\Value\ImageValue;
+use Dilone\VCard\Formatter\Property\NodeFormatterInterface;
+use Dilone\VCard\Formatter\Property\PhotoFormatter;
+use Dilone\VCard\Parser\Property\NodeParserInterface;
+use Dilone\VCard\Parser\Property\PhotoParser;
+use Dilone\VCard\Property\Value\ImageValue;
 
 final class Photo extends ImageValue implements PropertyInterface, NodeInterface
 {

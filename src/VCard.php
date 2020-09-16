@@ -2,30 +2,30 @@
 
 declare(strict_types=1);
 
-namespace JeroenDesloovere\VCard;
+namespace Dilone\VCard;
 
-use JeroenDesloovere\VCard\Exception\VCardException;
-use JeroenDesloovere\VCard\Property\Address;
-use JeroenDesloovere\VCard\Property\Anniversary;
-use JeroenDesloovere\VCard\Property\Birthdate;
-use JeroenDesloovere\VCard\Property\Email;
-use JeroenDesloovere\VCard\Property\FullName;
-use JeroenDesloovere\VCard\Property\Gender;
-use JeroenDesloovere\VCard\Property\Logo;
-use JeroenDesloovere\VCard\Property\Name;
-use JeroenDesloovere\VCard\Property\Nickname;
-use JeroenDesloovere\VCard\Property\NodeInterface;
-use JeroenDesloovere\VCard\Property\Note;
-use JeroenDesloovere\VCard\Property\Parameter\Kind;
-use JeroenDesloovere\VCard\Property\Parameter\PropertyParameterInterface;
-use JeroenDesloovere\VCard\Property\Parameter\Revision;
-use JeroenDesloovere\VCard\Property\Parameter\Type;
-use JeroenDesloovere\VCard\Property\Parameter\Version;
-use JeroenDesloovere\VCard\Property\Photo;
-use JeroenDesloovere\VCard\Property\PropertyInterface;
-use JeroenDesloovere\VCard\Property\Role;
-use JeroenDesloovere\VCard\Property\Telephone;
-use JeroenDesloovere\VCard\Property\Title;
+use Dilone\VCard\Exception\VCardException;
+use Dilone\VCard\Property\Address;
+use Dilone\VCard\Property\Anniversary;
+use Dilone\VCard\Property\Birthdate;
+use Dilone\VCard\Property\Email;
+use Dilone\VCard\Property\FullName;
+use Dilone\VCard\Property\Gender;
+use Dilone\VCard\Property\Logo;
+use Dilone\VCard\Property\Name;
+use Dilone\VCard\Property\Nickname;
+use Dilone\VCard\Property\NodeInterface;
+use Dilone\VCard\Property\Note;
+use Dilone\VCard\Property\Parameter\Kind;
+use Dilone\VCard\Property\Parameter\PropertyParameterInterface;
+use Dilone\VCard\Property\Parameter\Revision;
+use Dilone\VCard\Property\Parameter\Type;
+use Dilone\VCard\Property\Parameter\Version;
+use Dilone\VCard\Property\Photo;
+use Dilone\VCard\Property\PropertyInterface;
+use Dilone\VCard\Property\Role;
+use Dilone\VCard\Property\Telephone;
+use Dilone\VCard\Property\Title;
 
 final class VCard
 {

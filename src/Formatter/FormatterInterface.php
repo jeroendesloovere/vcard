@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace JeroenDesloovere\VCard\Formatter;
+namespace Dilone\VCard\Formatter;
 
 interface FormatterInterface
 {

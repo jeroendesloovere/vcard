@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace JeroenDesloovere\VCard\Property;
+namespace Dilone\VCard\Property;
 
-use JeroenDesloovere\VCard\Formatter\Property\NodeFormatterInterface;
-use JeroenDesloovere\VCard\Formatter\Property\LogoFormatter;
-use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
-use JeroenDesloovere\VCard\Parser\Property\LogoParser;
-use JeroenDesloovere\VCard\Property\Value\ImageValue;
+use Dilone\VCard\Formatter\Property\NodeFormatterInterface;
+use Dilone\VCard\Formatter\Property\LogoFormatter;
+use Dilone\VCard\Parser\Property\NodeParserInterface;
+use Dilone\VCard\Parser\Property\LogoParser;
+use Dilone\VCard\Property\Value\ImageValue;
 
 final class Logo extends ImageValue implements PropertyInterface, NodeInterface
 {

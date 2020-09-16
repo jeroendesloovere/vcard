@@ -1,23 +1,25 @@
 # [WIP] VCard library
 
-<!--[![Latest Stable Version](http://img.shields.io/packagist/v/jeroendesloovere/vcard.svg)](https://packagist.org/packages/jeroendesloovere/vcard)-->
-[![License](http://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/jeroendesloovere/vcard/blob/master/LICENSE)
-[![Build Status](https://travis-ci.org/jeroendesloovere/vcard.svg?branch=2.0.0-dev)](https://travis-ci.org/jeroendesloovere/vcard)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/jeroendesloovere/vcard/badges/quality-score.png?b=2.0.0-dev)](https://scrutinizer-ci.com/g/jeroendesloovere/vcard/?branch=2.0.0-dev)
+<!--[![Latest Stable Version](http://img.shields.io/packagist/v/Dilone/vcard.svg)](https://packagist.org/packages/Dilone/vcard)-->
+
+[![License](http://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/Dilone/vcard/blob/master/LICENSE)
+[![Build Status](https://travis-ci.org/Dilone/vcard.svg?branch=2.0.0-dev)](https://travis-ci.org/Dilone/vcard)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Dilone/vcard/badges/quality-score.png?b=2.0.0-dev)](https://scrutinizer-ci.com/g/Dilone/vcard/?branch=2.0.0-dev)
 
 > This VCard PHP class can generate a vCard version 4.0. .vcf file with one or more vCards in it. Parsing is also possible. OOP is our goal-focus, so every property has its own class.
 
 Documentation about vCard 4.0:
-* [vCard 4.0 specification: RFC6350](https://tools.ietf.org/html/rfc6350)
-* [vCard 4.0 versus vCard 3.0](https://devguide.calconnect.org/vCard/vcard-4/)
+
+- [vCard 4.0 specification: RFC6350](https://tools.ietf.org/html/rfc6350)
+- [vCard 4.0 versus vCard 3.0](https://devguide.calconnect.org/vCard/vcard-4/)
 
 ## Installation
 
 ```bash
-composer require jeroendesloovere/vcard:dev-2.0.0-dev
+composer require Dilone/vcard:dev-2.0.0-dev
 ```
-> This will install the 2.0 WIP development version of vcard with [Composer](https://getcomposer.org)
 
+> This will install the 2.0 WIP development version of vcard with [Composer](https://getcomposer.org)
 
 ## Examples
 
@@ -26,10 +28,10 @@ Since this is a WIP, we refer to the [test class](tests/VCardTest.php) to view m
 ### Basic example
 
 ```php
-use JeroenDesloovere\VCard\VCard;
-use JeroenDesloovere\VCard\Property\Name;
-use JeroenDesloovere\VCard\Formatter\Formatter;
-use JeroenDesloovere\VCard\Formatter\VcfFormatter;
+use Dilone\VCard\VCard;
+use Dilone\VCard\Property\Name;
+use Dilone\VCard\Formatter\Formatter;
+use Dilone\VCard\Formatter\VcfFormatter;
 
 $lastname = "Berg";
 $firstname = "Melroy";
@@ -48,54 +50,62 @@ $formatter->download();
 ## Properties
 
 ### Identification Properties:
-* [x] [FN = Full name](./src/Property/FullName.php) - The full name of the object (as a single string). This is the only mandatory property.
-* [x] [N = Name](./src/Property/Name.php) - The name of the object represented in structured parts
-* [x] [NICKNAME](./src/Property/Nickname.php) - A nickname for the object
-* [x] [PHOTO](./src/Property/Photo.php)
-* [x] [BDAY](./src/Property/Birthdate.php) - Birth date of the object. Should only apply to Individual
-* [x] [ANNIVERSARY](./src/Property/Anniversary.php) - Should only apply to Individual
-* [x] [GENDER](./src/Property/Gender.php) - Should only apply to Individual
+
+- [x] [FN = Full name](./src/Property/FullName.php) - The full name of the object (as a single string). This is the only mandatory property.
+- [x] [N = Name](./src/Property/Name.php) - The name of the object represented in structured parts
+- [x] [NICKNAME](./src/Property/Nickname.php) - A nickname for the object
+- [x] [PHOTO](./src/Property/Photo.php)
+- [x] [BDAY](./src/Property/Birthdate.php) - Birth date of the object. Should only apply to Individual
+- [x] [ANNIVERSARY](./src/Property/Anniversary.php) - Should only apply to Individual
+- [x] [GENDER](./src/Property/Gender.php) - Should only apply to Individual
 
 ### Delivery Addressing Properties:
-* [x] [ADDRESS](./src/Property/Address.php) - The address of the object represented in structured parts
+
+- [x] [ADDRESS](./src/Property/Address.php) - The address of the object represented in structured parts
 
 ### Communications Properties:
-* [x] [TEL](./src/Property/Telephone.php) - The telephone number(s) as a tel URI
-* [x] [EMAIL](./src/Property/Email.php) - The email address(es) as a mailto URI
-* [ ] IMPP - The IMPP instant messaging contact information
-* [ ] LANG - The language of the object
+
+- [x] [TEL](./src/Property/Telephone.php) - The telephone number(s) as a tel URI
+- [x] [EMAIL](./src/Property/Email.php) - The email address(es) as a mailto URI
+- [ ] IMPP - The IMPP instant messaging contact information
+- [ ] LANG - The language of the object
 
 ### Geographical Properties:
-* [ ] TZ - The timezone of the object
-* [ ] GEO - The geographical coordinates of the object (geo URI)
+
+- [ ] TZ - The timezone of the object
+- [ ] GEO - The geographical coordinates of the object (geo URI)
 
 ### Organizational Properties:
-* [x] [TITLE](./src/Property/Title.php) - The title of the object
-* [ ] ROLE - The role of the object
-* [x] [LOGO](./src/Property/Logo.php) - The logo of the object (data URI)
-* [ ] ORG - The organisation related to the object
-* [ ] ORGUNIT - The organisational unit related to the object
-* [ ] MEMBER - Can only be used for Group Kind objects. Must point to other Individual or Organization objects.
-* [ ] RELATED - Link to related objects.
+
+- [x] [TITLE](./src/Property/Title.php) - The title of the object
+- [ ] ROLE - The role of the object
+- [x] [LOGO](./src/Property/Logo.php) - The logo of the object (data URI)
+- [ ] ORG - The organisation related to the object
+- [ ] ORGUNIT - The organisational unit related to the object
+- [ ] MEMBER - Can only be used for Group Kind objects. Must point to other Individual or Organization objects.
+- [ ] RELATED - Link to related objects.
 
 ### Explanatory Properties:
-* [ ] CATEGORIES - The categories of the object
-* [x] [NOTE](./src/Property/Note.php) - Notes about the object
-* [ ] PRODID - The identifier of the product that created the vCard object
-* [X] [REV](./src/Property/Parameter/Revision.php) - The revision datetime of the vCard object
-* [ ] SOUND - Audio related to the object (data URI)
-* [ ] UID - A unique identifier for the object
-* [ ] CLIENTPIDMAP - Not required
-* [ ] URL - Any URL related to the object
-* [X] [VERSION](./src/Property/Parameter/Version.php) - Is mandatory for 4.0
+
+- [ ] CATEGORIES - The categories of the object
+- [x] [NOTE](./src/Property/Note.php) - Notes about the object
+- [ ] PRODID - The identifier of the product that created the vCard object
+- [x] [REV](./src/Property/Parameter/Revision.php) - The revision datetime of the vCard object
+- [ ] SOUND - Audio related to the object (data URI)
+- [ ] UID - A unique identifier for the object
+- [ ] CLIENTPIDMAP - Not required
+- [ ] URL - Any URL related to the object
+- [x] [VERSION](./src/Property/Parameter/Version.php) - Is mandatory for 4.0
 
 ### Security Properties:
-* [ ] KEY - The security key of the object
+
+- [ ] KEY - The security key of the object
 
 ### Calendar Properties:
-* [ ] FBURL - Calendar Busy Time of the object
-* [ ] CALADURI - Calendar Request of the object
-* [ ] CALURI - Calendar Link of the object
+
+- [ ] FBURL - Calendar Busy Time of the object
+- [ ] CALADURI - Calendar Request of the object
+- [ ] CALURI - Calendar Link of the object
 
 ## Documentation
 
@@ -127,6 +137,7 @@ More info on how to work with GitHub on help.github.com.
 
 We use [squizlabs/php_codesniffer](https://packagist.org/packages/squizlabs/php_codesniffer) to maintain the code standards.
 Type the following to execute them:
+
 ```bash
 # To view the code errors
 vendor/bin/phpcs --standard=psr2 --extensions=php --warning-severity=0 --report=full "src"
@@ -134,19 +145,21 @@ vendor/bin/phpcs --standard=psr2 --extensions=php --warning-severity=0 --report=
 # OR to fix the code errors
 vendor/bin/phpcbf --standard=psr2 --extensions=php --warning-severity=0 --report=full "src"
 ```
+
 > [Read documentation about the code standards](https://github.com/squizlabs/PHP_CodeSniffer/wiki)
 
 ### Unit Tests
 
 We have build in tests, type the following to execute them:
+
 ```bash
 vendor/bin/phpunit tests
 ```
 
 ## Credits
 
-- [Jeroen Desloovere](https://github.com/jeroendesloovere)
-- [All Contributors](https://github.com/jeroendesloovere/vcard/contributors)
+- [Jeroen Desloovere](https://github.com/Dilone)
+- [All Contributors](https://github.com/Dilone/vcard/contributors)
 
 ## License
 

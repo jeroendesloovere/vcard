@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace JeroenDesloovere\VCard\Exception;
+namespace Dilone\VCard\Exception;
 
-use JeroenDesloovere\VCard\Property\NodeInterface;
-use JeroenDesloovere\VCard\Property\Parameter\Kind;
-use JeroenDesloovere\VCard\Property\Parameter\PropertyParameterInterface;
-use JeroenDesloovere\VCard\Property\PropertyInterface;
-use JeroenDesloovere\VCard\VCard;
+use Dilone\VCard\Property\NodeInterface;
+use Dilone\VCard\Property\Parameter\Kind;
+use Dilone\VCard\Property\Parameter\PropertyParameterInterface;
+use Dilone\VCard\Property\PropertyInterface;
+use Dilone\VCard\VCard;
 
 class VCardException extends \Exception
 {
@@ -38,7 +38,7 @@ class VCardException extends \Exception
     {
         return new self(
             'The node "' . get_class($node) . '" you are trying to add is not supported. Possible values are: '
-            . implode(', ', VCard::POSSIBLE_VALUES)
+                . implode(', ', VCard::POSSIBLE_VALUES)
         );
     }
 }

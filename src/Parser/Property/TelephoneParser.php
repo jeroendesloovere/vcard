@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace JeroenDesloovere\VCard\Parser\Property;
+namespace Dilone\VCard\Parser\Property;
 
-use JeroenDesloovere\VCard\Property\NodeInterface;
-use JeroenDesloovere\VCard\Property\Telephone;
-use JeroenDesloovere\VCard\Property\Parameter\Type;
-use JeroenDesloovere\VCard\Property\Parameter\Value;
+use Dilone\VCard\Property\NodeInterface;
+use Dilone\VCard\Property\Telephone;
+use Dilone\VCard\Property\Parameter\Type;
+use Dilone\VCard\Property\Parameter\Value;
 
 final class TelephoneParser extends PropertyParser implements NodeParserInterface
 {

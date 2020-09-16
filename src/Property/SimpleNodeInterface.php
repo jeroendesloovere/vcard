@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace JeroenDesloovere\VCard\Property;
+namespace Dilone\VCard\Property;
 
 interface SimpleNodeInterface extends NodeInterface
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace JeroenDesloovere\VCard\Exception;
+namespace Dilone\VCard\Exception;
 
 final class PropertyException extends VCardException
 {

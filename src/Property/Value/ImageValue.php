@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace JeroenDesloovere\VCard\Property\Value;
+namespace Dilone\VCard\Property\Value;
 
-use JeroenDesloovere\VCard\Exception\PropertyException;
+use Dilone\VCard\Exception\PropertyException;
 
 class ImageValue
 {

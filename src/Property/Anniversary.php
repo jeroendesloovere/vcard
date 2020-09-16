@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace JeroenDesloovere\VCard\Property;
+namespace Dilone\VCard\Property;
 
-use JeroenDesloovere\VCard\Formatter\Property\AnniversaryFormatter;
-use JeroenDesloovere\VCard\Formatter\Property\NodeFormatterInterface;
-use JeroenDesloovere\VCard\Parser\Property\AnniversaryParser;
-use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
-use JeroenDesloovere\VCard\Property\Value\DateTimeOrStringValue;
+use Dilone\VCard\Formatter\Property\AnniversaryFormatter;
+use Dilone\VCard\Formatter\Property\NodeFormatterInterface;
+use Dilone\VCard\Parser\Property\AnniversaryParser;
+use Dilone\VCard\Parser\Property\NodeParserInterface;
+use Dilone\VCard\Property\Value\DateTimeOrStringValue;
 
 final class Anniversary extends DateTimeOrStringValue implements PropertyInterface, SimpleNodeInterface
 {

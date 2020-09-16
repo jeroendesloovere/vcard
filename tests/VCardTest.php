@@ -2,30 +2,30 @@
 
 declare(strict_types=1);
 
-namespace JeroenDesloovere\Tests\VCard;
+namespace Dilone\Tests\VCard;
 
-use JeroenDesloovere\VCard\Formatter\Formatter;
-use JeroenDesloovere\VCard\Formatter\VcfFormatter;
-use JeroenDesloovere\VCard\Parser\Parser;
-use JeroenDesloovere\VCard\Parser\VcfParser;
-use JeroenDesloovere\VCard\Property\Address;
-use JeroenDesloovere\VCard\Property\Anniversary;
-use JeroenDesloovere\VCard\Property\Birthdate;
-use JeroenDesloovere\VCard\Property\Email;
-use JeroenDesloovere\VCard\Property\Gender;
-use JeroenDesloovere\VCard\Property\Logo;
-use JeroenDesloovere\VCard\Property\Name;
-use JeroenDesloovere\VCard\Property\Nickname;
-use JeroenDesloovere\VCard\Property\Note;
-use JeroenDesloovere\VCard\Property\Parameter\Kind;
-use JeroenDesloovere\VCard\Property\Parameter\Revision;
-use JeroenDesloovere\VCard\Property\Parameter\Type;
-use JeroenDesloovere\VCard\Property\Parameter\Version;
-use JeroenDesloovere\VCard\Property\Photo;
-use JeroenDesloovere\VCard\Property\Telephone;
-use JeroenDesloovere\VCard\Property\Title;
-use JeroenDesloovere\VCard\Property\Role;
-use JeroenDesloovere\VCard\VCard;
+use Dilone\VCard\Formatter\Formatter;
+use Dilone\VCard\Formatter\VcfFormatter;
+use Dilone\VCard\Parser\Parser;
+use Dilone\VCard\Parser\VcfParser;
+use Dilone\VCard\Property\Address;
+use Dilone\VCard\Property\Anniversary;
+use Dilone\VCard\Property\Birthdate;
+use Dilone\VCard\Property\Email;
+use Dilone\VCard\Property\Gender;
+use Dilone\VCard\Property\Logo;
+use Dilone\VCard\Property\Name;
+use Dilone\VCard\Property\Nickname;
+use Dilone\VCard\Property\Note;
+use Dilone\VCard\Property\Parameter\Kind;
+use Dilone\VCard\Property\Parameter\Revision;
+use Dilone\VCard\Property\Parameter\Type;
+use Dilone\VCard\Property\Parameter\Version;
+use Dilone\VCard\Property\Photo;
+use Dilone\VCard\Property\Telephone;
+use Dilone\VCard\Property\Title;
+use Dilone\VCard\Property\Role;
+use Dilone\VCard\VCard;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use PHPUnit\Framework\TestCase;
@@ -113,7 +113,7 @@ final class VCardTest extends TestCase
     }
 
     /**
-     * @expectedException \JeroenDesloovere\VCard\Exception\VCardException
+     * @expectedException \Dilone\VCard\Exception\VCardException
      */
     public function testMultipleNotAllowedProperties(): void
     {
@@ -123,7 +123,7 @@ final class VCardTest extends TestCase
     }
 
     /**
-     * @expectedException \JeroenDesloovere\VCard\Exception\VCardException
+     * @expectedException \Dilone\VCard\Exception\VCardException
      */
     public function testMultipleNotAllowedPropertyParameters(): void
     {
@@ -133,7 +133,7 @@ final class VCardTest extends TestCase
     }
 
     /**
-     * @expectedException \JeroenDesloovere\VCard\Exception\ParserException
+     * @expectedException \Dilone\VCard\Exception\ParserException
      * @expectedExceptionMessage File "Lorem ipsum dolor sit amet, consectetur adipiscing elit." is not readable, or doesn't exist.
      */
     public function testParserCorruptVCard(): void
@@ -142,7 +142,7 @@ final class VCardTest extends TestCase
     }
 
     /**
-     * @expectedException \JeroenDesloovere\VCard\Exception\ParserException
+     * @expectedException \Dilone\VCard\Exception\ParserException
      * @expectedExceptionMessage File "" is not readable, or doesn't exist.
      */
     public function testParserEmptyVCard(): void
@@ -151,7 +151,7 @@ final class VCardTest extends TestCase
     }
 
     /**
-     * @expectedException \JeroenDesloovere\VCard\Exception\ParserException
+     * @expectedException \Dilone\VCard\Exception\ParserException
      */
     public function testParserGetFileContentsException(): void
     {
@@ -327,24 +327,24 @@ final class VCardTest extends TestCase
      */
     public function testTelephonePropertyContent(): void
     {
-      // Given
-      $expectedContent = "BEGIN:VCARD\r\n" .
-        "VERSION:4.0\r\n" .
-        "KIND:individual\r\n" .
-        "TEL;TYPE=home;VALUE=uri:tel:+33-01-23-45-67\r\n" .
-        "TEL;TYPE=work;VALUE=uri:tel:+33-05-42-41-96\r\n" .
-        "END:VCARD\r\n";
+        // Given
+        $expectedContent = "BEGIN:VCARD\r\n" .
+            "VERSION:4.0\r\n" .
+            "KIND:individual\r\n" .
+            "TEL;TYPE=home;VALUE=uri:tel:+33-01-23-45-67\r\n" .
+            "TEL;TYPE=work;VALUE=uri:tel:+33-05-42-41-96\r\n" .
+            "END:VCARD\r\n";
 
-      $formatter = new Formatter(new VcfFormatter(), '');
-      $vcard = (new VCard())
-        ->add(new Telephone('+33 01 23 45 67'))
-        ->add(new Telephone('+33-05-42-41-96', Type::work()));
+        $formatter = new Formatter(new VcfFormatter(), '');
+        $vcard = (new VCard())
+            ->add(new Telephone('+33 01 23 45 67'))
+            ->add(new Telephone('+33-05-42-41-96', Type::work()));
 
-      // When
-      $formatter->addVCard($vcard);
+        // When
+        $formatter->addVCard($vcard);
 
-      // Then
-      $this->assertEquals($expectedContent, $formatter->getContent());
+        // Then
+        $this->assertEquals($expectedContent, $formatter->getContent());
     }
 
     /**
@@ -352,44 +352,44 @@ final class VCardTest extends TestCase
      */
     public function testNamePropertyContent(): void
     {
-      // Given
-      $expectedContent = "BEGIN:VCARD\r\n" .
-        "VERSION:4.0\r\n" .
-        "KIND:individual\r\n" .
-        "N:van den Berg;Melroy;Antoine;Mr.;\r\n" .
-        "END:VCARD\r\n";
+        // Given
+        $expectedContent = "BEGIN:VCARD\r\n" .
+            "VERSION:4.0\r\n" .
+            "KIND:individual\r\n" .
+            "N:van den Berg;Melroy;Antoine;Mr.;\r\n" .
+            "END:VCARD\r\n";
 
-      $formatter = new Formatter(new VcfFormatter(), '');
-      $vcard = (new VCard())->add(new Name('van den Berg', 'Melroy', 'Antoine', 'Mr.'));
+        $formatter = new Formatter(new VcfFormatter(), '');
+        $vcard = (new VCard())->add(new Name('van den Berg', 'Melroy', 'Antoine', 'Mr.'));
 
-      // When
-      $formatter->addVCard($vcard);
+        // When
+        $formatter->addVCard($vcard);
 
-      // Then
-      $this->assertEquals($expectedContent, $formatter->getContent());
+        // Then
+        $this->assertEquals($expectedContent, $formatter->getContent());
     }
 
     /**
      * Verify if an address gets correctly formatted,
      * even with a long text over the 75 chars limit (excl. line breaks)
      */
-    public function testAddressPropertyContentWithLineBreak() : void
+    public function testAddressPropertyContentWithLineBreak(): void
     {
-      // Given
-      $expectedContent = "BEGIN:VCARD\r\n" .
-        "VERSION:4.0\r\n" .
-        "KIND:individual\r\n" .
-        "ADR;TYPE=home:42;Villa;Main Street 500;London;Barnet;EN4 0AG;United Kingd\r\n" .
-        // Line break because of 75 octets width limit, immediately followed by a single white space.
-        " om\r\n" .
-        "END:VCARD\r\n";
-      $formatter = new Formatter(new VcfFormatter(), '');
-      $vcard = (new VCard())->add(new Address('42', 'Villa', 'Main Street 500', 'London', 'Barnet', 'EN4 0AG', 'United Kingdom'));
+        // Given
+        $expectedContent = "BEGIN:VCARD\r\n" .
+            "VERSION:4.0\r\n" .
+            "KIND:individual\r\n" .
+            "ADR;TYPE=home:42;Villa;Main Street 500;London;Barnet;EN4 0AG;United Kingd\r\n" .
+            // Line break because of 75 octets width limit, immediately followed by a single white space.
+            " om\r\n" .
+            "END:VCARD\r\n";
+        $formatter = new Formatter(new VcfFormatter(), '');
+        $vcard = (new VCard())->add(new Address('42', 'Villa', 'Main Street 500', 'London', 'Barnet', 'EN4 0AG', 'United Kingdom'));
 
-      // When
-      $formatter->addVCard($vcard);
+        // When
+        $formatter->addVCard($vcard);
 
-      // Then
-      $this->assertEquals($expectedContent, $formatter->getContent());
+        // Then
+        $this->assertEquals($expectedContent, $formatter->getContent());
     }
 }

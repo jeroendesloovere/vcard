@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace JeroenDesloovere\VCard\Property;
+namespace Dilone\VCard\Property;
 
-use JeroenDesloovere\VCard\Exception\PropertyException;
-use JeroenDesloovere\VCard\Formatter\Property\NameFormatter;
-use JeroenDesloovere\VCard\Formatter\Property\NodeFormatterInterface;
-use JeroenDesloovere\VCard\Parser\Property\NameParser;
-use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
+use Dilone\VCard\Exception\PropertyException;
+use Dilone\VCard\Formatter\Property\NameFormatter;
+use Dilone\VCard\Formatter\Property\NodeFormatterInterface;
+use Dilone\VCard\Parser\Property\NameParser;
+use Dilone\VCard\Parser\Property\NodeParserInterface;
 
 final class Name implements PropertyInterface, NodeInterface
 {

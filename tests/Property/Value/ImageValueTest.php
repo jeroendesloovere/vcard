@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace JeroenDesloovere\Tests\VCard\Property\Value;
+namespace Dilone\Tests\VCard\Property\Value;
 
-use JeroenDesloovere\VCard\Property\Value\ImageValue;
+use Dilone\VCard\Property\Value\ImageValue;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -26,12 +26,12 @@ final class ImageValueTest extends TestCase
 
     public function testValidImageUrl(): void
     {
-        $image = new ImageValue('http://www.jeroendesloovere.be/images/my_head.jpg');
+        $image = new ImageValue('http://www.Dilone.be/images/my_head.jpg');
         $this->assertTrue($image instanceof ImageValue);
     }
 
     /**
-     * @expectedException \JeroenDesloovere\VCard\Exception\PropertyException
+     * @expectedException \Dilone\VCard\Exception\PropertyException
      * @expectedExceptionMessage The image you have provided is invalid.
      */
     public function testEmptyFile(): void
@@ -40,7 +40,7 @@ final class ImageValueTest extends TestCase
     }
 
     /**
-     * @expectedException \JeroenDesloovere\VCard\Exception\PropertyException
+     * @expectedException \Dilone\VCard\Exception\PropertyException
      * @expectedExceptionMessage The image you have provided is invalid.
      */
     public function testEmptyImage(): void
@@ -49,7 +49,7 @@ final class ImageValueTest extends TestCase
     }
 
     /**
-     * @expectedException \JeroenDesloovere\VCard\Exception\PropertyException
+     * @expectedException \Dilone\VCard\Exception\PropertyException
      * @expectedExceptionMessage The image you have provided is invalid.
      */
     public function testWrongFile(): void

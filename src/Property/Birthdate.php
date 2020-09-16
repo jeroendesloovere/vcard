@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace JeroenDesloovere\VCard\Property;
+namespace Dilone\VCard\Property;
 
-use JeroenDesloovere\VCard\Formatter\Property\BirthdateFormatter;
-use JeroenDesloovere\VCard\Formatter\Property\NodeFormatterInterface;
-use JeroenDesloovere\VCard\Parser\Property\BirthdateParser;
-use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
-use JeroenDesloovere\VCard\Property\Value\DateTimeOrStringValue;
+use Dilone\VCard\Formatter\Property\BirthdateFormatter;
+use Dilone\VCard\Formatter\Property\NodeFormatterInterface;
+use Dilone\VCard\Parser\Property\BirthdateParser;
+use Dilone\VCard\Parser\Property\NodeParserInterface;
+use Dilone\VCard\Property\Value\DateTimeOrStringValue;
 
 final class Birthdate extends DateTimeOrStringValue implements PropertyInterface, SimpleNodeInterface
 {

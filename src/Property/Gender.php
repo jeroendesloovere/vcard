@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace JeroenDesloovere\VCard\Property;
+namespace Dilone\VCard\Property;
 
-use JeroenDesloovere\VCard\Exception\PropertyException;
-use JeroenDesloovere\VCard\Formatter\Property\GenderFormatter;
-use JeroenDesloovere\VCard\Formatter\Property\NodeFormatterInterface;
-use JeroenDesloovere\VCard\Parser\Property\GenderParser;
-use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
+use Dilone\VCard\Exception\PropertyException;
+use Dilone\VCard\Formatter\Property\GenderFormatter;
+use Dilone\VCard\Formatter\Property\NodeFormatterInterface;
+use Dilone\VCard\Parser\Property\GenderParser;
+use Dilone\VCard\Parser\Property\NodeParserInterface;
 
 final class Gender implements PropertyInterface, NodeInterface
 {

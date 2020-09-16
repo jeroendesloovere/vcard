@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace JeroenDesloovere\VCard\Formatter\Property;
+namespace Dilone\VCard\Formatter\Property;
 
-use JeroenDesloovere\VCard\Property\Telephone;
+use Dilone\VCard\Property\Telephone;
 
 final class TelephoneFormatter implements NodeFormatterInterface
 {
@@ -19,7 +19,7 @@ final class TelephoneFormatter implements NodeFormatterInterface
     public function getVcfString(): string
     {
         return $this->telephone->getNode() .
-          ';TYPE=' . $this->telephone->getType()->__toString() .
-          ';VALUE=' . $this->telephone->getValue() . ':tel:' . $this->telephone->getTelephoneNumber();
+            ';TYPE=' . $this->telephone->getType()->__toString() .
+            ';VALUE=' . $this->telephone->getValue() . ':tel:' . $this->telephone->getTelephoneNumber();
     }
 }

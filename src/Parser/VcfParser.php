@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace JeroenDesloovere\VCard\Parser;
+namespace Dilone\VCard\Parser;
 
-use JeroenDesloovere\VCard\Exception\ParserException;
-use JeroenDesloovere\VCard\Formatter\VcfFormatter;
-use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
-use JeroenDesloovere\VCard\Property\NodeInterface;
-use JeroenDesloovere\VCard\VCard;
-use JeroenDesloovere\VCard\Property\Parameter\Version;
-use JeroenDesloovere\VCard\Property\Parameter\Kind;
+use Dilone\VCard\Exception\ParserException;
+use Dilone\VCard\Formatter\VcfFormatter;
+use Dilone\VCard\Parser\Property\NodeParserInterface;
+use Dilone\VCard\Property\NodeInterface;
+use Dilone\VCard\VCard;
+use Dilone\VCard\Property\Parameter\Version;
+use Dilone\VCard\Property\Parameter\Kind;
 
 final class VcfParser implements ParserInterface
 {
-    /** @var NodeParserInterface[] - f.e. ['ADR' => JeroenDesloovere\VCard\Parser\Property\AddressParser] */
+    /** @var NodeParserInterface[] - f.e. ['ADR' => Dilone\VCard\Parser\Property\AddressParser] */
     private $parsers = [];
 
     public function __construct()
@@ -82,8 +82,9 @@ final class VcfParser implements ParserInterface
     private function createVcardObjectWithProperties(string $content): VCard
     {
         $vcardProperties = array(
-          Kind::getNode() => null,
-          Version::getNode() => null);
+            Kind::getNode() => null,
+            Version::getNode() => null
+        );
 
         $lines = explode("\n", $content);
         foreach ($lines as $line) {

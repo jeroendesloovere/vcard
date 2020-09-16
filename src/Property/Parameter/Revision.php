@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace JeroenDesloovere\VCard\Property\Parameter;
+namespace Dilone\VCard\Property\Parameter;
 
-use JeroenDesloovere\VCard\Formatter\Property\NodeFormatterInterface;
-use JeroenDesloovere\VCard\Formatter\Property\Parameter\RevisionFormatter;
-use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
-use JeroenDesloovere\VCard\Parser\Property\RevisionParser;
-use JeroenDesloovere\VCard\Property\SimpleNodeInterface;
-use JeroenDesloovere\VCard\Property\Value\DateTimeValue;
+use Dilone\VCard\Formatter\Property\NodeFormatterInterface;
+use Dilone\VCard\Formatter\Property\Parameter\RevisionFormatter;
+use Dilone\VCard\Parser\Property\NodeParserInterface;
+use Dilone\VCard\Parser\Property\RevisionParser;
+use Dilone\VCard\Property\SimpleNodeInterface;
+use Dilone\VCard\Property\Value\DateTimeValue;
 
 final class Revision extends DateTimeValue implements PropertyParameterInterface, SimpleNodeInterface
 {

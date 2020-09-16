@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace JeroenDesloovere\VCard\Parser\Property;
+namespace Dilone\VCard\Parser\Property;
 
 class PropertyParser
 {

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace JeroenDesloovere\VCard\Formatter;
+namespace Dilone\VCard\Formatter;
 
-use JeroenDesloovere\VCard\Exception\FormatterException;
-use JeroenDesloovere\VCard\VCard;
+use Dilone\VCard\Exception\FormatterException;
+use Dilone\VCard\VCard;
 
 final class Formatter
 {

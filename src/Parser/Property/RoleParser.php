@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace JeroenDesloovere\VCard\Parser\Property;
+namespace Dilone\VCard\Parser\Property;
 
-use JeroenDesloovere\VCard\Property\Role;
-use JeroenDesloovere\VCard\Property\NodeInterface;
+use Dilone\VCard\Property\Role;
+use Dilone\VCard\Property\NodeInterface;
 
 final class RoleParser implements NodeParserInterface
 {

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace JeroenDesloovere\VCard\Property;
+namespace Dilone\VCard\Property;
 
-use JeroenDesloovere\VCard\Formatter\Property\NodeFormatterInterface;
-use JeroenDesloovere\VCard\Formatter\Property\TelephoneFormatter;
-use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
-use JeroenDesloovere\VCard\Parser\Property\TelephoneParser;
-use JeroenDesloovere\VCard\Property\Parameter\Type;
-use JeroenDesloovere\VCard\Property\Parameter\Value;
+use Dilone\VCard\Formatter\Property\NodeFormatterInterface;
+use Dilone\VCard\Formatter\Property\TelephoneFormatter;
+use Dilone\VCard\Parser\Property\NodeParserInterface;
+use Dilone\VCard\Parser\Property\TelephoneParser;
+use Dilone\VCard\Property\Parameter\Type;
+use Dilone\VCard\Property\Parameter\Value;
 
 final class Telephone implements PropertyInterface, NodeInterface
 {

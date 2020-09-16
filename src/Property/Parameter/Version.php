@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace JeroenDesloovere\VCard\Property\Parameter;
+namespace Dilone\VCard\Property\Parameter;
 
-use JeroenDesloovere\VCard\Exception\PropertyParameterException;
-use JeroenDesloovere\VCard\Formatter\Property\NodeFormatterInterface;
-use JeroenDesloovere\VCard\Formatter\Property\Parameter\VersionFormatter;
-use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
-use JeroenDesloovere\VCard\Parser\Property\Parameter\VersionParser;
-use JeroenDesloovere\VCard\Property\SimpleNodeInterface;
+use Dilone\VCard\Exception\PropertyParameterException;
+use Dilone\VCard\Formatter\Property\NodeFormatterInterface;
+use Dilone\VCard\Formatter\Property\Parameter\VersionFormatter;
+use Dilone\VCard\Parser\Property\NodeParserInterface;
+use Dilone\VCard\Parser\Property\Parameter\VersionParser;
+use Dilone\VCard\Property\SimpleNodeInterface;
 
 final class Version implements PropertyParameterInterface, SimpleNodeInterface
 {
