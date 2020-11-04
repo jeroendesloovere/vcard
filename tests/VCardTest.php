@@ -56,7 +56,7 @@ class VCardTest extends \PHPUnit_Framework_TestCase
         $this->additional = '&';
         $this->prefix = 'Mister';
         $this->suffix = 'Junior';
-        
+
         $this->emailAddress1 = '';
         $this->emailAddress2 = '';
 
@@ -65,6 +65,10 @@ class VCardTest extends \PHPUnit_Framework_TestCase
 
         $this->firstName3 = 'Garçon';
         $this->lastName3 = 'Jéroèn';
+
+        $this->firstName4 = '潤發';
+        $this->lastName4 = '周';
+        $this->fullName4 = '周潤發';
     }
 
     /**
@@ -127,6 +131,29 @@ class VCardTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals($this->vcard, $this->vcard->addName(''));
     }
+
+
+    /**
+     * Test addName with fullname
+     */
+    public function testAddNameWithFullName()
+    {
+        $return = $this->vcard->addName(
+            $this->lastName4,
+            $this->firstName4,
+            '',
+            '',
+            '',
+            $this->fullName4
+        );
+
+        $this->assertEquals($this->vcard, $return);
+
+        $this->assertContains($this->fullName4, $this->vcard->getOutput());
+        $this->assertEquals('zhou-run-fa', $this->vcard->getFilename());
+    }
+
+
 
     public function testAddNote()
     {
@@ -334,6 +361,7 @@ class VCardTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('mister-jeroen-desloovere-junior', $this->vcard->getFilename());
     }
+
 
     /**
      * Test multiple birthdays
