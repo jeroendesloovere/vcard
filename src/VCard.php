@@ -225,8 +225,9 @@ class VCard
      * @param string $element The name of the element to set
      * @throws VCardException
      */
-    private function addMedia($property, $url, $include = true, $element)
+    private function addMedia($property, $url, $include, $element)
     {
+        $include = is_bool($include) ? $include : true;
         $mimeType = null;
 
         //Is this URL for a remote resource?
