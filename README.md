@@ -8,10 +8,18 @@ Required parameter $element follows optional parameter $include
 
 ## Usage
 
-### Installation
+### Adjust your composer.json
 
 ```bash
-composer require lordsimal/vcard
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/lordsimal/vcard"
+    }
+  ],
+  "require": {
+    "jeroendesloovere/vcard": "dev-master",
+  }
 ```
 
 See the rest of the doc in the base repo https://github.com/jeroendesloovere/vcard
