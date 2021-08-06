@@ -22,4 +22,6 @@ Required parameter $element follows optional parameter $include
   }
 ```
 
+Then perform a `composer update`
+
 See the rest of the doc in the base repo https://github.com/jeroendesloovere/vcard
