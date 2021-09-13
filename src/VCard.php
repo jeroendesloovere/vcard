@@ -225,7 +225,7 @@ class VCard
      * @param string $element The name of the element to set
      * @throws VCardException
      */
-    private function addMedia($property, $url, $include = true, $element)
+    private function addMedia($property, $url, $include = true, $element = 'photo')
     {
         $mimeType = null;
 
