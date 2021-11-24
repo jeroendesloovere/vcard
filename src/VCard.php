@@ -26,6 +26,7 @@ use JeroenDesloovere\VCard\Property\PropertyInterface;
 use JeroenDesloovere\VCard\Property\Role;
 use JeroenDesloovere\VCard\Property\Telephone;
 use JeroenDesloovere\VCard\Property\Title;
+use JeroenDesloovere\VCard\Property\Url;
 
 final class VCard
 {
@@ -50,6 +51,7 @@ final class VCard
         Photo::class,
         Logo::class,
         Telephone::class,
+        Url::class,
     ];
 
     private const ONLY_APPLY_TO_INDIVIDUAL_KIND = [
