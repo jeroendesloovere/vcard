@@ -71,7 +71,7 @@ $formatter->download();
 
 ### Organizational Properties:
 * [x] [TITLE](./src/Property/Title.php) - The title of the object
-* [ ] ROLE - The role of the object
+* [x] ROLE - The role of the object
 * [x] [LOGO](./src/Property/Logo.php) - The logo of the object (data URI)
 * [ ] ORG - The organisation related to the object
 * [ ] ORGUNIT - The organisational unit related to the object
