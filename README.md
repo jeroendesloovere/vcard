@@ -86,7 +86,7 @@ $formatter->download();
 * [ ] SOUND - Audio related to the object (data URI)
 * [ ] UID - A unique identifier for the object
 * [ ] CLIENTPIDMAP - Not required
-* [ ] URL - Any URL related to the object
+* [x] [URL](./src/Property/Url.php) - Any URL related to the object
 * [X] [VERSION](./src/Property/Parameter/Version.php) - Is mandatory for 4.0
 
 ### Security Properties:

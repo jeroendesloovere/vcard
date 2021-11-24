@@ -14,6 +14,7 @@ BDAY:2015-12-05T00:00:00.00
 ANNIVERSARY:2017-12-05T00:00:00.00
 TEL;VALUE=uri;TYPE=home:tel:+33-01-23-45-67
 TEL;VALUE=uri;TYPE=work:tel:+33-05-42-41-96
+URL:https://www.jeroendesloovere.be
 END:VCARD
 BEGIN:VCARD
 KIND:individual

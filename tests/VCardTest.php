@@ -25,6 +25,7 @@ use JeroenDesloovere\VCard\Property\Photo;
 use JeroenDesloovere\VCard\Property\Telephone;
 use JeroenDesloovere\VCard\Property\Title;
 use JeroenDesloovere\VCard\Property\Role;
+use JeroenDesloovere\VCard\Property\Url;
 use JeroenDesloovere\VCard\VCard;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
@@ -69,7 +70,9 @@ final class VCardTest extends TestCase
             ->add(new Birthdate(new \DateTime('2015-12-05')))
             ->add(new Anniversary(new \DateTime('2017-12-05')))
             ->add(new Telephone('+33 01 23 45 67'))
-            ->add(new Telephone('+33-05-42-41-96', Type::work()));
+            ->add(new Telephone('+33-05-42-41-96', Type::work()))
+            ->add(new Url('https://www.jeroendesloovere.be'))
+        ;
     }
 
     private function setUpSecondVCard(): void
@@ -299,7 +302,7 @@ final class VCardTest extends TestCase
      */
     public function testVCardGetProperties(): void
     {
-        $this->assertCount(12, $this->firstVCard->getProperties());
+        $this->assertCount(13, $this->firstVCard->getProperties());
         $this->assertCount(1, $this->firstVCard->getProperties(Gender::class));
         $this->assertCount(1, $this->firstVCard->getProperties(Nickname::class));
         $this->assertCount(1, $this->firstVCard->getProperties(Name::class));
@@ -309,6 +312,7 @@ final class VCardTest extends TestCase
         $this->assertCount(1, $this->firstVCard->getProperties(Birthdate::class));
         $this->assertCount(1, $this->firstVCard->getProperties(Anniversary::class));
         $this->assertCount(2, $this->firstVCard->getProperties(Telephone::class));
+        $this->assertCount(1, $this->firstVCard->getProperties(Url::class));
 
         $this->assertCount(2, $this->secondVCard->getProperties());
         $this->assertCount(1, $this->secondVCard->getProperties(Name::class));
