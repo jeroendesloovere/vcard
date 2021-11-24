@@ -91,7 +91,7 @@ class VCard
     ) {
         // init value
         $value = $name . ';' . $extended . ';' . $street . ';' . $city . ';' . $region . ';' . $zip . ';' . $country;
-
+        $type = $this->transformTypes($type);
         // set property
         $this->setProperty(
             'address',
@@ -154,9 +154,10 @@ class VCard
      */
     public function addEmail($address, $type = '')
     {
+        $type = $this->transformTypes($type);
         $this->setProperty(
             'email',
-            'EMAIL;INTERNET' . (($type != '') ? ';' . $type : ''),
+            'EMAIL;type=INTERNET' . (($type != '') ? ';' . $type : ''),
             $address
         );
 
@@ -413,6 +414,7 @@ class VCard
      */
     public function addPhoneNumber($number, $type = '')
     {
+        $type = $this->transformTypes($type);
         $this->setProperty(
             'phoneNumber',
             'TEL' . (($type != '') ? ';' . $type : ''),
@@ -503,6 +505,7 @@ class VCard
      */
     public function addURL($url, $type = '')
     {
+        $type = $this->transformTypes($type);
         $this->setProperty(
             'url',
             'URL' . (($type != '') ? ';' . $type : ''),
@@ -967,5 +970,25 @@ class VCard
         $version = isset($matches[1]) ? ((int)$matches[1]) : 999;
 
         return ($version < 8);
+    }
+
+    /**
+     * Takes type(s) string like "PREF;WORK;FAX" and adds "type=" to each type property.
+     *
+     * @param string $types
+     *
+     * @return string
+     */
+    protected function transformTypes($types)
+    {
+        if ($types == '') {
+            return $types;
+        }
+
+        $types = explode(';', $types);
+        foreach ($types as $key => $type) {
+            $types[$key] = 'type=' . $type;
+        }
+        return implode(';', $types);
     }
 }
