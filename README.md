@@ -95,6 +95,12 @@ return Response::make(
 );
 ```
 
+## Tests
+
+```bash
+vendor/bin/phpunit tests
+```
+
 ## Documentation
 
 The class is well documented inline. If you use a decent IDE you'll see that each method is documented with PHPDoc.

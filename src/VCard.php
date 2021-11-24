@@ -192,7 +192,7 @@ class VCard
     {
         $this->setProperty(
             'label',
-            'LABEL' . ($type !== '' ? ';' . $type : ''),
+            'LABEL' . ($type !== '' ? ';' . $type : '') . $this->getCharsetString(),
             $label
         );
 
