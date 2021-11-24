@@ -30,6 +30,7 @@ $vcard->addPhoneNumber(1234121212, 'PREF;WORK');
 $vcard->addPhoneNumber(123456789, 'WORK');
 $vcard->addAddress(null, null, 'street', 'worktown', null, 'workpostcode', 'Belgium');
 $vcard->addURL('http://www.jeroendesloovere.be');
+$vcard->addLabel('street, worktown, workpostcode Belgium', 'work');
 
 $vcard->addPhoto(__DIR__ . '/assets/landscape.jpeg');
 //$vcard->addPhoto('https://raw.githubusercontent.com/jeroendesloovere/vcard/master/tests/image.jpg');
