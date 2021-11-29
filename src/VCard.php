@@ -67,14 +67,14 @@ class VCard
     /**
      * Add address
      *
-     * @param  string [optional] $name
-     * @param  string [optional] $extended
-     * @param  string [optional] $street
-     * @param  string [optional] $city
-     * @param  string [optional] $region
-     * @param  string [optional] $zip
-     * @param  string [optional] $country
-     * @param  string [optional] $type
+     * @param string [optional] $name
+     * @param string [optional] $extended
+     * @param string [optional] $street
+     * @param string [optional] $city
+     * @param string [optional] $region
+     * @param string [optional] $zip
+     * @param string [optional] $country
+     * @param string [optional] $type
      *                                     $type may be DOM | INTL | POSTAL | PARCEL | HOME | WORK
      *                                     or any combination of these: e.g. "WORK;PARCEL;POSTAL"
      * @return $this
@@ -88,7 +88,8 @@ class VCard
         $zip = '',
         $country = '',
         $type = 'WORK;POSTAL'
-    ) {
+    )
+    {
         // init value
         $value = $name . ';' . $extended . ';' . $street . ';' . $city . ';' . $region . ';' . $zip . ';' . $country;
 
@@ -105,7 +106,7 @@ class VCard
     /**
      * Add birthday
      *
-     * @param  string $date Format is YYYY-MM-DD
+     * @param string $date Format is YYYY-MM-DD
      * @return $this
      */
     public function addBirthday($date)
@@ -146,8 +147,8 @@ class VCard
     /**
      * Add email
      *
-     * @param  string $address The e-mail address
-     * @param  string [optional] $type    The type of the email address
+     * @param string $address The e-mail address
+     * @param string [optional] $type    The type of the email address
      *                                    $type may be  PREF | WORK | HOME
      *                                    or any combination of these: e.g. "PREF;WORK"
      * @return $this
@@ -166,7 +167,7 @@ class VCard
     /**
      * Add jobtitle
      *
-     * @param  string $jobtitle The jobtitle for the person.
+     * @param string $jobtitle The jobtitle for the person.
      * @return $this
      */
     public function addJobtitle($jobtitle)
@@ -202,7 +203,7 @@ class VCard
     /**
      * Add role
      *
-     * @param  string $role The role for the person.
+     * @param string $role The role for the person.
      * @return $this
      */
     public function addRole($role)
@@ -225,7 +226,7 @@ class VCard
      * @param string $element The name of the element to set
      * @throws VCardException
      */
-    private function addMedia($property, $url, $include = true, $element)
+    private function addMedia($property, $url, $include, $element)
     {
         $mimeType = null;
 
@@ -233,11 +234,9 @@ class VCard
         if (filter_var($url, FILTER_VALIDATE_URL) !== false) {
             $headers = get_headers($url, 1);
 
-            if (array_key_exists('Content-Type', $headers)) {
-                $mimeType = $headers['Content-Type'];
-                if (is_array($mimeType)) {
-                    $mimeType = end($mimeType);
-                }
+            $mimeType = $headers['Content-Type'] ?? $headers['content-type'] ?? null;
+            if (is_array($mimeType)) {
+                $mimeType = end($mimeType);
             }
         } else {
             //Local file, so inspect it directly
@@ -247,12 +246,13 @@ class VCard
             $mimeType = strstr($mimeType, ';', true);
         }
         if (!is_string($mimeType) || substr($mimeType, 0, 6) !== 'image/') {
+            info('url',[$url]);
             throw VCardException::invalidImage();
         }
         $fileType = strtoupper(substr($mimeType, 6));
 
         if ($include) {
-            if ((bool) ini_get('allow_url_fopen') === true) {
+            if ((bool)ini_get('allow_url_fopen') === true) {
                 $value = file_get_contents($url);
             } else {
                 $curl = curl_init();
@@ -320,11 +320,11 @@ class VCard
     /**
      * Add name
      *
-     * @param  string [optional] $lastName
-     * @param  string [optional] $firstName
-     * @param  string [optional] $additional
-     * @param  string [optional] $prefix
-     * @param  string [optional] $suffix
+     * @param string [optional] $lastName
+     * @param string [optional] $firstName
+     * @param string [optional] $additional
+     * @param string [optional] $prefix
+     * @param string [optional] $suffix
      * @return $this
      */
     public function addName(
@@ -333,7 +333,8 @@ class VCard
         $additional = '',
         $prefix = '',
         $suffix = ''
-    ) {
+    )
+    {
         // define values with non-empty values
         $values = array_filter([
             $prefix,
@@ -370,7 +371,7 @@ class VCard
     /**
      * Add note
      *
-     * @param  string $note
+     * @param string $note
      * @return $this
      */
     public function addNote($note)
@@ -404,8 +405,8 @@ class VCard
     /**
      * Add phone number
      *
-     * @param  string $number
-     * @param  string [optional] $type
+     * @param string $number
+     * @param string [optional] $type
      *                                   Type may be PREF | WORK | HOME | VOICE | FAX | MSG |
      *                                   CELL | PAGER | BBS | CAR | MODEM | ISDN | VIDEO
      *                                   or any senseful combination, e.g. "PREF;WORK;VOICE"
@@ -425,8 +426,8 @@ class VCard
     /**
      * Add Logo
      *
-     * @param  string $url image url or filename
-     * @param  bool $include Include the image in our vcard?
+     * @param string $url image url or filename
+     * @param bool $include Include the image in our vcard?
      * @return $this
      */
     public function addLogo($url, $include = true)
@@ -444,7 +445,7 @@ class VCard
     /**
      * Add Logo content
      *
-     * @param  string $content image content
+     * @param string $content image content
      * @return $this
      */
     public function addLogoContent($content)
@@ -461,8 +462,8 @@ class VCard
     /**
      * Add Photo
      *
-     * @param  string $url image url or filename
-     * @param  bool $include Include the image in our vcard?
+     * @param string $url image url or filename
+     * @param bool $include Include the image in our vcard?
      * @return $this
      */
     public function addPhoto($url, $include = true)
@@ -480,7 +481,7 @@ class VCard
     /**
      * Add Photo content
      *
-     * @param  string $content image content
+     * @param string $content image content
      * @return $this
      */
     public function addPhotoContent($content)
@@ -497,8 +498,8 @@ class VCard
     /**
      * Add URL
      *
-     * @param  string $url
-     * @param  string [optional] $type Type may be WORK | HOME
+     * @param string $url
+     * @param string [optional] $type Type may be WORK | HOME
      * @return $this
      */
     public function addURL($url, $type = '')
@@ -598,7 +599,7 @@ class VCard
     /**
      * Decode
      *
-     * @param  string $value The value to decode
+     * @param string $value The value to decode
      * @return string decoded
      */
     private function decode($value)
@@ -627,7 +628,7 @@ class VCard
      * Fold a line according to RFC2425 section 5.8.1.
      *
      * @link http://tools.ietf.org/html/rfc2425#section-5.8.1
-     * @param  string $text
+     * @param string $text
      * @return mixed
      */
     protected function fold($text)
@@ -643,10 +644,10 @@ class VCard
     /**
      * multibyte word chunk split
      * @link http://php.net/manual/en/function.chunk-split.php#107711
-     * 
-     * @param  string  $body     The string to be chunked.
-     * @param  integer $chunklen The chunk length.
-     * @param  string  $end      The line ending sequence.
+     *
+     * @param string $body The string to be chunked.
+     * @param integer $chunklen The chunk length.
+     * @param string $end The line ending sequence.
      * @return string            Chunked string
      */
     protected function chunk_split_unicode($body, $chunklen = 76, $end = "\r\n")
@@ -664,7 +665,7 @@ class VCard
      * Escape newline characters according to RFC2425 section 5.8.4.
      *
      * @link http://tools.ietf.org/html/rfc2425#section-5.8.4
-     * @param  string $text
+     * @param string $text
      * @return string
      */
     protected function escape($text)
@@ -677,9 +678,9 @@ class VCard
 
     /**
      * Get output as string
+     * @return string
      * @deprecated in the future
      *
-     * @return string
      */
     public function get()
     {
@@ -745,7 +746,7 @@ class VCard
     /**
      * Get headers
      *
-     * @param  bool $asAssociative
+     * @param bool $asAssociative
      * @return array
      */
     public function getHeaders($asAssociative)
@@ -800,7 +801,7 @@ class VCard
     /**
      * Has property
      *
-     * @param  string $key
+     * @param string $key
      * @return bool
      */
     public function hasProperty($key)
@@ -862,7 +863,7 @@ class VCard
     /**
      * Set charset
      *
-     * @param  mixed $charset
+     * @param mixed $charset
      * @return void
      */
     public function setCharset($charset)
@@ -873,9 +874,9 @@ class VCard
     /**
      * Set filename
      *
-     * @param  mixed $value
-     * @param  bool $overwrite [optional] Default overwrite is true
-     * @param  string $separator [optional] Default separator is an underscore '_'
+     * @param mixed $value
+     * @param bool $overwrite [optional] Default overwrite is true
+     * @param string $separator [optional] Default separator is an underscore '_'
      * @return void
      */
     public function setFilename($value, $overwrite = true, $separator = '_')
@@ -910,7 +911,7 @@ class VCard
     /**
      * Set the save path directory
      *
-     * @param  string $savePath Save Path
+     * @param string $savePath Save Path
      * @throws VCardException
      */
     public function setSavePath($savePath)
@@ -930,9 +931,9 @@ class VCard
     /**
      * Set property
      *
-     * @param  string $element The element name you want to set, f.e.: name, email, phoneNumber, ...
-     * @param  string $key
-     * @param  string $value
+     * @param string $element The element name you want to set, f.e.: name, email, phoneNumber, ...
+     * @param string $key
+     * @param string $value
      * @throws VCardException
      */
     private function setProperty($element, $key, $value)
