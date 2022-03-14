@@ -446,8 +446,8 @@ class VCardTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->vcard, $this->vcard->addLabel('My label'));
         $this->assertSame($this->vcard, $this->vcard->addLabel('My work label', 'WORK'));
         $this->assertSame(2, count($this->vcard->getProperties()));
-        $this->assertContains('LABEL:My label', $this->vcard->getOutput());
-        $this->assertContains('LABEL;WORK:My work label', $this->vcard->getOutput());
+        $this->assertContains('LABEL;CHARSET=utf-8:My label', $this->vcard->getOutput());
+        $this->assertContains('LABEL;WORK;CHARSET=utf-8:My work label', $this->vcard->getOutput());
     }
 
     public function testChunkSplitUnicode()
