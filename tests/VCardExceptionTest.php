@@ -4,6 +4,8 @@ namespace JeroenDesloovere\VCard;
 
 use PHPUnit\Framework\TestCase;
 
+use PHPUnit\Framework\TestCase;
+
 /*
  * This file is part of the VCard PHP Class from Jeroen Desloovere.
  *
