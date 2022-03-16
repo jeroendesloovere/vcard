@@ -192,7 +192,7 @@ class VCard
     {
         $this->setProperty(
             'label',
-            'LABEL' . ($type !== '' ? ';' . $type : ''),
+            'LABEL' . ($type !== '' ? ';' . $type : '') . $this->getCharsetString(),
             $label
         );
 
@@ -669,6 +669,10 @@ class VCard
      */
     protected function escape($text)
     {
+        if ($text === null) {
+            return '';
+        }
+
         $text = str_replace("\r\n", "\\n", $text);
         $text = str_replace("\n", "\\n", $text);
 

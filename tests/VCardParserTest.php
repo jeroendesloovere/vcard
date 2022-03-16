@@ -287,4 +287,13 @@ class VCardParserTest extends TestCase
     {
         $parser = VCardParser::parseFromFile(__DIR__ . '/does-not-exist.vcf');
     }
+
+    public function testLabel()
+    {
+        $label = 'street, worktown, workpostcode Belgium';
+        $vcard = new VCard();
+        $vcard->addLabel($label, 'work');
+        $parser = new VCardParser($vcard->buildVCard());
+        $this->assertEquals($parser->getCardAtIndex(0)->label, $label);
+    }
 }

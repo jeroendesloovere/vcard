@@ -268,6 +268,9 @@ class VCardParser implements Iterator
                     case 'CATEGORIES':
                         $cardData->categories = array_map('trim', explode(',', $value));
                         break;
+                    case 'LABEL':
+                        $cardData->label = $value;
+                        break;
                 }
             }
         }
