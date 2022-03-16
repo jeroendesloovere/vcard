@@ -15,6 +15,7 @@ use PHPUnit\Framework\TestCase;
  */
 
 use JeroenDesloovere\VCard\VCard;
+use PHPUnit\Framework\TestCase;
 
 /**
  * This class will test our VCard PHP Class which can generate VCards.
@@ -41,7 +42,12 @@ class VCardTest extends TestCase
         ];
     }
 
-    public function setUp(): void
+    /**
+     * Set up before class
+     *
+     * @return void
+     */
+    protected function setUp(): void
     {
         // set timezone
         date_default_timezone_set('Europe/Brussels');
@@ -53,7 +59,7 @@ class VCardTest extends TestCase
         $this->additional = '&';
         $this->prefix = 'Mister';
         $this->suffix = 'Junior';
-        
+
         $this->emailAddress1 = '';
         $this->emailAddress2 = '';
 
@@ -67,7 +73,7 @@ class VCardTest extends TestCase
     /**
      * Tear down after class
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $this->vcard = null;
     }
@@ -134,7 +140,7 @@ class VCardTest extends TestCase
     {
         $this->assertEquals($this->vcard, $this->vcard->addPhoneNumber(''));
         $this->assertEquals($this->vcard, $this->vcard->addPhoneNumber(''));
-        $this->assertEquals(2, count($this->vcard->getProperties()));
+        $this->assertCount(2, $this->vcard->getProperties());
     }
 
     public function testAddPhotoWithJpgPhoto()
@@ -222,7 +228,7 @@ class VCardTest extends TestCase
     {
         $this->assertEquals($this->vcard, $this->vcard->addUrl('1'));
         $this->assertEquals($this->vcard, $this->vcard->addUrl('2'));
-        $this->assertEquals(2, count($this->vcard->getProperties()));
+        $this->assertCount(2, $this->vcard->getProperties());
     }
 
     /**
