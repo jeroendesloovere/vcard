@@ -5,6 +5,8 @@ namespace JeroenDesloovere\VCard\tests;
 // required to load
 require_once __DIR__ . '/../vendor/autoload.php';
 
+use PHPUnit\Framework\TestCase;
+
 /*
  * This file is part of the VCard PHP Class from Jeroen Desloovere.
  *
@@ -17,7 +19,7 @@ use JeroenDesloovere\VCard\VCard;
 /**
  * This class will test our VCard PHP Class which can generate VCards.
  */
-class VCardTest extends \PHPUnit_Framework_TestCase
+class VCardTest extends TestCase
 {
     /**
      * @var VCard
@@ -39,12 +41,7 @@ class VCardTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    /**
-     * Set up before class
-     *
-     * @return void
-     */
-    public function setUp()
+    public function setUp(): void
     {
         // set timezone
         date_default_timezone_set('Europe/Brussels');
@@ -70,7 +67,7 @@ class VCardTest extends \PHPUnit_Framework_TestCase
     /**
      * Tear down after class
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->vcard = null;
     }
@@ -86,9 +83,9 @@ class VCardTest extends \PHPUnit_Framework_TestCase
           '55555',
           'USA'
         ));
-      $this->assertContains('ADR;WORK;POSTAL;CHARSET=utf-8:;88th Floor;555 East Flours Street;Los Angele', $this->vcard->getOutput());
+      $this->assertStringContainsString('ADR;WORK;POSTAL;CHARSET=utf-8:;88th Floor;555 East Flours Street;Los Angele', $this->vcard->getOutput());
       // Should fold on row 75, so we should not see the full address.
-      $this->assertNotContains('ADR;WORK;POSTAL;CHARSET=utf-8:;88th Floor;555 East Flours Street;Los Angeles;CA;55555;', $this->vcard->getOutput());
+      $this->assertStringNotContainsString('ADR;WORK;POSTAL;CHARSET=utf-8:;88th Floor;555 East Flours Street;Los Angeles;CA;55555;', $this->vcard->getOutput());
     }
 
     public function testAddBirthday()
@@ -299,9 +296,9 @@ class VCardTest extends \PHPUnit_Framework_TestCase
 
         foreach ($emails as $key => $email) {
             if (is_string($key)) {
-                $this->assertContains('EMAIL;INTERNET;' . $key . ':' . $email, $this->vcard->getOutput());
+                $this->assertStringContainsString('EMAIL;INTERNET;' . $key . ':' . $email, $this->vcard->getOutput());
             } else {
-                $this->assertContains('EMAIL;INTERNET:' . $email, $this->vcard->getOutput());
+                $this->assertStringContainsString('EMAIL;INTERNET:' . $email, $this->vcard->getOutput());
             }
         }
     }

@@ -672,7 +672,7 @@ class VCard
         if ($text === null) {
             return null;
         }
-        
+
         $text = str_replace("\r\n", "\\n", $text);
         $text = str_replace("\n", "\\n", $text);
 
