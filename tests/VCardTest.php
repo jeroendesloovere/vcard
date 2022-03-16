@@ -5,6 +5,8 @@ namespace JeroenDesloovere\VCard\tests;
 // required to load
 require_once __DIR__ . '/../vendor/autoload.php';
 
+use PHPUnit\Framework\TestCase;
+
 /*
  * This file is part of the VCard PHP Class from Jeroen Desloovere.
  *
@@ -13,11 +15,12 @@ require_once __DIR__ . '/../vendor/autoload.php';
  */
 
 use JeroenDesloovere\VCard\VCard;
+use PHPUnit\Framework\TestCase;
 
 /**
  * This class will test our VCard PHP Class which can generate VCards.
  */
-class VCardTest extends \PHPUnit_Framework_TestCase
+class VCardTest extends TestCase
 {
     /**
      * @var VCard
@@ -44,7 +47,7 @@ class VCardTest extends \PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function setUp(): void
     {
         // set timezone
         date_default_timezone_set('Europe/Brussels');
@@ -56,7 +59,7 @@ class VCardTest extends \PHPUnit_Framework_TestCase
         $this->additional = '&';
         $this->prefix = 'Mister';
         $this->suffix = 'Junior';
-        
+
         $this->emailAddress1 = '';
         $this->emailAddress2 = '';
 
@@ -70,7 +73,7 @@ class VCardTest extends \PHPUnit_Framework_TestCase
     /**
      * Tear down after class
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->vcard = null;
     }
@@ -86,9 +89,9 @@ class VCardTest extends \PHPUnit_Framework_TestCase
           '55555',
           'USA'
         ));
-      $this->assertContains('ADR;WORK;POSTAL;CHARSET=utf-8:;88th Floor;555 East Flours Street;Los Angele', $this->vcard->getOutput());
+      $this->assertStringContainsString('ADR;WORK;POSTAL;CHARSET=utf-8:;88th Floor;555 East Flours Street;Los Angele', $this->vcard->getOutput());
       // Should fold on row 75, so we should not see the full address.
-      $this->assertNotContains('ADR;WORK;POSTAL;CHARSET=utf-8:;88th Floor;555 East Flours Street;Los Angeles;CA;55555;', $this->vcard->getOutput());
+      $this->assertStringNotContainsString('ADR;WORK;POSTAL;CHARSET=utf-8:;88th Floor;555 East Flours Street;Los Angeles;CA;55555;', $this->vcard->getOutput());
     }
 
     public function testAddBirthday()
@@ -137,7 +140,7 @@ class VCardTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals($this->vcard, $this->vcard->addPhoneNumber(''));
         $this->assertEquals($this->vcard, $this->vcard->addPhoneNumber(''));
-        $this->assertEquals(2, count($this->vcard->getProperties()));
+        $this->assertCount(2, $this->vcard->getProperties());
     }
 
     public function testAddPhotoWithJpgPhoto()
@@ -225,7 +228,7 @@ class VCardTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals($this->vcard, $this->vcard->addUrl('1'));
         $this->assertEquals($this->vcard, $this->vcard->addUrl('2'));
-        $this->assertEquals(2, count($this->vcard->getProperties()));
+        $this->assertCount(2, $this->vcard->getProperties());
     }
 
     /**
@@ -299,9 +302,9 @@ class VCardTest extends \PHPUnit_Framework_TestCase
 
         foreach ($emails as $key => $email) {
             if (is_string($key)) {
-                $this->assertContains('EMAIL;INTERNET;' . $key . ':' . $email, $this->vcard->getOutput());
+                $this->assertStringContainsString('EMAIL;INTERNET;' . $key . ':' . $email, $this->vcard->getOutput());
             } else {
-                $this->assertContains('EMAIL;INTERNET:' . $email, $this->vcard->getOutput());
+                $this->assertStringContainsString('EMAIL;INTERNET:' . $email, $this->vcard->getOutput());
             }
         }
     }
@@ -446,8 +449,8 @@ class VCardTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->vcard, $this->vcard->addLabel('My label'));
         $this->assertSame($this->vcard, $this->vcard->addLabel('My work label', 'WORK'));
         $this->assertSame(2, count($this->vcard->getProperties()));
-        $this->assertContains('LABEL:My label', $this->vcard->getOutput());
-        $this->assertContains('LABEL;WORK:My work label', $this->vcard->getOutput());
+        $this->assertContains('LABEL;CHARSET=utf-8:My label', $this->vcard->getOutput());
+        $this->assertContains('LABEL;WORK;CHARSET=utf-8:My work label', $this->vcard->getOutput());
     }
 
     public function testChunkSplitUnicode()

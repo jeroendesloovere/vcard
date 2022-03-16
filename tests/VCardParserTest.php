@@ -4,11 +4,12 @@ namespace JeroenDesloovere\VCard\tests;
 
 use JeroenDesloovere\VCard\VCard;
 use JeroenDesloovere\VCard\VCardParser;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for our VCard parser.
  */
-class VCardParserTest extends \PHPUnit_Framework_TestCase
+class VCardParserTest extends TestCase
 {
     /**
      * @expectedException OutOfBoundsException
@@ -285,5 +286,14 @@ class VCardParserTest extends \PHPUnit_Framework_TestCase
     public function testFileNotFound()
     {
         $parser = VCardParser::parseFromFile(__DIR__ . '/does-not-exist.vcf');
+    }
+
+    public function testLabel()
+    {
+        $label = 'street, worktown, workpostcode Belgium';
+        $vcard = new VCard();
+        $vcard->addLabel($label, 'work');
+        $parser = new VCardParser($vcard->buildVCard());
+        $this->assertEquals($parser->getCardAtIndex(0)->label, $label);
     }
 }
