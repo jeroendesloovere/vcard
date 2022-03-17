@@ -5,8 +5,6 @@ namespace JeroenDesloovere\VCard\tests;
 // required to load
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use PHPUnit\Framework\TestCase;
-
 /*
  * This file is part of the VCard PHP Class from Jeroen Desloovere.
  *
@@ -162,12 +160,11 @@ class VCardTest extends TestCase
 
     /**
      * Test adding remote empty photo
-     *
-     * @expectedException Exception
-     * @expectedExceptionMessage Returned data is not an image.
      */
     public function testAddPhotoWithRemoteEmptyJpgPhoto()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Returned data is not an image.');
         $this->vcard->addPhoto(
             'https://raw.githubusercontent.com/jeroendesloovere/vcard/master/tests/empty.jpg',
             true
@@ -183,12 +180,11 @@ class VCardTest extends TestCase
 
     /**
      * Test adding empty photo
-     *
-     * @expectedException Exception
-     * @expectedExceptionMessage Returned data is not an image.
      */
     public function testAddPhotoContentWithEmptyContent()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Returned data is not an image.');
         $this->vcard->addPhotoContent('');
     }
 
@@ -215,12 +211,11 @@ class VCardTest extends TestCase
 
     /**
      * Test adding empty photo
-     *
-     * @expectedException Exception
-     * @expectedExceptionMessage Returned data is not an image.
      */
     public function testAddLogoContentWithEmptyContent()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Returned data is not an image.');
         $this->vcard->addLogoContent('');
     }
 
@@ -233,45 +228,41 @@ class VCardTest extends TestCase
 
     /**
      * Test adding local photo using an empty file
-     *
-     * @expectedException Exception
-     * @expectedExceptionMessage Returned data is not an image.
      */
     public function testAddPhotoWithEmptyFile()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Returned data is not an image.');
         $this->vcard->addPhoto(__DIR__ . '/emptyfile', true);
     }
 
     /**
      * Test adding logo with no value
-     *
-     * @expectedException Exception
-     * @expectedExceptionMessage Returned data is not an image.
      */
     public function testAddLogoWithNoValue()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Returned data is not an image.');
         $this->vcard->addLogo(__DIR__ . '/emptyfile', true);
     }
 
     /**
      * Test adding photo with no photo
-     *
-     * @expectedException Exception
-     * @expectedExceptionMessage Returned data is not an image.
      */
     public function testAddPhotoWithNoPhoto()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Returned data is not an image.');
         $this->vcard->addPhoto(__DIR__ . '/wrongfile', true);
     }
 
     /**
      * Test adding logo with no image
-     *
-     * @expectedException Exception
-     * @expectedExceptionMessage Returned data is not an image.
      */
     public function testAddLogoWithNoImage()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Returned data is not an image.');
         $this->vcard->addLogo(__DIR__ . '/wrongfile', true);
     }
 
@@ -340,77 +331,70 @@ class VCardTest extends TestCase
 
     /**
      * Test multiple birthdays
-     *
-     * @expectedException Exception
      */
     public function testMultipleBirthdays()
     {
+        $this->expectException(\Exception::class);
         $this->assertEquals($this->vcard, $this->vcard->addBirthday('1'));
         $this->assertEquals($this->vcard, $this->vcard->addBirthday('2'));
     }
 
     /**
      * Test multiple categories
-     *
-     * @expectedException Exception
      */
     public function testMultipleCategories()
     {
+        $this->expectException(\Exception::class);
         $this->assertEquals($this->vcard, $this->vcard->addCategories(['1']));
         $this->assertEquals($this->vcard, $this->vcard->addCategories(['2']));
     }
 
     /**
      * Test multiple companies
-     *
-     * @expectedException Exception
      */
     public function testMultipleCompanies()
     {
+        $this->expectException(\Exception::class);
         $this->assertEquals($this->vcard, $this->vcard->addCompany('1'));
         $this->assertEquals($this->vcard, $this->vcard->addCompany('2'));
     }
 
     /**
      * Test multiple job titles
-     *
-     * @expectedException Exception
      */
     public function testMultipleJobtitles()
     {
+        $this->expectException(\Exception::class);
         $this->assertEquals($this->vcard, $this->vcard->addJobtitle('1'));
         $this->assertEquals($this->vcard, $this->vcard->addJobtitle('2'));
     }
 
     /**
      * Test multiple roles
-     *
-     * @expectedException Exception
      */
     public function testMultipleRoles()
     {
+        $this->expectException(\Exception::class);
         $this->assertEquals($this->vcard, $this->vcard->addRole('1'));
         $this->assertEquals($this->vcard, $this->vcard->addRole('2'));
     }
 
     /**
      * Test multiple names
-     *
-     * @expectedException Exception
      */
     public function testMultipleNames()
     {
+        $this->expectException(\Exception::class);
         $this->assertEquals($this->vcard, $this->vcard->addName('1'));
         $this->assertEquals($this->vcard, $this->vcard->addName('2'));
     }
 
     /**
      * Test multiple notes
-     *
-     * @expectedException Exception
      */
     public function testMultipleNotes()
     {
+        $this->expectException(\Exception::class);
         $this->assertEquals($this->vcard, $this->vcard->addNote('1'));
         $this->assertEquals($this->vcard, $this->vcard->addNote('2'));
     }
@@ -449,8 +433,8 @@ class VCardTest extends TestCase
         $this->assertSame($this->vcard, $this->vcard->addLabel('My label'));
         $this->assertSame($this->vcard, $this->vcard->addLabel('My work label', 'WORK'));
         $this->assertSame(2, count($this->vcard->getProperties()));
-        $this->assertContains('LABEL;CHARSET=utf-8:My label', $this->vcard->getOutput());
-        $this->assertContains('LABEL;WORK;CHARSET=utf-8:My work label', $this->vcard->getOutput());
+        $this->assertStringContainsString('LABEL;CHARSET=utf-8:My label', $this->vcard->getOutput());
+        $this->assertStringContainsString('LABEL;WORK;CHARSET=utf-8:My work label', $this->vcard->getOutput());
     }
 
     public function testChunkSplitUnicode()
