@@ -20,6 +20,6 @@ final class TelephoneFormatter implements NodeFormatterInterface
     {
         return $this->telephone->getNode() .
           ';TYPE=' . $this->telephone->getType()->__toString() .
-          ';VALUE=' . $this->telephone->getValue() . ':tel:' . $this->telephone->getTelephoneNumber();
+          ';VALUE=' . $this->telephone->getValue() . ';TEL:' . $this->telephone->getTelephoneNumber();
     }
 }
