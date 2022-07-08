@@ -156,7 +156,7 @@ class VCard
     {
         $this->setProperty(
             'email',
-            'EMAIL;INTERNET' . (($type != '') ? ';' . $type : ''),
+            'EMAIL' . (($type != '') ? ';' . $type : ''),
             $address
         );
 
