@@ -148,20 +148,23 @@ class VCard
      *
      * @param  string $address The e-mail address
      * @param  string [optional] $type    The type of the email address
-     *                                    $type may be  PREF | WORK | HOME
-     *                                    or any combination of these: e.g. "PREF;WORK"
+     *                                    $type may be WORK | HOME
+     *                                    or any combination of these: e.g. "WORK"
+     * @param  boolean [optional] $pref
+     *                                   Set this number as preferred with pref = 1
      * @return $this
      */
-    public function addEmail($address, $type = '')
+    public function addEmail($address, $type = '', $pref = 0)
     {
         $this->setProperty(
             'email',
-            'EMAIL;INTERNET' . (($type != '') ? ';' . $type : ''),
+            'EMAIL;INTERNET' . (($pref == 1) ? ';PREF=' . $pref : '') . (($type != '') ? ';' . $type : ''),
             $address
         );
 
         return $this;
     }
+
 
     /**
      * Add jobtitle
@@ -406,16 +409,18 @@ class VCard
      *
      * @param  string $number
      * @param  string [optional] $type
-     *                                   Type may be PREF | WORK | HOME | VOICE | FAX | MSG |
+     *                                   Type may be WORK | HOME | VOICE | FAX | MSG |
      *                                   CELL | PAGER | BBS | CAR | MODEM | ISDN | VIDEO
-     *                                   or any senseful combination, e.g. "PREF;WORK;VOICE"
+     *                                   or any senseful combination, e.g. "WORK,VOICE"
+     * @param  boolean [optional] $pref
+     *                                   Set this number as preferred with pref = 1
      * @return $this
      */
-    public function addPhoneNumber($number, $type = '')
+    public function addPhoneNumber($number, $type = '', $pref = 0)
     {
         $this->setProperty(
             'phoneNumber',
-            'TEL' . (($type != '') ? ';' . $type : ''),
+            'TEL' . (($pref == 1) ? ';PREF=' . $pref : '') . (($type != '') ? ';TYPE=' . $type : ''),
             $number
         );
 
