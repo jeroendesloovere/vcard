@@ -189,7 +189,7 @@ class VCardParser implements Iterator
                     } elseif (strpos(strtolower($type), 'charset=') === 0) {
                         try {
                             $value = mb_convert_encoding($value, "UTF-8", substr($type, 8));
-                        } catch (\Exception $e) {
+                        } catch (\Throwable $e) {
                         }
                         unset($types[$i]);
                     }
