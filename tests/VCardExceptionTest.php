@@ -14,11 +14,11 @@ use PHPUnit\Framework\TestCase;
 /**
  * VCard Exception Test.
  */
-class VCardExceptionTest extends TestCase
+final class VCardExceptionTest extends TestCase
 {
     public function testException()
     {
-        $this->expectException(VCardException::class);
+        $this->expectException(\JeroenDesloovere\VCard\VCardException::class);
         throw new VCardException('Testing the VCard error.');
     }
 }

@@ -64,29 +64,29 @@ class VCardParser implements Iterator
         $this->parse();
     }
 
-    public function rewind()
+    public function rewind(): void
     {
         $this->position = 0;
     }
 
-    public function current()
+    public function current(): mixed
     {
         if ($this->valid()) {
             return $this->getCardAtIndex($this->position);
         }
     }
 
-    public function key()
+    public function key(): int
     {
         return $this->position;
     }
 
-    public function next()
+    public function next(): void
     {
         $this->position++;
     }
 
-    public function valid()
+    public function valid(): bool
     {
         return !empty($this->vcardObjects[$this->position]);
     }

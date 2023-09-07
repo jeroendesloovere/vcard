@@ -12,6 +12,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
  * file that was distributed with this source code.
  */
 
+use Exception;
 use JeroenDesloovere\VCard\VCard;
 use PHPUnit\Framework\TestCase;
 
@@ -163,7 +164,7 @@ class VCardTest extends TestCase
      */
     public function testAddPhotoWithRemoteEmptyJpgPhoto()
     {
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('Returned data is not an image.');
         $this->vcard->addPhoto(
             'https://raw.githubusercontent.com/jeroendesloovere/vcard/master/tests/empty.jpg',
@@ -183,7 +184,7 @@ class VCardTest extends TestCase
      */
     public function testAddPhotoContentWithEmptyContent()
     {
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('Returned data is not an image.');
         $this->vcard->addPhotoContent('');
     }
@@ -214,7 +215,7 @@ class VCardTest extends TestCase
      */
     public function testAddLogoContentWithEmptyContent()
     {
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('Returned data is not an image.');
         $this->vcard->addLogoContent('');
     }
@@ -231,7 +232,7 @@ class VCardTest extends TestCase
      */
     public function testAddPhotoWithEmptyFile()
     {
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('Returned data is not an image.');
         $this->vcard->addPhoto(__DIR__ . '/emptyfile', true);
     }
@@ -241,7 +242,7 @@ class VCardTest extends TestCase
      */
     public function testAddLogoWithNoValue()
     {
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('Returned data is not an image.');
         $this->vcard->addLogo(__DIR__ . '/emptyfile', true);
     }
@@ -251,7 +252,7 @@ class VCardTest extends TestCase
      */
     public function testAddPhotoWithNoPhoto()
     {
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('Returned data is not an image.');
         $this->vcard->addPhoto(__DIR__ . '/wrongfile', true);
     }
@@ -261,7 +262,7 @@ class VCardTest extends TestCase
      */
     public function testAddLogoWithNoImage()
     {
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('Returned data is not an image.');
         $this->vcard->addLogo(__DIR__ . '/wrongfile', true);
     }
@@ -336,6 +337,7 @@ class VCardTest extends TestCase
     {
         $this->expectException(\Exception::class);
         $this->assertEquals($this->vcard, $this->vcard->addBirthday('1'));
+        $this->expectException(Exception::class);
         $this->assertEquals($this->vcard, $this->vcard->addBirthday('2'));
     }
 
@@ -346,6 +348,7 @@ class VCardTest extends TestCase
     {
         $this->expectException(\Exception::class);
         $this->assertEquals($this->vcard, $this->vcard->addCategories(['1']));
+        $this->expectException(Exception::class);
         $this->assertEquals($this->vcard, $this->vcard->addCategories(['2']));
     }
 
@@ -356,6 +359,7 @@ class VCardTest extends TestCase
     {
         $this->expectException(\Exception::class);
         $this->assertEquals($this->vcard, $this->vcard->addCompany('1'));
+        $this->expectException(Exception::class);
         $this->assertEquals($this->vcard, $this->vcard->addCompany('2'));
     }
 
@@ -366,6 +370,7 @@ class VCardTest extends TestCase
     {
         $this->expectException(\Exception::class);
         $this->assertEquals($this->vcard, $this->vcard->addJobtitle('1'));
+        $this->expectException(Exception::class);
         $this->assertEquals($this->vcard, $this->vcard->addJobtitle('2'));
     }
 
@@ -376,6 +381,7 @@ class VCardTest extends TestCase
     {
         $this->expectException(\Exception::class);
         $this->assertEquals($this->vcard, $this->vcard->addRole('1'));
+        $this->expectException(Exception::class);
         $this->assertEquals($this->vcard, $this->vcard->addRole('2'));
     }
 
@@ -386,6 +392,7 @@ class VCardTest extends TestCase
     {
         $this->expectException(\Exception::class);
         $this->assertEquals($this->vcard, $this->vcard->addName('1'));
+        $this->expectException(Exception::class);
         $this->assertEquals($this->vcard, $this->vcard->addName('2'));
     }
 
@@ -396,6 +403,7 @@ class VCardTest extends TestCase
     {
         $this->expectException(\Exception::class);
         $this->assertEquals($this->vcard, $this->vcard->addNote('1'));
+        $this->expectException(Exception::class);
         $this->assertEquals($this->vcard, $this->vcard->addNote('2'));
     }
 
