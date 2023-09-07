@@ -4,8 +4,6 @@ namespace JeroenDesloovere\VCard;
 
 use PHPUnit\Framework\TestCase;
 
-use PHPUnit\Framework\TestCase;
-
 /*
  * This file is part of the VCard PHP Class from Jeroen Desloovere.
  *
@@ -16,13 +14,11 @@ use PHPUnit\Framework\TestCase;
 /**
  * VCard Exception Test.
  */
-class VCardExceptionTest extends TestCase
+final class VCardExceptionTest extends TestCase
 {
-    /**
-     * @expectedException JeroenDesloovere\VCard\VCardException
-     */
     public function testException()
     {
+        $this->expectException(\JeroenDesloovere\VCard\VCardException::class);
         throw new VCardException('Testing the VCard error.');
     }
 }
