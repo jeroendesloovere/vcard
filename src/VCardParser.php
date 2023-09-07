@@ -10,6 +10,9 @@ namespace JeroenDesloovere\VCard;
  */
 
 use Iterator;
+use OutOfBoundsException;
+use RuntimeException;
+use stdClass;
 
 /**
  * VCard PHP Class to parse .vcard files.
@@ -69,11 +72,13 @@ class VCardParser implements Iterator
         $this->position = 0;
     }
 
-    public function current(): mixed
+    public function current(): \stdClass
     {
-        if ($this->valid()) {
-            return $this->getCardAtIndex($this->position);
+        if (! $this->valid()) {
+            throw new RuntimeException('invalid');
         }
+
+        return $this->getCardAtIndex($this->position);
     }
 
     public function key(): int
@@ -97,7 +102,7 @@ class VCardParser implements Iterator
      * @return array
      *    A list of VCard card data objects.
      */
-    public function getCards()
+    public function getCards(): array
     {
         return $this->vcardObjects;
     }
@@ -112,7 +117,7 @@ class VCardParser implements Iterator
      * @return stdClass
      *    The card data object.
      */
-    public function getCardAtIndex($i)
+    public function getCardAtIndex($i): stdClass
     {
         if (isset($this->vcardObjects[$i])) {
             return $this->vcardObjects[$i];
