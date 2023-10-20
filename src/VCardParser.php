@@ -250,6 +250,13 @@ class VCardParser implements Iterator
                         $key = !empty($types) ? implode(';', $types) : 'default';
                         $cardData->url[$key][] = $value;
                         break;
+                    case 'SOCIALMEDIA':
+                        if (!isset($cardData->socialmedia)) {
+                            $cardData->socialmedia = [];
+                        }
+                        $key = !empty($types) ? implode(';', $types) : 'default';
+                        $cardData->socialmedia[$key][] = $value;
+                        break;
                     case 'TITLE':
                         $cardData->title = $value;
                         break;
