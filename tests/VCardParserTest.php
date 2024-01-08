@@ -41,7 +41,10 @@ final class VCardParserTest extends TestCase
         $date = new DateTimeImmutable('01-01-2021');
         $this->vcard->addBirthday($date);
         $parser = new VCardParser($this->vcard->buildVCard());
-        $this->assertSame($parser->getCardAtIndex(0)->getBirthday()->format('Y-m-d H:i:s'), $date->format('Y-m-d H:i:s'));
+        $this->assertSame(
+            $parser->getCardAtIndex(0)->getBirthday()->format('Y-m-d H:i:s'),
+            $date->format('Y-m-d H:i:s')
+        );
     }
 
     public function test_it_can_parse_addresses_correctly(): void
@@ -175,7 +178,7 @@ final class VCardParserTest extends TestCase
         $this->assertSame($resolve, 'This is a testnote');
 
         $resolve = $parserMultiline->getCardAtIndex(0)->getNote();
-        $this->assertSame($resolve, 'This is a multiline note' . \PHP_EOL . 'New line content!' . \PHP_EOL . 'Line 2');
+        $this->assertSame($resolve, 'This is a multiline note'.\PHP_EOL.'New line content!'.\PHP_EOL.'Line 2');
     }
 
     public function test_it_can_set_and_get_categories_correctly(): void
@@ -201,7 +204,7 @@ final class VCardParserTest extends TestCase
 
     public function test_it_can_set_and_get_raw_logo_correctly(): void
     {
-        $image = __DIR__ . '/image.jpg';
+        $image = __DIR__.'/image.jpg';
         $imageUrl = 'https://raw.githubusercontent.com/jeroendesloovere/vcard/master/tests/image.jpg';
 
         $card = new VCard();
@@ -212,7 +215,7 @@ final class VCardParserTest extends TestCase
         $card = new VCard();
         $card->addLogo($image, false);
         $parser = new VCardParser($card->buildVCard());
-        $this->assertSame($parser->getCardAtIndex(0)->getLogo(), __DIR__ . '/image.jpg');
+        $this->assertSame($parser->getCardAtIndex(0)->getLogo(), __DIR__.'/image.jpg');
 
         $card = new VCard();
         $card->addLogo($imageUrl, false);
@@ -222,7 +225,7 @@ final class VCardParserTest extends TestCase
 
     public function test_it_can_set_and_get_raw_photo_correctly(): void
     {
-        $image = __DIR__ . '/image.jpg';
+        $image = __DIR__.'/image.jpg';
         $imageUrl = 'https://raw.githubusercontent.com/jeroendesloovere/vcard/master/tests/image.jpg';
 
         $card = new VCard();
@@ -233,7 +236,7 @@ final class VCardParserTest extends TestCase
         $card = new VCard();
         $card->addPhoto($image, false);
         $parser = new VCardParser($card->buildVCard());
-        $this->assertSame($parser->getCardAtIndex(0)->getPhoto(), __DIR__ . '/image.jpg');
+        $this->assertSame($parser->getCardAtIndex(0)->getPhoto(), __DIR__.'/image.jpg');
 
         $card = new VCard();
         $card->addPhoto($imageUrl, false);
@@ -275,15 +278,15 @@ final class VCardParserTest extends TestCase
             $this->assertSame(
                 $card->getName(),
                 $i === 0
-                ? 'Jeroen Desloovere'
-                : 'Ipsum Lorem',
+                    ? 'Jeroen Desloovere'
+                    : 'Ipsum Lorem',
             );
         }
     }
 
     public function test_it_can_load_vcard_from_file(): void
     {
-        $parser = VCardParser::parseFromFile(__DIR__ . '/example.vcf');
+        $parser = VCardParser::parseFromFile(__DIR__.'/example.vcf');
         $cards = $parser->getCards();
         foreach ($cards as $card) {
             $this->assertInstanceOf(CardData::class, $card);
@@ -299,7 +302,7 @@ final class VCardParserTest extends TestCase
     public function test_it_will_throw_an_exception_when_file_cannot_be_loaded(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        VCardParser::parseFromFile(__DIR__ . '/does-not-exist.vcf');
+        VCardParser::parseFromFile(__DIR__.'/does-not-exist.vcf');
     }
 
     public function test_it_can_correctly_return_a_label(): void

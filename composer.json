@@ -37,6 +37,6 @@
         "psr-4": { "JeroenDesloovere\\VCard\\": "src/"}
     },
     "autoload-dev": {
-        "psr-4": { "JeroenDesloovere\\VCard\\Tests\\": "Tests/"}
+        "psr-4": { "JeroenDesloovere\\VCard\\Tests\\": "tests/"}
     }
 }
