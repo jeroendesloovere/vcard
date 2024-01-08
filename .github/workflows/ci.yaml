@@ -40,16 +40,16 @@ jobs:
         run: "composer install --no-interaction --no-progress --no-suggest"
 
       - name: "EasyCodingStandards for src"
-        run: "vendor/bin/ecs check src/ tests/ --no-interaction --no-progress-bar"
+        run: "vendor/bin/ecs check src/ Tests/ --no-interaction --no-progress-bar"
 
       - name: "PhpStan for src/"
         run: "vendor/bin/phpstan analyse --error-format=checkstyle src --level=8 | cs2pr"
 
-      - name: "PhpStan for tests/"
-        run: "vendor/bin/phpstan analyse --error-format=checkstyle tests --level=6 | cs2pr"
+      - name: "PhpStan for Tests/"
+        run: "vendor/bin/phpstan analyse --error-format=checkstyle Tests/ --level=6 | cs2pr"
 
       - name: "PHPUnit Test with Coverage"
-        run: "vendor/bin/phpunit -c phpunit.xml.dist tests/ --coverage-clover=clover.xml"
+        run: "vendor/bin/phpunit -c phpunit.xml.dist Tests/ --coverage-clover=clover.xml"
 
 #      - name: Upload coverage reports to Codecov
 #        uses: codecov/codecov-action@v3
