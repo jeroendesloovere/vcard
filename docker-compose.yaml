@@ -1,0 +1,7 @@
+version: '3.9'
+
+services:
+  php:
+      build: ./build/php
+      volumes:
+        - .:/var/www/html

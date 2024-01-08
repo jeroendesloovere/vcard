@@ -42,9 +42,9 @@ $vcard->addRole('Data Protection Officer');
 $vcard->addEmail('info@jeroendesloovere.be');
 $vcard->addPhoneNumber(1234121212, 'PREF;WORK');
 $vcard->addPhoneNumber(123456789, 'WORK');
-$vcard->addAddress(null, null, 'street', 'worktown', null, 'workpostcode', 'Belgium');
+$vcard->addAddress('', '', 'street', 'worktown', '', 'workpostcode', 'Belgium');
 $vcard->addLabel('street, worktown, workpostcode Belgium');
-$vcard->addURL('http://www.jeroendesloovere.be');
+$vcard->addURL('https://www.wikipedia.de');
 
 $vcard->addPhoto(__DIR__ . '/landscape.jpeg');
 
@@ -60,7 +60,7 @@ return $vcard->download();
 
 ```
 
-> [View all examples](/examples/example.php) or check [the VCard class](/src/VCard.php).
+> [View all examples](/examples/example.php) or check [the VCard class](/src_/VCard.php).
 
 ### Parsing examples
 
@@ -78,9 +78,9 @@ Or by using a factory method with a file name:
 
 ```php
 $parser = VCardParser::parseFromFile('path/to/file.vcf');
-echo $parser->getCardAtIndex(0)->fullname; // Prints the full name.
+echo $parser->getCardAtIndex(0)->getName(); // Prints the full name.
 ```
-> [View the parsing example](/examples/example_parsing.php) or check the [the VCardParser class](/src/VCardParser.php) class.
+> [View the parsing example](/examples/example_parsing.php) or check the [the VCardParser class](/src_/VCardParser.php) class.
 
 **Support for frameworks**
 
@@ -126,6 +126,16 @@ Contributions are **welcome** and will be fully **credited**.
 > For bug reporting or code discussions.
 
 More info on how to work with GitHub on help.github.com.
+
+### Development
+
+In order to run the development instance of this repository, you can very easily utilize the shipped docker-compose package.
+
+```bash 
+docker compose up --build
+```
+
+Afterwards you will have an instance with PHP8.3 running that you can use to develop your changes. Xdebug is enabled by default, so you can use your IDE to debug the code.
 
 ## Credits
 

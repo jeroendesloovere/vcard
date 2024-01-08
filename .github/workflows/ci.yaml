@@ -1,0 +1,59 @@
+name: "Test Pipeline"
+
+on:
+  pull_request:
+  push:
+    branches:
+      - "master"
+
+jobs:
+  tests:
+    name: "Run Tests"
+    runs-on: "ubuntu-latest"
+    strategy:
+      matrix:
+        php-version:
+          - "8.1"
+          - "8.2"
+          - "8.3"
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v2"
+
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          coverage: "pcov"
+          php-version: "${{ matrix.php-version }}"
+          ini-values: memory_limit=-1
+          tools: composer:v2, cs2pr
+
+      - name: "Cache dependencies"
+        uses: "actions/cache@v2"
+        with:
+          path: |
+            ~/.composer/cache
+            vendor
+          key: "php-${{ matrix.php-version }}"
+
+      - name: "Install dependencies"
+        run: "composer install --no-interaction --no-progress --no-suggest"
+
+      - name: "EasyCodingStandards for src"
+        run: "vendor/bin/ecs check src/ tests/ --no-interaction --no-progress-bar"
+
+      - name: "PhpStan for src/"
+        run: "vendor/bin/phpstan analyse --error-format=checkstyle src --level=8 | cs2pr"
+
+      - name: "PhpStan for tests/"
+        run: "vendor/bin/phpstan analyse --error-format=checkstyle tests/ --level=6 | cs2pr"
+
+      - name: "PHPUnit Test with Coverage"
+        run: "vendor/bin/phpunit -c phpunit.xml.dist tests/ --coverage-clover=clover.xml"
+
+#      - name: Upload coverage reports to Codecov
+#        uses: codecov/codecov-action@v3
+#        with:
+#          file: src/clover.xml
+#        env:
+#          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

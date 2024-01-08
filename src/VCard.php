@@ -1,254 +1,165 @@
 <?php
 
+declare(strict_types=1);
+
 namespace JeroenDesloovere\VCard;
 
-/*
- * This file is part of the VCard PHP Class from Jeroen Desloovere.
- *
- * For the full copyright and license information, please view the license
- * file that was distributed with this source code.
- */
-
 use Behat\Transliterator\Transliterator;
+use DateTimeImmutable;
+use finfo;
+use InvalidArgumentException;
+use Webmozart\Assert\Assert;
+use const CURLOPT_RETURNTRANSFER;
+use const CURLOPT_URL;
+use const DIRECTORY_SEPARATOR;
+use const FILEINFO_MIME_TYPE;
+use const FILTER_VALIDATE_URL;
+use const PREG_SPLIT_NO_EMPTY;
 
-/**
- * VCard PHP Class to generate .vcard files and save them to a file or output as a download.
- */
-class VCard
+class VCard implements VCardInterface
 {
-    /**
-     * definedElements
-     *
-     * @var array
-     */
-    private $definedElements;
+    private const FILE_EXT_ICS = 'ics';
 
-    /**
-     * Filename
-     *
-     * @var string
-     */
-    private $filename;
+    private const FILE_EXT_VCF = 'vcf';
 
-    /**
-     * Save Path
-     *
-     * @var string
-     */
-    private $savePath = null;
-
-    /**
-     * Multiple properties for element allowed
-     *
-     * @var array
-     */
-    private $multiplePropertiesForElementAllowed = [
+    private const PROPERTY_MULTI_WHITELIST = [
         'email',
         'address',
         'phoneNumber',
         'url',
-        'label'
+        'label',
     ];
 
-    /**
-     * Properties
-     *
-     * @var array
-     */
-    private $properties;
+    private array $definedElements = [];
 
-    /**
-     * Default Charset
-     *
-     * @var string
-     */
-    public $charset = 'utf-8';
+    private ?string $filename = null;
 
-    /**
-     * Add address
-     *
-     * @param  string [optional] $name
-     * @param  string [optional] $extended
-     * @param  string [optional] $street
-     * @param  string [optional] $city
-     * @param  string [optional] $region
-     * @param  string [optional] $zip
-     * @param  string [optional] $country
-     * @param  string [optional] $type
-     *                                     $type may be DOM | INTL | POSTAL | PARCEL | HOME | WORK
-     *                                     or any combination of these: e.g. "WORK;PARCEL;POSTAL"
-     * @return $this
-     */
+    private ?string $savePath = null;
+
+    private array $properties;
+
+    public string $charset = 'utf-8';
+
     public function addAddress(
-        $name = '',
-        $extended = '',
-        $street = '',
-        $city = '',
-        $region = '',
-        $zip = '',
-        $country = '',
-        $type = 'WORK;POSTAL'
-    ) {
-        // init value
-        $value = $name . ';' . $extended . ';' . $street . ';' . $city . ';' . $region . ';' . $zip . ';' . $country;
-
-        // set property
+        string $name = '',
+        string $extended = '',
+        string $street = '',
+        string $city = '',
+        string $region = '',
+        string $zip = '',
+        string $country = '',
+        array $type = ['WORK', 'POSTAL'],
+    ): void {
+        Assert::allInArray($type, ['PERSONAL', 'DOM', 'INTL', 'POSTAL', 'PARCEL', 'HOME', 'WORK']);
         $this->setProperty(
             'address',
-            'ADR' . (($type != '') ? ';' . $type : '') . $this->getCharsetString(),
-            $value
+            sprintf(
+                'ADR%s%s',
+                $type !== [] ? ';' . implode(';', $type) : '',
+                $this->getCharsetString(),
+            ),
+            sprintf(
+                '%s;%s;%s;%s;%s;%s;%s',
+                $name,
+                $extended,
+                $street,
+                $city,
+                $region,
+                $zip,
+                $country,
+            ),
         );
-
-        return $this;
     }
 
-    /**
-     * Add birthday
-     *
-     * @param  string $date Format is YYYY-MM-DD
-     * @return $this
-     */
-    public function addBirthday($date)
+    public function addBirthday(DateTimeImmutable $date): void
     {
         $this->setProperty(
             'birthday',
             'BDAY',
-            $date
+            $date->format('Y-m-d'),
         );
-
-        return $this;
     }
 
-    /**
-     * Add company
-     *
-     * @param string $company
-     * @param string $department
-     * @return $this
-     */
-    public function addCompany($company, $department = '')
+    public function addCompany(string $company, string $department = ''): void
     {
         $this->setProperty(
             'company',
             'ORG' . $this->getCharsetString(),
             $company
-            . ($department != '' ? ';' . $department : '')
+            . ($department !== '' ? ';' . $department : ''),
         );
 
-        // if filename is empty, add to filename
         if ($this->filename === null) {
             $this->setFilename($company);
         }
-
-        return $this;
     }
 
-    /**
-     * Add email
-     *
-     * @param  string $address The e-mail address
-     * @param  string [optional] $type    The type of the email address
-     *                                    $type may be  PREF | WORK | HOME
-     *                                    or any combination of these: e.g. "PREF;WORK"
-     * @return $this
-     */
-    public function addEmail($address, $type = '')
+    public function addEmail(string $address, array $type = []): void
     {
+        Assert::allInArray($type, ['PREF', 'WORK', 'HOME']);
+
         $this->setProperty(
             'email',
-            'EMAIL;INTERNET' . (($type != '') ? ';' . $type : ''),
-            $address
+            'EMAIL;INTERNET' . (($type !== []) ? ';' . implode(';', $type) : ''),
+            $address,
         );
-
-        return $this;
     }
 
-    /**
-     * Add jobtitle
-     *
-     * @param  string $jobtitle The jobtitle for the person.
-     * @return $this
-     */
-    public function addJobtitle($jobtitle)
+    public function addJobtitle(string $jobtitle): void
     {
         $this->setProperty(
             'jobtitle',
             'TITLE' . $this->getCharsetString(),
-            $jobtitle
+            $jobtitle,
         );
-
-        return $this;
     }
 
-    /**
-     * Add a label
-     *
-     * @param string $label
-     * @param string $type
-     *
-     * @return $this
-     */
-    public function addLabel($label, $type = '')
+    public function addLabel(string $label, string $type = ''): void
     {
         $this->setProperty(
             'label',
-            'LABEL' . ($type !== '' ? ';' . $type : '') . $this->getCharsetString(),
-            $label
+            'LABEL' . ($type === '' ? '' : ';' . $type) . $this->getCharsetString(),
+            $label,
         );
-
-        return $this;
     }
 
-    /**
-     * Add role
-     *
-     * @param  string $role The role for the person.
-     * @return $this
-     */
-    public function addRole($role)
+    public function addRole(string $role): void
     {
         $this->setProperty(
             'role',
             'ROLE' . $this->getCharsetString(),
-            $role
+            $role,
         );
-
-        return $this;
     }
 
-    /**
-     * Add a photo or logo (depending on property name)
-     *
-     * @param string $property LOGO|PHOTO
-     * @param string $url image url or filename
-     * @param bool $include Do we include the image in our vcard or not?
-     * @param string $element The name of the element to set
-     * @throws VCardException
-     */
-    private function addMedia($property, $url, $element, $include = true)
-    {
+    private function addMedia(
+        string $property,
+        string $url,
+        string $element,
+        bool $include = true,
+    ): void {
         $mimeType = null;
 
-        //Is this URL for a remote resource?
         if (filter_var($url, FILTER_VALIDATE_URL) !== false) {
-            $headers = get_headers($url, 1);
-
-            if (array_key_exists('Content-Type', $headers)) {
+            $headers = get_headers($url, true);
+            if ($headers !== false && array_key_exists('Content-Type', $headers)) {
                 $mimeType = $headers['Content-Type'];
                 if (is_array($mimeType)) {
                     $mimeType = end($mimeType);
                 }
             }
         } else {
-            //Local file, so inspect it directly
             $mimeType = mime_content_type($url);
         }
-        if (strpos($mimeType, ';') !== false) {
+
+        if (str_contains($mimeType, ';')) {
             $mimeType = strstr($mimeType, ';', true);
         }
-        if (!is_string($mimeType) || substr($mimeType, 0, 6) !== 'image/') {
+
+        if (!is_string($mimeType) || !str_starts_with($mimeType, 'image/')) {
             throw VCardException::invalidImage();
         }
+
         $fileType = strtoupper(substr($mimeType, 6));
 
         if ($include) {
@@ -266,75 +177,63 @@ class VCard
                 throw VCardException::emptyURL();
             }
 
+            Assert::string($value);
             $value = base64_encode($value);
-            $property .= ";ENCODING=b;TYPE=" . $fileType;
+            $property .= ';ENCODING=b;TYPE=' . $fileType;
         } else {
             if (filter_var($url, FILTER_VALIDATE_URL) !== false) {
                 $propertySuffix = ';VALUE=URL';
                 $propertySuffix .= ';TYPE=' . strtoupper($fileType);
 
                 $property = $property . $propertySuffix;
-                $value = $url;
-            } else {
-                $value = $url;
             }
+            $value = $url;
         }
 
         $this->setProperty(
             $element,
             $property,
-            $value
+            $value,
         );
     }
 
-    /**
-     * Add a photo or logo (depending on property name)
-     *
-     * @param string $property LOGO|PHOTO
-     * @param string $content image content
-     * @param string $element The name of the element to set
-     */
-    private function addMediaContent($property, $content, $element)
-    {
-        $finfo = new \finfo();
+    private function addMediaContent(
+        string $property,
+        string $content,
+        string $element,
+    ): void {
+        $finfo = new finfo();
         $mimeType = $finfo->buffer($content, FILEINFO_MIME_TYPE);
 
-        if (strpos($mimeType, ';') !== false) {
+        Assert::string($mimeType);
+        if (str_contains($mimeType, ';') === true) {
             $mimeType = strstr($mimeType, ';', true);
+            Assert::string($mimeType);
         }
-        if (!is_string($mimeType) || substr($mimeType, 0, 6) !== 'image/') {
+
+        if (str_starts_with($mimeType, 'image/') === false) {
             throw VCardException::invalidImage();
         }
+
         $fileType = strtoupper(substr($mimeType, 6));
 
         $content = base64_encode($content);
-        $property .= ";ENCODING=b;TYPE=" . $fileType;
+        $property .= ';ENCODING=b;TYPE=' . $fileType;
 
         $this->setProperty(
             $element,
             $property,
-            $content
+            $content,
         );
     }
 
-    /**
-     * Add name
-     *
-     * @param  string [optional] $lastName
-     * @param  string [optional] $firstName
-     * @param  string [optional] $additional
-     * @param  string [optional] $prefix
-     * @param  string [optional] $suffix
-     * @return $this
-     */
     public function addName(
-        $lastName = '',
-        $firstName = '',
-        $additional = '',
-        $prefix = '',
-        $suffix = ''
-    ) {
-        // define values with non-empty values
+        string $lastName = '',
+        string $firstName = '',
+        string $additional = '',
+        string $prefix = '',
+        string $suffix = '',
+    ): void {
         $values = array_filter([
             $prefix,
             $firstName,
@@ -342,416 +241,233 @@ class VCard
             $lastName,
             $suffix,
         ]);
-
-        // define filename
         $this->setFilename($values);
 
-        // set property
-        $property = $lastName . ';' . $firstName . ';' . $additional . ';' . $prefix . ';' . $suffix;
         $this->setProperty(
             'name',
             'N' . $this->getCharsetString(),
-            $property
+            sprintf('%s;%s;%s;%s;%s', $lastName, $firstName, $additional, $prefix, $suffix),
         );
 
-        // is property FN set?
-        if (!$this->hasProperty('FN')) {
-            // set property
+        if ($this->hasProperty('FN') === false) {
             $this->setProperty(
                 'fullname',
                 'FN' . $this->getCharsetString(),
-                trim(implode(' ', $values))
+                trim(implode(' ', $values)),
             );
         }
-
-        return $this;
     }
 
-    /**
-     * Add note
-     *
-     * @param  string $note
-     * @return $this
-     */
-    public function addNote($note)
+    public function addNote(string $note): void
     {
         $this->setProperty(
             'note',
             'NOTE' . $this->getCharsetString(),
-            $note
+            $note,
         );
-
-        return $this;
     }
 
-    /**
-     * Add categories
-     *
-     * @param array $categories
-     * @return $this
-     */
-    public function addCategories($categories)
+    public function addCategories(array $categories): void
     {
         $this->setProperty(
             'categories',
             'CATEGORIES' . $this->getCharsetString(),
-            trim(implode(',', $categories))
+            trim(implode(',', $categories)),
         );
-
-        return $this;
     }
 
-    /**
-     * Add phone number
-     *
-     * @param  string $number
-     * @param  string [optional] $type
-     *                                   Type may be PREF | WORK | HOME | VOICE | FAX | MSG |
-     *                                   CELL | PAGER | BBS | CAR | MODEM | ISDN | VIDEO
-     *                                   or any senseful combination, e.g. "PREF;WORK;VOICE"
-     * @return $this
-     */
-    public function addPhoneNumber($number, $type = '')
+    public function addPhoneNumber(string $number, array $type = []): void
     {
+        Assert::allInArray(
+            $type,
+            ['PREF', 'WORK', 'HOME', 'VOICE', 'FAX', 'MSG', 'CELL', 'PAGER', 'BBS', 'CAR', 'MODEM', 'ISDN', 'VIDEO'],
+        );
+
         $this->setProperty(
             'phoneNumber',
-            'TEL' . (($type != '') ? ';' . $type : ''),
-            $number
+            'TEL' . (($type != '') ? ';' . implode(';', $type) : ''),
+            $number,
         );
-
-        return $this;
     }
 
-    /**
-     * Add Logo
-     *
-     * @param  string $url image url or filename
-     * @param  bool $include Include the image in our vcard?
-     * @return $this
-     */
-    public function addLogo($url, $include = true)
+    public function addLogo(string $url, bool $include = true): void
     {
         $this->addMedia(
             'LOGO',
             $url,
             'logo',
-            $include
+            $include,
         );
-
-        return $this;
     }
 
-    /**
-     * Add Logo content
-     *
-     * @param  string $content image content
-     * @return $this
-     */
-    public function addLogoContent($content)
+    public function addLogoContent(string $content): void
     {
         $this->addMediaContent(
             'LOGO',
             $content,
-            'logo'
+            'logo',
         );
-
-        return $this;
     }
 
-    /**
-     * Add Photo
-     *
-     * @param  string $url image url or filename
-     * @param  bool $include Include the image in our vcard?
-     * @return $this
-     */
-    public function addPhoto($url, $include = true)
+    public function addPhoto(string $url, bool $include = true): void
     {
         $this->addMedia(
             'PHOTO',
             $url,
             'photo',
-            $include
+            $include,
         );
-
-        return $this;
     }
 
-    /**
-     * Add Photo content
-     *
-     * @param  string $content image content
-     * @return $this
-     */
-    public function addPhotoContent($content)
+    public function addPhotoContent(string $content): void
     {
         $this->addMediaContent(
             'PHOTO',
             $content,
-            'photo'
+            'photo',
         );
-
-        return $this;
     }
 
-    /**
-     * Add URL
-     *
-     * @param  string $url
-     * @param  string [optional] $type Type may be WORK | HOME
-     * @return $this
-     */
-    public function addURL($url, $type = '')
+    public function addURL(string $url, string $type = ''): void
     {
         $this->setProperty(
             'url',
             'URL' . (($type != '') ? ';' . $type : ''),
-            $url
+            $url,
         );
-
-        return $this;
     }
 
-    /**
-     * Build VCard (.vcf)
-     *
-     * @return string
-     */
-    public function buildVCard()
+    public function buildVCard(): string
     {
-        // init string
-        $string = "BEGIN:VCARD\r\n";
-        $string .= "VERSION:3.0\r\n";
-        $string .= "REV:" . date("Y-m-d") . "T" . date("H:i:s") . "Z\r\n";
+        $string = VCardInterface::VCARD_START . \PHP_EOL;
+        $string .= sprintf('%s:%s%s', self::VCARD_VERSION, self::VCARD_VERSION_VALUE, \PHP_EOL);
+        $string .= sprintf('%s%sT%sZ%s', self::VCARD_REVISION, date('Y-m-d'), date('H:i:s'), \PHP_EOL);
 
-        // loop all properties
         $properties = $this->getProperties();
         foreach ($properties as $property) {
-            // add to string
             $string .= $this->fold($property['key'] . ':' . $this->escape($property['value'])) . "\r\n";
         }
 
-        // add to string
-        $string .= "END:VCARD\r\n";
+        $string .= self::VCARD_END . \PHP_EOL;
 
-        // return
         return $string;
     }
 
-    /**
-     * Build VCalender (.ics) - Safari (< iOS 8) can not open .vcf files, so we have build a workaround.
-     *
-     * @return string
-     */
-    public function buildVCalendar()
+    public function buildVCalendar(): string
     {
         // init dates
-        $dtstart = date("Ymd") . "T" . date("Hi") . "00";
-        $dtend = date("Ymd") . "T" . date("Hi") . "01";
+        $start = date('Ymd') . 'T' . date('Hi') . '00';
+        $end = date('Ymd') . 'T' . date('Hi') . '01';
 
         // init string
         $string = "BEGIN:VCALENDAR\n";
         $string .= "VERSION:2.0\n";
         $string .= "BEGIN:VEVENT\n";
-        $string .= "DTSTART;TZID=Europe/London:" . $dtstart . "\n";
-        $string .= "DTEND;TZID=Europe/London:" . $dtend . "\n";
+        $string .= 'DTSTART;TZID=Europe/London:' . $start . "\n";
+        $string .= 'DTEND;TZID=Europe/London:' . $end . "\n";
         $string .= "SUMMARY:Click attached contact below to save to your contacts\n";
-        $string .= "DTSTAMP:" . $dtstart . "Z\n";
+        $string .= 'DTSTAMP:' . $start . "Z\n";
         $string .= "ATTACH;VALUE=BINARY;ENCODING=BASE64;FMTTYPE=text/directory;\n";
-        $string .= " X-APPLE-FILENAME=" . $this->getFilename() . "." . $this->getFileExtension() . ":\n";
+        $string .= ' X-APPLE-FILENAME=' . $this->getFilename() . '.' . $this->getFileExtension() . ":\n";
 
-        // base64 encode it so that it can be used as an attachemnt to the "dummy" calendar appointment
         $b64vcard = base64_encode($this->buildVCard());
-
-        // chunk the single long line of b64 text in accordance with RFC2045
-        // (and the exact line length determined from the original .ics file exported from Apple calendar
-        $b64mline = chunk_split($b64vcard, 74, "\n");
-
-        // need to indent all the lines by 1 space for the iphone (yes really?!!)
+        $b64mline = chunk_split($b64vcard, 74);
         $b64final = preg_replace('/(.+)/', ' $1', $b64mline);
         $string .= $b64final;
-
-        // output the correctly formatted encoded text
         $string .= "END:VEVENT\n";
         $string .= "END:VCALENDAR\n";
 
-        // return
         return $string;
     }
 
-    /**
-     * Returns the browser user agent string.
-     *
-     * @return string
-     */
-    protected function getUserAgent()
+    protected function getUserAgent(): string
     {
-        if (array_key_exists('HTTP_USER_AGENT', $_SERVER)) {
-            $browser = strtolower($_SERVER['HTTP_USER_AGENT']);
-        } else {
-            $browser = 'unknown';
-        }
-
-        return $browser;
+        return array_key_exists('HTTP_USER_AGENT', $_SERVER)
+            ? strtolower($_SERVER['HTTP_USER_AGENT'])
+            : 'unknown';
     }
 
-    /**
-     * Decode
-     *
-     * @param  string $value The value to decode
-     * @return string decoded
-     */
-    private function decode($value)
+    private function decode(string $value): string
     {
-        // convert cyrlic, greek or other caracters to ASCII characters
         return Transliterator::transliterate($value);
     }
 
-    /**
-     * Download a vcard or vcal file to the browser.
-     */
-    public function download()
+    public function download(): string
     {
-        // define output
-        $output = $this->getOutput();
-
         foreach ($this->getHeaders(false) as $header) {
             header($header);
         }
 
-        // echo the output and it will be a download
-        echo $output;
-    }
-
-    /**
-     * Fold a line according to RFC2425 section 5.8.1.
-     *
-     * @link http://tools.ietf.org/html/rfc2425#section-5.8.1
-     * @param  string $text
-     * @return mixed
-     */
-    protected function fold($text)
-    {
-        if (strlen($text) <= 75) {
-            return $text;
-        }
-
-        // The chunk_split_unicode creates a huge memory footprint when used on long strings (EG photos are base64 10MB results in > 1GB memory usage)
-        // So check if the string is ASCII (7 bit) and if it is use the built in way RE: https://github.com/jeroendesloovere/vcard/issues/153
-        if ($this->is_ascii($text)) {
-           return substr(chunk_split($text, 75, "\r\n "), 0, -3);
-        }
-
-        // split, wrap and trim trailing separator
-        return substr($this->chunk_split_unicode($text, 75, "\r\n "), 0, -3);
-    }
-
-
-    /**
-     * Determine if string is pure 7bit ascii
-     * @link https://pageconfig.com/post/how-to-validate-ascii-text-in-php
-     *
-     * @param string $string
-     * @return bool
-     */
-    protected function is_ascii($string = '' ) {
-        $num = 0;
-        while( isset( $string[$num] ) ) {
-            if( ord( $string[$num] ) & 0x80 ) {
-                return false;
-            }
-        $num++;
-        }
-        return true;
-    }
-
-    /**
-     * multibyte word chunk split
-     * @link http://php.net/manual/en/function.chunk-split.php#107711
-     *
-     * @param  string  $body     The string to be chunked.
-     * @param  integer $chunklen The chunk length.
-     * @param  string  $end      The line ending sequence.
-     * @return string            Chunked string
-     */
-    protected function chunk_split_unicode($body, $chunklen = 76, $end = "\r\n")
-    {
-        $array = array_chunk(
-            preg_split("//u", $body, -1, PREG_SPLIT_NO_EMPTY), $chunklen);
-        $body = "";
-        foreach ($array as $item) {
-            $body .= join("", $item) . $end;
-        }
-        return $body;
-    }
-
-    /**
-     * Escape newline characters according to RFC2425 section 5.8.4.
-     *
-     * @link http://tools.ietf.org/html/rfc2425#section-5.8.4
-     * @param  string $text
-     * @return string
-     */
-    protected function escape($text)
-    {
-        if ($text === null) {
-            return null;
-        }
-
-        $text = str_replace("\r\n", "\\n", $text);
-        $text = str_replace("\n", "\\n", $text);
-
-        return $text;
-    }
-
-    /**
-     * Get output as string
-     * @deprecated in the future
-     *
-     * @return string
-     */
-    public function get()
-    {
         return $this->getOutput();
     }
 
     /**
-     * Get charset
-     *
-     * @return string
+     * @see https://github.com/jeroendesloovere/vcard/issues/153
      */
-    public function getCharset()
+    protected function fold(string $text): string
+    {
+        return match (true) {
+            strlen($text) <= 75 => $text,
+            $this->isAscii($text) => substr(chunk_split($text, 75, "\r\n "), 0, -3),
+            default => substr($this->chunkSplitUnicode($text, 75, "\r\n "), 0, -3),
+        };
+    }
+
+    protected function isAscii(string $string = ''): bool
+    {
+        $num = 0;
+        while (isset($string[$num])) {
+            if (ord($string[$num]) & 0x80) {
+                return false;
+            }
+            ++$num;
+        }
+
+        return true;
+    }
+
+    protected function chunkSplitUnicode(string $body, int $chunkLen = 76, string $end = "\r\n"): string
+    {
+        $parts = preg_split('//u', $body, -1, PREG_SPLIT_NO_EMPTY);
+        Assert::isArray($parts);
+        $array = array_chunk($parts, max(1, $chunkLen));
+        $body = '';
+
+        foreach ($array as $item) {
+            $body .= implode('', $item) . $end;
+        }
+
+        return $body;
+    }
+
+    protected function escape(string $text): string
+    {
+        return str_replace(["\n", "\r\n"], '\\n', $text);
+    }
+
+    public function get(): string
+    {
+        return $this->getOutput();
+    }
+
+    public function getCharset(): string
     {
         return $this->charset;
     }
 
-    /**
-     * Get charset string
-     *
-     * @return string
-     */
-    public function getCharsetString()
+    public function getCharsetString(): string
     {
         return ';CHARSET=' . $this->charset;
     }
 
-    /**
-     * Get content type
-     *
-     * @return string
-     */
-    public function getContentType()
+    public function getContentType(): string
     {
-        return ($this->isIOS7()) ?
-            'text/x-vcalendar' : 'text/x-vcard';
+        return $this->isIOS7()
+            ? 'text/x-vcalendar'
+            : 'text/x-vcard';
     }
 
-    /**
-     * Get filename
-     *
-     * @return string
-     */
-    public function getFilename()
+    public function getFilename(): string
     {
         if (!$this->filename) {
             return 'unknown';
@@ -760,40 +476,26 @@ class VCard
         return $this->filename;
     }
 
-    /**
-     * Get file extension
-     *
-     * @return string
-     */
-    public function getFileExtension()
+    public function getFileExtension(): string
     {
-        return ($this->isIOS7()) ?
-            'ics' : 'vcf';
+        return $this->isIOS7()
+            ? self::FILE_EXT_ICS
+            : self::FILE_EXT_VCF;
     }
 
-    /**
-     * Get headers
-     *
-     * @param  bool $asAssociative
-     * @return array
-     */
-    public function getHeaders($asAssociative)
+    public function getHeaders(bool $asAssociative): array
     {
         $contentType = $this->getContentType() . '; charset=' . $this->getCharset();
         $contentDisposition = 'attachment; filename=' . $this->getFilename() . '.' . $this->getFileExtension();
         $contentLength = mb_strlen($this->getOutput(), '8bit');
         $connection = 'close';
 
-        if ((bool)$asAssociative) {
-            return [
-                'Content-type' => $contentType,
-                'Content-Disposition' => $contentDisposition,
-                'Content-Length' => $contentLength,
-                'Connection' => $connection,
-            ];
-        }
-
-        return [
+        return $asAssociative ? [
+            'Content-type' => $contentType,
+            'Content-Disposition' => $contentDisposition,
+            'Content-Length' => $contentLength,
+            'Connection' => $connection,
+        ] : [
             'Content-type: ' . $contentType,
             'Content-Disposition: ' . $contentDisposition,
             'Content-Length: ' . $contentLength,
@@ -801,38 +503,19 @@ class VCard
         ];
     }
 
-    /**
-     * Get output as string
-     * iOS devices (and safari < iOS 8 in particular) can not read .vcf (= vcard) files.
-     * So I build a workaround to build a .ics (= vcalender) file.
-     *
-     * @return string
-     */
-    public function getOutput()
+    public function getOutput(): string
     {
-        $output = ($this->isIOS7()) ?
-            $this->buildVCalendar() : $this->buildVCard();
-
-        return $output;
+        return $this->isIOS7()
+            ? $this->buildVCalendar()
+            : $this->buildVCard();
     }
 
-    /**
-     * Get properties
-     *
-     * @return array
-     */
-    public function getProperties()
+    public function getProperties(): array
     {
         return $this->properties;
     }
 
-    /**
-     * Has property
-     *
-     * @param  string $key
-     * @return bool
-     */
-    public function hasProperty($key)
+    public function hasProperty(string $key): bool
     {
         $properties = $this->getProperties();
 
@@ -845,104 +528,62 @@ class VCard
         return false;
     }
 
-    /**
-     * Is iOS - Check if the user is using an iOS-device
-     *
-     * @return bool
-     */
-    public function isIOS()
+    public function isIOS(): bool
     {
-        // get user agent
         $browser = $this->getUserAgent();
 
-        return (strpos($browser, 'iphone') || strpos($browser, 'ipod') || strpos($browser, 'ipad'));
+        return strpos($browser, 'iphone') || strpos($browser, 'ipod') || strpos($browser, 'ipad');
     }
 
-    /**
-     * Is iOS less than 7 (should cal wrapper be returned)
-     *
-     * @return bool
-     */
-    public function isIOS7()
+    public function isIOS7(): bool
     {
-        return ($this->isIOS() && $this->shouldAttachmentBeCal());
+        return $this->isIOS() && $this->shouldAttachmentBeCal();
     }
 
-    /**
-     * Save to a file
-     *
-     * @return void
-     */
-    public function save()
+    public function save(): void
     {
         $file = $this->getFilename() . '.' . $this->getFileExtension();
 
-        // Add save path if given
-        if (null !== $this->savePath) {
+        if ($this->savePath !== null) {
             $file = $this->savePath . $file;
         }
 
         file_put_contents(
             $file,
-            $this->getOutput()
+            $this->getOutput(),
         );
     }
 
-    /**
-     * Set charset
-     *
-     * @param  mixed $charset
-     * @return void
-     */
-    public function setCharset($charset)
+    public function setCharset(string $charset): void
     {
         $this->charset = $charset;
     }
 
-    /**
-     * Set filename
-     *
-     * @param  mixed $value
-     * @param  bool $overwrite [optional] Default overwrite is true
-     * @param  string $separator [optional] Default separator is an underscore '_'
-     * @return void
-     */
-    public function setFilename($value, $overwrite = true, $separator = '_')
-    {
-        // recast to string if $value is array
+    public function setFilename(
+        string|array $value,
+        bool $overwrite = true,
+        string $separator = '_',
+    ): void {
         if (is_array($value)) {
             $value = implode($separator, $value);
         }
 
-        // trim unneeded values
         $value = trim($value, $separator);
 
-        // remove all spaces
         $value = preg_replace('/\s+/', $separator, $value);
 
-        // if value is empty, stop here
         if (empty($value)) {
             return;
         }
 
-        // decode value + lowercase the string
         $value = strtolower($this->decode($value));
-
-        // urlize this part
         $value = Transliterator::urlize($value);
-
-        // overwrite filename or add to filename using a prefix in between
-        $this->filename = ($overwrite) ?
-            $value : $this->filename . $separator . $value;
+        $this->filename = $overwrite
+            ? $value
+            : $this->filename . $separator . $value;
     }
 
-    /**
-     * Set the save path directory
-     *
-     * @param  string $savePath Save Path
-     * @throws VCardException
-     */
-    public function setSavePath($savePath)
+    public function setSavePath(string $savePath): void
     {
         if (!is_dir($savePath)) {
             throw VCardException::outputDirectoryNotExists();
@@ -956,45 +597,27 @@ class VCard
         $this->savePath = $savePath;
     }
 
-    /**
-     * Set property
-     *
-     * @param  string $element The element name you want to set, f.e.: name, email, phoneNumber, ...
-     * @param  string $key
-     * @param  string $value
-     * @throws VCardException
-     */
-    private function setProperty($element, $key, $value)
+    private function setProperty(string $element, string $key, string $value): void
     {
-        if (!in_array($element, $this->multiplePropertiesForElementAllowed)
-            && isset($this->definedElements[$element])
-        ) {
-            throw VCardException::elementAlreadyExists($element);
+        if (in_array($element, self::PROPERTY_MULTI_WHITELIST) === false && array_key_exists($element, $this->definedElements)) {
+            throw new InvalidArgumentException(sprintf('You can only add one %s property', $element));
         }
 
-        // we define that we set this element
         $this->definedElements[$element] = true;
-
-        // adding property
         $this->properties[] = [
             'key' => $key,
-            'value' => $value
+            'value' => $value,
         ];
     }
 
-    /**
-     * Checks if we should return vcard in cal wrapper
-     *
-     * @return bool
-     */
-    protected function shouldAttachmentBeCal()
+    protected function shouldAttachmentBeCal(): bool
     {
         $browser = $this->getUserAgent();
 
         $matches = [];
         preg_match('/os (\d+)_(\d+)\s+/', $browser, $matches);
-        $version = isset($matches[1]) ? ((int)$matches[1]) : 999;
+        $version = isset($matches[1]) ? ((int) $matches[1]) : 999;
 
-        return ($version < 8);
+        return $version < 8;
     }
 }

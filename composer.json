@@ -11,19 +11,32 @@
             "email": "info@jeroendesloovere.be",
             "homepage": "http://jeroendesloovere.be",
             "role": "Developer"
+        },
+        {
+            "name": "Maximilian Graf Schimmelmann",
+            "email": "foss@schimmelmann.org",
+            "homepage": "https://www.schimmelmann.org",
+            "role": "Developer"
         }
     ],
     "require": {
-        "php": ">=7.3.0",
-        "behat/transliterator": "~1.0"
+        "php": "^8.1",
+        "behat/transliterator": "~1.0",
+        "webmozart/assert": "^1.11",
+        "ext-fileinfo": "*",
+        "ext-curl": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.3"
+        "phpunit/phpunit": "^10",
+        "symplify/easy-coding-standard": "^12.1",
+        "phpstan/phpstan": "^1.10",
+        "phpstan/phpstan-webmozart-assert": "^1.2",
+        "seec/phpunit-consecutive-params": "^1.1"
     },
     "autoload": {
-        "psr-4": { "JeroenDesloovere\\VCard\\": "src/" }
+        "psr-4": { "JeroenDesloovere\\VCard\\": "src/"}
     },
     "autoload-dev": {
-        "psr-4": { "JeroenDesloovere\\VCard\\": "tests/" }
+        "psr-4": { "JeroenDesloovere\\VCard\\Tests\\": "tests/"}
     }
 }

@@ -1,0 +1,6 @@
+parameters:
+    reportUnmatchedIgnoredErrors: false
+    checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false
+    parallel:
+        processTimeout: 300.0

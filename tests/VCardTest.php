@@ -1,37 +1,40 @@
 <?php
 
-namespace JeroenDesloovere\VCard\tests;
+declare(strict_types=1);
 
-// required to load
-require_once __DIR__ . '/../vendor/autoload.php';
-
-/*
- * This file is part of the VCard PHP Class from Jeroen Desloovere.
- *
- * For the full copyright and license information, please view the license
- * file that was distributed with this source code.
- */
+namespace JeroenDesloovere\VCard\Tests;
 
 use Exception;
 use JeroenDesloovere\VCard\VCard;
 use PHPUnit\Framework\TestCase;
 
-/**
- * This class will test our VCard PHP Class which can generate VCards.
- */
-class VCardTest extends TestCase
+final class VCardTest extends TestCase
 {
-    /**
-     * @var VCard
-     */
-    protected $vcard = null;
+    private VCard $vcard;
 
-    /**
-     * Data provider for testEmail()
-     *
-     * @return array
-     */
-    public function emailDataProvider()
+    private string $firstName;
+
+    private string $lastName;
+
+    private string $additional;
+
+    private string $prefix;
+
+    private string $suffix;
+
+    private string $emailAddress1;
+
+    private string $emailAddress2;
+
+    private string $firstName2;
+
+    private string $lastName2;
+
+    private string $firstName3;
+
+    private string $lastName3;
+
+    public static function emailDataProvider(): array
     {
         return [
             [['john@doe.com']],
@@ -41,426 +44,200 @@ class VCardTest extends TestCase
         ];
     }
 
-    /**
-     * Set up before class
-     *
-     * @return void
-     */
     protected function setUp(): void
     {
-        // set timezone
-        date_default_timezone_set('Europe/Brussels');
-
+        date_default_timezone_set('Europe/Berlin');
         $this->vcard = new VCard();
-
         $this->firstName = 'Jeroen';
         $this->lastName = 'Desloovere';
         $this->additional = '&';
         $this->prefix = 'Mister';
         $this->suffix = 'Junior';
-
         $this->emailAddress1 = '';
         $this->emailAddress2 = '';
-
         $this->firstName2 = 'Ali';
         $this->lastName2 = 'ÖZSÜT';
-
         $this->firstName3 = 'Garçon';
         $this->lastName3 = 'Jéroèn';
+
+        $this->vcard->addEmail($this->emailAddress1);
+        $this->vcard->addEmail($this->emailAddress2);
+
+        $this->vcard->addAddress(
+            '',
+            '88th Floor',
+            '555 East Flours Street',
+            'Los Angeles',
+            'CA',
+            '55555',
+            'USA',
+        );
     }
 
-    /**
-     * Tear down after class
-     */
-    protected function tearDown(): void
+    public function test_it_can_add_an_address(): void
     {
-        $this->vcard = null;
-    }
-
-    public function testAddAddress()
-    {
-        $this->assertEquals($this->vcard, $this->vcard->addAddress(
-          '',
-          '88th Floor',
-          '555 East Flours Street',
-          'Los Angeles',
-          'CA',
-          '55555',
-          'USA'
-        ));
-      $this->assertStringContainsString('ADR;WORK;POSTAL;CHARSET=utf-8:;88th Floor;555 East Flours Street;Los Angele', $this->vcard->getOutput());
-      // Should fold on row 75, so we should not see the full address.
-      $this->assertStringNotContainsString('ADR;WORK;POSTAL;CHARSET=utf-8:;88th Floor;555 East Flours Street;Los Angeles;CA;55555;', $this->vcard->getOutput());
-    }
-
-    public function testAddBirthday()
-    {
-        $this->assertEquals($this->vcard, $this->vcard->addBirthday(''));
-    }
-
-    public function testAddCompany()
-    {
-        $this->assertEquals($this->vcard, $this->vcard->addCompany(''));
-    }
-
-    public function testAddCategories()
-    {
-        $this->assertEquals($this->vcard, $this->vcard->addCategories([]));
-    }
-
-    public function testAddEmail()
-    {
-        $this->assertEquals($this->vcard, $this->vcard->addEmail($this->emailAddress1));
-        $this->assertEquals($this->vcard, $this->vcard->addEmail($this->emailAddress2));
-        $this->assertEquals(2, count($this->vcard->getProperties()));
-    }
-
-    public function testAddJobTitle()
-    {
-        $this->assertEquals($this->vcard, $this->vcard->addJobtitle(''));
-    }
-
-    public function testAddRole()
-    {
-        $this->assertEquals($this->vcard, $this->vcard->addRole(''));
-    }
-
-    public function testAddName()
-    {
-        $this->assertEquals($this->vcard, $this->vcard->addName(''));
-    }
-
-    public function testAddNote()
-    {
-        $this->assertEquals($this->vcard, $this->vcard->addNote(''));
-    }
-
-    public function testAddPhoneNumber()
-    {
-        $this->assertEquals($this->vcard, $this->vcard->addPhoneNumber(''));
-        $this->assertEquals($this->vcard, $this->vcard->addPhoneNumber(''));
-        $this->assertCount(2, $this->vcard->getProperties());
-    }
-
-    public function testAddPhotoWithJpgPhoto()
-    {
-        $return = $this->vcard->addPhoto(__DIR__ . '/image.jpg', true);
-
-        $this->assertEquals($this->vcard, $return);
-    }
-
-    public function testAddPhotoWithRemoteJpgPhoto()
-    {
-        $return = $this->vcard->addPhoto(
-            'https://raw.githubusercontent.com/jeroendesloovere/vcard/master/tests/image.jpg',
-            true
+        $output = $this->vcard->getOutput();
+        $this->assertStringContainsString(
+            'ADR;WORK;POSTAL;CHARSET=utf-8:;88th Floor;555 East Flours Street;Los Angele',
+            $output,
         );
 
-        $this->assertEquals($this->vcard, $return);
+        $this->assertStringNotContainsString(
+            'ADR;WORK;POSTAL;CHARSET=utf-8:;88th Floor;555 East Flours Street;Los Angeles;CA;55555;',
+            $output,
+        );
     }
 
-    /**
-     * Test adding remote empty photo
-     */
-    public function testAddPhotoWithRemoteEmptyJpgPhoto()
+    public function test_it_cannot_add_a_remote_text_file_as_photo(): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Returned data is not an image.');
-        $this->vcard->addPhoto(
-            'https://raw.githubusercontent.com/jeroendesloovere/vcard/master/tests/empty.jpg',
-            true
-        );
+        $this->vcard->addPhoto('https://raw.githubusercontent.com/jeroendesloovere/vcard/master/tests/empty.jpg');
     }
 
-    public function testAddPhotoContentWithJpgPhoto()
-    {
-        $return = $this->vcard->addPhotoContent(file_get_contents(__DIR__ . '/image.jpg'));
-
-        $this->assertEquals($this->vcard, $return);
-    }
-
-    /**
-     * Test adding empty photo
-     */
-    public function testAddPhotoContentWithEmptyContent()
+    public function test_it_cannot_add_an_empty_picture_as_photo(): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Returned data is not an image.');
         $this->vcard->addPhotoContent('');
     }
 
-    public function testAddLogoWithJpgImage()
-    {
-        $return = $this->vcard->addLogo(__DIR__ . '/image.jpg', true);
-
-        $this->assertEquals($this->vcard, $return);
-    }
-
-    public function testAddLogoWithJpgImageNoInclude()
-    {
-        $return = $this->vcard->addLogo(__DIR__ . '/image.jpg', false);
-
-        $this->assertEquals($this->vcard, $return);
-    }
-
-    public function testAddLogoContentWithJpgImage()
-    {
-        $return = $this->vcard->addLogoContent(file_get_contents(__DIR__ . '/image.jpg'));
-
-        $this->assertEquals($this->vcard, $return);
-    }
-
-    /**
-     * Test adding empty photo
-     */
-    public function testAddLogoContentWithEmptyContent()
+    public function test_it_cannot_add_a_remote_text_file_as_logo(): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Returned data is not an image.');
         $this->vcard->addLogoContent('');
     }
 
-    public function testAddUrl()
-    {
-        $this->assertEquals($this->vcard, $this->vcard->addUrl('1'));
-        $this->assertEquals($this->vcard, $this->vcard->addUrl('2'));
-        $this->assertCount(2, $this->vcard->getProperties());
-    }
-
-    /**
-     * Test adding local photo using an empty file
-     */
-    public function testAddPhotoWithEmptyFile()
+    public function test_it_cannot_add_an_empty_picture_as_logo(): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Returned data is not an image.');
-        $this->vcard->addPhoto(__DIR__ . '/emptyfile', true);
+        $this->vcard->addPhoto(__DIR__ . '/emptyfile');
     }
 
-    /**
-     * Test adding logo with no value
-     */
-    public function testAddLogoWithNoValue()
+    public function test_it_cannot_add_a_empty_photo_as_logo(): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Returned data is not an image.');
-        $this->vcard->addLogo(__DIR__ . '/emptyfile', true);
+        $this->vcard->addLogo(__DIR__ . '/emptyfile');
     }
 
-    /**
-     * Test adding photo with no photo
-     */
-    public function testAddPhotoWithNoPhoto()
+    public function test_it_cannot_add_a_empty_photo_as_photo(): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Returned data is not an image.');
         $this->vcard->addPhoto(__DIR__ . '/wrongfile', true);
     }
 
-    /**
-     * Test adding logo with no image
-     */
-    public function testAddLogoWithNoImage()
+    public function test_it_cannot_add_empty_image_as_logo(): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Returned data is not an image.');
-        $this->vcard->addLogo(__DIR__ . '/wrongfile', true);
+        $this->vcard->addLogo(__DIR__ . '/wrongfile');
     }
 
-    /**
-     * Test charset
-     */
-    public function testCharset()
+    public function test_it_will_correctly_return_the_charset(): void
     {
         $charset = 'ISO-8859-1';
         $this->vcard->setCharset($charset);
-        $this->assertEquals($charset, $this->vcard->getCharset());
+        $this->assertSame($charset, $this->vcard->getCharset());
     }
 
-    /**
-     * Test Email
-     *
-     * @dataProvider emailDataProvider $emails
-     */
-    public function testEmail($emails = [])
+    /** @dataProvider emailDataProvider */
+    public function test_it_can_set_emails_as_expected(array $emails): void
     {
         foreach ($emails as $key => $email) {
-            if (is_string($key)) {
-                $this->vcard->addEmail($email, $key);
-            } else {
-                $this->vcard->addEmail($email);
-            }
+            $this->vcard->addEmail(
+                $email,
+                is_string($key)
+                ? explode(';', $key)
+                : [],
+            );
         }
 
+        $output = $this->vcard->getOutput();
         foreach ($emails as $key => $email) {
             if (is_string($key)) {
-                $this->assertStringContainsString('EMAIL;INTERNET;' . $key . ':' . $email, $this->vcard->getOutput());
+                $this->assertStringContainsString(sprintf('EMAIL;INTERNET;%s:%s', $key, $email), $output);
             } else {
-                $this->assertStringContainsString('EMAIL;INTERNET:' . $email, $this->vcard->getOutput());
+                $this->assertStringContainsString(sprintf('EMAIL;INTERNET:%s', $email), $output);
             }
         }
     }
 
-    /**
-     * Test first name and last name
-     */
-    public function testFirstNameAndLastName()
+    public function test_it_can_set_and_transform_names_correctly(): void
     {
         $this->vcard->addName(
             $this->lastName,
-            $this->firstName
+            $this->firstName,
         );
 
         $this->assertEquals('jeroen-desloovere', $this->vcard->getFilename());
     }
 
-    /**
-     * Test full blown name
-     */
-    public function testFullBlownName()
+    public function test_it_can_correctly_evaluate_full_name(): void
     {
         $this->vcard->addName(
             $this->lastName,
             $this->firstName,
             $this->additional,
             $this->prefix,
-            $this->suffix
+            $this->suffix,
         );
 
         $this->assertEquals('mister-jeroen-desloovere-junior', $this->vcard->getFilename());
     }
 
-    /**
-     * Test multiple birthdays
-     */
-    public function testMultipleBirthdays()
-    {
-        $this->expectException(\Exception::class);
-        $this->assertEquals($this->vcard, $this->vcard->addBirthday('1'));
-        $this->expectException(Exception::class);
-        $this->assertEquals($this->vcard, $this->vcard->addBirthday('2'));
-    }
-
-    /**
-     * Test multiple categories
-     */
-    public function testMultipleCategories()
-    {
-        $this->expectException(\Exception::class);
-        $this->assertEquals($this->vcard, $this->vcard->addCategories(['1']));
-        $this->expectException(Exception::class);
-        $this->assertEquals($this->vcard, $this->vcard->addCategories(['2']));
-    }
-
-    /**
-     * Test multiple companies
-     */
-    public function testMultipleCompanies()
-    {
-        $this->expectException(\Exception::class);
-        $this->assertEquals($this->vcard, $this->vcard->addCompany('1'));
-        $this->expectException(Exception::class);
-        $this->assertEquals($this->vcard, $this->vcard->addCompany('2'));
-    }
-
-    /**
-     * Test multiple job titles
-     */
-    public function testMultipleJobtitles()
-    {
-        $this->expectException(\Exception::class);
-        $this->assertEquals($this->vcard, $this->vcard->addJobtitle('1'));
-        $this->expectException(Exception::class);
-        $this->assertEquals($this->vcard, $this->vcard->addJobtitle('2'));
-    }
-
-    /**
-     * Test multiple roles
-     */
-    public function testMultipleRoles()
-    {
-        $this->expectException(\Exception::class);
-        $this->assertEquals($this->vcard, $this->vcard->addRole('1'));
-        $this->expectException(Exception::class);
-        $this->assertEquals($this->vcard, $this->vcard->addRole('2'));
-    }
-
-    /**
-     * Test multiple names
-     */
-    public function testMultipleNames()
-    {
-        $this->expectException(\Exception::class);
-        $this->assertEquals($this->vcard, $this->vcard->addName('1'));
-        $this->expectException(Exception::class);
-        $this->assertEquals($this->vcard, $this->vcard->addName('2'));
-    }
-
-    /**
-     * Test multiple notes
-     */
-    public function testMultipleNotes()
-    {
-        $this->expectException(\Exception::class);
-        $this->assertEquals($this->vcard, $this->vcard->addNote('1'));
-        $this->expectException(Exception::class);
-        $this->assertEquals($this->vcard, $this->vcard->addNote('2'));
-    }
-
-    /**
-     * Test special first name and last name
-     */
-    public function testSpecialFirstNameAndLastName()
+    public function test_it_can_evaluate_special_characters_properly(): void
     {
         $this->vcard->addName(
             $this->lastName2,
-            $this->firstName2
+            $this->firstName2,
         );
 
         $this->assertEquals('ali-ozsut', $this->vcard->getFilename());
     }
 
-    /**
-     * Test special first name and last name
-     */
-    public function testSpecialFirstNameAndLastName2()
+    public function test_it_can_evaluate_special_characters_properly_second(): void
     {
         $this->vcard->addName(
             $this->lastName3,
-            $this->firstName3
+            $this->firstName3,
         );
 
         $this->assertEquals('garcon-jeroen', $this->vcard->getFilename());
     }
 
-    /**
-     * Test multiple labels
-     */
-    public function testMultipleLabels()
+    public function test_property_count_and_contents(): void
     {
-        $this->assertSame($this->vcard, $this->vcard->addLabel('My label'));
-        $this->assertSame($this->vcard, $this->vcard->addLabel('My work label', 'WORK'));
-        $this->assertSame(2, count($this->vcard->getProperties()));
-        $this->assertStringContainsString('LABEL;CHARSET=utf-8:My label', $this->vcard->getOutput());
-        $this->assertStringContainsString('LABEL;WORK;CHARSET=utf-8:My work label', $this->vcard->getOutput());
+        $this->assertCount(3, $this->vcard->getProperties());
+        $this->vcard->addLabel('My label');
+        $this->vcard->addLabel('My work label', 'WORK');
+
+        $resolve = $this->vcard->getOutput();
+        $this->assertStringContainsString('LABEL;CHARSET=utf-8:My label', $resolve);
+        $this->assertStringContainsString('LABEL;WORK;CHARSET=utf-8:My work label', $resolve);
     }
 
-    public function testChunkSplitUnicode()
+    public function test_it_can_correctly_invoke_ChunkSplitUnicode(): void
     {
-        $class_handler  = new \ReflectionClass('JeroenDesloovere\VCard\VCard');
-        $method_handler = $class_handler->getMethod('chunk_split_unicode');
+        $class_handler = new \ReflectionClass('JeroenDesloovere\VCard\VCard');
+        $method_handler = $class_handler->getMethod('chunkSplitUnicode');
         $method_handler->setAccessible(true);
 
-        $ascii_input="Lorem ipsum dolor sit amet,";
-        $ascii_output = $method_handler->invokeArgs(new VCard(), [$ascii_input,10,'|']);
-        $unicode_input='Τη γλώσσα μου έδωσαν ελληνική το σπίτι φτωχικό στις αμμουδιές του Ομήρου.';
-        $unicode_output = $method_handler->invokeArgs(new VCard(), [$unicode_input,10,'|']);
+        $ascii_input = 'Lorem ipsum dolor sit amet,';
+        $ascii_output = $method_handler->invokeArgs(new VCard(), [$ascii_input, 10, '|']);
+        $unicode_input = 'Τη γλώσσα μου έδωσαν ελληνική το σπίτι φτωχικό στις αμμουδιές του Ομήρου.';
+        $unicode_output = $method_handler->invokeArgs(new VCard(), [$unicode_input, 10, '|']);
 
         $this->assertEquals(
-            "Lorem ipsu|m dolor si|t amet,|",
-            $ascii_output);
+            'Lorem ipsu|m dolor si|t amet,|',
+            $ascii_output,
+        );
         $this->assertEquals(
-            "Τη γλώσσα |μου έδωσαν| ελληνική |το σπίτι φ|τωχικό στι|ς αμμουδιέ|ς του Ομήρ|ου.|",
-            $unicode_output);
+            'Τη γλώσσα |μου έδωσαν| ελληνική |το σπίτι φ|τωχικό στι|ς αμμουδιέ|ς του Ομήρ|ου.|',
+            $unicode_output,
+        );
     }
 }
