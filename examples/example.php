@@ -5,7 +5,7 @@
  */
 
 require_once __DIR__ . '/../vendor/autoload.php';
-require_once __DIR__ . '/../src/VCard.php';
+require_once __DIR__.'/../src_/VCard.php';
 
 use JeroenDesloovere\VCard\VCard;
 
@@ -39,10 +39,9 @@ $vcard->addPhoto(__DIR__ . '/assets/landscape.jpeg');
 //return $vcard->getOutput();
 
 // return vcard as a download
-return $vcard->download();
+print $vcard->download();
 
-// echo message
-echo 'A personal vCard is saved in this folder: ' . __DIR__;
+print 'A personal vCard is saved in this folder: ' . __DIR__;
 
 // or
 
