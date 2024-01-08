@@ -30,7 +30,7 @@ final class Type implements PropertyParameterInterface, SimpleNodeInterface
     public function __construct(string $value)
     {
         if (!in_array($value, self::POSSIBLE_VALUES, true)) {
-            throw PropertyParameterException::forWrongValue($value, self::POSSIBLE_VALUES);
+            $value = self::HOME;
         }
 
         $this->value = $value;
