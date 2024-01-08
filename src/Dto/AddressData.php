@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace JeroenDesloovere\VCard\Dto;
 
-final readonly class AddressData
+final class AddressData
 {
     public function __construct(
-        private string $name,
-        private string $extended,
-        private string $street,
-        private string $city,
-        private string $region,
-        private string $zip,
-        private string $country,
+        private readonly string $name,
+        private readonly string $extended,
+        private readonly string $street,
+        private readonly string $city,
+        private readonly string $region,
+        private readonly string $zip,
+        private readonly string $country,
     ) {
     }
 
