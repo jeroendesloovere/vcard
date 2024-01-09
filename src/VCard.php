@@ -120,19 +120,18 @@ final class VCard
 
     /**
      * @param PropertyParameterInterface $propertyParameter
-     * @throws VCardException
      */
     private function addPropertyParameter(PropertyParameterInterface $propertyParameter): void
     {
         // Parameter is not allowed multiple times
         if ($this->hasParameter(get_class($propertyParameter))) {
-            throw VCardException::forExistingPropertyParameter($propertyParameter);
+            return;
         }
 
         $this->parameters[] = $propertyParameter;
     }
 
-    public function getKind(): Kind
+    public function getKind()
     {
         $kind = $this->getParameters(Kind::class);
 
