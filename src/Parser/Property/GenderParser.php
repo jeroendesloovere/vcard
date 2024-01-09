@@ -13,7 +13,7 @@ final class GenderParser extends PropertyParser implements NodeParserInterface
     {
         @list($gender, $note) = explode(';', $value, 2);
 
-        $this->convertEmptyStringToNull([$note]);
+        $this->convertEmptyStringToNull($note);
 
         return new Gender($gender, $note);
     }
