@@ -11,7 +11,7 @@ final class NameParser extends PropertyParser implements NodeParserInterface
 {
     public function parseVcfString(string $value, array $parameters = []): NodeInterface
     {
-        @list($firstName, $additional, $lastName, $prefix, $suffix) = explode(';', $value);
+        @list($lastName, $firstName, $additional, $prefix, $suffix) = explode(';', $value);
 
         $this->convertEmptyStringToNull([
             $lastName,
