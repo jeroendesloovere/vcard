@@ -6,7 +6,7 @@ namespace JeroenDesloovere\VCard\Parser\Property;
 
 class PropertyParser
 {
-    protected function convertEmptyStringToNull(array $values): void
+    protected function convertEmptyStringToNull(&...$values): void
     {
         foreach ($values as &$value) {
             if ($value === '') {

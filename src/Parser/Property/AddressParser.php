@@ -33,7 +33,7 @@ final class AddressParser extends PropertyParser implements NodeParserInterface
             $countryName
         ) = explode(';', $value);
 
-        $this->convertEmptyStringToNull([
+        $this->convertEmptyStringToNull(
             $postOfficeBox,
             $extendedAddress,
             $streetAddress,
@@ -41,7 +41,7 @@ final class AddressParser extends PropertyParser implements NodeParserInterface
             $region,
             $postalCode,
             $countryName
-        ]);
+        );
 
         return new Address($postOfficeBox, $extendedAddress, $streetAddress, $locality, $region, $postalCode, $countryName);
     }
