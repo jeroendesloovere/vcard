@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace JeroenDesloovere\VCard\Property;
 
+use Brick\PhoneNumber\PhoneNumber;
+use Brick\PhoneNumber\PhoneNumberFormat;
 use JeroenDesloovere\VCard\Formatter\Property\NodeFormatterInterface;
 use JeroenDesloovere\VCard\Formatter\Property\TelephoneFormatter;
 use JeroenDesloovere\VCard\Parser\Property\NodeParserInterface;
@@ -16,6 +18,9 @@ final class Telephone implements PropertyInterface, NodeInterface
     /** @var string */
     protected $telephoneNumber;
 
+    /** @var PhoneNumber */
+    protected $phoneNumber;
+
     /** @var Type */
     private $type;
 
@@ -24,7 +29,10 @@ final class Telephone implements PropertyInterface, NodeInterface
 
     public function __construct(string $telephoneNumber, Type $type = null, Value $value = null)
     {
-        $this->telephoneNumber = str_replace(' ', '-', $telephoneNumber);
+        $regionCode = \Locale::getRegion(\Locale::getDefault());
+        $this->phoneNumber = PhoneNumber::parse($telephoneNumber, $regionCode);
+        $this->telephoneNumber = $this->phoneNumber->format(PhoneNumberFormat::NATIONAL);
+
         $this->type = $type ?? Type::home();
         $this->value = $value ?? Value::uri();
     }
@@ -47,6 +55,16 @@ final class Telephone implements PropertyInterface, NodeInterface
     public function getTelephoneNumber(): string
     {
         return $this->telephoneNumber;
+    }
+
+    public function getTelephoneNumberURI(): string
+    {
+        return $this->phoneNumber->format(PhoneNumberFormat::RFC3966);
+    }
+
+    public function getPhoneNumber(): PhoneNumber
+    {
+        return $this->phoneNumber;
     }
 
     public static function getParser(): NodeParserInterface
