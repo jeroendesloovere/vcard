@@ -29,8 +29,8 @@ final class Telephone implements PropertyInterface, NodeInterface
 
     public function __construct(string $telephoneNumber, Type $type = null, Value $value = null)
     {
-
-        $this->phoneNumber = PhoneNumber::parse($telephoneNumber);
+        $regionCode = \Locale::getRegion(\Locale::getDefault());
+        $this->phoneNumber = PhoneNumber::parse($telephoneNumber, $regionCode);
         $this->telephoneNumber = $this->phoneNumber->format(PhoneNumberFormat::NATIONAL);
 
         $this->type = $type ?? Type::home();
