@@ -975,6 +975,9 @@ class VCard
         // we define that we set this element
         $this->definedElements[$element] = true;
 
+        // Commas must be escaped with a backslash.
+        $value = str_replace(',', '\,', $value);
+
         // adding property
         $this->properties[] = [
             'key' => $key,

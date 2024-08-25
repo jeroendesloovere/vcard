@@ -271,7 +271,7 @@ class VCardParser implements Iterator
                         $cardData->note = $this->unescape($value);
                         break;
                     case 'CATEGORIES':
-                        $cardData->categories = array_map('trim', explode(',', $value));
+                        $cardData->categories = array_map('trim', explode('\,', $value));
                         break;
                     case 'LABEL':
                         $cardData->label = $value;

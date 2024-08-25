@@ -82,21 +82,21 @@ final class VCardParserTest extends TestCase
         ));
         $this->assertEquals($parser->getCardAtIndex(0)->address['WORK;PERSONAL'][0], (object) array(
             'name' => "Jeroen Desloovere",
-            'extended' => "(extended info, again)",
+            'extended' => "(extended info\, again)",
             'street' => "25th Some Address",
             'city' => "Townsville",
             'region' => "Area 51",
             'zip' => "045784",
-            'country' => "Europe (is a country, right?)",
+            'country' => "Europe (is a country\, right?)",
         ));
         $this->assertEquals($parser->getCardAtIndex(0)->address['WORK;PERSONAL'][1], (object) array(
             'name' => "Georges Desloovere",
-            'extended' => "(extended info, again, again)",
+            'extended' => "(extended info\, again\, again)",
             'street' => "26th Some Address",
             'city' => "Townsville-South",
             'region' => "Area 51B",
             'zip' => "04554",
-            'country' => "Europe (no, it isn't)",
+            'country' => "Europe (no\, it isn't)",
         ));
     }
 
@@ -291,6 +291,6 @@ final class VCardParserTest extends TestCase
         $vcard = new VCard();
         $vcard->addLabel($label, 'work');
         $parser = new VCardParser($vcard->buildVCard());
-        $this->assertEquals($parser->getCardAtIndex(0)->label, $label);
+        $this->assertEquals($parser->getCardAtIndex(0)->label, str_replace(',', '\,', $label));
     }
 }
