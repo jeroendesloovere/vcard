@@ -227,11 +227,18 @@ class VCard
      */
     private function addMedia($property, $url, $element, $include = true)
     {
+        $context = null;
         $mimeType = null;
 
         //Is this URL for a remote resource?
         if (filter_var($url, FILTER_VALIDATE_URL) !== false) {
-            $headers = get_headers($url, 1);
+            $contextOptions = [
+                'http' => [
+                    'user_agent' => 'jeroendesloovere/vcard',
+                ],
+            ];
+            $context = stream_context_create($contextOptions);
+            $headers = get_headers($url, true, $context);
 
             if (array_key_exists('Content-Type', $headers)) {
                 $mimeType = $headers['Content-Type'];
@@ -253,7 +260,7 @@ class VCard
 
         if ($include) {
             if ((bool) ini_get('allow_url_fopen') === true) {
-                $value = file_get_contents($url);
+                $value = file_get_contents($url, false, $context);
             } else {
                 $curl = curl_init();
                 curl_setopt($curl, CURLOPT_URL, $url);
@@ -528,7 +535,7 @@ class VCard
         $properties = $this->getProperties();
         foreach ($properties as $property) {
             // add to string
-            $string .= $this->fold($property['key'] . ':' . $this->escape($property['value'])) . "\r\n";
+            $string .= $this->fold($property['key'] . ':' . $this->escape($property['value']) . "\r\n");
         }
 
         // add to string
