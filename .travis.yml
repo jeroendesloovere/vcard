@@ -1,8 +1,10 @@
 language: php
 
 php:
-  - 7.1
-  - 7.2
+  - 7.4
+  - 8.0
+  - 8.1
+  - 8.2
 
 sudo: false
 
@@ -12,14 +14,4 @@ script:
 
 before_script:
   - composer self-update
-  - composer install --prefer-source --no-interaction --dev
-
-after_success:
-  - wget https://scrutinizer-ci.com/ocular.phar
-  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
-
-after_failure:
-  - cat var/logs/test.log
-
-matrix:
-  fast_finish: true
+  - composer install --prefer-source --no-interaction

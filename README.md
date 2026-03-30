@@ -62,40 +62,40 @@ $formatter->download();
 ### Communications Properties:
 * [x] [TEL](./src/Property/Telephone.php) - The telephone number(s) as a tel URI
 * [x] [EMAIL](./src/Property/Email.php) - The email address(es) as a mailto URI
-* [ ] IMPP - The IMPP instant messaging contact information
-* [ ] LANG - The language of the object
+* [x] [IMPP](./src/Property/Impp.php) - The IMPP instant messaging contact information
+* [x] [LANG](./src/Property/Lang.php) - The language of the object
 
 ### Geographical Properties:
-* [ ] TZ - The timezone of the object
-* [ ] GEO - The geographical coordinates of the object (geo URI)
+* [x] [TZ](./src/Property/Tz.php) - The timezone of the object
+* [x] [GEO](./src/Property/Geo.php) - The geographical coordinates of the object (geo URI)
 
 ### Organizational Properties:
 * [x] [TITLE](./src/Property/Title.php) - The title of the object
 * [x] ROLE - The role of the object
 * [x] [LOGO](./src/Property/Logo.php) - The logo of the object (data URI)
-* [ ] ORG - The organisation related to the object
-* [ ] ORGUNIT - The organisational unit related to the object
-* [ ] MEMBER - Can only be used for Group Kind objects. Must point to other Individual or Organization objects.
-* [ ] RELATED - Link to related objects.
+* [x] [ORG](./src/Property/Org.php) - The organisation related to the object
+* [x] [ORGUNIT](./src/Property/Org.php) - The organisational unit related to the object (part of ORG)
+* [x] [MEMBER](./src/Property/Member.php) - Can only be used for Group Kind objects. Must point to other Individual or Organization objects.
+* [x] [RELATED](./src/Property/Related.php) - Link to related objects.
 
 ### Explanatory Properties:
-* [ ] CATEGORIES - The categories of the object
+* [x] [CATEGORIES](./src/Property/Categories.php) - The categories of the object
 * [x] [NOTE](./src/Property/Note.php) - Notes about the object
-* [ ] PRODID - The identifier of the product that created the vCard object
+* [x] [PRODID](./src/Property/ProdId.php) - The identifier of the product that created the vCard object
 * [X] [REV](./src/Property/Parameter/Revision.php) - The revision datetime of the vCard object
-* [ ] SOUND - Audio related to the object (data URI)
-* [ ] UID - A unique identifier for the object
+* [x] [SOUND](./src/Property/Sound.php) - Audio related to the object (data URI)
+* [x] [UID](./src/Property/Uid.php) - A unique identifier for the object
 * [ ] CLIENTPIDMAP - Not required
 * [x] [URL](./src/Property/Url.php) - Any URL related to the object
 * [X] [VERSION](./src/Property/Parameter/Version.php) - Is mandatory for 4.0
 
 ### Security Properties:
-* [ ] KEY - The security key of the object
+* [x] [KEY](./src/Property/Key.php) - The security key of the object
 
 ### Calendar Properties:
-* [ ] FBURL - Calendar Busy Time of the object
-* [ ] CALADURI - Calendar Request of the object
-* [ ] CALURI - Calendar Link of the object
+* [x] [FBURL](./src/Property/FbUrl.php) - Calendar Busy Time of the object
+* [x] [CALADURI](./src/Property/CalAdUri.php) - Calendar Request of the object
+* [x] [CALURI](./src/Property/CalUri.php) - Calendar Link of the object
 
 ## Documentation
 
