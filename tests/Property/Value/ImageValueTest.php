@@ -30,30 +30,24 @@ final class ImageValueTest extends TestCase
         $this->assertTrue($image instanceof ImageValue);
     }
 
-    /**
-     * @expectedException \JeroenDesloovere\VCard\Exception\PropertyException
-     * @expectedExceptionMessage The image you have provided is invalid.
-     */
     public function testEmptyFile(): void
     {
+        $this->expectException(\JeroenDesloovere\VCard\Exception\PropertyException::class);
+        $this->expectExceptionMessage('The image you have provided is invalid.');
         new ImageValue(__DIR__ . '/../../assets/emptyfile');
     }
 
-    /**
-     * @expectedException \JeroenDesloovere\VCard\Exception\PropertyException
-     * @expectedExceptionMessage The image you have provided is invalid.
-     */
     public function testEmptyImage(): void
     {
+        $this->expectException(\JeroenDesloovere\VCard\Exception\PropertyException::class);
+        $this->expectExceptionMessage('The image you have provided is invalid.');
         new ImageValue(__DIR__ . '/../../assets/empty.jpg');
     }
 
-    /**
-     * @expectedException \JeroenDesloovere\VCard\Exception\PropertyException
-     * @expectedExceptionMessage The image you have provided is invalid.
-     */
     public function testWrongFile(): void
     {
+        $this->expectException(\JeroenDesloovere\VCard\Exception\PropertyException::class);
+        $this->expectExceptionMessage('The image you have provided is invalid.');
         new ImageValue(__DIR__ . '/../../assets/wrongfile');
     }
 }
