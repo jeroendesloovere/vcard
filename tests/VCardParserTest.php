@@ -293,4 +293,14 @@ final class VCardParserTest extends TestCase
         $parser = new VCardParser($vcard->buildVCard());
         $this->assertEquals($parser->getCardAtIndex(0)->label, $label);
     }
+
+    public function testInvalidEndingConversion()
+    {
+        $parser = VCardParser::parseFromFile(__DIR__ . '/invalid_encoding.vcf');
+
+        $cards = $parser->getCards();
+
+        $this->assertEquals($cards[0]->firstname, 'Jeroen');
+        $this->assertEquals($cards[0]->lastname, 'Desloovere');
+    }
 }
