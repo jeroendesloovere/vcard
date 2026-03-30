@@ -11,20 +11,35 @@ use JeroenDesloovere\VCard\Parser\VcfParser;
 use JeroenDesloovere\VCard\Property\Address;
 use JeroenDesloovere\VCard\Property\Anniversary;
 use JeroenDesloovere\VCard\Property\Birthdate;
+use JeroenDesloovere\VCard\Property\CalAdUri;
+use JeroenDesloovere\VCard\Property\CalUri;
+use JeroenDesloovere\VCard\Property\Categories;
 use JeroenDesloovere\VCard\Property\Email;
+use JeroenDesloovere\VCard\Property\FbUrl;
 use JeroenDesloovere\VCard\Property\Gender;
+use JeroenDesloovere\VCard\Property\Geo;
+use JeroenDesloovere\VCard\Property\Impp;
+use JeroenDesloovere\VCard\Property\Key;
+use JeroenDesloovere\VCard\Property\Lang;
 use JeroenDesloovere\VCard\Property\Logo;
+use JeroenDesloovere\VCard\Property\Member;
 use JeroenDesloovere\VCard\Property\Name;
 use JeroenDesloovere\VCard\Property\Nickname;
 use JeroenDesloovere\VCard\Property\Note;
+use JeroenDesloovere\VCard\Property\Org;
 use JeroenDesloovere\VCard\Property\Parameter\Kind;
 use JeroenDesloovere\VCard\Property\Parameter\Revision;
 use JeroenDesloovere\VCard\Property\Parameter\Type;
 use JeroenDesloovere\VCard\Property\Parameter\Version;
 use JeroenDesloovere\VCard\Property\Photo;
+use JeroenDesloovere\VCard\Property\ProdId;
+use JeroenDesloovere\VCard\Property\Related;
+use JeroenDesloovere\VCard\Property\Sound;
 use JeroenDesloovere\VCard\Property\Telephone;
 use JeroenDesloovere\VCard\Property\Title;
 use JeroenDesloovere\VCard\Property\Role;
+use JeroenDesloovere\VCard\Property\Tz;
+use JeroenDesloovere\VCard\Property\Uid;
 use JeroenDesloovere\VCard\Property\Url;
 use JeroenDesloovere\VCard\VCard;
 use org\bovigo\vfs\vfsStream;
@@ -115,49 +130,39 @@ final class VCardTest extends TestCase
         $this->assertTrue($this->virtualStorage->hasChild('vcard-export.vcf'));
     }
 
-    /**
-     * @expectedException \JeroenDesloovere\VCard\Exception\VCardException
-     */
     public function testMultipleNotAllowedProperties(): void
     {
+        $this->expectException(\JeroenDesloovere\VCard\Exception\VCardException::class);
         (new VCard())
             ->add(new Nickname('Jeroen'))
             ->add(new Nickname('Jeroen2'));
     }
 
-    /**
-     * @expectedException \JeroenDesloovere\VCard\Exception\VCardException
-     */
     public function testMultipleNotAllowedPropertyParameters(): void
     {
+        $this->expectException(\JeroenDesloovere\VCard\Exception\VCardException::class);
         (new VCard())
             ->add(new Revision(new \DateTime))
             ->add(new Revision(new \DateTime));
     }
 
-    /**
-     * @expectedException \JeroenDesloovere\VCard\Exception\ParserException
-     * @expectedExceptionMessage File "Lorem ipsum dolor sit amet, consectetur adipiscing elit." is not readable, or doesn't exist.
-     */
     public function testParserCorruptVCard(): void
     {
+        $this->expectException(\JeroenDesloovere\VCard\Exception\ParserException::class);
+        $this->expectExceptionMessage('File "Lorem ipsum dolor sit amet, consectetur adipiscing elit." is not readable, or doesn\'t exist.');
         new Parser(new VcfParser(), 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.');
     }
 
-    /**
-     * @expectedException \JeroenDesloovere\VCard\Exception\ParserException
-     * @expectedExceptionMessage File "" is not readable, or doesn't exist.
-     */
     public function testParserEmptyVCard(): void
     {
+        $this->expectException(\JeroenDesloovere\VCard\Exception\ParserException::class);
+        $this->expectExceptionMessage('File "" is not readable, or doesn\'t exist.');
         new Parser(new VcfParser(), '');
     }
 
-    /**
-     * @expectedException \JeroenDesloovere\VCard\Exception\ParserException
-     */
     public function testParserGetFileContentsException(): void
     {
+        $this->expectException(\JeroenDesloovere\VCard\Exception\ParserException::class);
         Parser::getFileContents(__DIR__ . '/not-existing');
     }
 
@@ -395,5 +400,267 @@ final class VCardTest extends TestCase
 
       // Then
       $this->assertEquals($expectedContent, $formatter->getContent());
+    }
+
+    public function testTzPropertyContent(): void
+    {
+        $expectedContent = "BEGIN:VCARD\r\n" .
+            "VERSION:4.0\r\n" .
+            "KIND:individual\r\n" .
+            "TZ:-0500\r\n" .
+            "END:VCARD\r\n";
+
+        $formatter = new Formatter(new VcfFormatter(), '');
+        $vcard = (new VCard())->add(new Tz('-0500'));
+
+        $formatter->addVCard($vcard);
+
+        $this->assertEquals($expectedContent, $formatter->getContent());
+    }
+
+    public function testGeoPropertyContent(): void
+    {
+        $expectedContent = "BEGIN:VCARD\r\n" .
+            "VERSION:4.0\r\n" .
+            "KIND:individual\r\n" .
+            "GEO:geo:37.386013,-122.082932\r\n" .
+            "END:VCARD\r\n";
+
+        $formatter = new Formatter(new VcfFormatter(), '');
+        $vcard = (new VCard())->add(new Geo('geo:37.386013,-122.082932'));
+
+        $formatter->addVCard($vcard);
+
+        $this->assertEquals($expectedContent, $formatter->getContent());
+    }
+
+    public function testCategoriesPropertyContent(): void
+    {
+        $expectedContent = "BEGIN:VCARD\r\n" .
+            "VERSION:4.0\r\n" .
+            "KIND:individual\r\n" .
+            "CATEGORIES:TRAVEL AGENT,INTERNET\r\n" .
+            "END:VCARD\r\n";
+
+        $formatter = new Formatter(new VcfFormatter(), '');
+        $vcard = (new VCard())->add(new Categories('TRAVEL AGENT,INTERNET'));
+
+        $formatter->addVCard($vcard);
+
+        $this->assertEquals($expectedContent, $formatter->getContent());
+    }
+
+    public function testProdIdPropertyContent(): void
+    {
+        $expectedContent = "BEGIN:VCARD\r\n" .
+            "VERSION:4.0\r\n" .
+            "KIND:individual\r\n" .
+            "PRODID:-//My App//EN\r\n" .
+            "END:VCARD\r\n";
+
+        $formatter = new Formatter(new VcfFormatter(), '');
+        $vcard = (new VCard())->add(new ProdId('-//My App//EN'));
+
+        $formatter->addVCard($vcard);
+
+        $this->assertEquals($expectedContent, $formatter->getContent());
+    }
+
+    public function testUidPropertyContent(): void
+    {
+        $expectedContent = "BEGIN:VCARD\r\n" .
+            "VERSION:4.0\r\n" .
+            "KIND:individual\r\n" .
+            "UID:urn:uuid:f81d4fae-7dec-11d0-a765-00a0c91e6bf6\r\n" .
+            "END:VCARD\r\n";
+
+        $formatter = new Formatter(new VcfFormatter(), '');
+        $vcard = (new VCard())->add(new Uid('urn:uuid:f81d4fae-7dec-11d0-a765-00a0c91e6bf6'));
+
+        $formatter->addVCard($vcard);
+
+        $this->assertEquals($expectedContent, $formatter->getContent());
+    }
+
+    public function testKeyPropertyContent(): void
+    {
+        $expectedContent = "BEGIN:VCARD\r\n" .
+            "VERSION:4.0\r\n" .
+            "KIND:individual\r\n" .
+            "KEY:data:application/pgp-keys;base64,abc123\r\n" .
+            "END:VCARD\r\n";
+
+        $formatter = new Formatter(new VcfFormatter(), '');
+        $vcard = (new VCard())->add(new Key('data:application/pgp-keys;base64,abc123'));
+
+        $formatter->addVCard($vcard);
+
+        $this->assertEquals($expectedContent, $formatter->getContent());
+    }
+
+    public function testImppPropertyContent(): void
+    {
+        $expectedContent = "BEGIN:VCARD\r\n" .
+            "VERSION:4.0\r\n" .
+            "KIND:individual\r\n" .
+            "IMPP;TYPE=home:xmpp:user@example.com\r\n" .
+            "END:VCARD\r\n";
+
+        $formatter = new Formatter(new VcfFormatter(), '');
+        $vcard = (new VCard())->add(new Impp('xmpp:user@example.com'));
+
+        $formatter->addVCard($vcard);
+
+        $this->assertEquals($expectedContent, $formatter->getContent());
+    }
+
+    public function testLangPropertyContent(): void
+    {
+        $expectedContent = "BEGIN:VCARD\r\n" .
+            "VERSION:4.0\r\n" .
+            "KIND:individual\r\n" .
+            "LANG;TYPE=home:en\r\n" .
+            "END:VCARD\r\n";
+
+        $formatter = new Formatter(new VcfFormatter(), '');
+        $vcard = (new VCard())->add(new Lang('en'));
+
+        $formatter->addVCard($vcard);
+
+        $this->assertEquals($expectedContent, $formatter->getContent());
+    }
+
+    public function testFbUrlPropertyContent(): void
+    {
+        $expectedContent = "BEGIN:VCARD\r\n" .
+            "VERSION:4.0\r\n" .
+            "KIND:individual\r\n" .
+            "FBURL;TYPE=home:http://example.com/busy\r\n" .
+            "END:VCARD\r\n";
+
+        $formatter = new Formatter(new VcfFormatter(), '');
+        $vcard = (new VCard())->add(new FbUrl('http://example.com/busy'));
+
+        $formatter->addVCard($vcard);
+
+        $this->assertEquals($expectedContent, $formatter->getContent());
+    }
+
+    public function testCalAdUriPropertyContent(): void
+    {
+        $expectedContent = "BEGIN:VCARD\r\n" .
+            "VERSION:4.0\r\n" .
+            "KIND:individual\r\n" .
+            "CALADRURI;TYPE=home:http://cal.example.com/\r\n" .
+            "END:VCARD\r\n";
+
+        $formatter = new Formatter(new VcfFormatter(), '');
+        $vcard = (new VCard())->add(new CalAdUri('http://cal.example.com/'));
+
+        $formatter->addVCard($vcard);
+
+        $this->assertEquals($expectedContent, $formatter->getContent());
+    }
+
+    public function testCalUriPropertyContent(): void
+    {
+        $expectedContent = "BEGIN:VCARD\r\n" .
+            "VERSION:4.0\r\n" .
+            "KIND:individual\r\n" .
+            "CALURI;TYPE=home:http://cal.example.com/\r\n" .
+            "END:VCARD\r\n";
+
+        $formatter = new Formatter(new VcfFormatter(), '');
+        $vcard = (new VCard())->add(new CalUri('http://cal.example.com/'));
+
+        $formatter->addVCard($vcard);
+
+        $this->assertEquals($expectedContent, $formatter->getContent());
+    }
+
+    public function testRelatedPropertyContent(): void
+    {
+        $expectedContent = "BEGIN:VCARD\r\n" .
+            "VERSION:4.0\r\n" .
+            "KIND:individual\r\n" .
+            "RELATED;TYPE=home:urn:uuid:f81d4fae-7dec-11d0-a765-00a0c91e6bf6\r\n" .
+            "END:VCARD\r\n";
+
+        $formatter = new Formatter(new VcfFormatter(), '');
+        $vcard = (new VCard())->add(new Related('urn:uuid:f81d4fae-7dec-11d0-a765-00a0c91e6bf6'));
+
+        $formatter->addVCard($vcard);
+
+        $this->assertEquals($expectedContent, $formatter->getContent());
+    }
+
+    public function testOrgPropertyContent(): void
+    {
+        $expectedContent = "BEGIN:VCARD\r\n" .
+            "VERSION:4.0\r\n" .
+            "KIND:individual\r\n" .
+            "ORG:Example Inc.;Engineering\r\n" .
+            "END:VCARD\r\n";
+
+        $formatter = new Formatter(new VcfFormatter(), '');
+        $vcard = (new VCard())->add(new Org('Example Inc.', 'Engineering'));
+
+        $formatter->addVCard($vcard);
+
+        $this->assertEquals($expectedContent, $formatter->getContent());
+    }
+
+    public function testOrgPropertyContentNoUnits(): void
+    {
+        $expectedContent = "BEGIN:VCARD\r\n" .
+            "VERSION:4.0\r\n" .
+            "KIND:individual\r\n" .
+            "ORG:Example Inc.\r\n" .
+            "END:VCARD\r\n";
+
+        $formatter = new Formatter(new VcfFormatter(), '');
+        $vcard = (new VCard())->add(new Org('Example Inc.'));
+
+        $formatter->addVCard($vcard);
+
+        $this->assertEquals($expectedContent, $formatter->getContent());
+    }
+
+    public function testMemberPropertyContent(): void
+    {
+        $expectedContent = "BEGIN:VCARD\r\n" .
+            "VERSION:4.0\r\n" .
+            "KIND:group\r\n" .
+            "MEMBER:urn:uuid:03a0e51f-d1aa-4385-8a53-e29025acd8af\r\n" .
+            "END:VCARD\r\n";
+
+        $formatter = new Formatter(new VcfFormatter(), '');
+        $vcard = (new VCard(Kind::group()))->add(new Member('urn:uuid:03a0e51f-d1aa-4385-8a53-e29025acd8af'));
+
+        $formatter->addVCard($vcard);
+
+        $this->assertEquals($expectedContent, $formatter->getContent());
+    }
+
+    public function testMemberNotAllowedOnIndividualVCard(): void
+    {
+        $this->expectException(\JeroenDesloovere\VCard\Exception\VCardException::class);
+        (new VCard())->add(new Member('urn:uuid:03a0e51f-d1aa-4385-8a53-e29025acd8af'));
+    }
+
+    public function testSoundPropertyContent(): void
+    {
+        $expectedContent = "BEGIN:VCARD\r\n" .
+            "VERSION:4.0\r\n" .
+            "KIND:individual\r\n" .
+            "SOUND:data:audio/basic;base64,abc123\r\n" .
+            "END:VCARD\r\n";
+
+        $formatter = new Formatter(new VcfFormatter(), '');
+        $vcard = (new VCard())->add(new Sound('data:audio/basic;base64,abc123'));
+
+        $formatter->addVCard($vcard);
+
+        $this->assertEquals($expectedContent, $formatter->getContent());
     }
 }

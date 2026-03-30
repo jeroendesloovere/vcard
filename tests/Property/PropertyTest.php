@@ -15,39 +15,31 @@ use PHPUnit\Framework\TestCase;
  */
 final class PropertyTest extends TestCase
 {
-    /**
-     * @expectedException \JeroenDesloovere\VCard\Exception\PropertyException
-     * @expectedExceptionMessage The property you are trying to add is empty.
-     */
     public function testEmptyName(): void
     {
+        $this->expectException(\JeroenDesloovere\VCard\Exception\PropertyException::class);
+        $this->expectExceptionMessage('The property you are trying to add is empty.');
         new Name();
     }
 
-    /**
-     * @expectedException \JeroenDesloovere\VCard\Exception\PropertyException
-     * @expectedExceptionMessage The property you are trying to add is empty.
-     */
     public function testEmptyAddress(): void
     {
+        $this->expectException(\JeroenDesloovere\VCard\Exception\PropertyException::class);
+        $this->expectExceptionMessage('The property you are trying to add is empty.');
         new Address();
     }
 
-    /**
-     * @expectedException \JeroenDesloovere\VCard\Exception\PropertyException
-     * @expectedExceptionMessage The property you are trying to add is empty.
-     */
     public function testEmptyEmail(): void
     {
+        $this->expectException(\JeroenDesloovere\VCard\Exception\PropertyException::class);
+        $this->expectExceptionMessage('The property you are trying to add is empty.');
         new Email();
     }
 
-    /**
-     * @expectedException \JeroenDesloovere\VCard\Exception\PropertyException
-     * @expectedExceptionMessage The property you are trying to add is empty.
-     */
     public function testEmptyGender(): void
     {
+        $this->expectException(\JeroenDesloovere\VCard\Exception\PropertyException::class);
+        $this->expectExceptionMessage('The property you are trying to add is empty.');
         new Gender();
     }
 }

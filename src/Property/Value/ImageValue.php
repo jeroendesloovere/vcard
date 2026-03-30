@@ -142,7 +142,7 @@ class ImageValue
 
     private function isValidImageURL(string $URL): bool
     {
-        $headers = get_headers($URL, 1);
+        $headers = get_headers($URL, true);
 
         if (array_key_exists('Content-Type', $headers)) {
             $mimeType = $headers['Content-Type'];

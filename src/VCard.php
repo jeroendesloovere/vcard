@@ -8,24 +8,39 @@ use JeroenDesloovere\VCard\Exception\VCardException;
 use JeroenDesloovere\VCard\Property\Address;
 use JeroenDesloovere\VCard\Property\Anniversary;
 use JeroenDesloovere\VCard\Property\Birthdate;
+use JeroenDesloovere\VCard\Property\CalAdUri;
+use JeroenDesloovere\VCard\Property\CalUri;
+use JeroenDesloovere\VCard\Property\Categories;
 use JeroenDesloovere\VCard\Property\Email;
+use JeroenDesloovere\VCard\Property\FbUrl;
 use JeroenDesloovere\VCard\Property\FullName;
 use JeroenDesloovere\VCard\Property\Gender;
+use JeroenDesloovere\VCard\Property\Geo;
+use JeroenDesloovere\VCard\Property\Impp;
+use JeroenDesloovere\VCard\Property\Key;
+use JeroenDesloovere\VCard\Property\Lang;
 use JeroenDesloovere\VCard\Property\Logo;
+use JeroenDesloovere\VCard\Property\Member;
 use JeroenDesloovere\VCard\Property\Name;
 use JeroenDesloovere\VCard\Property\Nickname;
 use JeroenDesloovere\VCard\Property\NodeInterface;
 use JeroenDesloovere\VCard\Property\Note;
+use JeroenDesloovere\VCard\Property\Org;
 use JeroenDesloovere\VCard\Property\Parameter\Kind;
 use JeroenDesloovere\VCard\Property\Parameter\PropertyParameterInterface;
 use JeroenDesloovere\VCard\Property\Parameter\Revision;
 use JeroenDesloovere\VCard\Property\Parameter\Type;
 use JeroenDesloovere\VCard\Property\Parameter\Version;
 use JeroenDesloovere\VCard\Property\Photo;
+use JeroenDesloovere\VCard\Property\ProdId;
 use JeroenDesloovere\VCard\Property\PropertyInterface;
+use JeroenDesloovere\VCard\Property\Related;
 use JeroenDesloovere\VCard\Property\Role;
+use JeroenDesloovere\VCard\Property\Sound;
 use JeroenDesloovere\VCard\Property\Telephone;
 use JeroenDesloovere\VCard\Property\Title;
+use JeroenDesloovere\VCard\Property\Tz;
+use JeroenDesloovere\VCard\Property\Uid;
 use JeroenDesloovere\VCard\Property\Url;
 
 final class VCard
@@ -52,12 +67,31 @@ final class VCard
         Logo::class,
         Telephone::class,
         Url::class,
+        Tz::class,
+        Geo::class,
+        Categories::class,
+        ProdId::class,
+        Sound::class,
+        Uid::class,
+        Key::class,
+        Impp::class,
+        Lang::class,
+        FbUrl::class,
+        CalAdUri::class,
+        CalUri::class,
+        Related::class,
+        Org::class,
+        Member::class,
     ];
 
     private const ONLY_APPLY_TO_INDIVIDUAL_KIND = [
         Birthdate::class,
         Anniversary::class,
         Gender::class,
+    ];
+
+    private const ONLY_APPLY_TO_GROUP_KIND = [
+        Member::class,
     ];
 
     /** @var PropertyParameterInterface[] */
@@ -113,6 +147,10 @@ final class VCard
 
         if (!$this->getKind()->isIndividual() && $this->isAllowedIndividualKindProperty(get_class($property))) {
             throw VCardException::forNotAllowedPropertyOnVCardKind($property, Kind::individual());
+        }
+
+        if (!$this->getKind()->isGroup() && $this->isAllowedGroupKindProperty(get_class($property))) {
+            throw VCardException::forNotAllowedPropertyOnVCardKind($property, Kind::group());
         }
 
         $this->properties[] = $property;
@@ -186,5 +224,10 @@ final class VCard
     private function isAllowedIndividualKindProperty(string $propertyClass): bool
     {
         return in_array($propertyClass, self::ONLY_APPLY_TO_INDIVIDUAL_KIND, true);
+    }
+
+    private function isAllowedGroupKindProperty(string $propertyClass): bool
+    {
+        return in_array($propertyClass, self::ONLY_APPLY_TO_GROUP_KIND, true);
     }
 }

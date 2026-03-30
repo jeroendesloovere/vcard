@@ -12,13 +12,10 @@ use PHPUnit\Framework\TestCase;
  */
 final class GenderTest extends TestCase
 {
-    /**
-     * @expectedException \JeroenDesloovere\VCard\Exception\PropertyException
-     * @expectedExceptionMessage The given value "False Gender" is not allowed.
-     * Possible values are: "", "F", "M", "N", "O", "U"
-     */
     public function testGenderFalseGender(): void
     {
+        $this->expectException(\JeroenDesloovere\VCard\Exception\PropertyException::class);
+        $this->expectExceptionMessage('The given value "False Gender" is not allowed.');
         new Gender('False Gender');
     }
 
