@@ -18,7 +18,7 @@ final class Impp implements PropertyInterface, NodeInterface
     /** @var Type */
     private $type;
 
-    public function __construct(string $uri, Type $type = null)
+    public function __construct(string $uri, ?Type $type = null)
     {
         $this->uri = $uri;
         $this->type = $type ?? Type::home();

@@ -18,7 +18,7 @@ final class Lang implements PropertyInterface, NodeInterface
     /** @var Type */
     private $type;
 
-    public function __construct(string $language, Type $type = null)
+    public function __construct(string $language, ?Type $type = null)
     {
         $this->language = $language;
         $this->type = $type ?? Type::home();

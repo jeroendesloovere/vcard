@@ -18,7 +18,7 @@ final class FbUrl implements PropertyInterface, NodeInterface
     /** @var Type */
     private $type;
 
-    public function __construct(string $url, Type $type = null)
+    public function __construct(string $url, ?Type $type = null)
     {
         $this->url = $url;
         $this->type = $type ?? Type::home();

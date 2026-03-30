@@ -38,6 +38,9 @@ final class Org implements PropertyInterface, NodeInterface
         return $this->organizationName;
     }
 
+    /**
+     * @return string[]
+     */
     public function getUnits(): array
     {
         return $this->units;
