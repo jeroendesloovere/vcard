@@ -9,7 +9,7 @@ namespace JeroenDesloovere\VCard;
  * file that was distributed with this source code.
  */
 
-use Behat\Transliterator\Transliterator;
+use Cocur\Slugify\Slugify;
 
 /**
  * VCard PHP Class to generate .vcard files and save them to a file or output as a download.
@@ -63,6 +63,13 @@ class VCard
      * @var string
      */
     public $charset = 'utf-8';
+
+    /**
+     * Slugify instance
+     *
+     * @var Slugify
+     */
+    private $slugify;
 
     /**
      * Add address
@@ -596,6 +603,34 @@ class VCard
     }
 
     /**
+     * Get Slugify instance, configured to match transliteration behaviour of
+     * the previously used behat/transliterator library (1:1 ASCII mappings for
+     * umlauts and Scandinavian characters, apostrophe removal).
+     *
+     * @return Slugify
+     */
+    private function getSlugify()
+    {
+        if ($this->slugify === null) {
+            $this->slugify = new Slugify();
+            // Override the German-style umlaut expansions (ö→oe, ü→ue, ä→ae)
+            // and similar multi-character mappings to keep filenames identical
+            // to those produced by the previous behat/transliterator library.
+            $this->slugify->addRules([
+                'Ä' => 'a', 'ä' => 'a',
+                'Å' => 'a', 'å' => 'a',
+                'Ö' => 'o', 'ö' => 'o',
+                'Ø' => 'o', 'ø' => 'o',
+                'Ü' => 'u', 'ü' => 'u',
+                'Ð' => 'd', 'ð' => 'd',
+                "'"  => '',
+            ]);
+        }
+
+        return $this->slugify;
+    }
+
+    /**
      * Decode
      *
      * @param  string $value The value to decode
@@ -603,8 +638,8 @@ class VCard
      */
     private function decode($value)
     {
-        // convert cyrlic, greek or other caracters to ASCII characters
-        return Transliterator::transliterate($value);
+        // convert Cyrillic, Greek or other characters to ASCII characters
+        return $this->getSlugify()->slugify($value, '-');
     }
 
     /**
@@ -925,11 +960,8 @@ class VCard
             return;
         }
 
-        // decode value + lowercase the string
-        $value = strtolower($this->decode($value));
-
-        // urlize this part
-        $value = Transliterator::urlize($value);
+        // decode value to ASCII, lowercase, and slugify
+        $value = $this->decode($value);
 
         // overwrite filename or add to filename using a prefix in between
         $this->filename = ($overwrite) ?
