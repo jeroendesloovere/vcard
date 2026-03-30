@@ -24,6 +24,9 @@ final class ImageValueTest extends TestCase
         $this->assertTrue($image instanceof ImageValue);
     }
 
+    /**
+     * @group network
+     */
     public function testValidImageUrl(): void
     {
         $image = new ImageValue('http://www.jeroendesloovere.be/images/my_head.jpg');

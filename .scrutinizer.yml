@@ -1,0 +1,17 @@
+build:
+    environment:
+        php:
+            version: '8.1'
+    dependencies:
+        before:
+            - composer install --no-interaction
+    tests:
+        run:
+            - command: vendor/bin/phpunit --no-coverage --exclude-group network
+
+checks:
+    php: true
+
+filter:
+    paths:
+        - src/
