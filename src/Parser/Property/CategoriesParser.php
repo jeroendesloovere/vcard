@@ -11,6 +11,8 @@ final class CategoriesParser implements NodeParserInterface
 {
     public function parseVcfString(string $value, array $parameters = []): NodeInterface
     {
-        return new Categories($value);
+        $categories = array_map('trim', explode(',', $value));
+
+        return new Categories($categories);
     }
 }

@@ -443,7 +443,7 @@ final class VCardTest extends TestCase
             "END:VCARD\r\n";
 
         $formatter = new Formatter(new VcfFormatter(), '');
-        $vcard = (new VCard())->add(new Categories('TRAVEL AGENT,INTERNET'));
+        $vcard = (new VCard())->add(new Categories(['TRAVEL AGENT', 'INTERNET']));
 
         $formatter->addVCard($vcard);
 
