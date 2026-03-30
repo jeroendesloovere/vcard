@@ -1,105 +1,101 @@
-# VCard PHP library
-[![Latest Stable Version](http://img.shields.io/packagist/v/jeroendesloovere/vcard.svg)](https://packagist.org/packages/jeroendesloovere/vcard)
+# [WIP] VCard library
+
+<!--[![Latest Stable Version](http://img.shields.io/packagist/v/jeroendesloovere/vcard.svg)](https://packagist.org/packages/jeroendesloovere/vcard)-->
 [![License](http://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/jeroendesloovere/vcard/blob/master/LICENSE)
-[![Build Status](https://travis-ci.org/jeroendesloovere/vcard.svg?branch=master)](https://travis-ci.org/jeroendesloovere/vcard)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/jeroendesloovere/vcard/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/jeroendesloovere/vcard/?branch=master)
+[![Build Status](https://travis-ci.org/jeroendesloovere/vcard.svg?branch=2.0.0-dev)](https://travis-ci.org/jeroendesloovere/vcard)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/jeroendesloovere/vcard/badges/quality-score.png?b=2.0.0-dev)](https://scrutinizer-ci.com/g/jeroendesloovere/vcard/?branch=2.0.0-dev)
 
-This VCard PHP library can generate a vCard with some data. When using an iOS device < iOS 8 it will export as a .ics file because iOS devices don't support the default .vcf files.
+> This VCard PHP class can generate a vCard version 4.0. .vcf file with one or more vCards in it. Parsing is also possible. OOP is our goal-focus, so every property has its own class.
 
-**NOTE**: We are working on a complete new version to work with vCard version 4.0, with extreme good code quality. [Check out the new version](https://github.com/jeroendesloovere/vcard/tree/2.0.0-dev)
+Documentation about vCard 4.0:
+* [vCard 4.0 specification: RFC6350](https://tools.ietf.org/html/rfc6350)
+* [vCard 4.0 versus vCard 3.0](https://devguide.calconnect.org/vCard/vcard-4/)
 
-## Usage
-
-### Installation
+## Installation
 
 ```bash
-composer require jeroendesloovere/vcard
+composer require jeroendesloovere/vcard:dev-2.0.0-dev
 ```
-> This will install the latest version of vcard with [Composer](https://getcomposer.org)
+> This will install the 2.0 WIP development version of vcard with [Composer](https://getcomposer.org)
 
-### Example
 
-``` php
+## Examples
+
+Since this is a WIP, we refer to the [test class](tests/VCardTest.php) to view multiple examples.
+
+### Basic example
+
+```php
 use JeroenDesloovere\VCard\VCard;
+use JeroenDesloovere\VCard\Property\Name;
+use JeroenDesloovere\VCard\Formatter\Formatter;
+use JeroenDesloovere\VCard\Formatter\VcfFormatter;
 
-// define vcard
+$lastname = "Berg";
+$firstname = "Melroy";
+$additional = "van den";
+$prefix = "Mr.";
+$suffix = "";
+
 $vcard = new VCard();
+$vcard->add(new Name($lastname, $firstname, $additional, $prefix, $suffix));
 
-// define variables
-$lastname = 'Desloovere';
-$firstname = 'Jeroen';
-$additional = '';
-$prefix = '';
-$suffix = '';
-
-// add personal data
-$vcard->addName($lastname, $firstname, $additional, $prefix, $suffix);
-
-// add work data
-$vcard->addCompany('Siesqo');
-$vcard->addJobtitle('Web Developer');
-$vcard->addRole('Data Protection Officer');
-$vcard->addEmail('info@jeroendesloovere.be');
-$vcard->addPhoneNumber(1234121212, 'PREF;WORK');
-$vcard->addPhoneNumber(123456789, 'WORK');
-$vcard->addAddress(null, null, 'street', 'worktown', null, 'workpostcode', 'Belgium');
-$vcard->addLabel('street, worktown, workpostcode Belgium');
-$vcard->addURL('http://www.jeroendesloovere.be');
-
-$vcard->addPhoto(__DIR__ . '/landscape.jpeg');
-
-// return vcard as a string
-//return $vcard->getOutput();
-
-// return vcard as a download
-return $vcard->download();
-
-// save vcard on disk
-//$vcard->setSavePath('/path/to/directory');
-//$vcard->save();
-
+$formatter = new Formatter(new VcfFormatter(), 'vcard-export');
+$formatter->addVCard($vcard);
+$formatter->download();
 ```
 
-> [View all examples](/examples/example.php) or check [the VCard class](/src/VCard.php).
+## Properties
 
-### Parsing examples
+### Identification Properties:
+* [x] [FN = Full name](./src/Property/FullName.php) - The full name of the object (as a single string). This is the only mandatory property.
+* [x] [N = Name](./src/Property/Name.php) - The name of the object represented in structured parts
+* [x] [NICKNAME](./src/Property/Nickname.php) - A nickname for the object
+* [x] [PHOTO](./src/Property/Photo.php)
+* [x] [BDAY](./src/Property/Birthdate.php) - Birth date of the object. Should only apply to Individual
+* [x] [ANNIVERSARY](./src/Property/Anniversary.php) - Should only apply to Individual
+* [x] [GENDER](./src/Property/Gender.php) - Should only apply to Individual
 
-The parser can either get passed a VCard string, like so:
+### Delivery Addressing Properties:
+* [x] [ADDRESS](./src/Property/Address.php) - The address of the object represented in structured parts
 
-```php
-// load VCardParser classes
-use JeroenDesloovere\VCard\VCardParser;
+### Communications Properties:
+* [x] [TEL](./src/Property/Telephone.php) - The telephone number(s) as a tel URI
+* [x] [EMAIL](./src/Property/Email.php) - The email address(es) as a mailto URI
+* [x] [IMPP](./src/Property/Impp.php) - The IMPP instant messaging contact information
+* [x] [LANG](./src/Property/Lang.php) - The language of the object
 
-$parser = new VCardParser($vcardString);
-echo $parser->getCardAtIndex(0)->fullname; // Prints the full name.
-```
+### Geographical Properties:
+* [x] [TZ](./src/Property/Tz.php) - The timezone of the object
+* [x] [GEO](./src/Property/Geo.php) - The geographical coordinates of the object (geo URI)
 
-Or by using a factory method with a file name:
+### Organizational Properties:
+* [x] [TITLE](./src/Property/Title.php) - The title of the object
+* [x] ROLE - The role of the object
+* [x] [LOGO](./src/Property/Logo.php) - The logo of the object (data URI)
+* [x] [ORG](./src/Property/Org.php) - The organisation related to the object
+* [x] [ORGUNIT](./src/Property/Org.php) - The organisational unit related to the object (part of ORG)
+* [x] [MEMBER](./src/Property/Member.php) - Can only be used for Group Kind objects. Must point to other Individual or Organization objects.
+* [x] [RELATED](./src/Property/Related.php) - Link to related objects.
 
-```php
-$parser = VCardParser::parseFromFile('path/to/file.vcf');
-echo $parser->getCardAtIndex(0)->fullname; // Prints the full name.
-```
-> [View the parsing example](/examples/example_parsing.php) or check the [the VCardParser class](/src/VCardParser.php) class.
+### Explanatory Properties:
+* [x] [CATEGORIES](./src/Property/Categories.php) - The categories of the object
+* [x] [NOTE](./src/Property/Note.php) - Notes about the object
+* [x] [PRODID](./src/Property/ProdId.php) - The identifier of the product that created the vCard object
+* [X] [REV](./src/Property/Parameter/Revision.php) - The revision datetime of the vCard object
+* [x] [SOUND](./src/Property/Sound.php) - Audio related to the object (data URI)
+* [x] [UID](./src/Property/Uid.php) - A unique identifier for the object
+* [ ] CLIENTPIDMAP - Not required
+* [x] [URL](./src/Property/Url.php) - Any URL related to the object
+* [X] [VERSION](./src/Property/Parameter/Version.php) - Is mandatory for 4.0
 
-**Support for frameworks**
+### Security Properties:
+* [x] [KEY](./src/Property/Key.php) - The security key of the object
 
-I've created a Symfony Bundle: [VCard Bundle](https://github.com/jeroendesloovere/vcard-bundle)
-
-Usage in for example: Laravel
-```php
-return Response::make(
-    $this->vcard->getOutput(),
-    200,
-    $this->vcard->getHeaders(true)
-);
-```
-
-## Tests
-
-```bash
-vendor/bin/phpunit tests
-```
+### Calendar Properties:
+* [x] [FBURL](./src/Property/FbUrl.php) - Calendar Busy Time of the object
+* [x] [CALADURI](./src/Property/CalAdUri.php) - Calendar Request of the object
+* [x] [CALURI](./src/Property/CalUri.php) - Calendar Link of the object
 
 ## Documentation
 
@@ -126,6 +122,26 @@ Contributions are **welcome** and will be fully **credited**.
 > For bug reporting or code discussions.
 
 More info on how to work with GitHub on help.github.com.
+
+### Coding Syntax
+
+We use [squizlabs/php_codesniffer](https://packagist.org/packages/squizlabs/php_codesniffer) to maintain the code standards.
+Type the following to execute them:
+```bash
+# To view the code errors
+vendor/bin/phpcs --standard=psr2 --extensions=php --warning-severity=0 --report=full "src"
+
+# OR to fix the code errors
+vendor/bin/phpcbf --standard=psr2 --extensions=php --warning-severity=0 --report=full "src"
+```
+> [Read documentation about the code standards](https://github.com/squizlabs/PHP_CodeSniffer/wiki)
+
+### Unit Tests
+
+We have build in tests, type the following to execute them:
+```bash
+vendor/bin/phpunit tests
+```
 
 ## Credits
 
