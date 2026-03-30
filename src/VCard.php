@@ -837,7 +837,7 @@ class VCard
         $properties = $this->getProperties();
 
         foreach ($properties as $property) {
-            if ($property['key'] === $key && $property['value'] !== '') {
+            if (preg_match('/^' . $key . '(;|$)/', $property['key']) && $property['value'] !== '') {
                 return true;
             }
         }
