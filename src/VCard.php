@@ -325,6 +325,7 @@ class VCard
      * @param  string [optional] $additional
      * @param  string [optional] $prefix
      * @param  string [optional] $suffix
+     * @param  string [optional] $fullName
      * @return $this
      */
     public function addName(
@@ -332,19 +333,26 @@ class VCard
         $firstName = '',
         $additional = '',
         $prefix = '',
-        $suffix = ''
+        $suffix = '',
+        $fullName = ''
     ) {
-        // define values with non-empty values
-        $values = array_filter([
-            $prefix,
-            $firstName,
-            $additional,
-            $lastName,
-            $suffix,
-        ]);
 
-        // define filename
-        $this->setFilename($values);
+        if ($fullName === '') {
+            // define values with non-empty values
+            $values = array_filter([
+                $prefix,
+                $firstName,
+                $additional,
+                $lastName,
+                $suffix,
+            ]);
+            // define filename
+            $this->setFilename($values);
+
+            $fullName = trim(implode(' ', $values));
+        } else {
+            $this->setFilename($fullName);
+        }
 
         // set property
         $property = $lastName . ';' . $firstName . ';' . $additional . ';' . $prefix . ';' . $suffix;
@@ -360,7 +368,7 @@ class VCard
             $this->setProperty(
                 'fullname',
                 'FN' . $this->getCharsetString(),
-                trim(implode(' ', $values))
+                $fullName
             );
         }
 
