@@ -981,7 +981,7 @@ class VCard
      * @param  string $value
      * @throws VCardException
      */
-    private function setProperty($element, $key, $value)
+    public function setProperty($element, $key, $value)
     {
         if (!in_array($element, $this->multiplePropertiesForElementAllowed)
             && isset($this->definedElements[$element])
