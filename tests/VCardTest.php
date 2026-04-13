@@ -88,9 +88,9 @@ class VCardTest extends TestCase
           '55555',
           'USA'
         ));
-      $this->assertStringContainsString('ADR;WORK;POSTAL;CHARSET=utf-8:;88th Floor;555 East Flours Street;Los Angele', $this->vcard->getOutput());
+      $this->assertStringContainsString('ADR;TYPE=WORK;POSTAL;CHARSET=utf-8:;88th Floor;555 East Flours Street;Los A', $this->vcard->getOutput());
       // Should fold on row 75, so we should not see the full address.
-      $this->assertStringNotContainsString('ADR;WORK;POSTAL;CHARSET=utf-8:;88th Floor;555 East Flours Street;Los Angeles;CA;55555;', $this->vcard->getOutput());
+      $this->assertStringNotContainsString('ADR;TYPE=WORK;POSTAL;CHARSET=utf-8:;88th Floor;555 East Flours Street;Los Angeles;CA;55555;', $this->vcard->getOutput());
     }
 
     public function testAddBirthday()
