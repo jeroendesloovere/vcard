@@ -52,7 +52,7 @@ final class CardData
 
     private string $organization = '';
 
-    private DateTimeImmutable $birthday;
+    private ?DateTimeImmutable $dateTimeImmutable = null;
 
     public function getName(): string
     {
@@ -99,9 +99,9 @@ final class CardData
         return $this->address;
     }
 
-    public function addAddress(string $key, ?AddressData $address): void
+    public function addAddress(string $key, ?AddressData $addressData): void
     {
-        $this->address[$key][] = $address;
+        $this->address[$key][] = $addressData;
     }
 
     public function getWebsite(): string
@@ -124,14 +124,14 @@ final class CardData
         $this->photo = $photo;
     }
 
-    public function getBirthday(): DateTimeImmutable
+    public function getBirthday(): ?DateTimeImmutable
     {
-        return $this->birthday;
+        return $this->dateTimeImmutable;
     }
 
-    public function setBirthday(DateTimeImmutable $birthday): void
+    public function setBirthday(?DateTimeImmutable $birthday): void
     {
-        $this->birthday = $birthday;
+        $this->dateTimeImmutable = $birthday;
     }
 
     public function getUrls(): array

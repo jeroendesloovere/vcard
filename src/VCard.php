@@ -14,7 +14,6 @@ use const CURLOPT_URL;
 use const DIRECTORY_SEPARATOR;
 use const FILEINFO_MIME_TYPE;
 use const FILTER_VALIDATE_URL;
-use const PREG_SPLIT_NO_EMPTY;
 
 class VCard implements VCardInterface
 {
@@ -163,7 +162,7 @@ class VCard implements VCardInterface
         $fileType = strtoupper(substr($mimeType, 6));
 
         if ($include) {
-            if ((bool) ini_get('allow_url_fopen') === true) {
+            if ((bool) ini_get('allow_url_fopen')) {
                 $value = file_get_contents($url);
             } else {
                 $curl = curl_init();
@@ -173,7 +172,7 @@ class VCard implements VCardInterface
                 curl_close($curl);
             }
 
-            if (!$value) {
+            if ($value === false || ($value === '' || $value === '0')) {
                 throw VCardException::emptyURL();
             }
 
@@ -185,8 +184,9 @@ class VCard implements VCardInterface
                 $propertySuffix = ';VALUE=URL';
                 $propertySuffix .= ';TYPE=' . strtoupper($fileType);
 
-                $property = $property . $propertySuffix;
+                $property .= $propertySuffix;
             }
+
             $value = $url;
         }
 
@@ -206,7 +206,7 @@ class VCard implements VCardInterface
         $mimeType = $finfo->buffer($content, FILEINFO_MIME_TYPE);
 
         Assert::string($mimeType);
-        if (str_contains($mimeType, ';') === true) {
+        if (str_contains($mimeType, ';')) {
             $mimeType = strstr($mimeType, ';', true);
             Assert::string($mimeType);
         }
@@ -285,7 +285,7 @@ class VCard implements VCardInterface
 
         $this->setProperty(
             'phoneNumber',
-            'TEL' . (($type != '') ? ';' . implode(';', $type) : ''),
+            'TEL' . (($type !== []) ? ';' . implode(';', $type) : ''),
             $number,
         );
     }
@@ -332,7 +332,7 @@ class VCard implements VCardInterface
     {
         $this->setProperty(
             'url',
-            'URL' . (($type != '') ? ';' . $type : ''),
+            'URL' . (($type !== '') ? ';' . $type : ''),
             $url,
         );
     }
@@ -348,9 +348,7 @@ class VCard implements VCardInterface
             $string .= $this->fold($property['key'] . ':' . $this->escape($property['value'])) . "\r\n";
         }
 
-        $string .= self::VCARD_END . \PHP_EOL;
-
-        return $string;
+        return $string . (self::VCARD_END . \PHP_EOL);
     }
 
     public function buildVCalendar(): string
@@ -375,9 +373,8 @@ class VCard implements VCardInterface
         $b64final = preg_replace('/(.+)/', ' $1', $b64mline);
         $string .= $b64final;
         $string .= "END:VEVENT\n";
-        $string .= "END:VCALENDAR\n";
 
-        return $string;
+        return $string . "END:VCALENDAR\n";
     }
 
     protected function getUserAgent(): string
@@ -415,21 +412,12 @@ class VCard implements VCardInterface
 
     protected function isAscii(string $string = ''): bool
     {
-        $num = 0;
-        while (isset($string[$num])) {
-            if (ord($string[$num]) & 0x80) {
-                return false;
-            }
-            ++$num;
-        }
-
-        return true;
+        return mb_check_encoding($string, 'ASCII');
     }
 
     protected function chunkSplitUnicode(string $body, int $chunkLen = 76, string $end = "\r\n"): string
     {
-        $parts = preg_split('//u', $body, -1, PREG_SPLIT_NO_EMPTY);
-        Assert::isArray($parts);
+        $parts = mb_str_split($body, 1, 'UTF-8');
         $array = array_chunk($parts, max(1, $chunkLen));
         $body = '';
 
@@ -469,7 +457,7 @@ class VCard implements VCardInterface
 
     public function getFilename(): string
     {
-        if (!$this->filename) {
+        if ($this->filename === null || $this->filename === '' || $this->filename === '0') {
             return 'unknown';
         }
 
@@ -578,6 +566,7 @@ class VCard implements VCardInterface
 
         $value = strtolower($this->decode($value));
         $value = Transliterator::urlize($value);
+
         $this->filename = $overwrite
             ? $value
             : $this->filename . $separator . $value;
@@ -590,7 +579,7 @@ class VCard implements VCardInterface
         }
 
         // Add trailing directory separator the save path
-        if (substr($savePath, -1) != DIRECTORY_SEPARATOR) {
+        if (substr($savePath, -1) !== DIRECTORY_SEPARATOR) {
             $savePath .= DIRECTORY_SEPARATOR;
         }
 

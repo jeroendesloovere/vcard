@@ -29,7 +29,6 @@ class VCardParser implements Iterator
 
     public function __construct(private string $content)
     {
-        $this->vcardObjects = [];
         $this->rewind();
         $this->parse();
     }
@@ -91,7 +90,7 @@ class VCardParser implements Iterator
             } elseif (strtoupper($line) === VCardInterface::VCARD_END) {
                 Assert::notNull($cardData, 'Card data should not be null, malformed input.');
                 $this->vcardObjects[] = $cardData;
-            } elseif (!empty($line)) {
+            } elseif ($line !== '' && $line !== '0') {
                 $line = preg_replace('/^\w+\./', '', $line);
                 Assert::notNull($line, 'Line should not be null, malformed input.');
                 Assert::contains($line, ':', 'Line should contain a colon, malformed input.');
@@ -100,8 +99,8 @@ class VCardParser implements Iterator
                 $element = strtoupper($types[0]);
                 array_shift($types);
 
-                if (empty($types) === false) {
-                    $types = array_map(static fn ($type) => preg_replace('/^type=/i', '', $type), $types);
+                if ($types !== []) {
+                    $types = array_map(static fn ($type): string|array|null => preg_replace('/^type=/i', '', $type), $types);
                 }
 
                 $i = 0;
@@ -172,7 +171,7 @@ class VCardParser implements Iterator
 
     private function processElement(
         string $element,
-        array|false|string|null $value,
+        string|array|bool $value,
         CardData $cardData,
         array $types,
         bool $rawValue,
@@ -202,8 +201,8 @@ class VCardParser implements Iterator
                     ? implode(';', $types)
                     : 'WORK;POSTAL';
 
-                $address = new AddressData(...array_values($this->parseAddress($value)));
-                $cardData->addAddress($key, $address);
+                $addressData = new AddressData(...array_values($this->parseAddress($value)));
+                $cardData->addAddress($key, $addressData);
 
                 break;
             case 'TEL':
@@ -267,7 +266,7 @@ class VCardParser implements Iterator
 
                 break;
             case 'CATEGORIES':
-                $cardData->setCategories(array_map(static fn ($v) => trim($v), explode(',', $value)));
+                $cardData->setCategories(array_map(static fn ($v): string => trim($v), explode(',', $value)));
 
                 break;
             case 'LABEL':

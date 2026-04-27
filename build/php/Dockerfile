@@ -1,4 +1,4 @@
-FROM php:8.2-cli
+FROM php:8.3-cli
 
 ENV PHP_IDE_CONFIG="serverName=vcard"
 RUN pecl install xdebug \

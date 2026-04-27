@@ -9,7 +9,7 @@ use SEEC\VCard\VCardException;
 
 final class VCardExceptionTest extends TestCase
 {
-    public function testException(): void
+    public function testException(): never
     {
         $this->expectException(VCardException::class);
 
